@@ -1,0 +1,62 @@
+[build-system]
+requires = [
+  "setuptools>=42",
+  "setuptools-scm>=8.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysdic"
+requires-python = ">= 3.10"
+dynamic = ["version"]
+description = "Python Stereo Digital Image Correlation Toolbox."
+license = {file = "LICENSE"}
+authors = [
+{name = "Artezaru", email = "artezaru.github@proton.me"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Artezaru/pysdic"
+Documentation = "https://Artezaru.github.io/pysdic"
+Source = "https://github.com/Artezaru/pysdic"
+Tracker = "https://github.com/Artezaru/pysdic/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pysdic", "pysdic*"]
+exclude = ["laboratory", "laboratory.*", "tests", "tests*", "examples", "examples*"]
+
+[tool.setuptools.package-data]
+"pysdic.resources" = ["*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "pysdic.__version__.__version__"}
+
+[project.optional-dependencies]
+dev = [
+    "sphinx",
+    "pydata-sphinx-theme",
+    "numpydoc",
+    "pytest",
+    "pytest-cov",
+    "bumpver",
+    "twine",
+    "wheel",
+    "build",
+    "setuptools",
+    "setuptools-scm",
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
