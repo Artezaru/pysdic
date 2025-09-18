@@ -30,7 +30,7 @@ html:
 # 3. Generate LaTeX PDF documentation
 latexpdf:
 	$(SPHINXBUILD) -b latex $(SOURCEDIR) $(BUILDDIR)/latex
-	cd $(BUILDDIR)/latex && pdflatex py3dframe.tex && pdflatex py3dframe.tex
+	cd $(BUILDDIR)/latex && pdflatex pysdic.tex && pdflatex pysdic.tex
 
 # 4. Clean the documentation
 clean:
@@ -50,9 +50,9 @@ git:
 
 # 7. Create the application
 app:
-	echo "from py3dframe.__main__ import __main_gui__" > run_gui.py
+	echo "from pysdic.__main__ import __main_gui__" > run_gui.py
 	echo "__main_gui__()" >> run_gui.py
-	pyinstaller --name py3dframe --onefile --windowed run_gui.py
+	pyinstaller --name pysdic --onefile --windowed run_gui.py
 	rm run_gui.py
 	rm -rf build
 	rm run_gui.spec
