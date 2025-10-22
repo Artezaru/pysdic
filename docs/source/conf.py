@@ -9,15 +9,16 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # 0. Import the necessary modules
-
 import os
 import sys
 sys.path.insert(0, os.path.abspath("../.."))
 
+project_directory = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "..")
+
 # 1. Set the project informations
 
 def read_version():
-    version_file = os.path.join(os.path.dirname(__file__), '..', '..', 'pysdic', '__version__.py')
+    version_file = os.path.join(project_directory, 'pysdic', '__version__.py')
     with open(version_file, "r") as file:
         exec(file.read()) 
     return locals()["__version__"]
@@ -40,6 +41,9 @@ extensions = [
     "sphinx.ext.githubpages", # Publish the documentation on GitHub
     "sphinx.ext.autosummary", # Generate summaries of the modules
 ]
+
+autosummary_generate = False  # Turn off autosummary generation
+autodoc_typehints = "description"
 
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
