@@ -1,0 +1,2219 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.geometry.point_cloud_3d &#8212; pysdic 0.0.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8c5712d9"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/point_cloud_3d';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 0.0.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.geometry.point_cloud_3d</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.geometry.point_cloud_3d</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2025 Artezaru</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Number</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">py3dframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">FrameTransform</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvista</span>
+
+
+<div class="viewcode-block" id="PointCloud3D">
+<a class="viewcode-back" href="../../../api_doc/point_cloud_3d.html#pysdic.geometry.PointCloud3D">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PointCloud3D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class representing a 3D point cloud.</span>
+
+<span class="sd">    This class is designed to handle 3D point clouds, which are collections of points in a three-dimensional space.</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/point_cloud_3d_visualize_example.png</span>
+<span class="sd">        :width: 600</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        Example of a 3D point cloud visualization using the `visualize` method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : numpy.ndarray</span>
+<span class="sd">        A NumPy array of shape (N, 3) representing the coordinates of the points.</span>
+
+<span class="sd">    Raises  </span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the input array does not have the correct shape (N, 3).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;_points&quot;</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># Properties</span>
+    <span class="c1"># ==========================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An numpy array of shape (N, 3) representing the coordinates of the points in the cloud.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This property is settable.</span>
+
+<span class="sd">        Access and modify the points of the point cloud.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : numpy.ndarray</span>
+<span class="sd">            An array-like of shape (N, 3) representing the coordinates of the points in the cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A NumPy array of shape (N, 3) containing the coordinates of the points in the cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input array does not have the correct shape (N, 3).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Lets create a basic point random point cloud.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D(points=random_points)</span>
+
+<span class="sd">        Now, we can access the points of the point cloud using the `points` property.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Access the points of the point cloud</span>
+<span class="sd">            points = point_cloud.points</span>
+<span class="sd">            print(points)</span>
+<span class="sd">            # Output: A NumPy array of shape (100, 3) containing the coordinates of the points</span>
+
+<span class="sd">        We can also modify the points of the point cloud by assigning a new array to the `points` property.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Modify the points of the point cloud</span>
+<span class="sd">            new_points = np.random.rand(50, 3)  # shape (50, 3)</span>
+<span class="sd">            point_cloud.points = new_points</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (50, 3) containing the new coordinates of the points</span>
+<span class="sd">        </span>
+<span class="sd">        The attribute ``points`` is modifiable in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Modify the points of the point cloud in place</span>
+<span class="sd">            point_cloud.points[0] = [0.0, 0.0, 0.0]</span>
+<span class="sd">            print(point_cloud.points[0])</span>
+<span class="sd">            # Output: [0.0, 0.0, 0.0]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points</span>
+    
+    <span class="nd">@points</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Points must be a 2D NumPy array with shape (N, 3).&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_points</span> <span class="o">=</span> <span class="n">points</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The number of points N in the point cloud.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            You can also use `len(point_cloud)`.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`shape` for getting the shape of the points array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of points in the point cloud.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Lets create a basic point random point cloud.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D(points=random_points)</span>
+
+<span class="sd">        The number of points in the point cloud can be accessed using the `n_points` property.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Access the number of points in the point cloud</span>
+<span class="sd">            num_points = point_cloud.n_points</span>
+<span class="sd">            print(num_points)</span>
+<span class="sd">            # Output: 100</span>
+
+<span class="sd">        You can also use the built-in `len` function to get the number of points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Get the number of points using len()</span>
+<span class="sd">            num_points_len = len(point_cloud)</span>
+<span class="sd">            print(num_points_len)</span>
+<span class="sd">            # Output: 100</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The shape of the points array (N, 3), where N is the number of points.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`n_points` for getting the number of points in the point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[int, int]</span>
+<span class="sd">            A tuple representing the shape of the points array (N, 3), where N is the number of points.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Lets create a basic point random point cloud.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D(points=random_points)</span>
+
+<span class="sd">        The shape of the points array can be accessed using the `shape` property.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Access the shape of the points array</span>
+<span class="sd">            points_shape = point_cloud.shape</span>
+<span class="sd">            print(points_shape)</span>
+<span class="sd">            # Output: (100, 3)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="c1"># ==========================</span>
+    <span class="c1"># Class methods</span>
+    <span class="c1"># ==========================</span>
+<div class="viewcode-block" id="PointCloud3D.from_array">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.from_array.html#pysdic.geometry.PointCloud3D.from_array">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_array</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a PointCloud3D object from a NumPy array of shape (N, 3).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        points : numpy.ndarray</span>
+<span class="sd">            A NumPy array of shape (N, 3) representing the coordinates of the points.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A PointCloud3D object containing the provided points.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input array does not have the correct shape (N, 3).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating a PointCloud3D object from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Now, ``point_cloud`` is a PointCloud3D object containing the points from the NumPy array.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.from_cls">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.from_cls.html#pysdic.geometry.PointCloud3D.from_cls">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_cls</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a PointCloud3D object from another PointCloud3D instance.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`copy` for creating a copy of the current instance. Same as ``PointCloud3D.from_cls(self)``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance to copy points from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing the same points as the input instance.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating a PointCloud3D object from another PointCloud3D instance.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud1 = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">            # Create a new PointCloud3D object from the existing one</span>
+<span class="sd">            point_cloud2 = PointCloud3D.from_cls(point_cloud1)</span>
+
+<span class="sd">        Now, ``point_cloud2`` is a new PointCloud3D object containing a copy of the points from `point_cloud1`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.from_empty">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.from_empty.html#pysdic.geometry.PointCloud3D.from_empty">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_empty</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an empty PointCloud3D object with no points, i.e., shape (0, 3).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            An empty PointCloud3D object with no points.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating an empty PointCloud3D object.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create an empty point cloud</span>
+<span class="sd">            empty_point_cloud = PointCloud3D.from_empty()</span>
+
+<span class="sd">        Now, ``empty_point_cloud`` is a PointCloud3D object with 0 points.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span></div>
+
+    
+    <span class="c1"># ==========================</span>
+    <span class="c1"># Operations</span>
+    <span class="c1"># ==========================</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">concatenate_inplace</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">equal_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+    
+    <span class="c1"># ==========================</span>
+    <span class="c1"># Methods</span>
+    <span class="c1"># ==========================</span>
+<div class="viewcode-block" id="PointCloud3D.allclose">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.allclose.html#pysdic.geometry.PointCloud3D.allclose">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">allclose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">rtol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-05</span><span class="p">,</span> <span class="n">atol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-08</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if all points in the current point cloud are approximately equal to the points in another PointCloud3D instance within a tolerance.</span>
+
+<span class="sd">        This method compares the points of the current point cloud with those of another PointCloud3D instance and returns True if all corresponding points are approximately equal within the specified relative and absolute tolerances.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`numpy.allclose` for more details on the comparison.</span>
+
+<span class="sd">        Nans are considered equal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance to compare with the current point cloud.</span>
+
+<span class="sd">        rtol : float, optional</span>
+<span class="sd">            The relative tolerance parameter (default is 1e-05).</span>
+
+<span class="sd">        atol : float, optional</span>
+<span class="sd">            The absolute tolerance parameter (default is 1e-08).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if all points are approximately equal within the specified tolerances, False otherwise.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D or if the point clouds have different shapes.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating a PointCloud3D object from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            </span>
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud1 = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Compare the point cloud with another point cloud that is slightly modified.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create a second point cloud by adding small noise to the first one</span>
+<span class="sd">            noise = np.random.normal(scale=1e-8, size=random_points.shape)</span>
+<span class="sd">            point_cloud2 = PointCloud3D.from_array(random_points + noise)</span>
+
+<span class="sd">            # Check if the two point clouds are approximately equal</span>
+<span class="sd">            are_close = point_cloud1.allclose(point_cloud2, rtol=1e-5, atol=1e-8)</span>
+<span class="sd">            print(are_close)</span>
+<span class="sd">            # Output: True (most likely, depending on the noise)</span>
+
+<span class="sd">        Compare with a point cloud that is significantly different.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create a third point cloud that is significantly different</span>
+<span class="sd">            different_points = np.random.rand(100, 3) + 1.0  # Shifted by 1.0</span>
+<span class="sd">            point_cloud3 = PointCloud3D.from_array(different_points)</span>
+<span class="sd">            are_close = point_cloud1.allclose(point_cloud3, rtol=1e-5, atol=1e-8)</span>
+<span class="sd">            print(are_close)</span>
+<span class="sd">            # Output: False</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Point clouds must have the same shape to compare.&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">,</span> <span class="n">equal_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PointCloud3D.as_array">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.as_array.html#pysdic.geometry.PointCloud3D.as_array">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_array</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the point cloud to a NumPy array of shape (N, 3).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The returned array is a copy of the internal points array. Modifying it will not affect the original point cloud.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`points` property for accessing and modifying the points of the point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A NumPy array of shape (N, 3) containing the coordinates of the points in the cloud.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating a PointCloud3D object from a random NumPy array.      </span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Convert back to a NumPy array using the `as_array` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Convert the point cloud back to a NumPy array</span>
+<span class="sd">            points_array = point_cloud.as_array()</span>
+<span class="sd">            print(points_array)</span>
+<span class="sd">            # Output: A NumPy array of shape (100, 3) containing the coordinates</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.bounding_box">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.bounding_box.html#pysdic.geometry.PointCloud3D.bounding_box">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the axis-aligned bounding box of the point cloud.</span>
+
+<span class="sd">        The bounding box is defined by the minimum and maximum coordinates along each axis (x, y, z).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The non-finite values (NaN, Inf) are ignored in the computation. If the point cloud is empty or contains only non-finite values, a ValueError is raised.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[numpy.ndarray, numpy.ndarray]</span>
+<span class="sd">            A tuple containing two NumPy arrays:</span>
+<span class="sd">            - The first array represents the minimum coordinates (min_x, min_y, min_z).</span>
+<span class="sd">            - The second array represents the maximum coordinates (max_x, max_y, max_z).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the point cloud is empty or contains only non-finite values.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a tetrahedron point cloud and compute its bounding box.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a tetrahedron point cloud</span>
+<span class="sd">            tetrahedron_points = np.array([[0, 0, 0], [1, 0, 0], [0, 2, 0], [0, 0, 3]])  # shape (4, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(tetrahedron_points)</span>
+
+<span class="sd">        Compute the bounding box using the `bounding_box` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Compute the bounding box of the point cloud</span>
+<span class="sd">            min_coords, max_coords = point_cloud.bounding_box()</span>
+<span class="sd">            print(&quot;Min coordinates:&quot;, min_coords)</span>
+<span class="sd">            print(&quot;Max coordinates:&quot;, max_coords)</span>
+<span class="sd">            # Output:</span>
+<span class="sd">            # Min coordinates: [0. 0. 0.]</span>
+<span class="sd">            # Max coordinates: [1. 2. 3.]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot compute bounding box of an empty point cloud.&quot;</span><span class="p">)</span>
+
+        <span class="n">finite_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="p">:]</span>
+        <span class="n">min_coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">finite_points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">max_coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">finite_points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">min_coords</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">max_coords</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Point cloud contains only non-finite values; cannot compute bounding box.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">min_coords</span><span class="p">,</span> <span class="n">max_coords</span></div>
+
+    
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">]:</span>
+        <span class="c1"># Check if other is a PointCloud3D instance</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Concatenate points</span>
+        <span class="n">concatenated_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">))</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">concatenated_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">concatenated_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="PointCloud3D.concatenate">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.concatenate.html#pysdic.geometry.PointCloud3D.concatenate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concatenate the current point cloud with another PointCloud3D instance.</span>
+
+<span class="sd">        This method combines the points from both point clouds into a new PointCloud3D object.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method is functionally equivalent to using the `+` operator.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`merge` for merging points from another point cloud avoiding duplicates.</span>
+<span class="sd">            - :meth:`concatenate_inplace` for concatenating another point cloud in place.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance to concatenate with the current point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing the concatenated points from both point clouds.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating two PointCloud3D objects.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create two random NumPy arrays of shape (100, 3)</span>
+<span class="sd">            random_points1 = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            random_points2 = np.random.rand(50, 3)   # shape (50, 3)</span>
+
+<span class="sd">            point_cloud1 = PointCloud3D.from_array(random_points1)</span>
+<span class="sd">            point_cloud2 = PointCloud3D.from_array(random_points2)</span>
+
+<span class="sd">        Concatenate the two point clouds using the `concatenate` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Concatenate the two point clouds</span>
+<span class="sd">            concatenated_point_cloud = point_cloud1.concatenate(point_cloud2)</span>
+
+<span class="sd">            print(concatenated_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (150, 3) containing the concatenated coordinates</span>
+
+<span class="sd">        This is equivalent to using the `+` operator.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Concatenate using the + operator</span>
+<span class="sd">            concatenated_point_cloud_op = point_cloud1 + point_cloud2</span>
+<span class="sd">            print(concatenated_point_cloud_op.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (150, 3) containing the concatenated coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_concatenate</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.concatenate_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.concatenate_inplace.html#pysdic.geometry.PointCloud3D.concatenate_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concatenate another PointCloud3D instance to the current point cloud in place.</span>
+
+<span class="sd">        This method modifies the current point cloud by appending the points from the provided PointCloud3D instance.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method modifies the current instance and does not return a new object.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`merge_inplace` for merging points from another point cloud avoiding duplicates in place.</span>
+<span class="sd">            - :meth:`concatenate` for concatenating two point clouds into a new object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance to concatenate with the current point cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating two PointCloud3D objects.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            </span>
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create two random NumPy arrays of shape (100, 3)</span>
+<span class="sd">            random_points1 = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            random_points2 = np.random.rand(50, 3)   # shape (50, 3)</span>
+
+<span class="sd">            point_cloud1 = PointCloud3D.from_array(random_points1)</span>
+<span class="sd">            point_cloud2 = PointCloud3D.from_array(random_points2)</span>
+<span class="sd">    </span>
+<span class="sd">        Concatenate the second point cloud to the first one in place using the `concatenate_inplace` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Concatenate point_cloud2 to point_cloud1 in place</span>
+<span class="sd">            point_cloud1.concatenate_inplace(point_cloud2)</span>
+<span class="sd">            print(point_cloud1.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (150, 3) containing the concatenated coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_concatenate</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PointCloud3D.copy">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.copy.html#pysdic.geometry.PointCloud3D.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a copy of the current PointCloud3D instance.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`from_cls` for creating a new PointCloud3D instance from another instance. Same as ``self.copy()``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing the same points as the current instance.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Creating a PointCloud3D from a random NumPy array and making a copy.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud1 = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">            # Create a copy of the existing PointCloud3D object</span>
+<span class="sd">            point_cloud2 = point_cloud1.copy()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_cls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_frame</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Frame</span><span class="p">],</span> <span class="n">output_frame</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Frame</span><span class="p">],</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">]:</span>
+        <span class="c1"># Validate input frames</span>
+        <span class="k">if</span> <span class="n">input_frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">Frame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input frame must be an instance of Frame or None.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_frame</span><span class="p">,</span> <span class="n">Frame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Output frame must be an instance of Frame or None.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Default to canonical frame if None</span>
+        <span class="k">if</span> <span class="n">input_frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">input_frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">canonical</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">output_frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">canonical</span><span class="p">()</span>
+
+        <span class="c1"># Create the frame transform</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">FrameTransform</span><span class="p">(</span><span class="n">input_frame</span><span class="o">=</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">output_frame</span><span class="o">=</span><span class="n">output_frame</span><span class="p">)</span>
+
+        <span class="c1"># Transform the points</span>
+        <span class="n">transformed_points</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">transformed_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">transformed_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        
+
+<div class="viewcode-block" id="PointCloud3D.frame_transform">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.frame_transform.html#pysdic.geometry.PointCloud3D.frame_transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">frame_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_frame</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Frame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">output_frame</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Frame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform the point cloud from an input frame of reference to an output frame of reference.</span>
+
+<span class="sd">        Assuming the point cloud is defined in the coordinate system of the input frame, this method transforms the points to the coordinate system of the output frame.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - Package `py3dframe &lt;https://pypi.org/project/py3dframe/&gt;`_ for more details on Frame and FrameTransform.</span>
+<span class="sd">            - :meth:`frame_transform_inplace` for transforming the point cloud in place.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_frame : Optional[Frame], optional</span>
+<span class="sd">            The input frame representing the current coordinate system of the point cloud. If None, the canonical frame is assumed.</span>
+
+<span class="sd">        output_frame : Optional[Frame], optional</span>
+<span class="sd">            The output frame representing the target coordinate system for the point cloud. If None, the canonical frame is assumed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing the transformed points.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input or output frames are not instances of Frame.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+<span class="sd">        </span>
+<span class="sd">        Lets assume this point cloud is defined in the canonical frame.</span>
+<span class="sd">        We want to express the point cloud in local frame defined by a : </span>
+
+<span class="sd">        - orgin at (1, 1, 1)</span>
+<span class="sd">        - x-axis along (0, 1, 0)</span>
+<span class="sd">        - y-axis along (-1, 0, 0)</span>
+<span class="sd">        - z-axis along (0, 0, 1)</span>
+
+<span class="sd">        We can use the `frame_transform` method to perform this transformation.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from py3dframe import Frame</span>
+
+<span class="sd">            # Define input and output frames</span>
+<span class="sd">            input_frame = Frame.canonical()</span>
+<span class="sd">            output_frame = Frame(origin=[1, 1, 1], x_axis=[0, 1, 0], y_axis=[-1, 0, 0], z_axis=[0, 0, 1])</span>
+
+<span class="sd">            # Transform the point cloud from input frame to output frame</span>
+<span class="sd">            transformed_point_cloud = point_cloud.frame_transform(input_frame=input_frame, output_frame=output_frame)</span>
+<span class="sd">            print(transformed_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (100, 3) containing the transformed coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_transform</span><span class="p">(</span><span class="n">input_frame</span><span class="o">=</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">output_frame</span><span class="o">=</span><span class="n">output_frame</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.frame_transform_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.frame_transform_inplace.html#pysdic.geometry.PointCloud3D.frame_transform_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">frame_transform_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_frame</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Frame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">output_frame</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Frame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform the point cloud from an input frame of reference to an output frame of reference in place.</span>
+
+<span class="sd">        Assuming the point cloud is defined in the coordinate system of the input frame, this method modifies the points to be expressed in the coordinate system of the output frame.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - Package `py3dframe &lt;https://pypi.org/project/py3dframe/&gt;`_ for more details on Frame and FrameTransform.</span>
+<span class="sd">            - :meth:`frame_transform` for transforming the point cloud and returning a new instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_frame : Optional[Frame], optional</span>
+<span class="sd">            The input frame representing the current coordinate system of the point cloud. If None, the canonical frame is assumed.</span>
+
+<span class="sd">        output_frame : Optional[Frame], optional</span>
+<span class="sd">            The output frame representing the target coordinate system for the point cloud. If None, the canonical frame is assumed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input or output frames are not instances of Frame.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Lets assume this point cloud is defined in the canonical frame.</span>
+<span class="sd">        We want to convert the point cloud in local frame defined by a :</span>
+
+<span class="sd">        - orgin at (1, 1, 1)</span>
+<span class="sd">        - x-axis along (0, 1, 0)</span>
+<span class="sd">        - y-axis along (-1, 0, 0)</span>
+<span class="sd">        - z-axis along (0, 0, 1)</span>
+
+<span class="sd">        We can use the `frame_transform_inplace` method to perform this transformation in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from py3dframe import Frame</span>
+
+<span class="sd">            # Define input and output frames</span>
+<span class="sd">            input_frame = Frame.canonical()</span>
+<span class="sd">            output_frame = Frame(origin=[1, 1, 1], x_axis=[0, 1, 0], y_axis=[-1, 0, 0], z_axis=[0, 0, 1])</span>
+
+<span class="sd">            # Transform the point cloud from input frame to output frame in place</span>
+<span class="sd">            point_cloud.frame_transform_inplace(input_frame=input_frame, output_frame=output_frame)</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (100, 3) containing the transformed points</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_transform</span><span class="p">(</span><span class="n">input_frame</span><span class="o">=</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">output_frame</span><span class="o">=</span><span class="n">output_frame</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_keep_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">]:</span>
+        <span class="c1"># Check if other is a PointCloud3D instance</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Conversion to void type for easy comparison</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">((</span><span class="n">numpy</span><span class="o">.</span><span class="n">void</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c1"># Create views of the points as 1D arrays of void type</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+        <span class="c1"># Create a mask for points in self.points that are also in other.points</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="n">kept_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">kept_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">kept_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="PointCloud3D.keep_points">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.keep_points.html#pysdic.geometry.PointCloud3D.keep_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Keep only the points in the current point cloud that are present in another PointCloud3D instance.</span>
+
+<span class="sd">        This method returns a new PointCloud3D object containing only the points that are also present in the provided PointCloud3D instance.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Points in the `other` point cloud that are not present in the current point cloud are ignored.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`remove_points` for removing points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`keep_points_at` for keeping points at specified indices.</span>
+<span class="sd">            - :meth:`keep_points_inplace` for keeping points in place.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance containing the points to be kept in the current point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing only the points that are also present in the provided PointCloud3D instance.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Create another PointCloud3D with some common points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create another point cloud with some common points</span>
+<span class="sd">            common_points = random_points[[3, 6, 10]]  # shape (3, 3)</span>
+<span class="sd">            other_point_cloud = PointCloud3D.from_array(common_points)</span>
+
+<span class="sd">        Keeping only the points that are present in the other point cloud.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Keep only points that are present in the other point cloud</span>
+<span class="sd">            new_point_cloud = point_cloud.keep_points(other_point_cloud)</span>
+<span class="sd">            print(new_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (3, 3) with points [3, 6, 10] retained</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_points</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.keep_points_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.keep_points_inplace.html#pysdic.geometry.PointCloud3D.keep_points_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_points_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Keep only the points in the current point cloud that are present in another PointCloud3D instance, modifying the point cloud in place.</span>
+
+<span class="sd">        This method modifies the point cloud in place by retaining only the points that are also present in the provided PointCloud3D instance and removing all other points.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Points in the `other` point cloud that are not present in the current point cloud are ignored.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`remove_points_inplace` for removing points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`keep_points_at` for keeping points at specified indices.</span>
+<span class="sd">            - :meth:`keep_points` for keeping points and returning a new instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance containing the points to be kept in the current point cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Create another PointCloud3D with some common points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create another point cloud with some common points</span>
+<span class="sd">            common_points = random_points[[3, 6, 10]]  # shape (3, 3)</span>
+<span class="sd">            other_point_cloud = PointCloud3D.from_array(common_points)</span>
+
+<span class="sd">        Keeping only the points that are present in the other point cloud in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Keep only points that are present in the other point cloud in place</span>
+<span class="sd">            point_cloud.keep_points_inplace(other_point_cloud)</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (3, 3) with points [3, 6, 10] retained</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keep_points</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_keep_points_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Load and validate indices</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Indices must be a 1D array.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">indices</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Indices must be integers.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Indices are out of bounds.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="PointCloud3D.keep_points_at">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.keep_points_at.html#pysdic.geometry.PointCloud3D.keep_points_at">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_points_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Keep only the points at the specified indices in the point cloud.</span>
+
+<span class="sd">        This method returns a new PointCloud3D object containing only the points at the specified indices.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`remove_points_at` for removing points at specified indices.</span>
+<span class="sd">            - :meth:`keep_points` for keeping points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`keep_points_at_inplace` for keeping points at specified indices in place.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices : numpy.ndarray</span>
+<span class="sd">            A 1D NumPy array of integer indices representing the points to be kept in the point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing only the points at the specified indices.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If any index is out of bounds or if the input is not a 1D array of integers.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Keeping only the points at indices 0, 2, and 4.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Keep only points at indices 0, 2, and 4</span>
+<span class="sd">            indices_to_keep = np.array([0, 2, 4])</span>
+<span class="sd">            new_point_cloud = point_cloud.keep_points_at(indices_to_keep)</span>
+<span class="sd">            print(new_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (3, 3) containing only the points at indices 0, 2, and 4</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_points_at</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.keep_points_at_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.keep_points_at_inplace.html#pysdic.geometry.PointCloud3D.keep_points_at_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_points_at_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Keep only the points at the specified indices in the point cloud, modifying the point cloud in place.</span>
+
+<span class="sd">        This method modifies the point cloud in place by retaining only the points at the specified indices and removing all other points.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`remove_points_at_inplace` for removing points at specified indices.</span>
+<span class="sd">            - :meth:`keep_points` for keeping points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`keep_points_at` for keeping points at specified indices and returning a new instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices : numpy.ndarray</span>
+<span class="sd">            A 1D NumPy array of integer indices representing the points to be kept in the point cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If any index is out of bounds or if the input is not a 1D array of integers.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+<span class="sd">        </span>
+<span class="sd">        Keeping only the points at indices 0, 2, and 4 in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Keep only points at indices 0, 2, and 4 in place</span>
+<span class="sd">            indices_to_keep = np.array([0, 2, 4])</span>
+<span class="sd">            point_cloud.keep_points_at_inplace(indices_to_keep)</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (3, 3) containing only the points at indices 0, 2, and 4</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keep_points_at</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">]:</span>
+        <span class="c1"># Check if other is a PointCloud3D instance</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Conversion to void type for easy comparison</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">((</span><span class="n">numpy</span><span class="o">.</span><span class="n">void</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c1"># Create views of the points as 1D arrays of void type</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+        <span class="c1"># Find unique points</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">unique_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">unique_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  <span class="c1"># Sort indices to maintain original order</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">unique_indices</span><span class="p">]</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">unique_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">unique_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  <span class="c1"># Sort indices to maintain original order</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">unique_indices</span><span class="p">]</span>
+
+        <span class="c1"># Find points in other.points that are not in self.points</span>
+        <span class="n">mask_new</span> <span class="o">=</span> <span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">unique_points</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">mask_new</span><span class="p">]</span>
+
+        <span class="c1"># Merge points</span>
+        <span class="n">merged_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">unique_points</span><span class="p">))</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">merged_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">merged_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="PointCloud3D.merge">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.merge.html#pysdic.geometry.PointCloud3D.merge">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge points from another PointCloud3D instance with the current point cloud, avoiding duplicates.</span>
+
+<span class="sd">        This method returns a new PointCloud3D object containing the points from both point clouds, ensuring that duplicate points are not included.</span>
+<span class="sd">        This method removes duplicate points from the initial point clouds so the indices of the points may change.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Points in the `other` point cloud that are already present in the current point cloud are ignored.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`concatenate` for concatenating two point clouds, including duplicates.</span>
+<span class="sd">            - :meth:`merge_inplace` for merging points from another point cloud in place.</span>
+<span class="sd">            - :meth:`unique` to remove duplicate points within the same point cloud.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance containing the points to be merged with the current point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing the merged points from both point clouds, excluding duplicates.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Create another PointCloud3D with some common points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create another point cloud with some common points</span>
+<span class="sd">            common_points = random_points[[3, 6, 10]]  # shape (3, 3)</span>
+<span class="sd">            non_common_points = np.random.rand(5, 3) + 10  # shape (5, 3), offset to avoid overlap</span>
+<span class="sd">            other_point_cloud = PointCloud3D.from_array(np.vstack((common_points, non_common_points)))</span>
+
+<span class="sd">        Merging points from the other point cloud.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Merge points from the other point cloud</span>
+<span class="sd">            new_point_cloud = point_cloud.merge(other_point_cloud)</span>
+<span class="sd">            print(new_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (102, 3) with points [3, 6, 10] ignored and 5 new points added</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.merge_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.merge_inplace.html#pysdic.geometry.PointCloud3D.merge_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge points from another PointCloud3D instance with the current point cloud in place, avoiding duplicates.</span>
+
+<span class="sd">        This method modifies the current point cloud by adding points from the provided PointCloud3D instance, ensuring that duplicate points are not included.</span>
+<span class="sd">        This method removes duplicate points from the initial point clouds so the indices of the points may change.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Points in the `other` point cloud that are already present in the current point cloud are ignored.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`concatenate_inplace` for concatenating another point cloud in place, including duplicates.</span>
+<span class="sd">            - :meth:`merge` for merging points from another point cloud and returning a new instance.</span>
+<span class="sd">            - :meth:`unique` to remove duplicate points within the same point cloud.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance containing the points to be merged with the current point cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Create another PointCloud3D with some common points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create another point cloud with some common points</span>
+<span class="sd">            common_points = random_points[[3, 6, 10]]  # shape (3, 3)</span>
+<span class="sd">            non_common_points = np.random.rand(5, 3) + 10  # shape (5, 3), offset to avoid overlap</span>
+<span class="sd">            other_point_cloud = PointCloud3D.from_array(np.vstack((common_points, non_common_points)))</span>
+
+<span class="sd">        Merging points from the other point cloud in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Merge points from the other point cloud in place</span>
+<span class="sd">            point_cloud.merge_inplace(other_point_cloud)</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (102, 3) with points [3, 6, 10] ignored and 5 new points added</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_remove_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">]:</span>
+        <span class="c1"># Check if other is a PointCloud3D instance</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Conversion to void type for easy comparison</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">((</span><span class="n">numpy</span><span class="o">.</span><span class="n">void</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c1"># Create views of the points as 1D arrays of void type</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+        <span class="c1"># Create a mask for points in self.points that are not in other.points</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="n">remaining_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">remaining_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">remaining_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        
+
+<div class="viewcode-block" id="PointCloud3D.remove_points">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.remove_points.html#pysdic.geometry.PointCloud3D.remove_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove points from the current point cloud that are present in another PointCloud3D instance.</span>
+
+<span class="sd">        This method returns a new PointCloud3D object with the points that are also present in the provided PointCloud3D instance removed.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Points in the `other` point cloud that are not present in the current point cloud are ignored.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`keep_points` for keeping points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`remove_points_at` for removing points at specified indices.</span>
+<span class="sd">            - :meth:`remove_points_inplace` for removing points in place.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance containing the points to be removed from the current point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object with the points that are also present in the provided PointCloud3D instance removed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Create another PointCloud3D with some common points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create another point cloud with some common points</span>
+<span class="sd">            common_points = random_points[[3, 6, 10]]  # shape (3, 3)</span>
+<span class="sd">            other_point_cloud = PointCloud3D.from_array(common_points)</span>
+
+<span class="sd">        Removing points that are present in the other point cloud.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Remove points that are present in the other point cloud</span>
+<span class="sd">            new_point_cloud = point_cloud.remove_points(other_point_cloud)</span>
+<span class="sd">            print(new_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (97, 3) with points [3, 6, 10] removed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remove_points</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.remove_points_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.remove_points_inplace.html#pysdic.geometry.PointCloud3D.remove_points_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove points from the current point cloud that are present in another PointCloud3D instance, modifying the point cloud in place.</span>
+
+<span class="sd">        This method modifies the current point cloud by removing the points that are also present in the provided PointCloud3D instance.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Points in the `other` point cloud that are not present in the current point cloud are ignored.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`keep_points_inplace` for keeping points that are present in another PointCloud3D instance in place.</span>
+<span class="sd">            - :meth:`remove_points_at` for removing points at specified indices.</span>
+<span class="sd">            - :meth:`remove_points` for removing points and returning a new instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : PointCloud3D</span>
+<span class="sd">            Another PointCloud3D instance containing the points to be removed from the current point cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the input is not an instance of PointCloud3D.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Create another PointCloud3D with some common points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create another point cloud with some common points</span>
+<span class="sd">            common_points = random_points[[3, 6, 10]]  # shape (3, 3)</span>
+<span class="sd">            other_point_cloud = PointCloud3D.from_array(common_points)</span>
+
+<span class="sd">        Removing points that are present in the other point cloud in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Remove points that are present in the other point cloud in place</span>
+<span class="sd">            point_cloud.remove_points_inplace(other_point_cloud)</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (97, 3) with points [3, 6, 10] removed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remove_points</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_remove_points_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Load and validate indices</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Indices must be a 1D array.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">indices</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Indices must be integers.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Indices are out of bounds.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Select points to keep</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">remaining_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">remaining_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">remaining_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="PointCloud3D.remove_points_at">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.remove_points_at.html#pysdic.geometry.PointCloud3D.remove_points_at">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove points from the point cloud based on their indices.</span>
+
+<span class="sd">        This method returns a new PointCloud3D object with the points at the specified indices removed.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`keep_points_at` for keeping points at specified indices.</span>
+<span class="sd">            - :meth:`remove_points` for removing points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`remove_points_at_inplace` for removing points at specified indices in place.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices : numpy.ndarray</span>
+<span class="sd">            A 1D NumPy array of integer indices representing the points to be removed from the point cloud.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object with the points at the specified indices removed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If any index is out of bounds or if the input is not a 1D array of integers.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Removing points at indices 1 and 3.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Remove points at indices 1 and 3</span>
+<span class="sd">            indices_to_remove = np.array([1, 3])</span>
+<span class="sd">            new_point_cloud = point_cloud.remove_points_at(indices_to_remove)</span>
+<span class="sd">            print(new_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (98, 3) with points at indices 1 and 3 removed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remove_points_at</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.remove_points_at_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.remove_points_at_inplace.html#pysdic.geometry.PointCloud3D.remove_points_at_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points_at_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove points from the point cloud based on their indices, modifying the point cloud in place.</span>
+
+<span class="sd">        This method modifies the point cloud in place by removing the points at the specified indices.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`keep_points_at_inplace` for keeping points at specified indices in place.</span>
+<span class="sd">            - :meth:`remove_points` for removing points that are present in another PointCloud3D instance.</span>
+<span class="sd">            - :meth:`remove_points_at` for removing points at specified indices and returning a new instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices : numpy.ndarray</span>
+<span class="sd">            A 1D NumPy array of integer indices representing the points to be removed from the point cloud.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If any index is out of bounds or if the input is not a 1D array of integers.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            random_points = np.random.rand(100, 3)  # shape (100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(random_points)</span>
+
+<span class="sd">        Removing points at indices 1 and 3 in place.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Remove points at indices 1 and 3 in place</span>
+<span class="sd">            indices_to_remove = np.array([1, 3])</span>
+<span class="sd">            point_cloud.remove_points_at_inplace(indices_to_remove)</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (98, 3) with points at indices 1 and 3 removed</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remove_points_at</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_unique</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">]:</span>
+        <span class="c1"># Conversion to void type for easy comparison</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">((</span><span class="n">numpy</span><span class="o">.</span><span class="n">void</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c1"># Create a view of the points as a 1D array of void type</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+        <span class="c1"># Find unique points</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">unique_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">unique_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  <span class="c1"># Sort indices to maintain original order</span>
+        <span class="n">unique_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">unique_indices</span><span class="p">]</span>
+
+        <span class="c1"># Return new instance or modify in place</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">unique_points</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">unique_points</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="PointCloud3D.unique">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.unique.html#pysdic.geometry.PointCloud3D.unique">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove duplicate points from the point cloud.</span>
+
+<span class="sd">        This method returns a new PointCloud3D object containing only unique points, with duplicates removed.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`merge` for merging two point clouds while avoiding duplicates.</span>
+<span class="sd">            - :meth:`unique_inplace` for removing duplicate points in place.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A new PointCloud3D object containing only unique points.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a NumPy array with duplicate points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a point cloud with duplicate points</span>
+<span class="sd">            points_with_duplicates = np.array([[0, 0, 0],</span>
+<span class="sd">                                               [1, 1, 1],</span>
+<span class="sd">                                               [0, 0, 0],  # Duplicate</span>
+<span class="sd">                                               [2, 2, 2],</span>
+<span class="sd">                                               [1, 1, 1]]) # Duplicate</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(points_with_duplicates)</span>
+
+<span class="sd">        Removing duplicate points using the `unique` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            unique_point_cloud = point_cloud.unique()</span>
+<span class="sd">            print(unique_point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (3, 3) with unique points [[0, 0, 0], [1, 1, 1], [2, 2, 2]]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+
+<div class="viewcode-block" id="PointCloud3D.unique_inplace">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.unique_inplace.html#pysdic.geometry.PointCloud3D.unique_inplace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unique_inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove duplicate points from the point cloud in place.</span>
+
+<span class="sd">        This method modifies the point cloud in place by retaining only unique points and removing all duplicate points.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`merge_inplace` for merging another point cloud while avoiding duplicates in place.</span>
+<span class="sd">            - :meth:`unique` for removing duplicate points and returning a new instance.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a NumPy array with duplicate points.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import PointCloud3D</span>
+
+<span class="sd">            # Create a point cloud with duplicate points</span>
+<span class="sd">            points_with_duplicates = np.array([[0, 0, 0],</span>
+<span class="sd">                                               [1, 1, 1],</span>
+<span class="sd">                                               [0, 0, 0],  # Duplicate</span>
+<span class="sd">                                               [2, 2, 2],</span>
+<span class="sd">                                               [1, 1, 1]]) # Duplicate</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(points_with_duplicates)</span>
+
+<span class="sd">        Removing duplicate points in place using the `unique_inplace` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            point_cloud.unique_inplace()</span>
+<span class="sd">            print(point_cloud.points)</span>
+<span class="sd">            # Output: A NumPy array of shape (3, 3) with unique points [[0, 0, 0], [1, 1, 1], [2, 2, 2]]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unique</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PointCloud3D.visualize">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.PointCloud3D.visualize.html#pysdic.geometry.PointCloud3D.visualize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">visualize</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> 
+            <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">point_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize the point cloud using PyVista.</span>
+
+<span class="sd">        Only finite points (not NaN or Inf) are visualized.  </span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - `PyVista Documentation &lt;https://docs.pyvista.org&gt;`_ for more details on visualization options.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        color : str, optional</span>
+<span class="sd">            The color of the points in the visualization. Default is &quot;black&quot;.</span>
+
+<span class="sd">        point_size : float, optional</span>
+<span class="sd">            The size of the points in the visualization. Default is 1.0.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a PointCloud3D from a random NumPy array.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Create a random point cloud with 100 points</span>
+<span class="sd">            points_array = np.random.rand(100, 3)</span>
+<span class="sd">            point_cloud = PointCloud3D.from_array(points_array)</span>
+
+<span class="sd">        Visualize the point cloud using the `visualize` method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            point_cloud.visualize(color=&#39;red&#39;, point_size=10)</span>
+
+<span class="sd">        This will open a PyVista window displaying the point cloud with red points of size 10.</span>
+
+<span class="sd">        .. figure:: ../../../pysdic/resources/point_cloud_3d_visualize_example.png</span>
+<span class="sd">            :width: 600</span>
+<span class="sd">            :align: center</span>
+
+<span class="sd">            Example of a 3D point cloud visualization using the `visualize` method.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check empty point cloud</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot visualize an empty point cloud.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Validate parameters</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Color must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">point_size</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">and</span> <span class="n">point_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Point size must be a positive number.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a PyVista point cloud</span>
+        <span class="n">valid_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">valid_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Point cloud contains only non-finite values; cannot visualize.&quot;</span><span class="p">)</span>
+        
+        <span class="n">pv_point_cloud</span> <span class="o">=</span> <span class="n">pyvista</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">valid_points</span><span class="p">)</span>
+        <span class="n">plotter</span> <span class="o">=</span> <span class="n">pyvista</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pv_point_cloud</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">point_size</span><span class="p">),</span> <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lighting</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">show_axes</span><span class="p">()</span> 
+        <span class="n">plotter</span><span class="o">.</span><span class="n">show_grid</span><span class="p">()</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2025, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

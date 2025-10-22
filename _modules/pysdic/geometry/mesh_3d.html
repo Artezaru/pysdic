@@ -1,0 +1,1840 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.geometry.mesh_3d &#8212; pysdic 0.0.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8c5712d9"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/mesh_3d';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 0.0.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.geometry.mesh_3d</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.geometry.mesh_3d</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2025 Artezaru</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">meshio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.point_cloud_3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud3D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.integrated_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegratedPoints</span>
+
+<div class="viewcode-block" id="Mesh3D">
+<a class="viewcode-back" href="../../../api_doc/mesh_3d.html#pysdic.geometry.Mesh3D">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Mesh3D</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Mesh is a collection of vertices (PointCloud3D) and connectivity information.</span>
+<span class="sd">    </span>
+<span class="sd">    This is an abstract base class for 3D meshes.</span>
+
+<span class="sd">    The vertices are represented as a PointCloud3D instance with shape (N, 3),</span>
+<span class="sd">    The connectivity is represented as a numpy ndarray with shape (M, K),</span>
+<span class="sd">    where N is the number of vertices (``n_vertices``), M is the number of elements (``n_elements``), and K is</span>
+<span class="sd">    the number of vertices per element (``n_nodes_per_element``). </span>
+
+<span class="sd">    The coordinates of a point into the mesh can be accessed by the natural coordinates</span>
+<span class="sd">    in the reference element. The number of natural coordinates :math:`(\xi, \eta, \zeta, ...)` depends on the type of element and</span>
+<span class="sd">    is noted as d (the topological dimension of the element) accessible through the property ``n_dimensions``.</span>
+
+<span class="sd">    Lets consider a mesh with K vertices per element, and d natural coordinates.</span>
+<span class="sd">    Lets :math:`X` be the coordinates of a point in the mesh. The transformation from natural coordinates to global coordinates is given by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        X = \sum_{i=1}^{K} N_i(\xi, \eta, \zeta, ...) X_i</span>
+
+<span class="sd">    where :math:`N_i` are the shape functions associated with each vertex, and :math:`X_i` are the coordinates of the vertices of the element.</span>
+<span class="sd">        </span>
+<span class="sd">    The subclasses must implement the following attributes and methods:</span>
+
+<span class="sd">    - (class property) ``_n_nodes_per_element``: int, the number of nodes K per element.</span>
+<span class="sd">    - (class property) ``_n_dimensions``: int, the topological dimension d of the elements.</span>
+<span class="sd">    - (class property) ``_meshio_cell_type``: str, the cell type used by meshio for this type of element.</span>
+<span class="sd">    - (method) ``shape_functions``: Callable[[numpy.ndarray], [numpy.ndarray, numpy.ndarray]], a method to compute the shape functions at given natural coordinates (and optional Jacobians).</span>
+
+<span class="sd">    The mesh can also store additional properties for the elements and vertices through the dictionaries</span>
+
+<span class="sd">    - ``_vertices_properties``: dict, a dictionary to store properties of the vertices, each property is a numpy ndarray of shape (N, A) where N is the number of vertices and A is the number of attributes for that property.</span>
+<span class="sd">    - ``_elements_properties``: dict, a dictionary to store properties of the elements, each property is a numpy ndarray of shape (M, B) where M is the number of elements and B is the number of attributes for that property.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vertices : PointCloud3D</span>
+<span class="sd">        The vertices of the mesh as a PointCloud3D instance with shape (N, 3).</span>
+
+<span class="sd">    connectivity : numpy.ndarray</span>
+<span class="sd">        The connectivity of the mesh as a numpy ndarray with shape (M, K),</span>
+<span class="sd">        where M is the number of elements and K is the number of vertices per element.</span>
+
+<span class="sd">    vertices_properties : Optional[dict], optional</span>
+<span class="sd">        A dictionary to store properties of the vertices, each property should be a numpy ndarray of shape (N, A) where N is the number of vertices and A is the number of attributes for that property, by default None.</span>
+
+<span class="sd">    elements_properties : Optional[dict], optional</span>
+<span class="sd">        A dictionary to store properties of the elements, each property should be a numpy ndarray of shape (M, B) where M is the number of elements and B is the number of attributes for that property, by default None.</span>
+
+<span class="sd">    internal_bypass : bool, optional</span>
+<span class="sd">        If True, internal checks are skipped for better performance, by default False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_n_nodes_per_element</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_n_dimensions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_meshio_cell_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;_internal_bypass&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;_vertices&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;_connectivity&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;_vertices_properties&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;_elements_properties&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;_vertices_predefined_metadata&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;_elements_predefined_metadata&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">elements_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">internal_bypass</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Define expected properties informations</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_vertices_predefined_metadata&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_elements_predefined_metadata&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># Initialize attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span> <span class="o">=</span> <span class="n">vertices_properties</span> <span class="k">if</span> <span class="n">vertices_properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span> <span class="o">=</span> <span class="n">elements_properties</span> <span class="k">if</span> <span class="n">elements_properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_bypass</span> <span class="o">=</span> <span class="n">internal_bypass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Internals</span>
+    <span class="c1"># =======================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">internal_bypass</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When enabled, internal checks are skipped for better performance.</span>
+
+<span class="sd">        This is useful for testing purposes, but should not be used in production code.</span>
+<span class="sd">        Please ensure that all necessary checks are performed before using this mode.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This property is settable, but it is recommended to set it only when necessary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : bool</span>
+<span class="sd">            If True, internal checks are bypassed. If False, internal checks are performed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if internal checks are bypassed, False otherwise.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        --------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not a boolean.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_bypass</span>
+    
+    <span class="nd">@internal_bypass</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">internal_bypass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bypass mode must be a boolean, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_bypass</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_internal_check_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of the vertices.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If vertices is not a PointCloud3D instance.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If vertices do not have 3 dimensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices must be a PointCloud3D instance, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">n_points</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes_per_element</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices must have at least </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes_per_element</span><span class="si">}</span><span class="s2"> points, got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_internal_check_connectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of the connectivity.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If connectivity is not a numpy ndarray.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If connectivity does not have the correct shape or contains invalid indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connectivity must be a numpy ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connectivity must be a 2D array, got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Connectivity array cannot be empty.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes_per_element</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Connectivity must have at least two columns (for edges).&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Connectivity contains invalid vertex indices.&quot;</span><span class="p">)</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">_internal_check_vertices_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of a specific vertices property.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the vertices property to check.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the vertices property is not a numpy ndarray or has invalid type.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the vertices property has invalid shape or values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Global checks</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must be a numpy ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must be a 2D array, got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must have shape (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span><span class="si">}</span><span class="s2">, A), got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Specific checks</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span><span class="p">:</span>
+            <span class="n">expected_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;dim&quot;</span><span class="p">]</span>
+            <span class="n">expected_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="n">check_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;check_method&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected_dim</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must have </span><span class="si">{</span><span class="n">expected_dim</span><span class="si">}</span><span class="s2"> columns, got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">expected_type</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must have type </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">check_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">check_method</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">_internal_check_vertices_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of the vertices properties.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If vertices properties is not a dictionary or contains invalid types.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If vertices properties contains invalid shapes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_vertices_property</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_internal_check_elements_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of a specific elements property.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the elements property to check.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the elements property is not a numpy ndarray or has invalid type.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the elements property has invalid shape or values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Global checks</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must be a numpy ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must be a 2D array, got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must have shape (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2">, B), got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Specific checks</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="p">:</span>
+            <span class="n">expected_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;dim&quot;</span><span class="p">]</span>
+            <span class="n">expected_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="n">check_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;check_method&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected_dim</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must have </span><span class="si">{</span><span class="n">expected_dim</span><span class="si">}</span><span class="s2"> columns, got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">expected_type</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; must have type </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">check_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">check_method</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            
+    <span class="k">def</span><span class="w"> </span><span class="nf">_internal_check_elements_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of the elements properties.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If elements properties is not a dictionary or contains invalid types.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If elements properties contains invalid shapes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_elements_property</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_integrated_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrated_points</span><span class="p">:</span> <span class="n">IntegratedPoints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to check the validity of an IntegratedPoints instance for this mesh.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        integrated_points : IntegratedPoints</span>
+<span class="sd">            The IntegratedPoints instance to check.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If integrated_points is not an IntegratedPoints instance.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If integrated_points has invalid dimensions or contains invalid element indices.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">,</span> <span class="n">IntegratedPoints</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input must be an IntegratedPoints instance, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;IntegratedPoints dimensions (</span><span class="si">{</span><span class="n">integrated_points</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">) do not match mesh dimensions (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">n_points</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PointCloud3D</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">integrated_points</span><span class="o">.</span><span class="n">element_indices</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;IntegratedPoints contains element indices out of bounds for this mesh.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_vertices_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to get a vertices property or return a default value if the property does not exist.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : Optional[str]</span>
+<span class="sd">            The key of the vertices property to retrieve. If None, returns the default value.</span>
+
+<span class="sd">        default : Optional[numpy.ndarray], optional</span>
+<span class="sd">            The default value to return if the property does not exist, by default None.</span>
+
+<span class="sd">        raise_error : bool, optional</span>
+<span class="sd">            If True, raises a KeyError if the property does not exist, by default False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The vertices property associated with the key, or the default value if the property does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Overwrite default if key is provided</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">raise_error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; does not exist in the mesh.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="n">default</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property must be a numpy ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">default</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property must have shape (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span><span class="si">}</span><span class="s2">, A), got </span><span class="si">{</span><span class="n">default</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">default</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_elements_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span> <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal method to get an elements property or return a default value if the property does not exist.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : Optional[str]</span>
+<span class="sd">            The key of the elements property to retrieve. If None, returns the default value.</span>
+
+<span class="sd">        default : Optional[numpy.ndarray], optional</span>
+<span class="sd">            The default value to return if the property does not exist, by default None.</span>
+
+<span class="sd">        raise_error : bool, optional</span>
+<span class="sd">            If True, raises a KeyError if the property does not exist, by default False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The elements property associated with the key, or the default value if the property does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Overwrite default if key is provided</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">raise_error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; does not exist in the mesh.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">default</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property must be a numpy ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">default</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property must have shape (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2">, B), got </span><span class="si">{</span><span class="n">default</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">default</span>
+        
+    <span class="c1"># =======================</span>
+    <span class="c1"># I/O Methods</span>
+    <span class="c1"># =======================</span>
+<div class="viewcode-block" id="Mesh3D.from_meshio">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.from_meshio.html#pysdic.geometry.Mesh3D.from_meshio">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_meshio</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">mesh</span><span class="p">:</span> <span class="n">meshio</span><span class="o">.</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">load_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Mesh3D instance from a meshio Mesh object.</span>
+
+<span class="sd">        The following fields are extracted:</span>
+
+<span class="sd">        - mesh.points → vertices</span>
+<span class="sd">        - mesh.cells[0].data → triangles</span>
+<span class="sd">        - mesh.point_data → _vertex_properties as arrays of shape (N, A)</span>
+<span class="sd">        - mesh.cell_data → _element_properties as arrays of shape (M, B)</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`Mesh3D.to_meshio` for the reverse operation.</span>
+<span class="sd">            - `meshio documentation &lt;https://pypi.org/project/meshio/&gt;`_ for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mesh : meshio.Mesh</span>
+<span class="sd">            A meshio Mesh object.</span>
+
+<span class="sd">        load_properties : bool, optional</span>
+<span class="sd">            If True, properties are extracted from the meshio Mesh object, by default True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Mesh3D</span>
+<span class="sd">            A Mesh3D instance created from the meshio Mesh object.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the input is not a meshio Mesh object.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the mesh structure is invalid.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a simple meshio Mesh object.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            import meshio</span>
+<span class="sd">            from pysdic.geometry import Mesh3D</span>
+
+<span class="sd">            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])</span>
+<span class="sd">            cells = [(&quot;triangle&quot;, np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]))]</span>
+
+<span class="sd">            mesh = meshio.Mesh(points=points, cells=cells)</span>
+
+<span class="sd">        Create a Mesh3D instance from the meshio Mesh object.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            mesh3d = Mesh3D.from_meshio(mesh)</span>
+<span class="sd">            print(mesh3d.vertices)</span>
+<span class="sd">            # Output: PointCloud3D with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validations</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">meshio</span><span class="o">.</span><span class="n">Mesh</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input must be a meshio Mesh object, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">cells</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">n_nodes_per_element</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid mesh structure.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">load_properties</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;load_properties must be a boolean, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">load_properties</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Extract data</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="n">PointCloud3D</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">connectivity</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">mesh_properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">vertices_properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">elements_properties</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># Extract properties if requested</span>
+        <span class="k">if</span> <span class="n">load_properties</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">field_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">mesh_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+            
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">vertices_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">cell_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">elements_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Create Mesh3D instance</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="p">,</span> <span class="n">mesh_properties</span><span class="o">=</span><span class="n">mesh_properties</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="o">=</span><span class="n">vertices_properties</span><span class="p">,</span> <span class="n">elements_properties</span><span class="o">=</span><span class="n">elements_properties</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Mesh3D.to_meshio">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.to_meshio.html#pysdic.geometry.Mesh3D.to_meshio">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_meshio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">meshio</span><span class="o">.</span><span class="n">Mesh</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the Mesh3D instance to a meshio Mesh object.</span>
+
+<span class="sd">        The following fields are created:</span>
+
+<span class="sd">        - vertices → mesh.points</span>
+<span class="sd">        - connectivity → mesh.cells[0].data</span>
+<span class="sd">        - _vertex_properties as arrays of shape (N, A) → mesh.point_data</span>
+<span class="sd">        - _element_properties as arrays of shape (M, B) → mesh.cell_data</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`Mesh3D.from_meshio` for the reverse operation.</span>
+<span class="sd">            - `meshio documentation &lt;https://pypi.org/project/meshio/&gt;`_ for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        save_properties : bool, optional</span>
+<span class="sd">            If True, properties are saved to the meshio Mesh object, by default True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        meshio.Mesh</span>
+<span class="sd">            A meshio Mesh object created from the Mesh3D instance.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If save_properties is not a boolean.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a simple Mesh3D instance.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import Mesh3D, PointCloud3D</span>
+
+<span class="sd">            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])</span>
+<span class="sd">            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])</span>
+
+<span class="sd">            mesh3d = Mesh3D(PointCloud3D.from_array(points), connectivity)</span>
+
+<span class="sd">        Convert the Mesh3D instance to a meshio Mesh object.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            mesh = mesh3d.to_meshio()</span>
+<span class="sd">            print(mesh.points)</span>
+<span class="sd">            # Output: [[0. 0. 0.] [1. 0. 0.] [0. 1. 0.] [0. 0. 1.]]</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_properties</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;save_properties must be a boolean, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">save_properties</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">meshio</span><span class="o">.</span><span class="n">CellBlock</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">meshio_cell_type</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">)]</span>
+        
+        <span class="k">if</span> <span class="n">save_properties</span><span class="p">:</span>
+            <span class="n">point_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">cell_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">field_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">value</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh_properties</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">point_data</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cell_data</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">field_data</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">return</span> <span class="n">meshio</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">cells</span><span class="o">=</span><span class="n">cells</span><span class="p">,</span> <span class="n">point_data</span><span class="o">=</span><span class="n">point_data</span><span class="p">,</span> <span class="n">cell_data</span><span class="o">=</span><span class="n">cell_data</span><span class="p">,</span> <span class="n">field_data</span><span class="o">=</span><span class="n">field_data</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Mesh3D.from_vtk">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.from_vtk.html#pysdic.geometry.Mesh3D.from_vtk">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_vtk</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">load_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Mesh3D instance from a VTK file.</span>
+
+<span class="sd">        This method uses meshio to read the VTK file and then converts it to a Mesh3D instance.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`Mesh3D.to_vtk` for the reverse operation.</span>
+<span class="sd">            - :meth:`Mesh3D.from_meshio` for more information on the conversion process.</span>
+<span class="sd">            - `meshio documentation &lt;https://pypi.org/project/meshio/&gt;`_ for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            The path to the VTK file.</span>
+
+<span class="sd">        load_properties : bool, optional</span>
+<span class="sd">            If True, properties are extracted from the VTK file, by default True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Mesh3D</span>
+<span class="sd">            A Mesh3D instance created from the VTK file.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If the file does not exist.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the file format is not supported or the mesh structure is invalid.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a simple meshio Mesh object.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            import meshio</span>
+<span class="sd">            from pysdic.geometry import Mesh3D</span>
+
+<span class="sd">            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])</span>
+<span class="sd">            cells = [(&quot;triangle&quot;, np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]))]</span>
+
+<span class="sd">            mesh = meshio.Mesh(points=points, cells=cells)</span>
+
+<span class="sd">        Save the meshio Mesh object to a VTK file.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            mesh.write(&quot;simple_mesh.vtk&quot;, file_format=&quot;vtk&quot;)</span>
+
+<span class="sd">        Create a Mesh3D instance from the VTK file.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            mesh3d = Mesh3D.from_vtk(&quot;simple_mesh.vtk&quot;)</span>
+<span class="sd">            print(mesh3d.vertices)</span>
+<span class="sd">            # Output: PointCloud3D with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]      </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span>
+        
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">meshio</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;vtk&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_meshio</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">load_properties</span><span class="o">=</span><span class="n">load_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.to_vtk">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.to_vtk.html#pysdic.geometry.Mesh3D.to_vtk">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_vtk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the Mesh3D instance to a VTK file.</span>
+
+<span class="sd">        This method uses meshio to write the Mesh3D instance to a VTK file.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`Mesh3D.from_vtk` for the reverse operation.</span>
+<span class="sd">            - :meth:`Mesh3D.to_meshio` for more information on the conversion process.</span>
+<span class="sd">            - `meshio documentation &lt;https://pypi.org/project/meshio/&gt;`_ for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            The path to the output VTK file.</span>
+<span class="sd">        </span>
+<span class="sd">        save_properties : bool, optional</span>
+<span class="sd">            If True, properties are saved to the VTK file, by default True.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the file format is not supported.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a simple Mesh3D instance.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import Mesh3D, PointCloud3D</span>
+
+<span class="sd">            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])</span>
+<span class="sd">            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])</span>
+<span class="sd">            mesh3d = Mesh3D(PointCloud3D.from_array(points), connectivity)</span>
+
+<span class="sd">        Save the Mesh3D instance to a VTK file.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            mesh3d.to_vtk(&quot;simple_mesh.vtk&quot;)</span>
+<span class="sd">            # This will create a file named &#39;simple_mesh.vtk&#39; in the current directory.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">mesh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_meshio</span><span class="p">(</span><span class="n">save_properties</span><span class="o">=</span><span class="n">save_properties</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;vtk&quot;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Properties</span>
+    <span class="c1"># =======================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The vertices of the mesh in an :class:`PointCloud3D` instance.</span>
+
+<span class="sd">        The vertices are represented as a PointCloud3D instance with shape (N, 3) where N is the number of vertices.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This property is settable.</span>
+
+<span class="sd">        To change the number of vertices, it is recommended to create a new Mesh3D instance with the updated vertices and connectivity</span>
+<span class="sd">        rather than modifying the vertices in place. For memory considerations, you can also modify the vertices in place, but please ensure that</span>
+<span class="sd">        all necessary checks are performed before using this mode.</span>
+
+<span class="sd">        You should set `internal_bypass` to True before modifying the vertices, and set it back to False afterwards.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            mesh.internal_bypass = True</span>
+<span class="sd">            mesh.vertices = new_vertices</span>
+<span class="sd">            mesh.connectivity = new_connectivity</span>
+<span class="sd">            mesh.clear_properties()  # Optional: clear properties if they are no longer valid</span>
+<span class="sd">            mesh.internal_bypass = False</span>
+<span class="sd">            mesh.validate()  # Optional: ensure the mesh is still valid</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            If the vertices are changed, the connectivity and properties may become invalid. </span>
+<span class="sd">            Please ensure to recompute or update them accordingly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : Union[PointCloud3D, numpy.ndarray]</span>
+<span class="sd">            The new vertices for the mesh with shape (N, 3).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            The vertices of the mesh as a PointCloud3D instance of shape (N, 3).</span>
+
+<span class="sd">        Exemples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create a simple Mesh3D instance.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy as np</span>
+<span class="sd">            from pysdic.geometry import Mesh3D, PointCloud3D</span>
+
+<span class="sd">            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])</span>
+<span class="sd">            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])</span>
+<span class="sd">            mesh3d = Mesh3D(PointCloud3D.from_array(points), connectivity)</span>
+
+<span class="sd">        Access the vertices of the mesh.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            print(mesh3d.vertices)</span>
+<span class="sd">            # Output: PointCloud3D with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span>
+    
+    <span class="nd">@vertices</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">PointCloud3D</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_vertices</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or set the connectivity of the mesh.</span>
+
+<span class="sd">        The connectivity is represented as a numpy ndarray with shape (M, K),</span>
+<span class="sd">        where M is the number of elements and K is the number of vertices per element.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            If the connectivity is changed, the properties should be updated accordingly.</span>
+<span class="sd">            To avoid inconsistencies, it is recommended to create a new Mesh3D instance with the updated vertices and connectivity.</span>
+
+<span class="sd">            Otherwise, you should set `internal_bypass` to True before modifying the connectivity, and set it back to False afterwards.</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                mesh.internal_bypass = True</span>
+<span class="sd">                mesh.connectivity = new_connectivity</span>
+<span class="sd">                mesh.clear_elements_properties()  # Optional: clear properties if they are no longer valid</span>
+<span class="sd">                mesh.elements_uvmap = new_uvmap  # Optional: set new uvmap if needed or other properties</span>
+<span class="sd">                mesh.internal_bypass = False</span>
+<span class="sd">                mesh.validate()  # Optional: ensure the mesh is still valid</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            If the connectivity is changed, the properties may become invalid. </span>
+<span class="sd">            Please ensure to recompute or update them accordingly.        </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : numpy.ndarray</span>
+<span class="sd">            The new connectivity for the mesh as an array-like of shape (M, K).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            The connectivity of the mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectivity</span>
+    
+    <span class="nd">@connectivity</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectivity</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_connectivity</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of vertices in the mesh.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Alias for `mesh.vertices.n_points`.</span>
+<span class="sd">            You can also use `len(mesh.vertices)`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of vertices in the mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of elements in the mesh.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of elements in the mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_nodes_per_element</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of nodes per element in the mesh.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of nodes per element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes_per_element</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Subclasses must implement n_nodes_per_element property.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes_per_element</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the topological dimension of the elements in the mesh.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The topological dimension of the elements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Subclasses must implement n_dimensions property.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">meshio_cell_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the cell type used by meshio for this type of element.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The cell type used by meshio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meshio_cell_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Subclasses must implement meshio_cell_type property.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meshio_cell_type</span>
+
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Properties Methods</span>
+    <span class="c1"># =======================</span>
+<div class="viewcode-block" id="Mesh3D.get_vertices_property">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.get_vertices_property.html#pysdic.geometry.Mesh3D.get_vertices_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_vertices_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a property associated with the vertices of the mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the property to retrieve.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray or None</span>
+<span class="sd">            The property associated with the vertices, or None if the property does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_vertices_property</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Mesh3D.get_elements_property">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.get_elements_property.html#pysdic.geometry.Mesh3D.get_elements_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_elements_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a property associated with the elements of the mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the property to retrieve.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray or None</span>
+<span class="sd">            The property associated with the elements, or None if the property does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_elements_property</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Mesh3D.set_vertices_property">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.set_vertices_property.html#pysdic.geometry.Mesh3D.set_vertices_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_vertices_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a property associated with the vertices of the mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the property to set.</span>
+
+<span class="sd">        value : Optional[numpy.ndarray]</span>
+<span class="sd">            The property to associate with the vertices as an array-like of shape (N, A),</span>
+<span class="sd">            where N is the number of vertices and A is the number of attributes for that property.</span>
+<span class="sd">            If None, the property is removed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If value is not a numpy ndarray or None.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If value does not have the correct shape.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span><span class="p">:</span>
+            <span class="n">type_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">type_info</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">type_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_vertices_property</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.set_elements_property">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.set_elements_property.html#pysdic.geometry.Mesh3D.set_elements_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_elements_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a property associated with the elements of the mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the property to set.</span>
+
+<span class="sd">        value : Optional[numpy.ndarray]</span>
+<span class="sd">            The property to associate with the elements as an array-like of shape (M, B),</span>
+<span class="sd">            where M is the number of elements and B is the number of attributes for that property.</span>
+<span class="sd">            If None, the property is removed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If value is not a numpy ndarray or None.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If value does not have the correct shape.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="p">:</span>
+            <span class="n">type_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">type_info</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">type_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_elements_property</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.remove_vertices_property">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.remove_vertices_property.html#pysdic.geometry.Mesh3D.remove_vertices_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_vertices_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove a property associated with the vertices of the mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the property to remove.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            If the property does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vertices property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Mesh3D.remove_elements_property">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.remove_elements_property.html#pysdic.geometry.Mesh3D.remove_elements_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_elements_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove a property associated with the elements of the mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            The key of the property to remove.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            If the property does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elements property &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="Mesh3D.list_vertices_properties">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.list_vertices_properties.html#pysdic.geometry.Mesh3D.list_vertices_properties">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_vertices_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List all keys of the properties associated with the vertices of the mesh.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[str]</span>
+<span class="sd">            A tuple containing all keys of the vertices properties.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+    
+<div class="viewcode-block" id="Mesh3D.list_elements_properties">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.list_elements_properties.html#pysdic.geometry.Mesh3D.list_elements_properties">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_elements_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List all keys of the properties associated with the elements of the mesh.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[str]</span>
+<span class="sd">            A tuple containing all keys of the elements properties.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.clear_vertices_properties">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.clear_vertices_properties.html#pysdic.geometry.Mesh3D.clear_vertices_properties">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_vertices_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear all properties associated with the vertices of the mesh.</span>
+
+<span class="sd">        After calling this method, the vertices properties dictionary will be empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.clear_elements_properties">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.clear_elements_properties.html#pysdic.geometry.Mesh3D.clear_elements_properties">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_elements_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear all properties associated with the elements of the mesh.</span>
+
+<span class="sd">        After calling this method, the elements properties dictionary will be empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.clear_properties">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.clear_properties.html#pysdic.geometry.Mesh3D.clear_properties">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear all properties of the mesh, including mesh properties, vertices properties, and elements properties.</span>
+
+<span class="sd">        After calling this method, the properties dictionaries will be empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_elements_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_vertices_properties</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.validate">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.validate.html#pysdic.geometry.Mesh3D.validate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate the mesh by performing internal checks on vertices and connectivity.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If vertices is not a PointCloud3D instance or connectivity is not a numpy ndarray.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If vertices do not have 3 dimensions, if connectivity does not have the correct shape, or contains invalid indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_vertices</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_connectivity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_vertices_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_elements_properties</span><span class="p">()</span></div>
+
+        
+    <span class="c1"># =======================</span>
+    <span class="c1"># Public Methods</span>
+    <span class="c1"># =======================    </span>
+<div class="viewcode-block" id="Mesh3D.copy">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.copy.html#pysdic.geometry.Mesh3D.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a deep copy of the Mesh3D instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Mesh3D</span>
+<span class="sd">            A deep copy of the Mesh3D instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span>
+            <span class="n">vertices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">connectivity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">vertices_properties</span><span class="o">=</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertices_properties</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+            <span class="n">elements_properties</span><span class="o">=</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements_properties</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+            <span class="n">internal_bypass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
+        <span class="p">)</span> </div>
+
+
+<div class="viewcode-block" id="Mesh3D.get_vertices_coordinates">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.get_vertices_coordinates.html#pysdic.geometry.Mesh3D.get_vertices_coordinates">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_vertices_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the coordinates of the vertices for the specified elements.</span>
+
+<span class="sd">        If the element_indices is of shape (M,), the returned array will be of shape (M, K, 3),</span>
+<span class="sd">        where K is the number of vertices per element.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_indices : numpy.ndarray</span>
+<span class="sd">            An array of shape (M,) containing the element indices. Must be a 1D array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            An array of shape (M, K, 3) containing the vertex coordinates for each element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Element indices must be a 1D array, got </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">[</span><span class="n">element_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="p">:]</span></div>
+
+
+<div class="viewcode-block" id="Mesh3D.natural_to_global">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.natural_to_global.html#pysdic.geometry.Mesh3D.natural_to_global">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">natural_to_global</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natural_coords</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform natural coordinates to global coordinates for specified elements.</span>
+
+<span class="sd">        Lets consider a mesh with K vertices per element, and d natural coordinates.</span>
+<span class="sd">        The given natural coordinates should be (Np, d) where Np is the number of points to evaluate.</span>
+<span class="sd">        The element_indices should be (Np,) where each entry is the index of the element in which to evaluate the natural coordinates.</span>
+<span class="sd">        The returned global coordinates will be of shape (Np, 3).</span>
+
+<span class="sd">        The transformation from natural coordinates to global coordinates is given by:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = \sum_{i=1}^{K} N_i(\xi, \eta, \zeta, ...) X_i</span>
+
+<span class="sd">        where :math:`N_i` are the shape functions associated with each vertex, and :math:`X_i` are the coordinates of the vertices of the element.</span>
+
+<span class="sd">        .. note:</span>
+
+<span class="sd">            For one point, the input must be (1, d) and not only (d,).</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`shape_functions` for computing shape functions.</span>
+<span class="sd">            - :meth:`global_to_natural` for the inverse transformation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        natural_coords : numpy.ndarray</span>
+<span class="sd">            An array of shape (Np, d) containing the natural coordinates.</span>
+
+<span class="sd">        element_indices : numpy.ndarray</span>
+<span class="sd">            An array of shape (Np,) containing the element indices for each point.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            An array of shape (Np, 3) containing the global coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate input shapes</span>
+        <span class="n">natural_coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">natural_coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">natural_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid natural_coords shape: </span><span class="si">{</span><span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid element_indices shape: </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get the shape functions and vertices coordinates</span>
+        <span class="n">shape_functions</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span><span class="p">(</span><span class="n">natural_coords</span><span class="p">)</span>  <span class="c1"># (Np, K)</span>
+        <span class="n">vertices_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vertices_coordinates</span><span class="p">(</span><span class="n">element_indices</span><span class="p">)</span>  <span class="c1"># (Np, K, 3)</span>
+
+        <span class="c1"># Compute global coordinates</span>
+        <span class="n">global_coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,ijk-&gt;ik&#39;</span><span class="p">,</span> <span class="n">shape_functions</span><span class="p">,</span> <span class="n">vertices_coords</span><span class="p">)</span>  <span class="c1"># (Np, 3)</span>
+        <span class="k">return</span> <span class="n">global_coords</span></div>
+
+
+
+<div class="viewcode-block" id="Mesh3D.evaluate_vertices_property_at">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.evaluate_vertices_property_at.html#pysdic.geometry.Mesh3D.evaluate_vertices_property_at">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_vertices_property_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natural_coords</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">property_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">property_array</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate a vertices property at given natural coordinates and element indices.</span>
+
+<span class="sd">        Lets consider a mesh with K vertices per element, and d natural coordinates.</span>
+<span class="sd">        The given natural coordinates should be (Np, d) where Np is the number of points to evaluate.</span>
+<span class="sd">        The element_indices should be (Np,) where each entry is the index of the element in which to evaluate the natural coordinates.</span>
+<span class="sd">        The returned property values will be of shape (Np, A) where A is the number of attributes for that property.</span>
+
+<span class="sd">        The evaluation of the property at the given natural coordinates is performed using the shape functions:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            P = \sum_{i=1}^{K} N_i(\xi, \eta, \zeta, ...) P_i</span>
+
+<span class="sd">        where :math:`N_i` are the shape functions associated with each vertex, and :math:`P_i` are the property values at the vertices of the element.</span>
+
+<span class="sd">        .. note:</span>
+
+<span class="sd">            For one point, the input must be (1, d) and not only (d,).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        natural_coords : numpy.ndarray</span>
+<span class="sd">            An array of shape (Np, d) containing the natural coordinates.</span>
+
+<span class="sd">        element_indices : numpy.ndarray</span>
+<span class="sd">            An array of shape (Np,) containing the element indices for each point.</span>
+
+<span class="sd">        property_key : Optional[str], optional</span>
+<span class="sd">            The name of the vertices property to evaluate. If None, property_array must be provided., by default None.</span>
+
+<span class="sd">        property_array : Optional[numpy.ndarray], optional</span>
+<span class="sd">            An array of shape (N, A) containing the vertices property values. If None, property_key must be provided., by default None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            An array of shape (Np, A) containing the evaluated property values.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If neither or both property_key and property_array are provided.</span>
+<span class="sd">            If property_key does not exist in vertices properties.</span>
+<span class="sd">            If property_array does not have the correct shape.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate input shapes</span>
+        <span class="n">natural_coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">natural_coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">natural_coords</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid natural_coords shape: </span><span class="si">{</span><span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid element_indices shape: </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Get the property array</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">property_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">property_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">property_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">property_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either property_key or property_array must be provided, but not both.&quot;</span><span class="p">)</span>
+        <span class="n">property_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_vertices_property</span><span class="p">(</span><span class="n">property_key</span><span class="p">,</span> <span class="n">property_array</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># (N, A)</span>
+        
+        <span class="c1"># Get the shape functions and vertices coordinates</span>
+        <span class="n">shape_functions</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span><span class="p">(</span><span class="n">natural_coords</span><span class="p">)</span>  <span class="c1"># (Np, K)</span>
+        <span class="n">vertices_property</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">[</span><span class="n">element_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="p">:]</span>  <span class="c1"># (Np, K, A)</span>
+
+        <span class="c1"># Compute evaluated property</span>
+        <span class="n">evaluated_property</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij,ijk-&gt;ik&#39;</span><span class="p">,</span> <span class="n">shape_functions</span><span class="p">,</span> <span class="n">vertices_property</span><span class="p">)</span>  <span class="c1"># (Np, A)</span>
+        <span class="k">return</span> <span class="n">evaluated_property</span></div>
+
+        
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Convenience Methods</span>
+    <span class="c1"># =======================</span>
+<div class="viewcode-block" id="Mesh3D.natural_to_global_points">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.natural_to_global_points.html#pysdic.geometry.Mesh3D.natural_to_global_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">natural_to_global_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrated_points</span><span class="p">:</span> <span class="n">IntegratedPoints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PointCloud3D</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform natural coordinates to global coordinates for an IntegratedPoints instance.</span>
+
+<span class="sd">        This method is a convenience wrapper around :meth:`natural_to_global` that extracts the natural coordinates and element indices from the IntegratedPoints instance.</span>
+
+<span class="sd">        The integrated points with &quot;-1&quot; element index are ignored and the corresponding global coordinates are setted to NaN.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        integrated_points : IntegratedPoints</span>
+<span class="sd">            An IntegratedPoints instance containing natural coordinates and element indices.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PointCloud3D</span>
+<span class="sd">            A PointCloud3D instance containing the global coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_integrated_points</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">)</span>
+        
+        <span class="n">global_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">global_coordinates</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_to_global</span><span class="p">(</span><span class="n">integrated_points</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="p">:],</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span>
+        <span class="n">global_coordinates</span><span class="p">[</span><span class="o">~</span><span class="n">valid_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">PointCloud3D</span><span class="p">(</span><span class="n">global_coordinates</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Mesh3D.evaluate_vertices_property_at_points">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.evaluate_vertices_property_at_points.html#pysdic.geometry.Mesh3D.evaluate_vertices_property_at_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_vertices_property_at_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrated_points</span><span class="p">:</span> <span class="n">IntegratedPoints</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">property_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">property_array</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate a vertices property at given natural coordinates and element indices from an IntegratedPoints instance.</span>
+
+<span class="sd">        This method is a convenience wrapper around :meth:`evaluate_vertices_property_at` that extracts the natural coordinates and element indices from the IntegratedPoints instance.</span>
+
+<span class="sd">        The integrated points with &quot;-1&quot; element index are ignored and the corresponding property values are setted to NaN.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        integrated_points : IntegratedPoints</span>
+<span class="sd">            An IntegratedPoints instance containing natural coordinates and element indices.</span>
+
+<span class="sd">        property_key : Optional[str], optional</span>
+<span class="sd">            The name of the vertices property to evaluate. If None, property_array must be provided., by default None.</span>
+
+<span class="sd">        property_array : Optional[numpy.ndarray], optional</span>
+<span class="sd">            An array of shape (N, A) containing the vertices property values. If None, property_key must be provided., by default None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            An array of shape (Np, A) containing the evaluated property values.</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_integrated_points</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">)</span>
+        
+        <span class="c1"># Get the property array</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">property_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">property_array</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">property_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">property_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either property_key or property_array must be provided, but not both.&quot;</span><span class="p">)</span>
+        <span class="n">property_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_vertices_property</span><span class="p">(</span><span class="n">property_key</span><span class="p">,</span> <span class="n">property_array</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># (N, A)</span>
+
+        <span class="n">evaluated_property</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">),</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">property_array</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">evaluated_property</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_vertices_property_at</span><span class="p">(</span><span class="n">integrated_points</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="p">:],</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">],</span> <span class="n">property_array</span><span class="o">=</span><span class="n">property_array</span><span class="p">)</span>
+        <span class="n">evaluated_property</span><span class="p">[</span><span class="o">~</span><span class="n">valid_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">evaluated_property</span></div>
+
+
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Abstract Methods</span>
+    <span class="c1"># =======================</span>
+<div class="viewcode-block" id="Mesh3D.shape_functions">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.Mesh3D.shape_functions.html#pysdic.geometry.Mesh3D.shape_functions">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natural_coords</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the shape functions at given natural coordinates.</span>
+
+<span class="sd">        Lets consider a mesh with K vertices per element, and d natural coordinates.</span>
+<span class="sd">        The given natural coordinates should be (Np, d) where Np is the number of points to evaluate and d is the dimension of the natural coordinates.</span>
+<span class="sd">        The returned shape functions will be of shape (Np, K) and each row will sum to 1 and contain the values of the shape functions associated with each vertex of the element.</span>
+
+<span class="sd">        The shape fonctions :math:`N_i` are defined such that:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            X = \sum_{i=1}^{K} N_i(\xi, \eta, \zeta, ...) X_i</span>
+
+<span class="sd">        where :math:`X` are the global coordinates of a point, and :math:`X_i` are the coordinates of the vertices of the element and :math:`(\xi, \eta, \zeta, ...)` are the natural coordinates.</span>
+
+<span class="sd">        .. note:</span>
+
+<span class="sd">            For one point, the input must be (1, d) and not only (d,).</span>
+
+<span class="sd">        If ``jacobian`` is True, the method also returns the Jacobian of the shape functions with respect to the natural coordinates,</span>
+<span class="sd">        The returned Jacobian will be of shape (Np, K, d) where each entry (i, j, k) is the derivative of the j-th shape function with respect to the k-th natural coordinate at the i-th point.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial X}{\partial \xi_j} = \sum_{i=1}^{K} \frac{\partial N_i}{\partial \xi_j} X_i</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`natural_to_global` for transforming natural coordinates to global coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        natural_coords : numpy.ndarray</span>
+<span class="sd">            An array-like of shape (Np, d) where Np is the number of points to evaluate and d is the number of natural coordinates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            An array of shape (Np, K) where K is the number of nodes per element.</span>
+
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            If ``jacobian`` is True, an array of shape (Np, K, d) where K is the number of nodes per element and d is the number of natural coordinates. Otherwise, None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Subclasses must implement shape_functions method.&quot;</span><span class="p">)</span></div>
+</div>
+
+    
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2025, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
