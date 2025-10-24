@@ -65,7 +65,7 @@ def create_linear_triangle_heightmap(
             n_y=50,
         )
 
-        surface_mesh.visualize_mesh()
+        surface_mesh.visualize()
 
     .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_example.png
         :width: 400

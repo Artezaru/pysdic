@@ -449,24 +449,26 @@ class Mesh3D(ABC):
 
         Examples
         --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+        
         Create a simple meshio Mesh object.
 
         .. code-block:: python
 
             import numpy as np
             import meshio
-            from pysdic.geometry import Mesh3D
+            from pysdic.geometry import LinearTriangleMesh3D
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             cells = [("triangle", np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]))]
 
             mesh = meshio.Mesh(points=points, cells=cells)
 
-        Create a Mesh3D instance from the meshio Mesh object.
+        Create a LinearTriangleMesh3D instance from the meshio Mesh object.
 
         .. code-block:: python
 
-            mesh3d = Mesh3D.from_meshio(mesh)
+            mesh3d = LinearTriangleMesh3D.from_meshio(mesh)
             print(mesh3d.vertices)
             # Output: PointCloud3D with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
 
@@ -535,19 +537,21 @@ class Mesh3D(ABC):
 
         Examples
         --------
-        Create a simple Mesh3D instance.
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
 
         .. code-block:: python
 
             import numpy as np
-            from pysdic.geometry import Mesh3D, PointCloud3D
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
 
-            mesh3d = Mesh3D(PointCloud3D.from_array(points), connectivity)
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
 
-        Convert the Mesh3D instance to a meshio Mesh object.
+        Convert the LinearTriangleMesh3D instance to a meshio Mesh object.
 
         .. code-block:: python
 
@@ -607,13 +611,15 @@ class Mesh3D(ABC):
         
         Examples
         --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
         Create a simple meshio Mesh object.
 
         .. code-block:: python
 
             import numpy as np
             import meshio
-            from pysdic.geometry import Mesh3D
+            from pysdic.geometry import LinearTriangleMesh3D
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             cells = [("triangle", np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]))]
@@ -626,11 +632,11 @@ class Mesh3D(ABC):
 
             mesh.write("simple_mesh.vtk", file_format="vtk")
 
-        Create a Mesh3D instance from the VTK file.
+        Create a LinearTriangleMesh3D instance from the VTK file.
 
         .. code-block:: python
 
-            mesh3d = Mesh3D.from_vtk("simple_mesh.vtk")
+            mesh3d = LinearTriangleMesh3D.from_vtk("simple_mesh.vtk")
             print(mesh3d.vertices)
             # Output: PointCloud3D with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]      
 
@@ -669,18 +675,20 @@ class Mesh3D(ABC):
 
         Examples
         --------
-        Create a simple Mesh3D instance.
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
 
         .. code-block:: python
 
             import numpy as np
-            from pysdic.geometry import Mesh3D, PointCloud3D
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh3D(PointCloud3D.from_array(points), connectivity)
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
 
-        Save the Mesh3D instance to a VTK file.
+        Save the LinearTriangleMesh3D instance to a VTK file.
 
         .. code-block:: python
 
@@ -738,9 +746,12 @@ class Mesh3D(ABC):
         PointCloud3D
             The vertices of the mesh as a PointCloud3D instance of shape (N, 3).
 
-        Exemples
+
+        Examples
         --------
-        Create a simple Mesh3D instance.
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
 
         .. code-block:: python
 
@@ -749,7 +760,7 @@ class Mesh3D(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh3D(PointCloud3D.from_array(points), connectivity)
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
 
         Access the vertices of the mesh.
 
@@ -806,6 +817,30 @@ class Mesh3D(ABC):
         -------
         numpy.ndarray
             The connectivity of the mesh.
+
+
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Access the connectivity of the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.connectivity)
+            # Output: [[0 1 2] [0 1 3] [0 2 3] [1 2 3]]
+
         """
         return self._connectivity
     
@@ -829,6 +864,30 @@ class Mesh3D(ABC):
         -------
         int
             The number of vertices in the mesh.
+
+        
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Get the number of vertices in the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.n_vertices)
+            # Output: 4
+
         """
         return len(self.vertices)
     
@@ -841,6 +900,30 @@ class Mesh3D(ABC):
         -------
         int
             The number of elements in the mesh.
+
+        
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Get the number of elements in the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.n_elements)
+            # Output: 4
+
         """
         return self.connectivity.shape[0]
     
@@ -853,6 +936,30 @@ class Mesh3D(ABC):
         -------
         int
             The number of nodes per element.
+
+        
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+        
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Get the number of nodes per element in the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.n_nodes_per_element)
+            # Output: 3
+        
         """
         if self._n_nodes_per_element is None:
             raise NotImplementedError("Subclasses must implement n_nodes_per_element property.")
@@ -867,6 +974,30 @@ class Mesh3D(ABC):
         -------
         int
             The topological dimension of the elements.
+
+
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Get the topological dimension of the elements in the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.n_dimensions)
+            # Output: 2
+        
         """
         if self._n_dimensions is None:
             raise NotImplementedError("Subclasses must implement n_dimensions property.")
@@ -892,7 +1023,13 @@ class Mesh3D(ABC):
     # =======================
     def get_vertices_property(self, key: str) -> Optional[numpy.ndarray]:
         r"""
-        Get a property associated with the vertices of the mesh.
+        Get a property associated with the vertices of the mesh with shape (N, A).
+
+        ``N`` is the number of vertices and ``A`` is the size of the property.
+
+        .. seealso::
+
+            - :meth:`Mesh3D.set_vertices_property` to set a vertices property.
 
         Parameters
         ----------
@@ -903,12 +1040,46 @@ class Mesh3D(ABC):
         -------
         numpy.ndarray or None
             The property associated with the vertices, or None if the property does not exist.
+
+        
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance with a vertex property.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+
+            vertex_property = np.array([0.0, 1.0, 2.0, 3.0]).reshape(-1, 1) # Shape (4, 1)
+            mesh3d.set_vertices_property("my_property", vertex_property)
+
+        Extract the vertex property.
+
+        .. code-block:: python
+
+            prop = mesh3d.get_vertices_property("my_property")
+            print(prop)
+            # Output: [[0.] [1.] [2.] [3.]]    
+
         """
         return self._get_vertices_property(key, None, raise_error=False)
     
     def get_elements_property(self, key: str) -> Optional[numpy.ndarray]:
         r"""
-        Get a property associated with the elements of the mesh.
+        Get a property associated with the elements of the mesh with shape (M, B)
+
+        ``M`` is the number of elements and ``B`` is the size of the property.
+
+        .. seealso::
+
+            - :meth:`Mesh3D.set_elements_property` to set an elements property.
 
         Parameters
         ----------
@@ -919,12 +1090,45 @@ class Mesh3D(ABC):
         -------
         numpy.ndarray or None
             The property associated with the elements, or None if the property does not exist.
+
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance with an element property.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+
+            element_property = np.array([10.0, 20.0, 30.0, 40.0]).reshape(-1, 1) # Shape (4, 1)
+            mesh3d.set_elements_property("my_element_property", element_property)
+
+        Extract the element property.
+
+        .. code-block:: python
+
+            prop = mesh3d.get_elements_property("my_element_property")
+            print(prop)
+            # Output: [[10.] [20.] [30.] [40.]]
+
         """
         return self._get_elements_property(key, None, raise_error=False)
     
     def set_vertices_property(self, key: str, value: Optional[numpy.ndarray]) -> None:
         r"""
-        Set a property associated with the vertices of the mesh.
+        Set a property associated with the vertices of the mesh with shape (N, A).
+
+        ``N`` is the number of vertices and ``A`` is the size of the property.
+
+        .. seealso::
+
+            - :meth:`Mesh3D.get_vertices_property` to get a vertices property.
 
         Parameters
         ----------
@@ -934,7 +1138,7 @@ class Mesh3D(ABC):
         value : Optional[numpy.ndarray]
             The property to associate with the vertices as an array-like of shape (N, A),
             where N is the number of vertices and A is the number of attributes for that property.
-            If None, the property is removed.
+            If None, the property is removed.   
 
         Raises
         ------
@@ -942,6 +1146,35 @@ class Mesh3D(ABC):
             If value is not a numpy ndarray or None.
         ValueError
             If value does not have the correct shape.
+
+        
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Set a vertex property.
+
+        .. code-block:: python
+
+            vertex_property = np.array([0.0, 1.0, 2.0, 3.0]).reshape(-1, 1) # Shape (4, 1)
+            mesh3d.set_vertices_property("my_property", vertex_property)
+
+            prop = mesh3d.get_vertices_property("my_property")
+            print(prop)
+            # Output: [[0.] [1.] [2.] [3.]]
+        
         """
         if value is None:
             if key in self._vertices_properties:
@@ -959,7 +1192,13 @@ class Mesh3D(ABC):
 
     def set_elements_property(self, key: str, value: Optional[numpy.ndarray]) -> None:
         r"""
-        Set a property associated with the elements of the mesh.
+        Set a property associated with the elements of the mesh with shape (M, B).
+
+        ``M`` is the number of elements and ``B`` is the size of the property.
+
+        .. seealso::
+
+            - :meth:`Mesh3D.get_elements_property` to get an elements property.
 
         Parameters
         ----------
@@ -977,6 +1216,35 @@ class Mesh3D(ABC):
             If value is not a numpy ndarray or None.
         ValueError
             If value does not have the correct shape.
+
+
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Set an element property.
+
+        .. code-block:: python
+
+            element_property = np.array([10.0, 20.0, 30.0, 40.0]).reshape(-1, 1) # Shape (4, 1)
+            mesh3d.set_elements_property("my_element_property", element_property)
+
+            prop = mesh3d.get_elements_property("my_element_property")
+            print(prop)
+            # Output: [[10.] [20.] [30.] [40.]]
+
         """
         if value is None:
             if key in self._elements_properties:
@@ -1105,13 +1373,15 @@ class Mesh3D(ABC):
         Mesh3D
             A deep copy of the Mesh3D instance.
         """
-        return type(self)(
+        output = type(self)(
             vertices=self.vertices.copy(),
             connectivity=self.connectivity.copy(),
             vertices_properties={key: value.copy() for key, value in self._vertices_properties.items()},
             elements_properties={key: value.copy() for key, value in self._elements_properties.items()},
-            internal_bypass=self.internal_bypass
+            internal_bypass=False # Skip validation on copy
         ) 
+        output.internal_bypass = self.internal_bypass
+        return output
 
     def get_vertices_coordinates(self, element_indices: numpy.ndarray) -> numpy.ndarray:
         r"""
@@ -1129,6 +1399,36 @@ class Mesh3D(ABC):
         -------
         numpy.ndarray
             An array of shape (M, K, 3) containing the vertex coordinates for each element.
+
+
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Get the coordinates of the vertices for elements 0 and 2.
+
+        .. code-block:: python
+
+            element_indices = np.array([0, 2])
+            vertices_coords = mesh3d.get_vertices_coordinates(element_indices)
+            print(vertices_coords)
+            # Output: [[[0 0 0]
+            #           [1 0 0]
+            #           [0 1 0]]
+            #          [[0 0 0]
+            #           [0 1 0]
+            #           [0 0 1]]]
+
         """
         element_indices = numpy.asarray(element_indices, dtype=int)
         if element_indices.ndim != 1:
@@ -1159,7 +1459,6 @@ class Mesh3D(ABC):
         .. seealso::
 
             - :meth:`shape_functions` for computing shape functions.
-            - :meth:`global_to_natural` for the inverse transformation.
 
         Parameters
         ----------
@@ -1173,6 +1472,34 @@ class Mesh3D(ABC):
         -------
         numpy.ndarray
             An array of shape (Np, 3) containing the global coordinates.
+
+        
+        Examples
+        --------
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+        Transform natural coordinates to global coordinates for points in elements 0 and 3.
+
+        .. code-block:: python
+
+            natural_coords = np.array([[0.3, 0.3], [0.2, 0.5]])
+            element_indices = np.array([0, 3])
+            global_coords = mesh3d.natural_to_global(natural_coords, element_indices)
+            print(global_coords)
+            # Output: [[0.3 0.3 0. ]
+            #          [0.3 0.2 0.5]]
+
         """
         # Validate input shapes
         natural_coords = numpy.asarray(natural_coords, dtype=numpy.float64)
@@ -1237,6 +1564,39 @@ class Mesh3D(ABC):
             If neither or both property_key and property_array are provided.
             If property_key does not exist in vertices properties.
             If property_array does not have the correct shape.
+        
+        
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance with a vertices property.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+            temperature = np.array([100, 200, 150, 250]).reshape(-1, 1)  # Shape (4, 1)
+            mesh3d.set_vertices_property("temperature", temperature)
+
+        Evaluate the "temperature" property at given natural coordinates in elements 0 and 3.
+
+        .. code-block:: python
+
+            natural_coords = np.array([[0.3, 0.3], [0.2, 0.5]])
+            element_indices = np.array([0, 3])
+
+            temperatures = mesh3d.evaluate_vertices_property_at(natural_coords, element_indices, property_key="temperature")
+            print(temperatures)
+            # Output: [[145.]
+            #          [215.]]
+
         """
         # Validate input shapes
         natural_coords = numpy.asarray(natural_coords, dtype=numpy.float64)
@@ -1280,6 +1640,38 @@ class Mesh3D(ABC):
         -------
         PointCloud3D
             A PointCloud3D instance containing the global coordinates.
+
+
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D, IntegratedPoints
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+            natural_coords = np.array([[0.3, 0.3], [0.2, 0.5], [0.1, 0.1]])
+            element_indices = np.array([0, 3, -1])  # The last point is invalid
+            integrated_points = IntegratedPoints(natural_coords, element_indices)
+
+        Transform natural coordinates to global coordinates.
+
+        .. code-block:: python
+
+            global_points = mesh3d.natural_to_global_points(integrated_points)
+            print(global_points.points)
+            # Output: [[0.3 0.3 0. ]
+            #          [0.3 0.2 0.5]
+            #          [ nan  nan  nan]]
+
         """
         self._check_integrated_points(integrated_points)
         
@@ -1312,6 +1704,40 @@ class Mesh3D(ABC):
         -------
         numpy.ndarray
             An array of shape (Np, A) containing the evaluated property values.
+
+        
+        Examples
+        --------
+
+        Lets consider the subclass :class:`pysdic.geometry.LinearTriangleMesh3D` of Mesh3D.
+
+        Create a simple LinearTriangleMesh3D instance with a vertices property.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import LinearTriangleMesh3D, PointCloud3D, IntegratedPoints
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = LinearTriangleMesh3D(PointCloud3D.from_array(points), connectivity)
+
+            temperature = np.array([100, 200, 150, 250]).reshape(-1, 1)  # Shape (4, 1)
+            mesh3d.set_vertices_property("temperature", temperature)
+
+            natural_coords = np.array([[0.3, 0.3], [0.2, 0.5], [0.1, 0.1]])
+            element_indices = np.array([0, 3, -1])  # The last point is invalid
+            integrated_points = IntegratedPoints(natural_coords, element_indices)
+
+        Evaluate the "temperature" property at given natural coordinates.
+
+        .. code-block:: python
+
+            temperatures = mesh3d.evaluate_vertices_property_at_points(integrated_points, property_key="temperature")
+            print(temperatures)
+            # Output: [[145.]
+            #          [215.]
+            #          [ nan]]
     
         """
         self._check_integrated_points(integrated_points)
