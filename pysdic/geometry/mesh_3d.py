@@ -476,7 +476,7 @@ class Mesh3D(ABC):
         # Validations
         if not isinstance(mesh, meshio.Mesh):
             raise TypeError(f"Input must be a meshio Mesh object, got {type(mesh)}.")
-        if not len(mesh.cells) == 1 or mesh.cells[0].data.ndim != 2 or mesh.cells[0].data.shape[1] != cls.n_nodes_per_element:
+        if not len(mesh.cells) == 1 or mesh.cells[0].data.ndim != 2 or mesh.cells[0].data.shape[1] != cls._n_nodes_per_element:
             raise ValueError("Invalid mesh structure.")
         if not isinstance(load_properties, bool):
             raise TypeError(f"load_properties must be a boolean, got {type(load_properties)}.")
@@ -484,16 +484,11 @@ class Mesh3D(ABC):
         # Extract data
         vertices = PointCloud3D(mesh.points)
         connectivity = mesh.cells[0].data
-        mesh_properties = {}
         vertices_properties = {}
         elements_properties = {}
         
         # Extract properties if requested
-        if load_properties:
-            for key, value in mesh.field_data.items():
-                data = int(value[0])
-                mesh_properties[key] = data
-            
+        if load_properties:            
             for key, value in mesh.point_data.items():
                 vertices_properties[key] = numpy.asarray(value[0])
 
@@ -501,7 +496,7 @@ class Mesh3D(ABC):
                 elements_properties[key] = numpy.asarray(value[0])
 
         # Create Mesh3D instance
-        return cls(vertices, connectivity, mesh_properties=mesh_properties, vertices_properties=vertices_properties, elements_properties=elements_properties)
+        return cls(vertices, connectivity, vertices_properties=vertices_properties, elements_properties=elements_properties)
 
 
     def to_meshio(self, save_properties: bool = True) -> meshio.Mesh:
@@ -563,18 +558,16 @@ class Mesh3D(ABC):
         if not isinstance(save_properties, bool):
             raise TypeError(f"save_properties must be a boolean, got {type(save_properties)}.")
         
-        cells = [meshio.CellBlock(type=self.meshio_cell_type(), data=self.connectivity)]
+        cells = [meshio.CellBlock(self.meshio_cell_type, data=self.connectivity)]
         
         if save_properties:
             point_data = {key: value for key, value in self._vertices_properties.items()}
             cell_data = {key: [value] for key, value in self._elements_properties.items()}
-            field_data = {key: (numpy.array([value]), 1) for key, value in self._mesh_properties.items()}
         else:
             point_data = {}
             cell_data = {}
-            field_data = {}
         
-        return meshio.Mesh(points=self.vertices.coordinates, cells=cells, point_data=point_data, cell_data=cell_data, field_data=field_data)
+        return meshio.Mesh(points=self.vertices.points, cells=cells, point_data=point_data, cell_data=cell_data)
     
     @classmethod
     def from_vtk(cls, filename: str, load_properties: bool = True) -> Mesh3D:
