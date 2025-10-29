@@ -47,7 +47,7 @@ The projection results are stored into specialized objects:
 
 .. toctree::
    :maxdepth: 1
-   :caption: pysdic.imaging image class module
+   :caption: pysdic.imaging results dataclasses
 
    ./api_doc/projection_result.rst
    ./api_doc/image_projection_result.rst
@@ -60,6 +60,6 @@ The submodule ``pysdic.visualizer`` contains objects and functions to visualize 
 
 .. toctree::
    :maxdepth: 1
-   :caption: pysdic.visualizer class module
+   :caption: pysdic.visualizer utility functions
 
    ./api_doc/visualize_qt_pyvista_linear_triangle_mesh_3d.rst
