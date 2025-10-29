@@ -51,3 +51,15 @@ The projection results are stored into specialized objects:
 
    ./api_doc/projection_result.rst
    ./api_doc/image_projection_result.rst
+
+
+Visualizer Submodule
+--------------------
+
+The submodule ``pysdic.visualizer`` contains objects and functions to visualize 3D geometries and 2D images into ``pyqt5`` windows.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: pysdic.visualizer class module
+
+   ./api_doc/visualize_qt_pyvista_linear_triangle_mesh_3d.rst
