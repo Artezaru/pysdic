@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.imaging.view &#8212; pysdic 0.3.0 documentation</title>
+    <title>pysdic.imaging.view &#8212; pysdic 0.3.1 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/documentation_options.js?v=4621528c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/imaging/view';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.3.0 documentation</p>
+    <p class="title logo__title">pysdic 0.3.1 documentation</p>
   
 </a></div>
     
@@ -916,6 +916,8 @@
     
     
 
+<div class="viewcode-block" id="View.assembly_image_projection">
+<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.assembly_image_projection.html#pysdic.imaging.View.assembly_image_projection">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">assembly_image_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection_result</span><span class="p">:</span> <span class="n">ProjectionResult</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ddistortion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageProjectionResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assemble the image projection result from the camera&#39;s projection result and the world points.</span>
@@ -1020,7 +1022,8 @@
             <span class="n">jacobian_ddistortion</span><span class="o">=</span><span class="n">jacobian_ddistortion</span><span class="p">,</span>
             <span class="n">jacobian_dextrinsic</span><span class="o">=</span><span class="n">jacobian_dextrinsic</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">image_projection_result</span>
+        <span class="k">return</span> <span class="n">image_projection_result</span></div>
+
 
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Visualization methods</span>
@@ -1047,8 +1050,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">visualize_projected_point_cloud</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">point_cloud</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span>
-        <span class="n">point_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="n">point_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">points_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">points_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">points_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">clip_sensor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_pixel_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1056,20 +1060,27 @@
 <span class="sd">        Visualize the projected 2D points of a :class:`pysdic.geometry.PointCloud3D` on a 2D plot using matplotlib.</span>
 
 <span class="sd">        Simply calls the camera&#39;s own visualization method with image from the view.</span>
+
 <span class="sd">        .. seealso::</span>
 
 <span class="sd">            - :meth:`pysdic.imaging.Camera.visualize_projected_point_cloud` for the camera&#39;s own visualization method.</span>
+<span class="sd">            - :meth:`pysdic.imaging.View.visualize_projected_mesh` for visualizing projected meshes.</span>
+<span class="sd">            - :meth:`pysdic.geometry.View.visualize_image` for visualizing the view&#39;s image.</span>
+<span class="sd">            - :meth:`pysdic.geometry.PointCloud3D` for the structure of the input point cloud.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        point_cloud : PointCloud3D</span>
 <span class="sd">            An instance of PointCloud3D containing the 3D points in the world coordinate system to be projected and visualized.</span>
 
-<span class="sd">        point_color : str, optional</span>
+<span class="sd">        points_color : str, optional</span>
 <span class="sd">            The color of the projected points in the plot. Default is &quot;black&quot;.</span>
 
-<span class="sd">        point_size : int, optional</span>
+<span class="sd">        points_size : int, optional</span>
 <span class="sd">            The size of the projected points in the plot. Default is 5.</span>
+
+<span class="sd">        points_opacity : float, optional</span>
+<span class="sd">            The opacity of the projected points in the plot. Default is 1.0 (fully opaque).</span>
 
 <span class="sd">        clip_sensor : bool, optional</span>
 <span class="sd">            If True, only the points that are projected within the camera sensor dimensions are visualized. Default is True.</span>
@@ -1080,8 +1091,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">visualize_projected_point_cloud</span><span class="p">(</span>
             <span class="n">point_cloud</span><span class="o">=</span><span class="n">point_cloud</span><span class="p">,</span>
-            <span class="n">point_color</span><span class="o">=</span><span class="n">point_color</span><span class="p">,</span>
-            <span class="n">point_size</span><span class="o">=</span><span class="n">point_size</span><span class="p">,</span>
+            <span class="n">points_color</span><span class="o">=</span><span class="n">points_color</span><span class="p">,</span>
+            <span class="n">points_size</span><span class="o">=</span><span class="n">points_size</span><span class="p">,</span>
+            <span class="n">points_opacity</span><span class="o">=</span><span class="n">points_opacity</span><span class="p">,</span>
             <span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="p">,</span>
             <span class="n">clip_sensor</span><span class="o">=</span><span class="n">clip_sensor</span><span class="p">,</span>
             <span class="n">show_pixel_grid</span><span class="o">=</span><span class="n">show_pixel_grid</span><span class="p">,</span>
@@ -1093,14 +1105,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">visualize_projected_mesh</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh3D</span><span class="p">,</span>
-        <span class="n">face_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
-        <span class="n">face_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">edge_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="n">edge_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="n">point_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="n">point_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">vertices_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">vertices_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">vertices_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">edges_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">edges_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">edges_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">faces_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="n">faces_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
         <span class="n">clip_sensor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_pixel_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">show_vertices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_edges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_faces</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1112,32 +1127,38 @@
 <span class="sd">        .. seealso::</span>
 
 <span class="sd">            - :meth:`pysdic.imaging.Camera.visualize_projected_mesh` for the camera&#39;s own visualization method.</span>
+<span class="sd">            - :meth:`pysdic.imaging.View.visualize_projected_point_cloud` for visualizing projected point clouds.</span>
+<span class="sd">            - :meth:`pysdic.geometry.View.visualize_image` for visualizing the view&#39;s image.</span>
+<span class="sd">            - :meth:`pysdic.geometry.Mesh3D` for the structure of the input mesh.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        mesh : Mesh3D</span>
 <span class="sd">            The 3D mesh to visualize.</span>
 
-<span class="sd">        face_color : str, optional</span>
-<span class="sd">            The color of the mesh faces (default is &quot;red&quot;).</span>
-
-<span class="sd">        face_opacity : float, optional</span>
-<span class="sd">            The opacity of the mesh faces (default is 0.5).</span>
-
-<span class="sd">        edge_color : str, optional</span>
-<span class="sd">            The color of the mesh edges (default is &quot;black&quot;).</span>
-
-<span class="sd">        edge_width : int, optional</span>
-<span class="sd">            The width of the mesh edges (default is 1).</span>
-
-<span class="sd">        point_color : str, optional</span>
+<span class="sd">        vertices_color : str, optional</span>
 <span class="sd">            The color of the mesh vertices (default is &quot;black&quot;).</span>
 
-<span class="sd">        point_size : int, optional</span>
+<span class="sd">        vertices_size : int, optional</span>
 <span class="sd">            The size of the mesh vertices (default is 5).</span>
 
-<span class="sd">        image : Optional[numpy.ndarray], optional</span>
-<span class="sd">            An image to display as the background (default is None).</span>
+<span class="sd">        vertices_opacity : float, optional</span>
+<span class="sd">            The opacity of the mesh vertices (default is 1.0).</span>
+
+<span class="sd">        edges_color : str, optional</span>
+<span class="sd">            The color of the mesh edges (default is &quot;black&quot;).</span>
+
+<span class="sd">        edges_width : int, optional</span>
+<span class="sd">            The width of the mesh edges (default is 1).</span>
+
+<span class="sd">        edges_opacity : float, optional</span>
+<span class="sd">            The opacity of the mesh edges (default is 1.0).</span>
+
+<span class="sd">        faces_color : str, optional</span>
+<span class="sd">            The color of the mesh faces (default is &quot;red&quot;).</span>
+
+<span class="sd">        faces_opacity : float, optional</span>
+<span class="sd">            The opacity of the mesh faces (default is 0.5).</span>
 
 <span class="sd">        clip_sensor : bool, optional</span>
 <span class="sd">            Whether to clip points outside the sensor dimensions (default is True).</span>
@@ -1145,23 +1166,30 @@
 <span class="sd">        show_pixel_grid : bool, optional</span>
 <span class="sd">            Whether to show the pixel grid on the image (default is False).</span>
 
+<span class="sd">        show_vertices : bool, optional</span>
+<span class="sd">            Whether to show the mesh vertices (default is True).</span>
+
 <span class="sd">        show_edges : bool, optional</span>
 <span class="sd">            Whether to show the mesh edges (default is True).</span>
 
 <span class="sd">        show_faces : bool, optional</span>
 <span class="sd">            Whether to show the mesh faces (default is True).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">visualize_projected_mesh</span><span class="p">(</span>
             <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span>
-            <span class="n">face_color</span><span class="o">=</span><span class="n">face_color</span><span class="p">,</span>
-            <span class="n">face_opacity</span><span class="o">=</span><span class="n">face_opacity</span><span class="p">,</span>
-            <span class="n">edge_color</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span>
-            <span class="n">edge_width</span><span class="o">=</span><span class="n">edge_width</span><span class="p">,</span>
-            <span class="n">point_color</span><span class="o">=</span><span class="n">point_color</span><span class="p">,</span>
-            <span class="n">point_size</span><span class="o">=</span><span class="n">point_size</span><span class="p">,</span>
+            <span class="n">vertices_color</span><span class="o">=</span><span class="n">vertices_color</span><span class="p">,</span>
+            <span class="n">vertices_size</span><span class="o">=</span><span class="n">vertices_size</span><span class="p">,</span>
+            <span class="n">vertices_opacity</span><span class="o">=</span><span class="n">vertices_opacity</span><span class="p">,</span>
+            <span class="n">edges_color</span><span class="o">=</span><span class="n">edges_color</span><span class="p">,</span>
+            <span class="n">edges_width</span><span class="o">=</span><span class="n">edges_width</span><span class="p">,</span>
+            <span class="n">edges_opacity</span><span class="o">=</span><span class="n">edges_opacity</span><span class="p">,</span>
+            <span class="n">faces_color</span><span class="o">=</span><span class="n">faces_color</span><span class="p">,</span>
+            <span class="n">faces_opacity</span><span class="o">=</span><span class="n">faces_opacity</span><span class="p">,</span>
             <span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="p">,</span>
             <span class="n">clip_sensor</span><span class="o">=</span><span class="n">clip_sensor</span><span class="p">,</span>
             <span class="n">show_pixel_grid</span><span class="o">=</span><span class="n">show_pixel_grid</span><span class="p">,</span>
+            <span class="n">show_vertices</span><span class="o">=</span><span class="n">show_vertices</span><span class="p">,</span>
             <span class="n">show_edges</span><span class="o">=</span><span class="n">show_edges</span><span class="p">,</span>
             <span class="n">show_faces</span><span class="o">=</span><span class="n">show_faces</span><span class="p">,</span>
         <span class="p">)</span></div>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.imaging.camera &#8212; pysdic 0.3.0 documentation</title>
+    <title>pysdic.imaging.camera &#8212; pysdic 0.3.1 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/documentation_options.js?v=4621528c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/imaging/camera';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.3.0 documentation</p>
+    <p class="title logo__title">pysdic 0.3.1 documentation</p>
   
 </a></div>
     
@@ -1392,8 +1392,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">visualize_projected_point_cloud</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">point_cloud</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span>
-        <span class="n">point_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="n">point_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">points_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">points_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">points_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">clip_sensor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_pixel_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1413,11 +1414,14 @@
 <span class="sd">        point_cloud : PointCloud3D</span>
 <span class="sd">            An instance of PointCloud3D containing the 3D points in the world coordinate system to be projected and visualized.</span>
 
-<span class="sd">        point_color : str, optional</span>
+<span class="sd">        points_color : str, optional</span>
 <span class="sd">            The color of the projected points in the plot. Default is &quot;black&quot;.</span>
 
-<span class="sd">        point_size : int, optional</span>
+<span class="sd">        points_size : int, optional</span>
 <span class="sd">            The size of the projected points in the plot. Default is 5.</span>
+
+<span class="sd">        points_opacity : float, optional</span>
+<span class="sd">            The opacity of the projected points in the plot. Default is 1.0 (fully opaque).</span>
 
 <span class="sd">        image : Optional[numpy.ndarray], optional</span>
 <span class="sd">            An optional background image to display behind the projected points. If provided, the image should have dimensions matching the camera sensor size. Default is None.</span>
@@ -1468,7 +1472,7 @@
 <span class="sd">            world_points = PointCloud3D(points=world_points_array)</span>
 
 <span class="sd">            # Visualize the projected point cloud</span>
-<span class="sd">            camera.visualize_projected_point_cloud(point_cloud=world_points, point_color=&quot;red&quot;, point_size=10)</span>
+<span class="sd">            camera.visualize_projected_point_cloud(point_cloud=world_points, points_color=&quot;red&quot;, points_size=10, show_pixel_grid=True)</span>
 
 <span class="sd">        .. figure:: ../../../pysdic/resources/camera_visualize_projected_point_cloud_example.png</span>
 <span class="sd">            :align: center</span>
@@ -1482,10 +1486,12 @@
         <span class="c1"># Check input types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_cloud</span><span class="p">,</span> <span class="n">PointCloud3D</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;point_cloud must be an instance of PointCloud3D.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;point_color must be a string.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_size</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">point_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;point_size must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;points_color must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points_size</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">points_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;points_size must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points_opacity</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">points_opacity</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;points_opacity must be a float between 0.0 and 1.0.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clip_sensor</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;clip_sensor must be a boolean.&quot;</span><span class="p">)</span>
 
@@ -1517,7 +1523,7 @@
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">],</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
         <span class="c1"># Display the projected points</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">image_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">image_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">point_color</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">point_size</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">image_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">image_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">points_color</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">points_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">points_opacity</span><span class="p">)</span>
 
         <span class="c1"># Clip points outside the sensor dimensions if clip_sensor is True</span>
         <span class="k">if</span> <span class="n">clip_sensor</span><span class="p">:</span>
@@ -1538,15 +1544,18 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">visualize_projected_mesh</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh3D</span><span class="p">,</span>
-        <span class="n">face_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
-        <span class="n">face_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">edge_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="n">edge_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="n">point_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="n">point_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">vertices_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">vertices_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">vertices_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">edges_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">edges_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">edges_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">faces_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="n">faces_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
         <span class="n">image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">clip_sensor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_pixel_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">show_vertices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_edges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_faces</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1565,23 +1574,29 @@
 <span class="sd">        mesh : Mesh3D</span>
 <span class="sd">            The 3D mesh to visualize.</span>
 
-<span class="sd">        face_color : str, optional</span>
-<span class="sd">            The color of the mesh faces (default is &quot;red&quot;).</span>
-
-<span class="sd">        face_opacity : float, optional</span>
-<span class="sd">            The opacity of the mesh faces (default is 0.5).</span>
-
-<span class="sd">        edge_color : str, optional</span>
-<span class="sd">            The color of the mesh edges (default is &quot;black&quot;).</span>
-
-<span class="sd">        edge_width : int, optional</span>
-<span class="sd">            The width of the mesh edges (default is 1).</span>
-
-<span class="sd">        point_color : str, optional</span>
+<span class="sd">        vertices_color : str, optional</span>
 <span class="sd">            The color of the mesh vertices (default is &quot;black&quot;).</span>
 
-<span class="sd">        point_size : int, optional</span>
+<span class="sd">        vertices_size : int, optional</span>
 <span class="sd">            The size of the mesh vertices (default is 5).</span>
+
+<span class="sd">        vertices_opacity : float, optional</span>
+<span class="sd">            The opacity of the mesh vertices (default is 1.0).</span>
+
+<span class="sd">        edges_color : str, optional</span>
+<span class="sd">            The color of the mesh edges (default is &quot;black&quot;).</span>
+
+<span class="sd">        edges_width : int, optional</span>
+<span class="sd">            The width of the mesh edges (default is 1).</span>
+
+<span class="sd">        edges_opacity : float, optional</span>
+<span class="sd">            The opacity of the mesh edges (default is 1.0).</span>
+
+<span class="sd">        faces_color : str, optional</span>
+<span class="sd">            The color of the mesh faces (default is &quot;red&quot;).</span>
+
+<span class="sd">        faces_opacity : float, optional</span>
+<span class="sd">            The opacity of the mesh faces (default is 0.5).</span>
 
 <span class="sd">        image : Optional[numpy.ndarray], optional</span>
 <span class="sd">            An image to display as the background (default is None).</span>
@@ -1591,6 +1606,9 @@
 
 <span class="sd">        show_pixel_grid : bool, optional</span>
 <span class="sd">            Whether to show the pixel grid on the image (default is False).</span>
+
+<span class="sd">        show_vertices : bool, optional</span>
+<span class="sd">            Whether to show the mesh vertices (default is True).</span>
 
 <span class="sd">        show_edges : bool, optional</span>
 <span class="sd">            Whether to show the mesh edges (default is True).</span>
@@ -1643,7 +1661,7 @@
 <span class="sd">            mesh = LinearTriangleMesh3D(vertices=vertices, connectivity=connectivity)</span>
 
 <span class="sd">            # Visualize the projected mesh</span>
-<span class="sd">            camera.visualize_projected_mesh(mesh=mesh, face_color=&quot;blue&quot;, edge_color=&quot;black&quot;, point_color=&quot;red&quot;)</span>
+<span class="sd">            camera.visualize_projected_mesh(mesh=mesh, faces_color=&quot;blue&quot;, edges_color=&quot;black&quot;, vertices_color=&quot;red&quot;)</span>
 
 
 <span class="sd">        .. figure:: ../../../pysdic/resources/camera_visualize_projected_mesh_example.png</span>
@@ -1658,20 +1676,28 @@
         <span class="c1"># Check input types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh3D</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;mesh must be an instance of Mesh3D.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">face_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;face_color must be a string.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">face_opacity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">face_opacity</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;face_opacity must be a float between 0.0 and 1.0.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;edge_color must be a string.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_width</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">edge_width</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edge_width must be a positive integer.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;point_color must be a string.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_size</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">point_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;point_size must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">faces_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;faces_color must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">faces_opacity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">faces_opacity</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;faces_opacity must be a float between 0.0 and 1.0.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edges_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;edges_color must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edges_width</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">edges_width</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edges_width must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">edges_opacity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">edges_opacity</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edges_opacity must be a float between 0.0 and 1.0.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;vertices_color must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices_size</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">vertices_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;vertices_size must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices_opacity</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">vertices_opacity</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;vertices_opacity must be a float between 0.0 and 1.0.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clip_sensor</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;clip_sensor must be a boolean.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show_pixel_grid</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;show_pixel_grid must be a boolean.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show_vertices</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;show_vertices must be a boolean.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show_edges</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;show_edges must be a boolean.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show_faces</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
@@ -1707,17 +1733,18 @@
         <span class="c1"># Display the mesh faces</span>
         <span class="k">if</span> <span class="n">show_faces</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="p">:</span>
-                <span class="n">polygon</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">image_points</span><span class="p">[</span><span class="n">face</span><span class="p">,</span> <span class="p">:],</span> <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">face_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">face_opacity</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+                <span class="n">polygon</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">image_points</span><span class="p">[</span><span class="n">face</span><span class="p">,</span> <span class="p">:],</span> <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">faces_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">faces_opacity</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span>
 
         <span class="c1"># Display the mesh edges</span>
         <span class="k">if</span> <span class="n">show_edges</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="p">:</span>
-                <span class="n">polygon</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">image_points</span><span class="p">[</span><span class="n">face</span><span class="p">,</span> <span class="p">:],</span> <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">edge_width</span><span class="p">)</span>
+                <span class="n">polygon</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">image_points</span><span class="p">[</span><span class="n">face</span><span class="p">,</span> <span class="p">:],</span> <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edges_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">edges_width</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">edges_opacity</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span>
 
         <span class="c1"># Display the mesh vertices</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">image_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">image_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">point_color</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">point_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show_vertices</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">image_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">image_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">vertices_color</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">vertices_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">vertices_opacity</span><span class="p">)</span>
 
         <span class="c1"># Clip points outside the sensor dimensions if clip_sensor is True</span>
         <span class="k">if</span> <span class="n">clip_sensor</span><span class="p">:</span>

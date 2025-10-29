@@ -99,6 +99,7 @@ The view can be used to project 3D points into the 2D image plane.
 .. autosummary::
    :toctree: ../generated/
 
+    View.assembly_image_projection
     View.evaluate_image_at_pixel_points
     View.evaluate_image_jacobian_dx_at_pixel_points
     View.evaluate_image_jacobian_dy_at_pixel_points
