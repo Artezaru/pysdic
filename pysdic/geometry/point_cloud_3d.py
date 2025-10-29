@@ -64,6 +64,10 @@ class PointCloud3D(object):
 
             This property is settable.
 
+        .. note::
+
+            An alias for ``points`` is ``coordinates``.
+
         Access and modify the points of the point cloud.
 
         Parameters
@@ -131,6 +135,18 @@ class PointCloud3D(object):
         if not (points.ndim == 2 and points.shape[1] == 3):
             raise ValueError("Points must be a 2D NumPy array with shape (N, 3).")
         self._points = points
+
+    @property
+    def coordinates(self) -> numpy.ndarray:
+        r"""
+        Alias for :meth:`points` property.
+        """
+        return self.points
+
+    @coordinates.setter
+    def coordinates(self, value: numpy.ndarray) -> None:
+        self.points = value
+
 
     @property
     def n_points(self) -> int:

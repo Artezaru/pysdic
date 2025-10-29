@@ -19,6 +19,7 @@ from numbers import Number
 import numpy
 import pyvista
 import open3d
+import matplotlib.pyplot as plt
 
 from .mesh_3d import Mesh3D
 from .point_cloud_3d import PointCloud3D
@@ -469,15 +470,15 @@ class LinearTriangleMesh3D(Mesh3D):
             from pysdic.geometry import PointCloud3D, LinearTriangleMesh3D
 
             # Create a point cloud from a NumPy array
-            points_array = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]) # shape (4, 3)
+            points_array = numpy.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]) # shape (4, 3)
 
             point_cloud = PointCloud3D.from_array(points_array)
-            mesh_connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]) # shape (4, 3)
+            mesh_connectivity = numpy.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]) # shape (4, 3)
 
             mesh = LinearTriangleMesh3D(point_cloud, mesh_connectivity)
 
-            ray_origins = np.array([[0.1, 0.1, -1], [0.5, 0.5, -1]])  # shape (2, 3)
-            ray_directions = np.array([[0, 0, 1], [0, 0, 1]])  # shape (2, 3)
+            ray_origins = numpy.array([[0.1, 0.1, -1], [0.5, 0.5, -1]])  # shape (2, 3)
+            ray_directions = numpy.array([[0, 0, 1], [0, 0, 1]])  # shape (2, 3)
 
             intersection_points = mesh.cast_rays(ray_origins, ray_directions)  # Returns an IntegratedPoints instance with intersection points
 
@@ -639,13 +640,15 @@ class LinearTriangleMesh3D(Mesh3D):
     # =======================
     def visualize(
             self,
-            point_color: str = "black",
-            point_size: int = 5,
-            edge_color: str = "blue",
-            edge_width: int = 1,
-            face_color: str = "gray",   
-            face_opacity: float = 0.5,
-            show_points: bool = True,
+            vertices_color: str = "black",
+            vertices_size: int = 5,
+            vertices_opacity: float = 1.0,
+            edges_color: str = "black",
+            edges_width: int = 1,
+            edges_opacity: float = 1.0,
+            faces_color: str = "gray",   
+            faces_opacity: float = 0.5,
+            show_vertices: bool = True,
             show_edges: bool = True,
             show_faces: bool = True,
         ) -> None:
@@ -661,24 +664,34 @@ class LinearTriangleMesh3D(Mesh3D):
             - :meth:`visualize_texture` to visualize the texture of the mesh.
             - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.
 
+        .. seealso::
+
+            - :func:`pysdic.visualizer.visualize_qt_pyvista_linear_triangle_mesh_3d` for a Qt-based interactive visualization of the mesh.
+
         Parameters
         ----------
-        point_color : str, optional
+        vertices_color : str, optional
             Color of the vertices (points) in the mesh, by default "black".
 
-        point_size : int, optional
+        vertices_size : int, optional
             Size of the vertices (points) in the mesh, by default 5.
 
-        edge_color : str, optional
-            Color of the edges in the mesh, by default "blue".
+        vertices_opacity : float, optional
+            Opacity of the vertices (points) in the mesh (0.0 to 1.0), by default 1.0.
 
-        edge_width : int, optional
+        edges_color : str, optional
+            Color of the edges in the mesh, by default "black".
+
+        edges_width : int, optional
             Width of the edges in the mesh, by default 1.
 
-        face_color : str, optional
+        edges_opacity : float, optional
+            Opacity of the edges in the mesh (0.0 to 1.0), by default 1.0.
+
+        faces_color : str, optional
             Color of the faces in the mesh, by default "gray".
 
-        face_opacity : float, optional
+        faces_opacity : float, optional
             Opacity of the faces in the mesh (0.0 to 1.0), by default 0.5.
 
         show_points : bool, optional
@@ -689,7 +702,6 @@ class LinearTriangleMesh3D(Mesh3D):
 
         show_faces : bool, optional
             Whether to display the faces of the mesh, by default True.
-
 
 
         More Information
@@ -708,16 +720,16 @@ class LinearTriangleMesh3D(Mesh3D):
         .. code-block:: python
 
             from pysdic.geometry import create_linear_triangle_heightmap
-            import numpy as np
+            import numpy
 
             surface_mesh = create_linear_triangle_heightmap(
-                height_function=lambda x, y: 0.5 * np.sin(np.pi * x) * np.cos(np.pi * y),
+                height_function=lambda x, y: 0.5 * numpy.sin(numpy.pi * x) * numpy.cos(numpy.pi * y),
                 x_bounds=(-1.0, 1.0),
                 y_bounds=(-1.0, 1.0),
                 n_x=50,
                 n_y=50,
             )
-            surface_mesh.visualize(face_color='green', face_opacity=0.7, edge_color='black')
+            surface_mesh.visualize(faces_color='green', faces_opacity=0.7, edges_color='black')
 
         .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_example.png
            :width: 600
@@ -732,21 +744,25 @@ class LinearTriangleMesh3D(Mesh3D):
         if self.n_elements == 0:
             raise ValueError("Cannot visualize a mesh without elements.")
 
-        if not isinstance(point_color, str):
-            raise ValueError("Point color must be a string.")
-        if not (isinstance(point_size, Number) and point_size > 0):
-            raise ValueError("Point size must be a positive number.")
-        if not isinstance(edge_color, str):
-            raise ValueError("Edge color must be a string.")
-        if not (isinstance(edge_width, Number) and edge_width > 0):
-            raise ValueError("Edge width must be a positive number.")
-        if not isinstance(face_color, str):
-            raise ValueError("Face color must be a string.")
-        if not (isinstance(face_opacity, Number) and 0.0 <= face_opacity <= 1.0):
-            raise ValueError("Face opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(vertices_color, str):
+            raise ValueError("Vertices color must be a string.")
+        if not (isinstance(vertices_size, Number) and vertices_size > 0):
+            raise ValueError("Vertices size must be a positive number.")
+        if not (isinstance(vertices_opacity, Number) and 0.0 <= vertices_opacity <= 1.0):
+            raise ValueError("Vertices opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(edges_color, str):
+            raise ValueError("Edges color must be a string.")
+        if not (isinstance(edges_width, Number) and edges_width > 0):
+            raise ValueError("Edges width must be a positive number.")
+        if not (isinstance(edges_opacity, Number) and 0.0 <= edges_opacity <= 1.0):
+            raise ValueError("Edges opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(faces_color, str):
+            raise ValueError("Faces color must be a string.")
+        if not (isinstance(faces_opacity, Number) and 0.0 <= faces_opacity <= 1.0):
+            raise ValueError("Faces opacity must be a float between 0.0 and 1.0.")
         
-        if not isinstance(show_points, bool):
-            raise ValueError("show_points must be a boolean.")
+        if not isinstance(show_vertices, bool):
+            raise ValueError("show_vertices must be a boolean.")
         if not isinstance(show_edges, bool):
             raise ValueError("show_edges must be a boolean.")
         if not isinstance(show_faces, bool):
@@ -760,16 +776,31 @@ class LinearTriangleMesh3D(Mesh3D):
 
         # Add faces if required
         if show_faces:
-            plotter.add_mesh(pv_mesh, color=face_color, opacity=face_opacity, show_edges=show_edges, edge_color=edge_color, line_width=edge_width)
+            plotter.add_mesh(
+                pv_mesh, 
+                color=faces_color, 
+                opacity=faces_opacity
+            )
 
         # Add edges if required
-        elif show_edges:
-            edges = pv_mesh.extract_feature_edges()
-            plotter.add_mesh(edges, color=edge_color, line_width=edge_width)
+        if show_edges:
+            edges = pv_mesh.extract_all_edges()
+            plotter.add_mesh(
+                edges, 
+                color=edges_color, 
+                line_width=edges_width,
+                opacity=edges_opacity
+            )
 
-        # Add points if required
-        if show_points:
-            plotter.add_points(self.vertices.points, color=point_color, point_size=point_size)
+        # Add vertices if required
+        if show_vertices:
+            plotter.add_points(
+                self.vertices.points, 
+                color=vertices_color, 
+                point_size=vertices_size,
+                opacity=vertices_opacity,
+                render_points_as_spheres=True
+            )
 
         # Show the plot
         plotter.show_axes() 
@@ -781,10 +812,20 @@ class LinearTriangleMesh3D(Mesh3D):
             self,
             property_key: Optional[str] = None,
             property_array: Optional[numpy.ndarray] = None,
+            property_axis: Optional[int] = None,
             property_label: Optional[str] = None,
-            cmap: str = "viridis",
+            cmap: str = "magma",
             vmin : Optional[float] = None,
             vmax : Optional[float] = None,
+            use_log_scale: bool = False,
+            vertices_color: str = "black",
+            vertices_size: int = 5,
+            vertices_opacity: float = 1.0,
+            edges_color: str = "black",
+            edges_width: int = 1,
+            edges_opacity: float = 1.0,
+            faces_opacity: float = 1.0,
+            show_vertices: bool = True,
             show_edges: bool = True,
             ) -> None:
         r"""
@@ -799,6 +840,10 @@ class LinearTriangleMesh3D(Mesh3D):
             - :meth:`visualize_texture` to visualize the texture of the mesh.
             - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.
 
+        .. seealso::
+
+            - :func:`pysdic.visualizer.visualize_qt_pyvista_linear_triangle_mesh_3d` for a Qt-based interactive visualization of the mesh.
+
         Parameters
         ----------
         property_key : str, optional
@@ -808,11 +853,14 @@ class LinearTriangleMesh3D(Mesh3D):
             A numpy ndarray of shape (N, A) where N is the number of vertices and A is the number of attributes for that property.
             If None, `property_key` must be provided, by default None.
 
+        property_axis : int, optional
+            The axis of the property to visualize (0 for x, 1 for y, 2 for z). If None, the magnitude of the property will be visualized, by default None.
+
         property_label : str, optional
             The label to use for the property in the visualization legend. If None, `property_key` will be used, by default None.
 
         cmap : str, optional
-            The colormap to use for coloring the vertices based on the property values, by default "viridis".
+            The colormap to use for coloring the vertices based on the property values, by default "magma".
 
         vmin : float, optional
             The minimum value for the colormap, by default None.
@@ -820,8 +868,35 @@ class LinearTriangleMesh3D(Mesh3D):
         vmax : float, optional
             The maximum value for the colormap, by default None.
 
+        use_log_scale : bool, optional
+            Whether to use a logarithmic scale for the colormap, by default False.
+
+        vertices_color : str, optional
+            Color of the vertices (points) in the mesh, by default "black".
+
+        vertices_size : int, optional
+            Size of the vertices (points) in the mesh, by default 5.
+
+        vertices_opacity : float, optional
+            Opacity of the vertices (points) in the mesh (0.0 to 1.0), by default 1.0.
+
+        edges_color : str, optional
+            Color of the edges in the mesh, by default "black".
+
+        edges_width : int, optional
+            Width of the edges in the mesh, by default 1.
+
+        edges_opacity : float, optional
+            Opacity of the edges in the mesh (0.0 to 1.0), by default 1.0.
+
+        faces_opacity : float, optional
+            Opacity of the faces in the mesh (0.0 to 1.0), by default 1.0.
+
+        show_points : bool, optional
+            Whether to display the vertices (points) of the mesh, by default True.
+
         show_edges : bool, optional
-            Whether to show the mesh edges in the visualization, by default True.
+            Whether to display the edges of the mesh, by default True.
 
             
         More Information
@@ -840,10 +915,10 @@ class LinearTriangleMesh3D(Mesh3D):
         .. code-block:: python
 
             from pysdic.geometry import create_linear_triangle_heightmap
-            import numpy as np
+            import numpy
 
             surface_mesh = create_linear_triangle_heightmap(
-                height_function=lambda x, y: 0.5 * np.sin(np.pi * x) * np.cos(np.pi * y),
+                height_function=lambda x, y: 0.5 * numpy.sin(numpy.pi * x) * numpy.cos(numpy.pi * y),
                 x_bounds=(-1.0, 1.0),
                 y_bounds=(-1.0, 1.0),
                 n_x=50,
@@ -852,7 +927,12 @@ class LinearTriangleMesh3D(Mesh3D):
             
             height = surface_mesh.vertices.points[:, 2].reshape(-1, 1)  # Use the z-coordinate as a property
 
-            surface_mesh.visualize_vertices_property(property_array=height, property_label='Height (m)', cmap='terrain')
+            surface_mesh.visualize_vertices_property(
+                property_array=height, 
+                property_label='Height [m]',
+                property_axis=0,
+                cmap='terrain'
+                )
 
         .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_vertices_property_example.png
            :width: 600
@@ -871,18 +951,36 @@ class LinearTriangleMesh3D(Mesh3D):
         if (property_key is None and property_array is None) or (property_key is not None and property_array is not None):
             raise ValueError("Either property_key or property_array must be provided, but not both.")
         property_array = self._get_vertices_property(property_key, property_array, raise_error=True)
-        property_use_norm = False
-        if property_array.shape[1] != 1:
-            property_array = numpy.linalg.norm(property_array, axis=1, keepdims=True) # use the norm if multiple attributes
-            property_use_norm = True
 
+        property_array = numpy.asarray(property_array)
+        if property_array.ndim == 1:
+            property_array = property_array.reshape(-1, 1)
+        if property_array.shape[0] != self.n_vertices:
+            raise ValueError(f"property_array must have shape ({self.n_vertices}, A) where A is the number of attributes.")
+        if property_array.shape[1] == 0:
+            raise ValueError("property_array must have at least one attribute (shape (N, A) with A >= 1).")   
+        
         # Default parameters
         if property_label is None and property_key is not None:
             property_label = property_key
-            if property_use_norm:
-                property_label += " (norm)"
         elif property_label is None:
             property_label = "property"
+
+        # Extract the desired axis
+        if property_axis is not None:
+            if not isinstance(property_axis, int):
+                raise ValueError("property_axis must be an integer.")
+            if property_axis < 0 or property_axis >= property_array.shape[1]:
+                raise ValueError(f"property_axis must be between 0 and {property_array.shape[1]-1}.")
+            property_array = property_array[:, property_axis]
+            property_label = f"{property_label} (Axis {property_axis})"
+        else:
+            # Use the magnitude of the property
+            property_array = numpy.linalg.norm(property_array, axis=1)
+            property_label = f"{property_label} (Magnitude)"
+        # Now property_array is of shape (N,)    
+
+        # Determine vmin and vmax if not provided
         if vmin is None:
             vmin = numpy.min(property_array)
         if vmax is None:
@@ -900,20 +998,74 @@ class LinearTriangleMesh3D(Mesh3D):
         if vmin >= vmax:
             raise ValueError("vmin must be less than vmax.")
         
+        if not isinstance(vertices_color, str):
+            raise ValueError("Vertices color must be a string.")
+        if not (isinstance(vertices_size, Number) and vertices_size > 0):
+            raise ValueError("Vertices size must be a positive number.")
+        if not (isinstance(vertices_opacity, Number) and 0.0 <= vertices_opacity <= 1.0):
+            raise ValueError("Vertices opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(edges_color, str):
+            raise ValueError("Edges color must be a string.")
+        if not (isinstance(edges_width, Number) and edges_width > 0):
+            raise ValueError("Edges width must be a positive number.")
+        if not (isinstance(edges_opacity, Number) and 0.0 <= edges_opacity <= 1.0):
+            raise ValueError("Edges opacity must be a float between 0.0 and 1.0.")
+        if not (isinstance(faces_opacity, Number) and 0.0 <= faces_opacity <= 1.0):
+            raise ValueError("Faces opacity must be a float between 0.0 and 1.0.")
+        
+        if not isinstance(show_vertices, bool):
+            raise ValueError("show_vertices must be a boolean.")
+        if not isinstance(show_edges, bool):
+            raise ValueError("show_edges must be a boolean.")
+        if not isinstance(use_log_scale, bool):
+            raise ValueError("use_log_scale must be a boolean.")
+    
+        
+        # Extract the cmap
+        colormaps = plt.colormaps()
+        if not cmap in colormaps:
+            raise ValueError(f"cmap '{cmap}' is not a valid colormap. Available colormaps are: {colormaps}")
+
         # Create a PyVista mesh
         pv_mesh = pyvista.PolyData(self.vertices.points, numpy.hstack((numpy.full((self.n_elements, 1), 3), self.connectivity)).astype(numpy.int64))
 
         # Add the property as point data
-        pv_mesh.point_data[property_label] = property_array.flatten()
+        pv_mesh.point_data[property_label] = property_array
 
         # Create a PyVista plotter
         plotter = pyvista.Plotter()
 
         # Add the mesh with the property colormap
-        plotter.add_mesh(pv_mesh, scalars=property_label, cmap=cmap, show_edges=show_edges, clim=[vmin, vmax])
+        plotter.add_mesh(
+            pv_mesh, 
+            scalars=property_label, 
+            cmap=cmap,
+            clim=(vmin, vmax),
+            log_scale=use_log_scale,
+            opacity=faces_opacity,
+        )
+
+        # Add edges if required
+        if show_edges:
+            edges = pv_mesh.extract_all_edges()
+            plotter.add_mesh(
+                edges, 
+                color=edges_color, 
+                line_width=edges_width,
+                opacity=edges_opacity
+            )
+
+        # Add vertices if required
+        if show_vertices:
+            plotter.add_points(
+                self.vertices.points, 
+                color=vertices_color, 
+                point_size=vertices_size,
+                opacity=vertices_opacity,
+                render_points_as_spheres=True
+            )
 
         # Show the plot
-        plotter.add_scalar_bar(title=property_label, n_labels=5, vertical=True)
         plotter.show_axes()
         plotter.show_grid()
         plotter.show()
@@ -923,6 +1075,15 @@ class LinearTriangleMesh3D(Mesh3D):
     def visualize_texture(
             self,
             texture: numpy.ndarray,
+            use_rgb: bool = True,
+            vertices_color: str = "black",
+            vertices_size: int = 5,
+            vertices_opacity: float = 1.0,
+            edges_color: str = "black",
+            edges_width: int = 1,
+            edges_opacity: float = 1.0,
+            faces_opacity: float = 1.0,
+            show_vertices: bool = True,
             show_edges: bool = True,
         ) -> None:
         r"""
@@ -937,7 +1098,7 @@ class LinearTriangleMesh3D(Mesh3D):
             - :meth:`elements_uvmap` to set or get the UV mapping of the elements.
 
         This method creates a 3D plot of the mesh, displaying its faces textured with the provided image.
-        The texture image should be a 2D (grayscale) or 3D (RGB/RGBA) numpy array.
+        The texture image should be a 2D (grayscale) or 3D (RGB) numpy array.
 
         .. seealso::
 
@@ -945,16 +1106,46 @@ class LinearTriangleMesh3D(Mesh3D):
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.
 
-    
+        .. seealso::
+
+            - :func:`pysdic.visualizer.visualize_qt_pyvista_linear_triangle_mesh_3d` for a Qt-based interactive visualization of the mesh.
+            
         Parameters
         ----------
         texture : numpy.ndarray
-            The texture image to apply to the mesh. It must have the same number of vertices as the mesh.
+            The texture image to apply to the mesh. Integer arrays with values in [0, 255] with dtype ``numpy.uint8``.
+            Array must have shape (height, width, 3) for RGB textures or (height, width) for grayscale textures.
+
+        use_rgb : bool, optional
+            Whether to interpret the texture as RGB (True). If False, any RGB texture will be converted to grayscale, by default True.
+
+        vertices_color : str, optional
+            Color of the vertices (points) in the mesh, by default "black".
+
+        vertices_size : int, optional
+            Size of the vertices (points) in the mesh, by default 5.
+
+        vertices_opacity : float, optional
+            Opacity of the vertices (points) in the mesh (0.0 to 1.0), by default 1.0.
+
+        edges_color : str, optional
+            Color of the edges in the mesh, by default "black".
+
+        edges_width : int, optional
+            Width of the edges in the mesh, by default 1.
+
+        edges_opacity : float, optional
+            Opacity of the edges in the mesh (0.0 to 1.0), by default 1.0.
+
+        faces_opacity : float, optional
+            Opacity of the faces in the mesh (0.0 to 1.0), by default 1.0.
+
+        show_points : bool, optional
+            Whether to display the vertices (points) of the mesh, by default True.
 
         show_edges : bool, optional
-            Whether to show the mesh edges in the visualization, by default True.
+            Whether to display the edges of the mesh, by default True.
 
-            
 
         More Information
         -------------------------
@@ -971,19 +1162,24 @@ class LinearTriangleMesh3D(Mesh3D):
         .. code-block:: python
 
             from pysdic.geometry import create_linear_triangle_heightmap
-            import numpy as np
+            import numpy
 
             surface_mesh = create_linear_triangle_heightmap(
-                height_function=lambda x, y: 0.5 * np.sin(np.pi * x) * np.cos(np.pi * y),
+                height_function=lambda x, y: 0.5 * numpy.sin(numpy.pi * x) * numpy.cos(numpy.pi * y),
                 x_bounds=(-1.0, 1.0),
                 y_bounds=(-1.0, 1.0),
                 n_x=50,
                 n_y=50,
             ) # UVMAP already set in the function
 
-            texture_image = numpy.sin(np.linspace(0, 2 * np.pi, 256)).reshape(16, 16)  # Example texture image with shape (16, 16)
+            # Create a texture image
+            u = numpy.linspace(0, 1, 50)
+            v = numpy.linspace(0, 1, 50)
+            U, V = numpy.meshgrid(u, v)
 
-            surface_mesh.visualize_texture(texture_image, show_edges=False)
+            texture_image = numpy.round(255/2 + 255/2 * numpy.sin(U * 4 * numpy.pi)).astype(numpy.uint8)  # Example texture image with shape (50, 50)
+
+            surface_mesh.visualize_texture(texture_image, show_edges=False, show_vertices=False)
             
         .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_texture_example.png
             :width: 600
@@ -1004,27 +1200,49 @@ class LinearTriangleMesh3D(Mesh3D):
             raise ValueError("texture must be a numpy ndarray.")
         
         if texture.ndim < 2 or texture.ndim > 3:
-            raise ValueError("texture must be a 2D (grayscale) or 3D (RGB/RGBA) array.")
-        if texture.ndim == 3 and texture.shape[2] not in [1, 3, 4]:
-            raise ValueError("If texture is 3D, its third dimension must be 1 (grayscale), 3 (RGB), or 4 (RGBA).")
+            raise ValueError("texture must be a 2D (grayscale) or 3D (RGB) array.")
+        if texture.ndim == 3 and texture.shape[2] not in [1, 3]:
+            raise ValueError("If texture is 3D, its third dimension must be 1 (grayscale) or 3 (RGB).")
+        if texture.dtype != numpy.uint8:
+            raise ValueError("texture array must have dtype numpy.uint8 with values in [0, 255].")
         
-        np = numpy
-        pv = pyvista
+        if not isinstance(use_rgb, bool):
+            raise ValueError("use_rgb must be a boolean.")
+
+        if not isinstance(vertices_color, str):
+            raise ValueError("Vertices color must be a string.")
+        if not (isinstance(vertices_size, Number) and vertices_size > 0):
+            raise ValueError("Vertices size must be a positive number.")
+        if not (isinstance(vertices_opacity, Number) and 0.0 <= vertices_opacity <= 1.0):
+            raise ValueError("Vertices opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(edges_color, str):
+            raise ValueError("Edges color must be a string.")
+        if not (isinstance(edges_width, Number) and edges_width > 0):
+            raise ValueError("Edges width must be a positive number.")
+        if not (isinstance(edges_opacity, Number) and 0.0 <= edges_opacity <= 1.0):
+            raise ValueError("Edges opacity must be a float between 0.0 and 1.0.")
+        if not (isinstance(faces_opacity, Number) and 0.0 <= faces_opacity <= 1.0):
+            raise ValueError("Faces opacity must be a float between 0.0 and 1.0.")
+        
+        if not isinstance(show_vertices, bool):
+            raise ValueError("show_vertices must be a boolean.")
+        if not isinstance(show_edges, bool):
+            raise ValueError("show_edges must be a boolean.")
 
         # Duplicate points per face
-        fictive_vertices = np.zeros((self.n_elements * 3, 3), dtype=np.float64)
+        fictive_vertices = numpy.zeros((self.n_elements * 3, 3), dtype=numpy.float64)
         fictive_vertices[0::3, :] = self.vertices.points[self.connectivity[:, 0], :]
         fictive_vertices[1::3, :] = self.vertices.points[self.connectivity[:, 1], :]
         fictive_vertices[2::3, :] = self.vertices.points[self.connectivity[:, 2], :]
 
         # Create connectivity for the fictive vertices
-        fictive_connectivity = np.arange(self.n_elements * 3, dtype=np.int64).reshape(self.n_elements, 3)
+        fictive_connectivity = numpy.arange(self.n_elements * 3, dtype=numpy.int64).reshape(self.n_elements, 3)
 
         # Create a PyVista mesh
-        pv_mesh = pv.PolyData(fictive_vertices, np.hstack((np.full((self.n_elements, 1), 3), fictive_connectivity)).astype(np.int64))
+        pv_mesh = pyvista.PolyData(fictive_vertices, numpy.hstack((numpy.full((self.n_elements, 1), 3), fictive_connectivity)).astype(numpy.int64))
 
         # Set texture coordinates
-        pv_mesh.active_texture_coordinates = np.zeros((self.n_elements * 3, 2), dtype=np.float64)
+        pv_mesh.active_texture_coordinates = numpy.zeros((self.n_elements * 3, 2), dtype=numpy.float64)
 
         # UV coordinates per vertex of each element
         uvmap = self.elements_uvmap  # shape (M, 6)
@@ -1036,13 +1254,50 @@ class LinearTriangleMesh3D(Mesh3D):
         pv_mesh.active_texture_coordinates[2::3, 1] = uvmap[:, 5]  # v3
 
         # Create a PyVista texture
-        texture = pv.Texture(texture)
+
+        if texture.ndim == 2:
+            color_texture = numpy.repeat(texture[:, :, numpy.newaxis], 3, axis=2).astype(numpy.uint8)
+        elif texture.ndim == 3 and texture.shape[2] == 1:
+            color_texture = numpy.repeat(texture, 3, axis=2).astype(numpy.uint8)
+        elif texture.ndim == 3 and self._current_use_RGB_texture and texture.shape[2] == 3:
+            color_texture = texture
+        elif texture.ndim == 3 and not self._current_use_RGB_texture and texture.shape[2] == 3:
+            gray_texture = numpy.round(numpy.dot(texture[..., :3], [0.2989, 0.5870, 0.1140])).astype(numpy.uint8)
+            color_texture = numpy.repeat(gray_texture[:, :, numpy.newaxis], 3, axis=2).astype(numpy.uint8)
+        else:
+            raise ValueError("Invalid texture array shape.")
+        
+        pvtexture = pyvista.Texture(color_texture)
 
         # Create a PyVista plotter
         plotter = pyvista.Plotter()
 
         # Add the mesh with the texture
-        plotter.add_mesh(pv_mesh, texture=texture, show_edges=show_edges)
+        plotter.add_mesh(
+            pv_mesh, 
+            texture=pvtexture,
+            opacity=faces_opacity,
+        )
+
+        # Add edges if required
+        if show_edges:
+            edges = pv_mesh.extract_all_edges()
+            plotter.add_mesh(
+                edges, 
+                color=edges_color, 
+                line_width=edges_width,
+                opacity=edges_opacity
+            )
+
+        # Add vertices if required
+        if show_vertices:
+            plotter.add_points(
+                self.vertices.points, 
+                color=vertices_color, 
+                point_size=vertices_size,
+                opacity=vertices_opacity,
+                render_points_as_spheres=True
+            )
 
         # Show the plot
         plotter.show_axes()
@@ -1053,15 +1308,18 @@ class LinearTriangleMesh3D(Mesh3D):
     def visualize_integrated_points(
             self,
             integrated_points: IntegratedPoints,
-            point_color: str = "black",
-            point_size: int = 5,
-            integrated_point_color: str = "red",
-            integrated_point_size: int = 10,
-            edge_color: str = "blue",
-            edge_width: int = 1,
-            face_color: str = "gray",   
-            face_opacity: float = 0.5,
-            show_points: bool = True,
+            points_color: str = "red",
+            points_size: int = 5,
+            points_opacity: float = 1.0,
+            vertices_color: str = "black",
+            vertices_size: int = 5,
+            vertices_opacity: float = 1.0,
+            edges_color: str = "black",
+            edges_width: int = 1,
+            edges_opacity: float = 1.0,
+            faces_color: str = "gray",   
+            faces_opacity: float = 0.5,
+            show_vertices: bool = True,
             show_edges: bool = True,
             show_faces: bool = True,
         ) -> None:
@@ -1077,34 +1335,47 @@ class LinearTriangleMesh3D(Mesh3D):
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
 
-    
+        .. seealso::
+
+            - :func:`pysdic.visualizer.visualize_qt_pyvista_linear_triangle_mesh_3d` for a Qt-based interactive visualization of the mesh.
+
         Parameters
         ----------
         integrated_points : IntegratedPoints
             An instance of IntegratedPoints containing the points to visualize on the mesh.
+            The dimensions of the integrated points must match the mesh dimensions.
 
-        point_color : str, optional
-            Color of the vertices (points) in the mesh, by default "black".
-
-        point_size : int, optional
-            Size of the vertices (points) in the mesh, by default 5.
-
-        integrated_point_color : str, optional
+        points_color : str, optional
             Color of the integrated points, by default "red".
 
-        integrated_point_size : int, optional
-            Size of the integrated points, by default 10.
+        points_size : int, optional
+            Size of the integrated points, by default 5.
+        
+        points_opacity : float, optional
+            Opacity of the integrated points (0.0 to 1.0), by default 1.0.
 
-        edge_color : str, optional
-            Color of the edges in the mesh, by default "blue".
+        vertices_color : str, optional
+            Color of the vertices (points) in the mesh, by default "black".
 
-        edge_width : int, optional
+        vertices_size : int, optional
+            Size of the vertices (points) in the mesh, by default 5.
+
+        vertices_opacity : float, optional
+            Opacity of the vertices (points) in the mesh (0.0 to 1.0), by default 1.0.
+
+        edges_color : str, optional
+            Color of the edges in the mesh, by default "black".
+
+        edges_width : int, optional
             Width of the edges in the mesh, by default 1.
 
-        face_color : str, optional
+        edges_opacity : float, optional
+            Opacity of the edges in the mesh (0.0 to 1.0), by default 1.0.
+
+        faces_color : str, optional
             Color of the faces in the mesh, by default "gray".
 
-        face_opacity : float, optional
+        faces_opacity : float, optional
             Opacity of the faces in the mesh (0.0 to 1.0), by default 0.5.
 
         show_points : bool, optional
@@ -1134,10 +1405,10 @@ class LinearTriangleMesh3D(Mesh3D):
         .. code-block:: python
 
             from pysdic.geometry import create_linear_triangle_heightmap
-            import numpy as np
+            import numpy
 
             surface_mesh = create_linear_triangle_heightmap(
-                height_function=lambda x, y: 0.5 * np.sin(np.pi * x) * np.cos(np.pi * y),
+                height_function=lambda x, y: 0.5 * numpy.sin(numpy.pi * x) * numpy.cos(numpy.pi * y),
                 x_bounds=(-1.0, 1.0),
                 y_bounds=(-1.0, 1.0),
                 n_x=50,
@@ -1145,13 +1416,13 @@ class LinearTriangleMesh3D(Mesh3D):
             )
 
             # Create some rays to cast
-            ray_origins = np.random.uniform(-1, 1, (100, 3))
+            ray_origins = numpy.random.uniform(-1, 1, (100, 3))
             ray_origins[:, 2] = 3.0  # Start above the surface
-            ray_directions = np.tile(np.array([[0, 0, -1]]), (100, 1))  # Pointing downwards
+            ray_directions = numpy.tile(numpy.array([[0, 0, -1]]), (100, 1))  # Pointing downwards
 
             intersection_points = surface_mesh.cast_rays(ray_origins, ray_directions)
 
-            surface_mesh.visualize_integrated_points(intersection_points, integrated_point_color='red', integrated_point_size=8, show_points=False, show_edges=False)
+            surface_mesh.visualize_integrated_points(intersection_points, points_size=8)
 
             
         .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_integrated_points_example.png
@@ -1171,22 +1442,32 @@ class LinearTriangleMesh3D(Mesh3D):
         if integrated_points.n_dimensions != self._n_dimensions:
             raise ValueError(f"integrated_points must have {self._n_dimensions} dimensions.")
         
-        if not isinstance(point_color, str):
-            raise ValueError("Point color must be a string.")
-        if not (isinstance(point_size, Number) and point_size > 0):
-            raise ValueError("Point size must be a positive number.")
-        if not isinstance(integrated_point_color, str):
-            raise ValueError("Integrated point color must be a string.")
-        if not (isinstance(integrated_point_size, Number) and integrated_point_size > 0):
-            raise ValueError("Integrated point size must be a positive number.")
-        if not isinstance(edge_color, str):
-            raise ValueError("Edge color must be a string.")
-        if not (isinstance(edge_width, Number) and edge_width > 0):
-            raise ValueError("Edge width must be a positive number.")
-        if not isinstance(face_color, str):
-            raise ValueError("Face color must be a string.")
-        if not (isinstance(face_opacity, Number) and 0.0 <= face_opacity <= 1.0):
-            raise ValueError("Face opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(points_color, str):
+            raise ValueError("Points color must be a string.")
+        if not (isinstance(points_size, Number) and points_size > 0):
+            raise ValueError("Points size must be a positive number.")
+        if not (isinstance(points_opacity, Number) and 0.0 <= points_opacity <= 1.0):
+            raise ValueError("Points opacity must be a float between 0.0 and 1.0.")
+        
+        if not isinstance(vertices_color, str):
+            raise ValueError("Vertices color must be a string.")
+        if not (isinstance(vertices_size, Number) and vertices_size > 0):
+            raise ValueError("Vertices size must be a positive number.")
+        if not (isinstance(vertices_opacity, Number) and 0.0 <= vertices_opacity <= 1.0):
+            raise ValueError("Vertices opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(edges_color, str):
+            raise ValueError("Edges color must be a string.")
+        if not (isinstance(edges_width, Number) and edges_width > 0):
+            raise ValueError("Edges width must be a positive number.")
+        if not (isinstance(edges_opacity, Number) and 0.0 <= edges_opacity <= 1.0):
+            raise ValueError("Edges opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(faces_color, str):
+            raise ValueError("Faces color must be a string.")
+        if not (isinstance(faces_opacity, Number) and 0.0 <= faces_opacity <= 1.0):
+            raise ValueError("Faces opacity must be a float between 0.0 and 1.0.")
+        
+        if not isinstance(show_vertices, bool):
+            raise ValueError("show_vertices must be a boolean.")
         if not isinstance(show_edges, bool):
             raise ValueError("show_edges must be a boolean.")
         if not isinstance(show_faces, bool):
@@ -1200,22 +1481,41 @@ class LinearTriangleMesh3D(Mesh3D):
 
         # Add faces if required
         if show_faces:
-            plotter.add_mesh(pv_mesh, color=face_color, opacity=face_opacity, show_edges=show_edges, edge_color=edge_color, line_width=edge_width)
+            plotter.add_mesh(
+                pv_mesh, 
+                color=faces_color, 
+                opacity=faces_opacity
+            )
 
         # Add edges if required
-        elif show_edges:
-            edges = pv_mesh.extract_feature_edges()
-            plotter.add_mesh(edges, color=edge_color, line_width=edge_width)
+        if show_edges:
+            edges = pv_mesh.extract_all_edges()
+            plotter.add_mesh(
+                edges, 
+                color=edges_color, 
+                line_width=edges_width,
+                opacity=edges_opacity
+            )
 
-        # Add points if required
-        if show_points:
-            plotter.add_points(self.vertices.points, color=point_color, point_size=point_size)
-
-        # Compute global coordinates of integrated points
-        global_coords = self.natural_to_global_points(integrated_points)
+        # Add vertices if required
+        if show_vertices:
+            plotter.add_points(
+                self.vertices.points, 
+                color=vertices_color, 
+                point_size=vertices_size,
+                opacity=vertices_opacity,
+                render_points_as_spheres=True
+            )
 
         # Add integrated points
-        plotter.add_points(global_coords.points, color=integrated_point_color, point_size=integrated_point_size)
+        points_coordinates = self.natural_to_global_points(integrated_points).points
+        plotter.add_points(
+            points_coordinates, 
+            color=points_color, 
+            point_size=points_size,
+            opacity=points_opacity,
+            render_points_as_spheres=True
+        )
 
         # Show the plot
         plotter.show_axes() 

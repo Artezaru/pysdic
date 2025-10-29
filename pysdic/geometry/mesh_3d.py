@@ -104,8 +104,14 @@ class Mesh3D(ABC):
         self._internal_bypass = True
         self.vertices = vertices
         self.connectivity = connectivity
-        self._vertices_properties = vertices_properties if vertices_properties is not None else {}
-        self._elements_properties = elements_properties if elements_properties is not None else {}
+        self._vertices_properties = {}
+        self._elements_properties = {}
+        if vertices_properties is not None:
+            for key, value in vertices_properties.items():
+                self.set_vertices_property(key, value)
+        if elements_properties is not None:
+            for key, value in elements_properties.items():
+                self.set_elements_property(key, value)
         self._internal_bypass = internal_bypass
         self.validate()
 

@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,12 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .__version__ import __version__
+__all__ = []
 
-__all__ = [
-    "__version__",
-]
+from .qt_pyvista_linear_triangle_mesh_3d import QtPyvistaLinearTriangleMesh3D, visualize_qt_pyvista_linear_triangle_mesh_3d
+__all__.extend(["QtPyvistaLinearTriangleMesh3D", "visualize_qt_pyvista_linear_triangle_mesh_3d"])
 
-from . import geometry
-from . import imaging
-from . import visualizer
