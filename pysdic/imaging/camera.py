@@ -1040,8 +1040,9 @@ class Camera(object):
     def visualize_projected_point_cloud(
         self,
         point_cloud: PointCloud3D,
-        point_color: str = "black",
-        point_size: int = 5,
+        points_color: str = "black",
+        points_size: int = 5,
+        points_opacity: float = 1.0,
         image: Optional[numpy.ndarray] = None,
         clip_sensor: bool = True,
         show_pixel_grid: bool = False,
@@ -1061,11 +1062,14 @@ class Camera(object):
         point_cloud : PointCloud3D
             An instance of PointCloud3D containing the 3D points in the world coordinate system to be projected and visualized.
 
-        point_color : str, optional
+        points_color : str, optional
             The color of the projected points in the plot. Default is "black".
 
-        point_size : int, optional
+        points_size : int, optional
             The size of the projected points in the plot. Default is 5.
+
+        points_opacity : float, optional
+            The opacity of the projected points in the plot. Default is 1.0 (fully opaque).
 
         image : Optional[numpy.ndarray], optional
             An optional background image to display behind the projected points. If provided, the image should have dimensions matching the camera sensor size. Default is None.
@@ -1116,7 +1120,7 @@ class Camera(object):
             world_points = PointCloud3D(points=world_points_array)
 
             # Visualize the projected point cloud
-            camera.visualize_projected_point_cloud(point_cloud=world_points, point_color="red", point_size=10)
+            camera.visualize_projected_point_cloud(point_cloud=world_points, points_color="red", points_size=10, show_pixel_grid=True)
 
         .. figure:: ../../../pysdic/resources/camera_visualize_projected_point_cloud_example.png
             :align: center
@@ -1130,10 +1134,12 @@ class Camera(object):
         # Check input types
         if not isinstance(point_cloud, PointCloud3D):
             raise TypeError("point_cloud must be an instance of PointCloud3D.")
-        if not isinstance(point_color, str):
-            raise TypeError("point_color must be a string.")
-        if not isinstance(point_size, Integral) or point_size <= 0:
-            raise ValueError("point_size must be a positive integer.")
+        if not isinstance(points_color, str):
+            raise TypeError("points_color must be a string.")
+        if not isinstance(points_size, Integral) or points_size <= 0:
+            raise ValueError("points_size must be a positive integer.")
+        if not isinstance(points_opacity, (float, int)) or not (0.0 <= points_opacity <= 1.0):
+            raise ValueError("points_opacity must be a float between 0.0 and 1.0.")
         if not isinstance(clip_sensor, bool):
             raise TypeError("clip_sensor must be a boolean.")
 
@@ -1165,7 +1171,7 @@ class Camera(object):
                 ax.plot([0, self.sensor_width], [y, y], color='gray', linewidth=0.5, alpha=0.5)
 
         # Display the projected points
-        ax.scatter(image_points[:, 0], image_points[:, 1], c=point_color, s=point_size)
+        ax.scatter(image_points[:, 0], image_points[:, 1], c=points_color, s=points_size, alpha=points_opacity)
 
         # Clip points outside the sensor dimensions if clip_sensor is True
         if clip_sensor:
@@ -1183,15 +1189,18 @@ class Camera(object):
     def visualize_projected_mesh(
         self,
         mesh: Mesh3D,
-        face_color: str = "red",
-        face_opacity: float = 0.5,
-        edge_color: str = "black",
-        edge_width: int = 1,
-        point_color: str = "black",
-        point_size: int = 5,
+        vertices_color: str = "black",
+        vertices_size: int = 5,
+        vertices_opacity: float = 1.0,
+        edges_color: str = "black",
+        edges_width: int = 1,
+        edges_opacity: float = 1.0,
+        faces_color: str = "red",
+        faces_opacity: float = 0.5,
         image: Optional[numpy.ndarray] = None,
         clip_sensor: bool = True,
         show_pixel_grid: bool = False,
+        show_vertices: bool = True,
         show_edges: bool = True,
         show_faces: bool = True,
     ) -> None:
@@ -1210,23 +1219,29 @@ class Camera(object):
         mesh : Mesh3D
             The 3D mesh to visualize.
 
-        face_color : str, optional
-            The color of the mesh faces (default is "red").
-
-        face_opacity : float, optional
-            The opacity of the mesh faces (default is 0.5).
-
-        edge_color : str, optional
-            The color of the mesh edges (default is "black").
-
-        edge_width : int, optional
-            The width of the mesh edges (default is 1).
-
-        point_color : str, optional
+        vertices_color : str, optional
             The color of the mesh vertices (default is "black").
 
-        point_size : int, optional
+        vertices_size : int, optional
             The size of the mesh vertices (default is 5).
+
+        vertices_opacity : float, optional
+            The opacity of the mesh vertices (default is 1.0).
+
+        edges_color : str, optional
+            The color of the mesh edges (default is "black").
+
+        edges_width : int, optional
+            The width of the mesh edges (default is 1).
+
+        edges_opacity : float, optional
+            The opacity of the mesh edges (default is 1.0).
+
+        faces_color : str, optional
+            The color of the mesh faces (default is "red").
+
+        faces_opacity : float, optional
+            The opacity of the mesh faces (default is 0.5).
 
         image : Optional[numpy.ndarray], optional
             An image to display as the background (default is None).
@@ -1236,6 +1251,9 @@ class Camera(object):
 
         show_pixel_grid : bool, optional
             Whether to show the pixel grid on the image (default is False).
+
+        show_vertices : bool, optional
+            Whether to show the mesh vertices (default is True).
 
         show_edges : bool, optional
             Whether to show the mesh edges (default is True).
@@ -1288,7 +1306,7 @@ class Camera(object):
             mesh = LinearTriangleMesh3D(vertices=vertices, connectivity=connectivity)
 
             # Visualize the projected mesh
-            camera.visualize_projected_mesh(mesh=mesh, face_color="blue", edge_color="black", point_color="red")
+            camera.visualize_projected_mesh(mesh=mesh, faces_color="blue", edges_color="black", vertices_color="red")
 
 
         .. figure:: ../../../pysdic/resources/camera_visualize_projected_mesh_example.png
@@ -1303,20 +1321,28 @@ class Camera(object):
         # Check input types
         if not isinstance(mesh, Mesh3D):
             raise TypeError("mesh must be an instance of Mesh3D.")
-        if not isinstance(face_color, str):
-            raise TypeError("face_color must be a string.")
-        if not isinstance(face_opacity, float) or not (0.0 <= face_opacity <= 1.0):
-            raise ValueError("face_opacity must be a float between 0.0 and 1.0.")
-        if not isinstance(edge_color, str):
-            raise TypeError("edge_color must be a string.")
-        if not isinstance(edge_width, Integral) or edge_width <= 0:
-            raise ValueError("edge_width must be a positive integer.")
-        if not isinstance(point_color, str):
-            raise TypeError("point_color must be a string.")
-        if not isinstance(point_size, Integral) or point_size <= 0:
-            raise ValueError("point_size must be a positive integer.")
+        if not isinstance(faces_color, str):
+            raise TypeError("faces_color must be a string.")
+        if not isinstance(faces_opacity, float) or not (0.0 <= faces_opacity <= 1.0):
+            raise ValueError("faces_opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(edges_color, str):
+            raise TypeError("edges_color must be a string.")
+        if not isinstance(edges_width, Integral) or edges_width <= 0:
+            raise ValueError("edges_width must be a positive integer.")
+        if not isinstance(edges_opacity, float) or not (0.0 <= edges_opacity <= 1.0):
+            raise ValueError("edges_opacity must be a float between 0.0 and 1.0.")
+        if not isinstance(vertices_color, str):
+            raise TypeError("vertices_color must be a string.")
+        if not isinstance(vertices_size, Integral) or vertices_size <= 0:
+            raise ValueError("vertices_size must be a positive integer.")
+        if not isinstance(vertices_opacity, float) or not (0.0 <= vertices_opacity <= 1.0):
+            raise ValueError("vertices_opacity must be a float between 0.0 and 1.0.")
         if not isinstance(clip_sensor, bool):
             raise TypeError("clip_sensor must be a boolean.")
+        if not isinstance(show_pixel_grid, bool):
+            raise TypeError("show_pixel_grid must be a boolean.")
+        if not isinstance(show_vertices, bool):
+            raise TypeError("show_vertices must be a boolean.")
         if not isinstance(show_edges, bool):
             raise TypeError("show_edges must be a boolean.")
         if not isinstance(show_faces, bool):
@@ -1352,17 +1378,18 @@ class Camera(object):
         # Display the mesh faces
         if show_faces:
             for face in mesh.connectivity:
-                polygon = plt.Polygon(image_points[face, :], closed=True, facecolor=face_color, alpha=face_opacity, edgecolor='none')
+                polygon = plt.Polygon(image_points[face, :], closed=True, facecolor=faces_color, alpha=faces_opacity, edgecolor='none')
                 ax.add_patch(polygon)
 
         # Display the mesh edges
         if show_edges:
             for face in mesh.connectivity:
-                polygon = plt.Polygon(image_points[face, :], closed=True, fill=None, edgecolor=edge_color, linewidth=edge_width)
+                polygon = plt.Polygon(image_points[face, :], closed=True, fill=None, edgecolor=edges_color, linewidth=edges_width, alpha=edges_opacity)
                 ax.add_patch(polygon)
 
         # Display the mesh vertices
-        ax.scatter(image_points[:, 0], image_points[:, 1], c=point_color, s=point_size)
+        if show_vertices:
+            ax.scatter(image_points[:, 0], image_points[:, 1], c=vertices_color, s=vertices_size, alpha=vertices_opacity)
 
         # Clip points outside the sensor dimensions if clip_sensor is True
         if clip_sensor:

@@ -710,8 +710,9 @@ class View(object):
     def visualize_projected_point_cloud(
         self,
         point_cloud: PointCloud3D,
-        point_color: str = "black",
-        point_size: int = 5,
+        points_color: str = "black",
+        points_size: int = 5,
+        points_opacity: float = 1.0,
         clip_sensor: bool = True,
         show_pixel_grid: bool = False,
     ) -> None:
@@ -719,20 +720,27 @@ class View(object):
         Visualize the projected 2D points of a :class:`pysdic.geometry.PointCloud3D` on a 2D plot using matplotlib.
 
         Simply calls the camera's own visualization method with image from the view.
+
         .. seealso::
 
             - :meth:`pysdic.imaging.Camera.visualize_projected_point_cloud` for the camera's own visualization method.
+            - :meth:`pysdic.imaging.View.visualize_projected_mesh` for visualizing projected meshes.
+            - :meth:`pysdic.geometry.View.visualize_image` for visualizing the view's image.
+            - :meth:`pysdic.geometry.PointCloud3D` for the structure of the input point cloud.
 
         Parameters
         ----------
         point_cloud : PointCloud3D
             An instance of PointCloud3D containing the 3D points in the world coordinate system to be projected and visualized.
 
-        point_color : str, optional
+        points_color : str, optional
             The color of the projected points in the plot. Default is "black".
 
-        point_size : int, optional
+        points_size : int, optional
             The size of the projected points in the plot. Default is 5.
+
+        points_opacity : float, optional
+            The opacity of the projected points in the plot. Default is 1.0 (fully opaque).
 
         clip_sensor : bool, optional
             If True, only the points that are projected within the camera sensor dimensions are visualized. Default is True.
@@ -743,8 +751,9 @@ class View(object):
         """
         self.camera.visualize_projected_point_cloud(
             point_cloud=point_cloud,
-            point_color=point_color,
-            point_size=point_size,
+            points_color=points_color,
+            points_size=points_size,
+            points_opacity=points_opacity,
             image=self._image,
             clip_sensor=clip_sensor,
             show_pixel_grid=show_pixel_grid,
@@ -753,14 +762,17 @@ class View(object):
     def visualize_projected_mesh(
         self,
         mesh: Mesh3D,
-        face_color: str = "red",
-        face_opacity: float = 0.5,
-        edge_color: str = "black",
-        edge_width: int = 1,
-        point_color: str = "black",
-        point_size: int = 5,
+        vertices_color: str = "black",
+        vertices_size: int = 5,
+        vertices_opacity: float = 1.0,
+        edges_color: str = "black",
+        edges_width: int = 1,
+        edges_opacity: float = 1.0,
+        faces_color: str = "red",
+        faces_opacity: float = 0.5,
         clip_sensor: bool = True,
         show_pixel_grid: bool = False,
+        show_vertices: bool = True,
         show_edges: bool = True,
         show_faces: bool = True,
     ) -> None:
@@ -772,32 +784,38 @@ class View(object):
         .. seealso::
 
             - :meth:`pysdic.imaging.Camera.visualize_projected_mesh` for the camera's own visualization method.
+            - :meth:`pysdic.imaging.View.visualize_projected_point_cloud` for visualizing projected point clouds.
+            - :meth:`pysdic.geometry.View.visualize_image` for visualizing the view's image.
+            - :meth:`pysdic.geometry.Mesh3D` for the structure of the input mesh.
 
         Parameters
         ----------
         mesh : Mesh3D
             The 3D mesh to visualize.
 
-        face_color : str, optional
-            The color of the mesh faces (default is "red").
-
-        face_opacity : float, optional
-            The opacity of the mesh faces (default is 0.5).
-
-        edge_color : str, optional
-            The color of the mesh edges (default is "black").
-
-        edge_width : int, optional
-            The width of the mesh edges (default is 1).
-
-        point_color : str, optional
+        vertices_color : str, optional
             The color of the mesh vertices (default is "black").
 
-        point_size : int, optional
+        vertices_size : int, optional
             The size of the mesh vertices (default is 5).
 
-        image : Optional[numpy.ndarray], optional
-            An image to display as the background (default is None).
+        vertices_opacity : float, optional
+            The opacity of the mesh vertices (default is 1.0).
+
+        edges_color : str, optional
+            The color of the mesh edges (default is "black").
+
+        edges_width : int, optional
+            The width of the mesh edges (default is 1).
+
+        edges_opacity : float, optional
+            The opacity of the mesh edges (default is 1.0).
+
+        faces_color : str, optional
+            The color of the mesh faces (default is "red").
+
+        faces_opacity : float, optional
+            The opacity of the mesh faces (default is 0.5).
 
         clip_sensor : bool, optional
             Whether to clip points outside the sensor dimensions (default is True).
@@ -805,23 +823,30 @@ class View(object):
         show_pixel_grid : bool, optional
             Whether to show the pixel grid on the image (default is False).
 
+        show_vertices : bool, optional
+            Whether to show the mesh vertices (default is True).
+
         show_edges : bool, optional
             Whether to show the mesh edges (default is True).
 
         show_faces : bool, optional
             Whether to show the mesh faces (default is True).
+
         """
         self.camera.visualize_projected_mesh(
             mesh=mesh,
-            face_color=face_color,
-            face_opacity=face_opacity,
-            edge_color=edge_color,
-            edge_width=edge_width,
-            point_color=point_color,
-            point_size=point_size,
+            vertices_color=vertices_color,
+            vertices_size=vertices_size,
+            vertices_opacity=vertices_opacity,
+            edges_color=edges_color,
+            edges_width=edges_width,
+            edges_opacity=edges_opacity,
+            faces_color=faces_color,
+            faces_opacity=faces_opacity,
             image=self._image,
             clip_sensor=clip_sensor,
             show_pixel_grid=show_pixel_grid,
+            show_vertices=show_vertices,
             show_edges=show_edges,
             show_faces=show_faces,
         )
