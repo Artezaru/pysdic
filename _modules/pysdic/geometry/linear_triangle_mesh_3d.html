@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.geometry.linear_triangle_mesh_3d &#8212; pysdic 0.3.1 documentation</title>
+    <title>pysdic.geometry.linear_triangle_mesh_3d &#8212; pysdic 0.4.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=4621528c"></script>
+    <script src="../../../_static/documentation_options.js?v=6c02275b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/linear_triangle_mesh_3d';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.3.1 documentation</p>
+    <p class="title logo__title">pysdic 0.4.0 documentation</p>
   
 </a></div>
     
@@ -335,7 +335,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.mesh_3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh3D</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.point_cloud_3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud3D</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.integrated_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegratedPoints</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.integration_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegrationPoints</span>
 
 <div class="viewcode-block" id="LinearTriangleMesh3D">
 <a class="viewcode-back" href="../../../api_doc/linear_triangle_mesh_3d.html#pysdic.geometry.LinearTriangleMesh3D">[docs]</a>
@@ -400,7 +400,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_vertices_predefined_metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;_elements_predefined_metadata&quot;</span><span class="p">]</span>
 
-    <span class="n">_n_nodes_per_element</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">_n_vertices_per_element</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">_n_dimensions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">_meshio_cell_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;triangle&quot;</span>
 
@@ -412,7 +412,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_elements_predefined_metadata</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-            <span class="s2">&quot;uvmap&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="s2">&quot;check_method&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_uvmap</span><span class="p">},</span>
+            <span class="s2">&quot;uvmap&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;check_method&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_uvmap</span><span class="p">},</span>
         <span class="p">})</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="o">=</span><span class="n">vertices_properties</span><span class="p">,</span> <span class="n">elements_properties</span><span class="o">=</span><span class="n">elements_properties</span><span class="p">,</span> <span class="n">internal_bypass</span><span class="o">=</span><span class="n">internal_bypass</span><span class="p">)</span>
@@ -514,7 +514,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">open3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">):</span> <span class="c1"># Legacy Open3D mesh</span>
             <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
             <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">triangles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-            <span class="n">mesh_instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">)</span>
+            <span class="n">mesh_instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">PointCloud3D</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">vertices</span><span class="p">),</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">)</span>
             <span class="n">mesh_instance</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>  <span class="c1"># Validate the mesh structure</span>
 
             <span class="c1"># Check if UV mapping is available</span>
@@ -546,6 +546,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">to_open3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legacy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">uvmap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">open3d</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">,</span> <span class="n">open3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the LinearTriangleMesh3D instance to an Open3D TriangleMesh object.</span>
+<span class="sd">        The mesh must not be empty.</span>
 
 <span class="sd">        If `legacy` is True, the method returns a legacy Open3D TriangleMesh object.</span>
 <span class="sd">        Otherwise, it returns a T geometry TriangleMesh object.</span>
@@ -578,10 +579,22 @@
 <span class="sd">        -------</span>
 <span class="sd">        Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh]</span>
 <span class="sd">            An Open3D TriangleMesh object containing the mesh data.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the mesh is empty.   </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot write an empty mesh to file.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">legacy</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a boolean for legacy, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">legacy</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">uvmap</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a boolean for uvmap, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">uvmap</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">legacy</span><span class="p">:</span>
             <span class="n">o3d_mesh</span> <span class="o">=</span> <span class="n">open3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">()</span>
-            <span class="n">o3d_mesh</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">open3d</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+            <span class="n">o3d_mesh</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">open3d</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">as_array</span><span class="p">())</span>
             <span class="n">o3d_mesh</span><span class="o">.</span><span class="n">triangles</span> <span class="o">=</span> <span class="n">open3d</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">Vector3iVector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connectivity</span><span class="p">)</span>
 
             <span class="c1"># Check if UV mapping is available</span>
@@ -596,7 +609,7 @@
 
             <span class="c1"># Check if UV mapping is available</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements_uvmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">uvmap</span><span class="p">:</span>
-                <span class="n">uvmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements_uvmap</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ntriangles</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Reshape to (M, 3, 2) for Open3D T geometry</span>
+                <span class="n">uvmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements_uvmap</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Reshape to (M, 3, 2) for Open3D T geometry</span>
                 <span class="n">o3d_mesh</span><span class="o">.</span><span class="n">triangle</span><span class="o">.</span><span class="n">texture_uvs</span> <span class="o">=</span> <span class="n">open3d</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">uvmap</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">open3d</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">o3d_mesh</span></div>
@@ -789,7 +802,7 @@
 
 <div class="viewcode-block" id="LinearTriangleMesh3D.cast_rays">
 <a class="viewcode-back" href="../../../generated/pysdic.geometry.LinearTriangleMesh3D.cast_rays.html#pysdic.geometry.LinearTriangleMesh3D.cast_rays">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cast_rays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_origins</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ray_directions</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegratedPoints</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cast_rays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_origins</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ray_directions</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cast rays into the mesh and compute the intersection points.</span>
 
@@ -811,11 +824,11 @@
 <span class="sd">            ray_origins = numpy.array([[0.1, 0.1, -1], [0.5, 0.5, -1]])  # shape (2, 3)</span>
 <span class="sd">            ray_directions = numpy.array([[0, 0, 1], [0, 0, 1]])  # shape (2, 3)</span>
 
-<span class="sd">            intersection_points = mesh.cast_rays(ray_origins, ray_directions)  # Returns an IntegratedPoints instance with intersection points</span>
+<span class="sd">            intersection_points = mesh.cast_rays(ray_origins, ray_directions)  # Returns an IntegrationPoints instance with intersection points</span>
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            - :class:`IntegratedPoints` for more information on the structure of the returned intersection points.</span>
+<span class="sd">            - :class:`IntegrationPoints` for more information on the structure of the returned intersection points.</span>
 <span class="sd">            - `Open3D Ray Casting Documentation &lt;http://www.open3d.org/docs/release/tutorial/geometry/ray_casting.html&gt;`_ for more details on ray casting.</span>
 
 <span class="sd">        .. warning::</span>
@@ -835,8 +848,8 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        IntegratedPoints</span>
-<span class="sd">            An IntegratedPoints instance containing the intersection points and related information.</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            An IntegrationPoints instance containing the intersection points and related information.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Combine ray origins and directions into a single array of shape (..., 6)</span>
@@ -872,7 +885,7 @@
         <span class="n">element_indices</span><span class="p">[</span><span class="n">intersect_true</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;primitive_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)[</span><span class="n">intersect_true</span><span class="p">]</span>
 
         <span class="c1"># Construct the output</span>
-        <span class="n">intersect_points</span> <span class="o">=</span> <span class="n">IntegratedPoints</span><span class="p">(</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="p">)</span>
+        <span class="n">intersect_points</span> <span class="o">=</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">intersect_points</span></div>
 
@@ -927,7 +940,7 @@
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            - :meth:`natural_to_global` for transforming natural coordinates to global coordinates.</span>
+<span class="sd">            - :meth:`natural_to_global_coordinates` for transforming natural coordinates to global coordinates.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -962,7 +975,7 @@
         <span class="k">if</span> <span class="n">jacobian</span><span class="p">:</span>
             <span class="n">dN_dxi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
             <span class="n">dN_deta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-            <span class="n">jacobian_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes_per_element</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">jacobian_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">natural_coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_vertices_per_element</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
             <span class="n">jacobian_matrix</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dN_dxi</span>  <span class="c1"># Derivative w.r.t xi</span>
             <span class="n">jacobian_matrix</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dN_deta</span>  <span class="c1"># Derivative w.r.t eta</span>
 
@@ -999,7 +1012,7 @@
 
 <span class="sd">            - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.</span>
 <span class="sd">            - :meth:`visualize_texture` to visualize the texture of the mesh.</span>
-<span class="sd">            - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.</span>
+<span class="sd">            - :meth:`visualize_integration_points` to visualize integration points on the mesh.</span>
 
 <span class="sd">        .. seealso::</span>
 
@@ -1178,7 +1191,7 @@
 
 <span class="sd">            - :meth:`visualize` to visualize the mesh without coloring by a property.</span>
 <span class="sd">            - :meth:`visualize_texture` to visualize the texture of the mesh.</span>
-<span class="sd">            - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.</span>
+<span class="sd">            - :meth:`visualize_integration_points` to visualize integration points on the mesh.</span>
 
 <span class="sd">        .. seealso::</span>
 
@@ -1447,7 +1460,7 @@
 
 <span class="sd">            - :meth:`visualize` to visualize the mesh without texture.</span>
 <span class="sd">            - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.</span>
-<span class="sd">            - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.</span>
+<span class="sd">            - :meth:`visualize_integration_points` to visualize integration points on the mesh.</span>
 
 <span class="sd">        .. seealso::</span>
 
@@ -1602,9 +1615,9 @@
             <span class="n">color_texture</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">texture</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">texture</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">texture</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">color_texture</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">texture</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">texture</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_use_RGB_texture</span> <span class="ow">and</span> <span class="n">texture</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">texture</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">use_rgb</span> <span class="ow">and</span> <span class="n">texture</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">color_texture</span> <span class="o">=</span> <span class="n">texture</span>
-        <span class="k">elif</span> <span class="n">texture</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_use_RGB_texture</span> <span class="ow">and</span> <span class="n">texture</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">texture</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_rgb</span> <span class="ow">and</span> <span class="n">texture</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">gray_texture</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">texture</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2989</span><span class="p">,</span> <span class="mf">0.5870</span><span class="p">,</span> <span class="mf">0.1140</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
             <span class="n">color_texture</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">gray_texture</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1649,11 +1662,11 @@
 
 
 
-<div class="viewcode-block" id="LinearTriangleMesh3D.visualize_integrated_points">
-<a class="viewcode-back" href="../../../generated/pysdic.geometry.LinearTriangleMesh3D.visualize_integrated_points.html#pysdic.geometry.LinearTriangleMesh3D.visualize_integrated_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">visualize_integrated_points</span><span class="p">(</span>
+<div class="viewcode-block" id="LinearTriangleMesh3D.visualize_integration_points">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.LinearTriangleMesh3D.visualize_integration_points.html#pysdic.geometry.LinearTriangleMesh3D.visualize_integration_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">visualize_integration_points</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
-            <span class="n">integrated_points</span><span class="p">:</span> <span class="n">IntegratedPoints</span><span class="p">,</span>
+            <span class="n">integration_points</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">,</span>
             <span class="n">points_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
             <span class="n">points_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
             <span class="n">points_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -1670,14 +1683,14 @@
             <span class="n">show_faces</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Visualize the 3D triangular mesh along with integrated points using PyVista.</span>
+<span class="sd">        Visualize the 3D triangular mesh along with integration points using PyVista.</span>
 
 <span class="sd">        This method creates a 3D plot of the mesh, displaying its vertices, edges, and faces,</span>
-<span class="sd">        along with the integrated points overlaid on the mesh.</span>
+<span class="sd">        along with the integration points overlaid on the mesh.</span>
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            - :meth:`visualize` to visualize the mesh without integrated points.</span>
+<span class="sd">            - :meth:`visualize` to visualize the mesh without integration points.</span>
 <span class="sd">            - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.</span>
 <span class="sd">            - :meth:`visualize_texture` to visualize the texture of the mesh.</span>
 
@@ -1687,18 +1700,18 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        integrated_points : IntegratedPoints</span>
-<span class="sd">            An instance of IntegratedPoints containing the points to visualize on the mesh.</span>
-<span class="sd">            The dimensions of the integrated points must match the mesh dimensions.</span>
+<span class="sd">        integration_points : IntegrationPoints</span>
+<span class="sd">            An instance of IntegrationPoints containing the points to visualize on the mesh.</span>
+<span class="sd">            The dimensions of the integration points must match the mesh dimensions.</span>
 
 <span class="sd">        points_color : str, optional</span>
-<span class="sd">            Color of the integrated points, by default &quot;red&quot;.</span>
+<span class="sd">            Color of the integration points, by default &quot;red&quot;.</span>
 
 <span class="sd">        points_size : int, optional</span>
-<span class="sd">            Size of the integrated points, by default 5.</span>
+<span class="sd">            Size of the integration points, by default 5.</span>
 <span class="sd">        </span>
 <span class="sd">        points_opacity : float, optional</span>
-<span class="sd">            Opacity of the integrated points (0.0 to 1.0), by default 1.0.</span>
+<span class="sd">            Opacity of the integration points (0.0 to 1.0), by default 1.0.</span>
 
 <span class="sd">        vertices_color : str, optional</span>
 <span class="sd">            Color of the vertices (points) in the mesh, by default &quot;black&quot;.</span>
@@ -1737,7 +1750,7 @@
 <span class="sd">        More Information</span>
 <span class="sd">        -------------------------</span>
 
-<span class="sd">        This method only display the mesh and integrated points without additional elements.</span>
+<span class="sd">        This method only display the mesh and integration points without additional elements.</span>
 <span class="sd">        To display additional elements, use PyVista directly.</span>
 
 <span class="sd">        .. seealso::</span>
@@ -1768,14 +1781,14 @@
 
 <span class="sd">            intersection_points = surface_mesh.cast_rays(ray_origins, ray_directions)</span>
 
-<span class="sd">            surface_mesh.visualize_integrated_points(intersection_points, points_size=8)</span>
+<span class="sd">            surface_mesh.visualize_integration_points(intersection_points, points_size=8)</span>
 
 <span class="sd">            </span>
-<span class="sd">        .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_integrated_points_example.png</span>
+<span class="sd">        .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_integration_points_example.png</span>
 <span class="sd">            :width: 600</span>
 <span class="sd">            :align: center</span>
 
-<span class="sd">            Example of a 3D triangular mesh visualization using the `visualize_integrated_points` method.</span>
+<span class="sd">            Example of a 3D triangular mesh visualization using the `visualize_integration_points` method.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check input data</span>
@@ -1783,10 +1796,10 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot visualize an empty mesh.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot visualize a mesh without elements.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">,</span> <span class="n">IntegratedPoints</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;integrated_points must be an instance of IntegratedPoints.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">integrated_points</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;integrated_points must have </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="si">}</span><span class="s2"> dimensions.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">integration_points</span><span class="p">,</span> <span class="n">IntegrationPoints</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;integration_points must be an instance of IntegrationPoints.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">integration_points</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;integration_points must have </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_dimensions</span><span class="si">}</span><span class="s2"> dimensions.&quot;</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points_color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Points color must be a string.&quot;</span><span class="p">)</span>
@@ -1853,8 +1866,8 @@
                 <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
 
-        <span class="c1"># Add integrated points</span>
-        <span class="n">points_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_to_global_points</span><span class="p">(</span><span class="n">integrated_points</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+        <span class="c1"># Add integration points</span>
+        <span class="n">points_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integration_points_to_global_coordinates</span><span class="p">(</span><span class="n">integration_points</span><span class="p">)</span>
         <span class="n">plotter</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span>
             <span class="n">points_coordinates</span><span class="p">,</span> 
             <span class="n">color</span><span class="o">=</span><span class="n">points_color</span><span class="p">,</span> 

@@ -29,6 +29,8 @@ The subclasses of Mesh3D can also use the following methods to instantiate a Mes
 
    Mesh3D.from_meshio
    Mesh3D.from_vtk
+   Mesh3D.from_empty
+   Mesh3D.from_mesh
 
 Exporting Mesh3D objects
 -------------------------------------------
@@ -52,12 +54,17 @@ The attributes of a PointCloud3D object can be accessed as follows:
 
     Mesh3D.internal_bypass
     Mesh3D.connectivity
+    Mesh3D.elements
     Mesh3D.n_vertices
     Mesh3D.n_elements
-    Mesh3D.n_nodes_per_element
+    Mesh3D.n_vertices_per_element
     Mesh3D.n_dimensions
     Mesh3D.meshio_cell_type
     Mesh3D.vertices
+
+
+Manage vertices and elements properties
+-------------------------------------------
 
 Several properties can be associated with the vertices and elements of the mesh.
 These properties can be accessed and modified using the following methods:
@@ -78,7 +85,25 @@ These properties can be accessed and modified using the following methods:
     Mesh3D.list_vertices_properties
 
 
-Manipulating Mesh3D objects
+Manage mesh topology
+-------------------------------------------
+
+The topology of the mesh can be modified using the following methods:
+
+.. autosummary::
+   :toctree: ../generated/
+
+    Mesh3D.add_elements
+    Mesh3D.add_vertices
+    Mesh3D.are_used_vertices
+    Mesh3D.is_empty
+    Mesh3D.keep_elements
+    Mesh3D.remove_elements
+    Mesh3D.remove_unused_vertices
+    Mesh3D.remove_vertices
+
+
+Operating on Mesh3D objects
 -------------------------------------------
 
 To manipulate only the geometry of the mesh, access the ``vertices`` attribute (:class:`pysdic.geometry.PointCloud3D`) and use its methods.
@@ -87,12 +112,14 @@ To manipulate only the geometry of the mesh, access the ``vertices`` attribute (
    :toctree: ../generated/
 
     Mesh3D.copy
-    Mesh3D.evaluate_vertices_property_at
-    Mesh3D.evaluate_vertices_property_at_points
     Mesh3D.get_vertices_coordinates
-    Mesh3D.natural_to_global
-    Mesh3D.natural_to_global_points
+    Mesh3D.interpolate_property_at_natural_coordinates
+    Mesh3D.interpolate_property_at_integration_points
+    Mesh3D.integration_points_to_global_coordinates
+    Mesh3D.natural_to_global_coordinates
+    Mesh3D.project_integration_property_to_vertices
     Mesh3D.shape_functions
+    Mesh3D.shape_functions_matrix
     Mesh3D.validate
 
 

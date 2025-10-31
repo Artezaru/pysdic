@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.geometry.create_linear_triangle_axisymmetric &#8212; pysdic 0.3.1 documentation</title>
+    <title>pysdic.geometry.create_linear_triangle_axisymmetric &#8212; pysdic 0.4.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=4621528c"></script>
+    <script src="../../../_static/documentation_options.js?v=6c02275b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/create_linear_triangle_axisymmetric';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.3.1 documentation</p>
+    <p class="title logo__title">pysdic 0.4.0 documentation</p>
   
 </a></div>
     
@@ -387,43 +387,24 @@
 
 <span class="sd">        Demi-cylinder mesh with the face centered on the world x-axis.</span>
 
-<span class="sd">    Nodes are ordered first in height (indexed by ``i_H``) and then in theta (indexed by ``i_T``).</span>
-<span class="sd">    So the vertex at height index ``i_H`` and angular index ``i_T`` (both starting from 0) is located at:</span>
+<span class="sd">    Nodes are ordered first in theta (indexed by ``i_T``) and then in height (indexed by ``i_H``).</span>
+<span class="sd">    So the vertex at theta index ``i_T`` and height index ``i_H`` (both starting from 0) is located at:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        mesh.vertices[i_T * n_height + i_H, :]</span>
+<span class="sd">        mesh.vertices[i_H * n_theta + i_T, :]</span>
 
 <span class="sd">    Each quadrilateral element is defined by the vertices:</span>
 
-<span class="sd">    - :math:`(i_H, i_T)`</span>
-<span class="sd">    - :math:`(i_H + 1, i_T)`</span>
-<span class="sd">    - :math:`(i_H + 1, i_T + 1)`</span>
-<span class="sd">    - :math:`(i_H, i_T + 1)`</span>
+<span class="sd">    - :math:`(i_T, i_H)`</span>
+<span class="sd">    - :math:`(i_T + 1, i_H)`</span>
+<span class="sd">    - :math:`(i_T + 1, i_H + 1)`</span>
+<span class="sd">    - :math:`(i_T, i_H + 1)`</span>
 
-<span class="sd">    This quadrilateral is then split into two triangles depending on the value of ``first_diagonal``:</span>
+<span class="sd">    This quadrilateral is split into two triangles.</span>
 
-<span class="sd">    - If ``first_diagonal`` is ``True``:</span>
-
-<span class="sd">        - Triangle 1: :math:`(i_H, i_T)`, :math:`(i_H, i_T + 1)`, :math:`(i_H + 1, i_T + 1)`</span>
-<span class="sd">        - Triangle 2: :math:`(i_H, i_T)`, :math:`(i_H + 1, i_T + 1)`, :math:`(i_H + 1, i_T)`</span>
-
-<span class="sd">    - If ``first_diagonal`` is ``False``:</span>
-
-<span class="sd">        - Triangle 1: :math:`(i_H, i_T)`, :math:`(i_H, i_T + 1)`, :math:`(i_H + 1, i_T)`</span>
-<span class="sd">        - Triangle 2: :math:`(i_H, i_T + 1)`, :math:`(i_H + 1, i_T + 1)`, :math:`(i_H + 1, i_T)`</span>
-
-<span class="sd">    These triangles are oriented in a direct (counterclockwise) order by default (for an observer outside the cylinder).</span>
-<span class="sd">    If ``direct`` is False, the orientation is reversed by swapping the second and third vertices in each triangle.</span>
-
-<span class="sd">    If ``closed`` is True, the mesh is closed in the angular direction.</span>
-<span class="sd">    In that case, ``theta_bounds`` should be set to:</span>
-
-<span class="sd">    .. math::</span>
-
-<span class="sd">        (\theta_0, \theta_0 \pm 2\pi (1 - \frac{1}{n_{theta}}))</span>
-
-<span class="sd">    to avoid duplicating vertices at the seam.</span>
+<span class="sd">    If ``closed`` is True, the mesh is closed in the angular direction by adding one more set of elements connecting the last and first theta positions.</span>
+<span class="sd">    In that case, ``theta_bounds`` are ignored and the theta starts from 0 to :math:`2\pi(1 - 1/n_{theta})`.</span>
 
 <span class="sd">    To generate a closed full cylinder:</span>
 
@@ -432,7 +413,6 @@
 <span class="sd">        cylinder_mesh = create_linear_triangle_axisymmetric(</span>
 <span class="sd">            profile_curve=lambda z: 1.0,</span>
 <span class="sd">            height_bounds=(-1.0, 1.0),</span>
-<span class="sd">            theta_bounds=(0.0, 2.0 * np.pi * (1 - 1.0 / 50)),</span>
 <span class="sd">            n_height=10,</span>
 <span class="sd">            n_theta=50,</span>
 <span class="sd">            closed=True,</span>
@@ -444,35 +424,8 @@
 
 <span class="sd">        Closed cylinder mesh.</span>
 
-<span class="sd">    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the OpenGL texture mapping convention.</span>
-<span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
-<span class="sd">    The following options are available for ``uv_layout``:</span>
-
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|</span>
-<span class="sd">    +=================+=========================+=========================+==========================+==========================+   </span>
-<span class="sd">    | 0               | (0, 0)                  | (n_height-1, 0)         | (0, n_theta-1)           | (n_height-1, n_theta-1)  |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 1               | (0, 0)                  | (0, n_theta-1)          | (n_height-1, 0)          | (n_height-1, n_theta-1)  |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 2               | (n_height-1, 0)         | (0, 0)                  | (n_height-1, n_theta-1)  | (0, n_theta-1)           |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 3               | (0, n_theta-1)          | (0, 0)                  | (n_height-1, n_theta-1)  | (n_height-1, 0)          |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 4               | (0, n_theta-1)          | (n_height-1, n_theta-1) | (0, 0)                   | (n_height-1, 0)          |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 5               | (n_height-1, 0)         | (n_height-1, n_theta-1) | (0, 0)                   | (0, n_theta-1)           |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 6               | (n_height-1, n_theta-1) | (0, n_theta-1)          | (n_height-1, 0)          | (0, 0)                   |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 7               | (n_height-1, n_theta-1) | (n_height-1, 0)         | (0, n_theta-1)           | (0, 0)                   |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-
-<span class="sd">    Notice that for a closed mesh, the ``N - 1`` becames ``N`` in the table above, since the a &#39;virtal&#39; last vertex is the same as the first one.</span>
-<span class="sd">    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</span>
-
 <span class="sd">    .. seealso:: </span>
-<span class="sd">    </span>
+<span class="sd">        </span>
 <span class="sd">        - :class:`LinearTriangleMesh3D` for more information on how to visualize and manipulate the mesh.</span>
 <span class="sd">        - https://github.com/Artezaru/py3dframe for details on the ``Frame`` class.</span>
 
@@ -481,32 +434,33 @@
 <span class="sd">    profile_curve : Callable[[float], float], optional</span>
 <span class="sd">        A function that takes a single height coordinate z and returns a strictly positive radius.</span>
 <span class="sd">        The default is a function that returns 1.0 for all z.</span>
-<span class="sd">    </span>
+
 <span class="sd">    frame : Frame, optional</span>
 <span class="sd">        The reference frame for the mesh. Defaults to the identity frame.</span>
-<span class="sd">    </span>
+
 <span class="sd">    height_bounds : tuple[float, float], optional</span>
 <span class="sd">        The lower and upper bounds for the height coordinate. Defaults to (0.0, 1.0).</span>
 <span class="sd">        The order determines the direction of vertex placement.</span>
-<span class="sd">    </span>
+<span class="sd">        </span>
 <span class="sd">    theta_bounds : tuple[float, float], optional</span>
-<span class="sd">        The angular sweep in radians. Defaults to (-numpy.pi, numpy.pi).</span>
-<span class="sd">        The order determines the angular direction of vertex placement.</span>
-<span class="sd">    </span>
+<span class="sd">        The angular sweep in radians. Defaults to (0.0, 2.0 * numpy.pi).</span>
+<span class="sd">        The order determines the angular direction of vertex placement. If ``closed`` is True, this parameter is ignored.</span>
+
 <span class="sd">    n_height : int, optional</span>
 <span class="sd">        Number of vertices along the height direction. Must be more than 1. Default is 10.</span>
-<span class="sd">    </span>
+
 <span class="sd">    n_theta : int, optional</span>
 <span class="sd">        Number of vertices along the angular direction. Must be more than 1. Default is 10.</span>
-<span class="sd">    </span>
+
 <span class="sd">    closed : bool, optional</span>
 <span class="sd">        If True, the mesh is closed in the angular direction. Default is False.</span>
 
 <span class="sd">    first_diagonal : bool, optional</span>
-<span class="sd">        If True, the quad is split along the first diagonal (bottom-left to top-right). Default is True.</span>
-<span class="sd">    </span>
+<span class="sd">        If True, the quad is split along the first diagonal (bottom-left to top-right).</span>
+<span class="sd">        Default is True.</span>
+
 <span class="sd">    direct : bool, optional</span>
-<span class="sd">        If True, triangle vertices are ordered counterclockwise. Default is True.</span>
+<span class="sd">        If True, triangle vertices are ordered counterclockwise for an observer looking from outside the radius. Default is True.</span>
 
 <span class="sd">    uv_layout : int, optional</span>
 <span class="sd">        The UV mapping strategy. Default is 0.</span>
@@ -515,6 +469,111 @@
 <span class="sd">    -------</span>
 <span class="sd">    TriangleMesh3D</span>
 <span class="sd">        The generated axisymmetric mesh as a TriangleMesh3D object.</span>
+<span class="sd">    </span>
+<span class="sd">        </span>
+<span class="sd">    Geometry of the mesh</span>
+<span class="sd">    ------------------------</span>
+
+<span class="sd">    Diagonal selection</span>
+<span class="sd">    ~~~~~~~~~~~~~~~~~~</span>
+
+<span class="sd">    According to the ``first_diagonal`` parameter, each quadrilateral face is split into two triangles as follows:</span>
+<span class="sd">    </span>
+<span class="sd">    - If ``first_diagonal`` is ``True``:</span>
+
+<span class="sd">        - Triangle 1: :math:`(i_T, i_H)`, :math:`(i_T + 1, i_H)`, :math:`(i_T + 1, i_H + 1)`</span>
+<span class="sd">        - Triangle 2: :math:`(i_T, i_H)`, :math:`(i_T + 1, i_H + 1)`, :math:`(i_T, i_H + 1)`</span>
+
+<span class="sd">    - If ``first_diagonal`` is ``False``:</span>
+
+<span class="sd">        - Triangle 1: :math:`(i_T, i_H)`, :math:`(i_T + 1, i_H)`, :math:`(i_T, i_H + 1)`</span>
+<span class="sd">        - Triangle 2: :math:`(i_T, i_H + 1)`, :math:`(i_T + 1, i_H)`, :math:`(i_T + 1, i_H + 1)`</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/create_linear_triangle_axisymmetric_diagonal.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        Diagonal selection for splitting quadrilaterals into triangles.</span>
+
+<span class="sd">    Notice that if the mesh is closed, the last column of quadrilaterals connecting the last and first theta positions are added at the end of the connectivity list.</span>
+
+<span class="sd">    Triangle orientation</span>
+<span class="sd">    ~~~~~~~~~~~~~~~~~~~~~~</span>
+
+<span class="sd">    - If ``direct`` is ``True``, triangles are oriented counterclockwise for an observer looking from outside the radius (See the Diagonal selection section).</span>
+<span class="sd">    - If ``direct`` is ``False``, triangles are oriented clockwise for an observer looking from outside the radius. Switch the order of the last two vertices in each triangle defined above.</span>
+
+<span class="sd">    UV Mapping</span>
+<span class="sd">    ~~~~~~~~~~</span>
+
+<span class="sd">    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).</span>
+<span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
+
+<span class="sd">    An image is defined by its four corners:</span>
+
+<span class="sd">    - Lower-left corner : pitel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left</span>
+<span class="sd">    - Upper-left corner : pitel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left</span>
+<span class="sd">    - Lower-right corner : pitel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right</span>
+<span class="sd">    - Upper-right corner : pitel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right</span>
+
+<span class="sd">    The following options are available for ``uv_layout`` and their corresponding vertex mapping:</span>
+
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|</span>
+<span class="sd">    +=================+=========================+=========================+==========================+==========================+   </span>
+<span class="sd">    | 0               | (0, 0)                  | (0, n_h-1)              | (n_t-1, 0)               | (n_t-1, n_h-1)           |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 1               | (0, 0)                  | (n_t-1, 0)              | (0, n_h-1)               | (n_t-1, n_h-1)           |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 2               | (n_t-1, 0)              | (0, 0)                  | (n_t-1, n_h-1)           | (0, n_h-1)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 3               | (0, n_h-1)              | (0, 0)                  | (n_t-1, n_h-1)           | (n_t-1, 0)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 4               | (0, n_h-1)              | (n_t-1, n_h-1)          | (0, 0)                   | (n_t-1, 0)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 5               | (n_t-1, 0)              | (n_t-1, n_h-1)          | (0, 0)                   | (0, n_h-1)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 6               | (n_t-1, n_h-1)          | (0, n_h-1)              | (n_t-1, 0)               | (0, 0)                   |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 7               | (n_t-1, n_h-1)          | (n_t-1, 0)              | (0, n_h-1)               | (0, 0)                   |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+
+<span class="sd">    Notice that for a closed mesh, the ``n_t - 1`` becames ``n_t`` in the table above, since the a &#39;virtal&#39; last vertex is the same as the first one.</span>
+<span class="sd">    </span>
+<span class="sd">    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/create_linear_triangle_axisymmetric_uv_layout.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        UV mapping strategies for different ``uv_layout`` options.</span>
+
+<span class="sd">    To check the UV mapping, you can use the following code:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic.geometry import create_linear_triangle_axisymmetric</span>
+<span class="sd">        import cv2</span>
+
+<span class="sd">        cylinder_mesh = create_linear_triangle_axisymmetric(</span>
+<span class="sd">            profile_curve=lambda z: 1.0,</span>
+<span class="sd">            height_bounds=(-1.0, 1.0),</span>
+<span class="sd">            theta_bounds=(0, np.pi/2),</span>
+<span class="sd">            n_height=10,</span>
+<span class="sd">            n_theta=20,</span>
+<span class="sd">            uv_layout=3,</span>
+<span class="sd">        )</span>
+<span class="sd">    </span>
+<span class="sd">        image = cv2.imread(&quot;lena_image.png&quot;)</span>
+<span class="sd">        cylinder_mesh.visualize_texture(image)</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/create_linear_triangle_axisymmetric_lena_texture.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        UV mapping of the Lena image on a demi-cylinder mesh with ``uv_layout=3``.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check the input parameters</span>
     <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -525,31 +584,31 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">profile_curve</span><span class="p">,</span> <span class="n">Callable</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;profile_curve must be a callable function&quot;</span><span class="p">)</span>
     
-    <span class="n">height_bounds</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">height_bounds</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">height_bounds</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;height_bounds must be a 2D array of shape (2,)&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;height_bounds must be different&quot;</span><span class="p">)</span>
-    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_theta</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_theta</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_theta must be an integer greater than 1&quot;</span><span class="p">)</span>
+    <span class="n">n_theta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_theta</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_height</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_height</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_height must be an integer greater than 1&quot;</span><span class="p">)</span>
+    <span class="n">n_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_height</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">closed</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;closed must be a boolean&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">closed</span><span class="p">:</span>
+        <span class="n">theta_bounds</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">n_theta</span><span class="p">))</span>
+
     <span class="n">theta_bounds</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta_bounds</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">theta_bounds</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;theta_bounds must be a 2D array of shape (2,)&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">theta_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">theta_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;theta_bounds must be different&quot;</span><span class="p">)</span>
     
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_height</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_height</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_height must be an integer greater than 1&quot;</span><span class="p">)</span>
-    <span class="n">n_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_height</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_theta</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_theta</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_theta must be an integer greater than 1&quot;</span><span class="p">)</span>
-    <span class="n">n_theta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_theta</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">closed</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;closed must be a boolean&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">closed</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">theta_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">theta_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="n">n_theta</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: The theta bounds are not set to the closed condition (theta_max = theta_min + 2*pi*(1 - 1/n_theta)). The mesh will be closed in the theta direction but the output can be unexpected.&quot;</span><span class="p">)</span>
-
+    <span class="n">height_bounds</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">height_bounds</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">height_bounds</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;height_bounds must be a 2D array of shape (2,)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;height_bounds must be different&quot;</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first_diagonal</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;first_diagonal must be a boolean&quot;</span><span class="p">)</span>
     
@@ -561,135 +620,170 @@
     <span class="n">uv_layout</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">uv_layout</span><span class="p">)</span>
     
     <span class="c1"># Generate the transform</span>
-    <span class="n">transform</span> <span class="o">=</span> <span class="n">FrameTransform</span><span class="p">(</span><span class="n">input_frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">output_frame</span><span class="o">=</span><span class="n">Frame</span><span class="p">())</span>
+    <span class="n">transform</span> <span class="o">=</span> <span class="n">FrameTransform</span><span class="p">(</span><span class="n">input_frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">output_frame</span><span class="o">=</span><span class="n">Frame</span><span class="o">.</span><span class="n">canonical</span><span class="p">())</span>
 
     <span class="c1"># Extract the parameters</span>
-    <span class="n">height_min</span> <span class="o">=</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">height_max</span> <span class="o">=</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">theta_min</span> <span class="o">=</span> <span class="n">theta_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">theta_max</span> <span class="o">=</span> <span class="n">theta_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">height_min</span> <span class="o">=</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">height_max</span> <span class="o">=</span> <span class="n">height_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Get the indices of the vertices in the array</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">:</span> <span class="n">it</span><span class="o">*</span><span class="n">n_height</span> <span class="o">+</span> <span class="n">ih</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">:</span> <span class="n">ih</span><span class="o">*</span><span class="n">n_theta</span> <span class="o">+</span> <span class="n">it</span>
 
-    <span class="c1"># Set the UV mapping strategy (list of 3D points -&gt; [(0,0) ; (0,Nt) ; (Nh,0) ; (Nh,Nt)])</span>
+    <span class="c1"># Set the UV mapping strategy (list of 3D points -&gt; [(0,0) ; (Nt,0) ; (0,Nh) ; (Nt,Nh)])</span>
     <span class="n">lower_left</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-    <span class="n">lower_right</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
     <span class="n">upper_left</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">lower_right</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
     <span class="n">upper_right</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+
     <span class="k">if</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
 
     <span class="c1"># Generate the vertices</span>
-    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_height</span><span class="o">*</span><span class="n">n_theta</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">vertices_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_theta</span><span class="o">*</span><span class="n">n_height</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_theta</span><span class="o">*</span><span class="n">n_height</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
-    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_theta</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_theta</span><span class="p">):</span>
             <span class="c1"># Compute the coordinates of the vertex in the local frame.</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">theta_max</span> <span class="o">-</span> <span class="n">theta_min</span><span class="p">)</span><span class="o">*</span><span class="n">it</span><span class="o">/</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">height</span> <span class="o">=</span> <span class="n">height_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">height_max</span> <span class="o">-</span> <span class="n">height_min</span><span class="p">)</span><span class="o">*</span><span class="n">ih</span><span class="o">/</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">rho</span> <span class="o">=</span> <span class="n">profile_curve</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">rho</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">rho</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">theta_max</span> <span class="o">-</span> <span class="n">theta_min</span><span class="p">)</span><span class="o">*</span><span class="n">it</span><span class="o">/</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">radius</span> <span class="o">=</span> <span class="n">profile_curve</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+
+            <span class="c1"># Convert from cylindrical to cartesian coordinates</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
             <span class="n">z</span> <span class="o">=</span> <span class="n">height</span>
 
             <span class="c1"># Convert the local point to the global frame</span>
             <span class="n">local_point</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-            <span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">local_point</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">local_point</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-    <span class="c1"># Generate the mesh</span>
-    <span class="n">triangles</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">)])</span>
-
-            <span class="k">elif</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">)])</span>
-
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="c1"># Compute the uvmap (UV Mapping for vertices)</span>
+            <span class="k">if</span> <span class="n">closed</span><span class="p">:</span> 
+                <span class="c1"># Shift 1 into UV mapping for closed meshes</span>
+                <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">it</span><span class="o">/</span><span class="p">(</span><span class="n">n_theta</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">ih</span><span class="o">/</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">it</span><span class="o">/</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">ih</span><span class="o">/</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">closed</span><span class="p">:</span>
+        <span class="c1"># Add fictive last vertex for UV mapping</span>
+        <span class="n">fictive_vertices_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_height</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="p">):</span>
+            <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">ih</span><span class="o">/</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Generate the mesh</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">closed</span><span class="p">:</span>
+        <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_theta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_theta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># Select the nodes of the two triangles            </span>
+            <span class="k">if</span> <span class="n">first_diagonal</span><span class="p">:</span>
+                <span class="n">node_1</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">node_2</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">node_3</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_4</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">node_5</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_6</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node_1</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">node_2</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">node_3</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_4</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_5</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">node_6</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="c1"># Compute the triangle indices</span>
+            <span class="n">triangle_1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">node_1</span> <span class="o">-</span> <span class="n">ih</span><span class="p">)</span>
+            <span class="n">triangle_2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">node_1</span> <span class="o">-</span> <span class="n">ih</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># Set the triangles and their UV map</span>
+            <span class="k">if</span> <span class="n">direct</span><span class="p">:</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_2</span><span class="p">,</span> <span class="n">node_3</span><span class="p">]</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="n">node_5</span><span class="p">,</span> <span class="n">node_6</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_2</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_3</span><span class="p">,</span> <span class="p">:]]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_5</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_6</span><span class="p">,</span> <span class="p">:]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_3</span><span class="p">,</span> <span class="n">node_2</span><span class="p">]</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="n">node_6</span><span class="p">,</span> <span class="n">node_5</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_3</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_2</span><span class="p">,</span> <span class="p">:]]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_6</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_5</span><span class="p">,</span> <span class="p">:]]</span>
+
+    <span class="c1"># Add the last column of triangles connecting the last and first theta positions if closed</span>
+    <span class="k">if</span> <span class="n">closed</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="c1"># Select the nodes of the two triangles            </span>
+            <span class="k">if</span> <span class="n">first_diagonal</span><span class="p">:</span>
+                <span class="n">node_1</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">uv_1</span> <span class="o">=</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_2</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">uv_2</span> <span class="o">=</span> <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_3</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">uv_3</span> <span class="o">=</span> <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_4</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">uv_4</span> <span class="o">=</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_5</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">uv_5</span> <span class="o">=</span> <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_6</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">uv_6</span> <span class="o">=</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_6</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node_1</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">uv_1</span> <span class="o">=</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_2</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">uv_2</span> <span class="o">=</span> <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_3</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">uv_3</span> <span class="o">=</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_3</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_4</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">uv_4</span> <span class="o">=</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_5</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ih</span><span class="p">)</span>
+                <span class="n">uv_5</span> <span class="o">=</span> <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">node_6</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">uv_6</span> <span class="o">=</span> <span class="n">fictive_vertices_uvmap</span><span class="p">[</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+            
+            <span class="c1"># Compute the triangle indices</span>
+            <span class="n">triangle_1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_theta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ih</span>
+            <span class="n">triangle_2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_theta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ih</span> <span class="o">+</span> <span class="mi">1</span>
 
-            <span class="k">elif</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+            <span class="c1"># Set the triangles and their UV map</span>
+            <span class="k">if</span> <span class="n">direct</span><span class="p">:</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_2</span><span class="p">,</span> <span class="n">node_3</span><span class="p">]</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="n">node_5</span><span class="p">,</span> <span class="n">node_6</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">uv_1</span><span class="p">,</span> <span class="n">uv_2</span><span class="p">,</span> <span class="n">uv_3</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">uv_4</span><span class="p">,</span> <span class="n">uv_5</span><span class="p">,</span> <span class="n">uv_6</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_3</span><span class="p">,</span> <span class="n">node_2</span><span class="p">]</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="n">node_6</span><span class="p">,</span> <span class="n">node_5</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">uv_1</span><span class="p">,</span> <span class="n">uv_3</span><span class="p">,</span> <span class="n">uv_2</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">uv_4</span><span class="p">,</span> <span class="n">uv_6</span><span class="p">,</span> <span class="n">uv_5</span><span class="p">]</span>
 
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
+    <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span> <span class="c1"># (Ntriangles, 6) - (u1,v1,u2,v2,u3,v3)</span>
 
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_theta</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-
-    <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">triangles</span><span class="p">)</span>
-
-    <span class="c1"># Generate the UV map</span>
-    <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">triangles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="c1"># [u1, v1, u2, v2, u3, v3]</span>
-
-    <span class="k">for</span> <span class="n">itri</span><span class="p">,</span> <span class="n">triangle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">triangles</span><span class="p">):</span>
-        <span class="c1"># Get the vertices of the triangle</span>
-        <span class="n">v1</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">triangle</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
-        <span class="n">v2</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">triangle</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:]</span>
-        <span class="n">v3</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">triangle</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">:]</span>
-
-        <span class="c1"># Get the index of the height and theta of the vertices</span>
-        <span class="n">it1</span><span class="p">,</span> <span class="n">ih1</span> <span class="o">=</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">n_height</span><span class="p">,</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">n_height</span>
-        <span class="n">it2</span><span class="p">,</span> <span class="n">ih2</span> <span class="o">=</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">n_height</span><span class="p">,</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="n">n_height</span>
-        <span class="n">it3</span><span class="p">,</span> <span class="n">ih3</span> <span class="o">=</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">//</span> <span class="n">n_height</span><span class="p">,</span> <span class="n">triangle</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">%</span> <span class="n">n_height</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">closed</span><span class="p">:</span>
-            <span class="n">n_height_up</span> <span class="o">=</span> <span class="n">n_height</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">n_theta_up</span> <span class="o">=</span> <span class="n">n_theta</span> <span class="o">-</span> <span class="mi">1</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">n_height_up</span> <span class="o">=</span> <span class="n">n_height</span>
-            <span class="n">n_theta_up</span> <span class="o">=</span> <span class="n">n_theta</span>
-
-        <span class="c1"># Compute the UV coordinates for each vertex (depending on the uv_layout and if we are in the last column)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="ow">in</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="n">it3</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="n">n_theta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">it1</span><span class="p">,</span> <span class="n">it2</span><span class="p">,</span> <span class="n">it3</span><span class="p">]):</span> 
-            <span class="k">if</span> <span class="n">it1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">it1</span> <span class="o">=</span> <span class="n">n_theta</span> <span class="c1"># Switch to the last column</span>
-            <span class="k">if</span> <span class="n">it2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">it2</span> <span class="o">=</span> <span class="n">n_theta</span>
-            <span class="k">if</span> <span class="n">it3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">it3</span> <span class="o">=</span> <span class="n">n_theta</span>
-
-        <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">itri</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ih1</span><span class="o">/</span><span class="n">n_height_up</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">it1</span><span class="o">/</span><span class="n">n_theta_up</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">itri</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ih2</span><span class="o">/</span><span class="n">n_height_up</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">it2</span><span class="o">/</span><span class="n">n_theta_up</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">itri</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ih3</span><span class="o">/</span><span class="n">n_height_up</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">it3</span><span class="o">/</span><span class="n">n_theta_up</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="c1"># Prepare the triangles for the mesh</span>
+    <span class="c1"># Prepare the mesh</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">LinearTriangleMesh3D</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">)</span>
+    
+    <span class="c1"># Set the UV map</span>
     <span class="n">mesh</span><span class="o">.</span><span class="n">elements_uvmap</span> <span class="o">=</span> <span class="n">triangles_uvmap</span>
+    
     <span class="k">return</span> <span class="n">mesh</span></div>
 
 </pre></div>

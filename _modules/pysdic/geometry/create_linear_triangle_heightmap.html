@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.geometry.create_linear_triangle_heightmap &#8212; pysdic 0.3.1 documentation</title>
+    <title>pysdic.geometry.create_linear_triangle_heightmap &#8212; pysdic 0.4.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=4621528c"></script>
+    <script src="../../../_static/documentation_options.js?v=6c02275b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/create_linear_triangle_heightmap';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.3.1 documentation</p>
+    <p class="title logo__title">pysdic 0.4.0 documentation</p>
   
 </a></div>
     
@@ -387,7 +387,7 @@
 
 <span class="sd">        Sinusoidal height map over a square domain centered at the origin.</span>
 
-<span class="sd">    Nodes are ordered first in y (indexed by ``i_Y``), then in x (indexed by ``i_X``).</span>
+<span class="sd">    Nodes are ordered first along the x direction, then along the y direction.</span>
 <span class="sd">    So the vertex at y index ``i_Y`` and x index ``i_X`` (both starting from 0) is located at:</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -401,46 +401,7 @@
 <span class="sd">    - :math:`(i_X + 1, i_Y + 1)`</span>
 <span class="sd">    - :math:`(i_X, i_Y + 1)`</span>
 
-<span class="sd">    This quadrilateral is split into two triangles depending on the value of ``first_diagonal``:</span>
-
-<span class="sd">    - If ``first_diagonal`` is ``True``:</span>
-
-<span class="sd">        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y + 1)`</span>
-<span class="sd">        - Triangle 2: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y + 1)`, :math:`(i_X + 1, i_Y)`</span>
-
-<span class="sd">    - If ``first_diagonal`` is ``False``:</span>
-
-<span class="sd">        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y)`</span>
-<span class="sd">        - Triangle 2: :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y + 1)`, :math:`(i_X + 1, i_Y)`</span>
-
-<span class="sd">    By default, the triangles are oriented counterclockwise (direct orientation) for an observer looking from above.</span>
-<span class="sd">    Set ``direct=False`` to reverse the orientation.</span>
-
-<span class="sd">    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the OpenGL texture mapping convention.</span>
-<span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
-<span class="sd">    The following options are available for ``uv_layout``:</span>
-
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|</span>
-<span class="sd">    +=================+=========================+=========================+==========================+==========================+   </span>
-<span class="sd">    | 0               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 1               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-
-<span class="sd">    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</span>
+<span class="sd">    This quadrilateral is split into two triangles.</span>
 
 <span class="sd">    .. seealso:: </span>
 <span class="sd">        </span>
@@ -471,7 +432,7 @@
 <span class="sd">        If True, the quad is split along the first diagonal (bottom-left to top-right). Default is True.</span>
 
 <span class="sd">    direct : bool, optional</span>
-<span class="sd">        If True, triangle vertices are ordered counterclockwise. Default is True.</span>
+<span class="sd">        If True, triangle vertices are ordered counterclockwise for an observer looking from above. Default is True.</span>
 
 <span class="sd">    uv_layout : int, optional</span>
 <span class="sd">        The UV mapping strategy. Default is 0.</span>
@@ -480,6 +441,107 @@
 <span class="sd">    -------</span>
 <span class="sd">    TriangleMesh3D</span>
 <span class="sd">        The generated surface mesh as a TriangleMesh3D object.</span>
+
+
+<span class="sd">    Geometry of the mesh</span>
+<span class="sd">    ------------------------</span>
+
+<span class="sd">    Diagonal selection</span>
+<span class="sd">    ~~~~~~~~~~~~~~~~~~~</span>
+
+<span class="sd">    According to the ``first_diagonal`` parameter, each quadrilateral face is split into two triangles as follows:</span>
+<span class="sd">    </span>
+<span class="sd">    - If ``first_diagonal`` is ``True``:</span>
+
+<span class="sd">        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y)`, :math:`(i_X + 1, i_Y + 1)`</span>
+<span class="sd">        - Triangle 2: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y + 1)`, :math:`(i_X, i_Y + 1)`</span>
+
+<span class="sd">    - If ``first_diagonal`` is ``False``:</span>
+
+<span class="sd">        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y)`, :math:`(i_X, i_Y + 1)`</span>
+<span class="sd">        - Triangle 2: :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y)`, :math:`(i_X + 1, i_Y + 1)`</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_diagonal.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        Diagonal selection for splitting quadrilaterals into triangles.</span>
+
+<span class="sd">    Triangle orientation</span>
+<span class="sd">    ~~~~~~~~~~~~~~~~~~~~~~</span>
+
+<span class="sd">    - If ``direct`` is ``True``, triangles are oriented counterclockwise for an observer looking from above (See the Diagonal selection section).</span>
+<span class="sd">    - If ``direct`` is ``False``, triangles are oriented clockwise for an observer looking from above. Switch the order of the last two vertices in each triangle defined above.</span>
+
+<span class="sd">    UV Mapping</span>
+<span class="sd">    ~~~~~~~~~~</span>
+
+<span class="sd">    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).</span>
+<span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
+
+<span class="sd">    An image is defined by its four corners:</span>
+
+<span class="sd">    - Lower-left corner : pixel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left</span>
+<span class="sd">    - Upper-left corner : pixel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left</span>
+<span class="sd">    - Lower-right corner : pixel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right</span>
+<span class="sd">    - Upper-right corner : pixel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right</span>
+
+<span class="sd">    The following options are available for ``uv_layout`` and their corresponding vertex mapping:</span>
+
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|</span>
+<span class="sd">    +=================+=========================+=========================+==========================+==========================+   </span>
+<span class="sd">    | 0               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 1               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+
+<span class="sd">    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_uv_layout.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        UV mapping strategies for different ``uv_layout`` options.</span>
+
+<span class="sd">    To check the UV mapping, you can use the following code:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic.geometry import create_linear_triangle_heightmap</span>
+<span class="sd">        import cv2</span>
+
+<span class="sd">        surface_mesh = create_linear_triangle_heightmap(</span>
+<span class="sd">            height_function=lambda x, y: 0.5 * np.sin(np.pi * x) * np.cos(np.pi * y),</span>
+<span class="sd">            x_bounds=(-1.0, 1.0),</span>
+<span class="sd">            y_bounds=(-1.0, 1.0),</span>
+<span class="sd">            n_x=50,</span>
+<span class="sd">            n_y=50,</span>
+<span class="sd">            uv_layout=3,</span>
+<span class="sd">        ) </span>
+
+<span class="sd">        image = cv2.imread(&quot;lena_image.png&quot;)</span>
+<span class="sd">        surface_mesh.visualize_texture(image)</span>
+
+<span class="sd">    .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_lena_texture.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        UV mapping of the Lena image on a sinusoidal height map.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check the input parameters</span>
     <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -530,87 +592,96 @@
     <span class="n">y_max</span> <span class="o">=</span> <span class="n">y_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Get the indices of the vertices in the array</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">:</span> <span class="n">it</span><span class="o">*</span><span class="n">n_x</span> <span class="o">+</span> <span class="n">ih</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">:</span> <span class="n">iy</span><span class="o">*</span><span class="n">n_x</span> <span class="o">+</span> <span class="n">ix</span>
 
-    <span class="c1"># Set the UV mapping strategy (list of 3D points -&gt; [(0,0) ; (0,Nt) ; (Nh,0) ; (Nh,Nt)])</span>
+    <span class="c1"># Set the UV mapping strategy (list of 3D points -&gt; [(0,0) ; (Nx,0) ; (0,Ny) ; (Nx,Ny)])</span>
     <span class="n">lower_left</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-    <span class="n">lower_right</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
     <span class="n">upper_left</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">lower_right</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
     <span class="n">upper_right</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+
     <span class="k">if</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">,</span> <span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
 
     <span class="c1"># Generate the vertices</span>
     <span class="n">vertices_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_x</span><span class="o">*</span><span class="n">n_y</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
     <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_x</span><span class="o">*</span><span class="n">n_y</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
-    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_y</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">iy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_y</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_x</span><span class="p">):</span>
             <span class="c1"># Compute the coordinates of the vertex in the local frame.</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">y_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span><span class="o">*</span><span class="n">it</span><span class="o">/</span><span class="p">(</span><span class="n">n_y</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span><span class="o">*</span><span class="n">ih</span><span class="o">/</span><span class="p">(</span><span class="n">n_x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span><span class="o">*</span><span class="n">iy</span><span class="o">/</span><span class="p">(</span><span class="n">n_y</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span><span class="o">*</span><span class="n">ix</span><span class="o">/</span><span class="p">(</span><span class="n">n_x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">z</span> <span class="o">=</span> <span class="n">height_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
             <span class="c1"># Convert the local point to the global frame</span>
             <span class="n">local_point</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-            <span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">local_point</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">vertices</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">local_point</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
             <span class="c1"># Compute the uvmap (UV Mapping for vertices)</span>
-            <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ih</span><span class="o">/</span><span class="p">(</span><span class="n">n_x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">it</span><span class="o">/</span><span class="p">(</span><span class="n">n_y</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ix</span><span class="o">/</span><span class="p">(</span><span class="n">n_x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">iy</span><span class="o">/</span><span class="p">(</span><span class="n">n_y</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">uv_mapping</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
 
     <span class="c1"># Generate the mesh</span>
-    <span class="n">triangles</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_y</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">ih</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_x</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">)])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:]])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:]])</span>
+    <span class="k">for</span> <span class="n">iy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_y</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_x</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># Select the nodes of the two triangles            </span>
+            <span class="k">if</span> <span class="n">first_diagonal</span><span class="p">:</span>
+                <span class="n">node_1</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+                <span class="n">node_2</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+                <span class="n">node_3</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_4</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+                <span class="n">node_5</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_6</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node_1</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+                <span class="n">node_2</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+                <span class="n">node_3</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_4</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">node_5</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+                <span class="n">node_6</span> <span class="o">=</span> <span class="n">index</span><span class="p">(</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="c1"># Compute the triangle indices</span>
+            <span class="n">triangle_1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">node_1</span> <span class="o">-</span> <span class="n">iy</span><span class="p">)</span>
+            <span class="n">triangle_2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">node_1</span> <span class="o">-</span> <span class="n">iy</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 
-            <span class="k">elif</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:]])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:]])</span>
+            <span class="c1"># Set the triangles and their UV map</span>
+            <span class="k">if</span> <span class="n">direct</span><span class="p">:</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_2</span><span class="p">,</span> <span class="n">node_3</span><span class="p">]</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="n">node_5</span><span class="p">,</span> <span class="n">node_6</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_2</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_3</span><span class="p">,</span> <span class="p">:]]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_5</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_6</span><span class="p">,</span> <span class="p">:]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_3</span><span class="p">,</span> <span class="n">node_2</span><span class="p">]</span>
+                <span class="n">triangles</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="n">node_6</span><span class="p">,</span> <span class="n">node_5</span><span class="p">]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_3</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_2</span><span class="p">,</span> <span class="p">:]]</span>
+                <span class="n">triangles_uvmap</span><span class="p">[</span><span class="n">triangle_2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_4</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_6</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">node_5</span><span class="p">,</span> <span class="p">:]]</span>
 
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">)])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:]])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:]])</span>
-
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">first_diagonal</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">direct</span><span class="p">:</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:]])</span>
-                <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="p">),</span> <span class="p">:],</span> <span class="n">vertices_uvmap</span><span class="p">[</span><span class="n">index</span><span class="p">(</span><span class="n">ih</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">:]])</span>
-
-    <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">triangles</span><span class="p">)</span> <span class="c1"># (Ntriangles, 3)</span>
-    <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">triangles_uvmap</span><span class="p">)</span> <span class="c1"># (Ntriangles, 3, 2)</span>
     <span class="n">triangles_uvmap</span> <span class="o">=</span> <span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">triangles_uvmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span> <span class="c1"># (Ntriangles, 6) - (u1,v1,u2,v2,u3,v3)</span>
 
     <span class="c1"># Prepare the mesh</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">LinearTriangleMesh3D</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">)</span>
+    
     <span class="c1"># Set the UV map</span>
     <span class="n">mesh</span><span class="o">.</span><span class="n">elements_uvmap</span> <span class="o">=</span> <span class="n">triangles_uvmap</span>
+    
     <span class="k">return</span> <span class="n">mesh</span></div>
 
 </pre></div>
