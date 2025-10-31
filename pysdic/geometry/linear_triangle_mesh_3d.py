@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 
 from .mesh_3d import Mesh3D
 from .point_cloud_3d import PointCloud3D
-from .integrated_points import IntegratedPoints
+from .integration_points import IntegrationPoints
 
 class LinearTriangleMesh3D(Mesh3D):
     r"""
@@ -86,7 +86,7 @@ class LinearTriangleMesh3D(Mesh3D):
     """
     __slots__ = ["_vertices_predefined_metadata", "_elements_predefined_metadata"]
 
-    _n_nodes_per_element: int = 3
+    _n_vertices_per_element: int = 3
     _n_dimensions: int = 2
     _meshio_cell_type: str = "triangle"
 
@@ -98,7 +98,7 @@ class LinearTriangleMesh3D(Mesh3D):
             self._elements_predefined_metadata = {}
 
         self._elements_predefined_metadata.update({
-            "uvmap": {"dim": 6, "type": numpy.float64, "check_method": self._internal_check_uvmap},
+            "uvmap": {"dim": 6, "check_method": self._internal_check_uvmap},
         })
 
         super().__init__(vertices, connectivity, vertices_properties=vertices_properties, elements_properties=elements_properties, internal_bypass=internal_bypass)
@@ -198,7 +198,7 @@ class LinearTriangleMesh3D(Mesh3D):
         if isinstance(mesh, open3d.geometry.TriangleMesh): # Legacy Open3D mesh
             vertices = numpy.asarray(mesh.vertices, dtype=numpy.float64)
             triangles = numpy.asarray(mesh.triangles, dtype=numpy.int64)
-            mesh_instance = cls(vertices=vertices, connectivity=triangles)
+            mesh_instance = cls(vertices=PointCloud3D.from_array(vertices), connectivity=triangles)
             mesh_instance.validate()  # Validate the mesh structure
 
             # Check if UV mapping is available
@@ -227,6 +227,7 @@ class LinearTriangleMesh3D(Mesh3D):
     def to_open3d(self, legacy: bool = False, uvmap: bool = True) -> Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh]:
         r"""
         Convert the LinearTriangleMesh3D instance to an Open3D TriangleMesh object.
+        The mesh must not be empty.
 
         If `legacy` is True, the method returns a legacy Open3D TriangleMesh object.
         Otherwise, it returns a T geometry TriangleMesh object.
@@ -259,10 +260,22 @@ class LinearTriangleMesh3D(Mesh3D):
         -------
         Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh]
             An Open3D TriangleMesh object containing the mesh data.
+
+        Raises
+        ------
+        ValueError
+            If the mesh is empty.   
         """
+        if self.n_vertices == 0 or self.n_elements == 0:
+            raise ValueError("Cannot write an empty mesh to file.")
+        if not isinstance(legacy, bool):
+            raise TypeError(f"Expected a boolean for legacy, got {type(legacy)}.")
+        if not isinstance(uvmap, bool):
+            raise TypeError(f"Expected a boolean for uvmap, got {type(uvmap)}.")
+
         if legacy:
             o3d_mesh = open3d.geometry.TriangleMesh()
-            o3d_mesh.vertices = open3d.utility.Vector3dVector(self.vertices)
+            o3d_mesh.vertices = open3d.utility.Vector3dVector(self.vertices.as_array())
             o3d_mesh.triangles = open3d.utility.Vector3iVector(self.connectivity)
 
             # Check if UV mapping is available
@@ -277,7 +290,7 @@ class LinearTriangleMesh3D(Mesh3D):
 
             # Check if UV mapping is available
             if self.elements_uvmap is not None and uvmap:
-                uvmap = self.elements_uvmap.reshape(self.Ntriangles, 3, 2)  # Reshape to (M, 3, 2) for Open3D T geometry
+                uvmap = self.elements_uvmap.reshape(self.n_elements, 3, 2)  # Reshape to (M, 3, 2) for Open3D T geometry
                 o3d_mesh.triangle.texture_uvs = open3d.core.Tensor(uvmap, dtype=open3d.core.float32)
 
         return o3d_mesh
@@ -458,7 +471,7 @@ class LinearTriangleMesh3D(Mesh3D):
         return centroids   
 
 
-    def cast_rays(self, ray_origins: numpy.ndarray, ray_directions: numpy.ndarray, weights: Optional[numpy.ndarray] = None) -> IntegratedPoints:
+    def cast_rays(self, ray_origins: numpy.ndarray, ray_directions: numpy.ndarray, weights: Optional[numpy.ndarray] = None) -> IntegrationPoints:
         r"""
         Cast rays into the mesh and compute the intersection points.
 
@@ -480,11 +493,11 @@ class LinearTriangleMesh3D(Mesh3D):
             ray_origins = numpy.array([[0.1, 0.1, -1], [0.5, 0.5, -1]])  # shape (2, 3)
             ray_directions = numpy.array([[0, 0, 1], [0, 0, 1]])  # shape (2, 3)
 
-            intersection_points = mesh.cast_rays(ray_origins, ray_directions)  # Returns an IntegratedPoints instance with intersection points
+            intersection_points = mesh.cast_rays(ray_origins, ray_directions)  # Returns an IntegrationPoints instance with intersection points
 
         .. seealso::
 
-            - :class:`IntegratedPoints` for more information on the structure of the returned intersection points.
+            - :class:`IntegrationPoints` for more information on the structure of the returned intersection points.
             - `Open3D Ray Casting Documentation <http://www.open3d.org/docs/release/tutorial/geometry/ray_casting.html>`_ for more details on ray casting.
 
         .. warning::
@@ -504,8 +517,8 @@ class LinearTriangleMesh3D(Mesh3D):
 
         Returns
         -------
-        IntegratedPoints
-            An IntegratedPoints instance containing the intersection points and related information.
+        IntegrationPoints
+            An IntegrationPoints instance containing the intersection points and related information.
 
         """
         # Combine ray origins and directions into a single array of shape (..., 6)
@@ -541,7 +554,7 @@ class LinearTriangleMesh3D(Mesh3D):
         element_indices[intersect_true] = results["primitive_ids"].numpy().astype(int)[intersect_true]
 
         # Construct the output
-        intersect_points = IntegratedPoints(natural_coordinates, element_indices, weights=weights, n_dimensions=self._n_dimensions)
+        intersect_points = IntegrationPoints(natural_coordinates, element_indices, weights=weights, n_dimensions=self._n_dimensions)
 
         return intersect_points
 
@@ -593,7 +606,7 @@ class LinearTriangleMesh3D(Mesh3D):
 
         .. seealso::
 
-            - :meth:`natural_to_global` for transforming natural coordinates to global coordinates.
+            - :meth:`natural_to_global_coordinates` for transforming natural coordinates to global coordinates.
 
         Parameters
         ----------
@@ -628,7 +641,7 @@ class LinearTriangleMesh3D(Mesh3D):
         if jacobian:
             dN_dxi = numpy.array([-1.0, 1.0, 0.0])
             dN_deta = numpy.array([-1.0, 0.0, 1.0])
-            jacobian_matrix = numpy.zeros((natural_coords.shape[0], self._n_nodes_per_element, self._n_dimensions), dtype=numpy.float64)
+            jacobian_matrix = numpy.zeros((natural_coords.shape[0], self._n_vertices_per_element, self._n_dimensions), dtype=numpy.float64)
             jacobian_matrix[:, :, 0] = dN_dxi  # Derivative w.r.t xi
             jacobian_matrix[:, :, 1] = dN_deta  # Derivative w.r.t eta
 
@@ -662,7 +675,7 @@ class LinearTriangleMesh3D(Mesh3D):
 
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
-            - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.
+            - :meth:`visualize_integration_points` to visualize integration points on the mesh.
 
         .. seealso::
 
@@ -838,7 +851,7 @@ class LinearTriangleMesh3D(Mesh3D):
 
             - :meth:`visualize` to visualize the mesh without coloring by a property.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
-            - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.
+            - :meth:`visualize_integration_points` to visualize integration points on the mesh.
 
         .. seealso::
 
@@ -1104,7 +1117,7 @@ class LinearTriangleMesh3D(Mesh3D):
 
             - :meth:`visualize` to visualize the mesh without texture.
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
-            - :meth:`visualize_integrated_points` to visualize integrated points on the mesh.
+            - :meth:`visualize_integration_points` to visualize integration points on the mesh.
 
         .. seealso::
 
@@ -1259,9 +1272,9 @@ class LinearTriangleMesh3D(Mesh3D):
             color_texture = numpy.repeat(texture[:, :, numpy.newaxis], 3, axis=2).astype(numpy.uint8)
         elif texture.ndim == 3 and texture.shape[2] == 1:
             color_texture = numpy.repeat(texture, 3, axis=2).astype(numpy.uint8)
-        elif texture.ndim == 3 and self._current_use_RGB_texture and texture.shape[2] == 3:
+        elif texture.ndim == 3 and use_rgb and texture.shape[2] == 3:
             color_texture = texture
-        elif texture.ndim == 3 and not self._current_use_RGB_texture and texture.shape[2] == 3:
+        elif texture.ndim == 3 and not use_rgb and texture.shape[2] == 3:
             gray_texture = numpy.round(numpy.dot(texture[..., :3], [0.2989, 0.5870, 0.1140])).astype(numpy.uint8)
             color_texture = numpy.repeat(gray_texture[:, :, numpy.newaxis], 3, axis=2).astype(numpy.uint8)
         else:
@@ -1305,9 +1318,9 @@ class LinearTriangleMesh3D(Mesh3D):
         plotter.show()
 
 
-    def visualize_integrated_points(
+    def visualize_integration_points(
             self,
-            integrated_points: IntegratedPoints,
+            integration_points: IntegrationPoints,
             points_color: str = "red",
             points_size: int = 5,
             points_opacity: float = 1.0,
@@ -1324,14 +1337,14 @@ class LinearTriangleMesh3D(Mesh3D):
             show_faces: bool = True,
         ) -> None:
         r"""
-        Visualize the 3D triangular mesh along with integrated points using PyVista.
+        Visualize the 3D triangular mesh along with integration points using PyVista.
 
         This method creates a 3D plot of the mesh, displaying its vertices, edges, and faces,
-        along with the integrated points overlaid on the mesh.
+        along with the integration points overlaid on the mesh.
 
         .. seealso::
 
-            - :meth:`visualize` to visualize the mesh without integrated points.
+            - :meth:`visualize` to visualize the mesh without integration points.
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
 
@@ -1341,18 +1354,18 @@ class LinearTriangleMesh3D(Mesh3D):
 
         Parameters
         ----------
-        integrated_points : IntegratedPoints
-            An instance of IntegratedPoints containing the points to visualize on the mesh.
-            The dimensions of the integrated points must match the mesh dimensions.
+        integration_points : IntegrationPoints
+            An instance of IntegrationPoints containing the points to visualize on the mesh.
+            The dimensions of the integration points must match the mesh dimensions.
 
         points_color : str, optional
-            Color of the integrated points, by default "red".
+            Color of the integration points, by default "red".
 
         points_size : int, optional
-            Size of the integrated points, by default 5.
+            Size of the integration points, by default 5.
         
         points_opacity : float, optional
-            Opacity of the integrated points (0.0 to 1.0), by default 1.0.
+            Opacity of the integration points (0.0 to 1.0), by default 1.0.
 
         vertices_color : str, optional
             Color of the vertices (points) in the mesh, by default "black".
@@ -1391,7 +1404,7 @@ class LinearTriangleMesh3D(Mesh3D):
         More Information
         -------------------------
 
-        This method only display the mesh and integrated points without additional elements.
+        This method only display the mesh and integration points without additional elements.
         To display additional elements, use PyVista directly.
 
         .. seealso::
@@ -1422,14 +1435,14 @@ class LinearTriangleMesh3D(Mesh3D):
 
             intersection_points = surface_mesh.cast_rays(ray_origins, ray_directions)
 
-            surface_mesh.visualize_integrated_points(intersection_points, points_size=8)
+            surface_mesh.visualize_integration_points(intersection_points, points_size=8)
 
             
-        .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_integrated_points_example.png
+        .. figure:: ../../../pysdic/resources/linear_triangle_mesh_3d_visualize_integration_points_example.png
             :width: 600
             :align: center
 
-            Example of a 3D triangular mesh visualization using the `visualize_integrated_points` method.
+            Example of a 3D triangular mesh visualization using the `visualize_integration_points` method.
 
         """
         # Check input data
@@ -1437,10 +1450,10 @@ class LinearTriangleMesh3D(Mesh3D):
             raise ValueError("Cannot visualize an empty mesh.")
         if self.n_elements == 0:
             raise ValueError("Cannot visualize a mesh without elements.")
-        if not isinstance(integrated_points, IntegratedPoints):
-            raise ValueError("integrated_points must be an instance of IntegratedPoints.")
-        if integrated_points.n_dimensions != self._n_dimensions:
-            raise ValueError(f"integrated_points must have {self._n_dimensions} dimensions.")
+        if not isinstance(integration_points, IntegrationPoints):
+            raise ValueError("integration_points must be an instance of IntegrationPoints.")
+        if integration_points.n_dimensions != self._n_dimensions:
+            raise ValueError(f"integration_points must have {self._n_dimensions} dimensions.")
         
         if not isinstance(points_color, str):
             raise ValueError("Points color must be a string.")
@@ -1507,8 +1520,8 @@ class LinearTriangleMesh3D(Mesh3D):
                 render_points_as_spheres=True
             )
 
-        # Add integrated points
-        points_coordinates = self.natural_to_global_points(integrated_points).points
+        # Add integration points
+        points_coordinates = self.integration_points_to_global_coordinates(integration_points)
         plotter.add_points(
             points_coordinates, 
             color=points_color, 

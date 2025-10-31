@@ -65,7 +65,7 @@ The LinearTriangleMesh3D class provides methods to visualize the mesh and its pr
    :toctree: ../generated/
    
     LinearTriangleMesh3D.visualize
-    LinearTriangleMesh3D.visualize_integrated_points
+    LinearTriangleMesh3D.visualize_integration_points
     LinearTriangleMesh3D.visualize_texture
     LinearTriangleMesh3D.visualize_vertices_property
 
@@ -148,7 +148,7 @@ Interpolating a vertices property at the intersection_points:
 
 .. code-block:: python
 
-   displacement_interpolated = mesh.evaluate_vertices_property_at_points(
+   displacement_interpolated = mesh.interpolate_property_at_integration_points(
       intersection_points,
       property_key="displacement",
    )

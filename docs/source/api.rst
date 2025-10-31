@@ -20,7 +20,7 @@ The submodule ``pysdic.geometry`` contains objects and functions to manipulate g
    ./api_doc/point_cloud_3d.rst
    ./api_doc/mesh_3d.rst
    ./api_doc/linear_triangle_mesh_3d.rst
-   ./api_doc/integrated_points.rst
+   ./api_doc/integration_points.rst
 
 Some utility functions to create specific meshes are also provided:
 

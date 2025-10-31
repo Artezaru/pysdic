@@ -28,7 +28,7 @@ ray_origins[:, 2] = 3.0  # Start above the surface
 ray_directions = np.tile(np.array([[0, 0, -1]]), (100, 1))  # Pointing downwards
 
 intersection_points = surface_mesh.cast_rays(ray_origins, ray_directions)
-intersection_points = {
+integration_points = {
     "Ray Intersections": intersection_points,
 }
 
@@ -50,6 +50,6 @@ textures = {
 visualize_qt_pyvista_linear_triangle_mesh_3d(
     mesh=surface_mesh,
     property_arrays=properties,
-    integrated_points=intersection_points,
+    integration_points=integration_points,
     textures=textures,
 )

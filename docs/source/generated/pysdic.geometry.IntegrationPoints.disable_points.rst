@@ -3,4 +3,4 @@ disable\_points
 
 .. currentmodule:: pysdic.geometry
 
-.. automethod:: IntegratedPoints.disable_points
+.. automethod:: IntegrationPoints.disable_points

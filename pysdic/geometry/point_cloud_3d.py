@@ -1705,7 +1705,8 @@ class PointCloud3D(object):
     def visualize(
             self, 
             color: str = "black",
-            point_size: float = 1.0
+            point_size: float = 1.0,
+            opacity: float = 1.0
             ) -> None:
         r"""
         Visualize the point cloud using PyVista.
@@ -1723,6 +1724,9 @@ class PointCloud3D(object):
 
         point_size : float, optional
             The size of the points in the visualization. Default is 1.0.
+
+        opacity : float, optional
+            The opacity of the points in the visualization. Default is 1.0 (fully opaque).
 
         Examples
         --------
@@ -1766,7 +1770,7 @@ class PointCloud3D(object):
         
         pv_point_cloud = pyvista.PolyData(valid_points)
         plotter = pyvista.Plotter()
-        plotter.add_mesh(pv_point_cloud, color=color, point_size=float(point_size), render_points_as_spheres=True, lighting=False)
+        plotter.add_mesh(pv_point_cloud, color=color, point_size=float(point_size), render_points_as_spheres=True, opacity=opacity)
         plotter.show_axes() 
         plotter.show_grid()
         plotter.show()

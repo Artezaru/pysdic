@@ -73,7 +73,7 @@ def create_linear_triangle_heightmap(
 
         Sinusoidal height map over a square domain centered at the origin.
 
-    Nodes are ordered first in y (indexed by ``i_Y``), then in x (indexed by ``i_X``).
+    Nodes are ordered first along the x direction, then along the y direction.
     So the vertex at y index ``i_Y`` and x index ``i_X`` (both starting from 0) is located at:
 
     .. code-block:: python
@@ -87,46 +87,7 @@ def create_linear_triangle_heightmap(
     - :math:`(i_X + 1, i_Y + 1)`
     - :math:`(i_X, i_Y + 1)`
 
-    This quadrilateral is split into two triangles depending on the value of ``first_diagonal``:
-
-    - If ``first_diagonal`` is ``True``:
-
-        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y + 1)`
-        - Triangle 2: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y + 1)`, :math:`(i_X + 1, i_Y)`
-
-    - If ``first_diagonal`` is ``False``:
-
-        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y)`
-        - Triangle 2: :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y + 1)`, :math:`(i_X + 1, i_Y)`
-
-    By default, the triangles are oriented counterclockwise (direct orientation) for an observer looking from above.
-    Set ``direct=False`` to reverse the orientation.
-
-    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the OpenGL texture mapping convention.
-    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.
-    The following options are available for ``uv_layout``:
-
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|
-    +=================+=========================+=========================+==========================+==========================+   
-    | 0               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 1               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-
-    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.
+    This quadrilateral is split into two triangles.
 
     .. seealso:: 
         
@@ -157,7 +118,7 @@ def create_linear_triangle_heightmap(
         If True, the quad is split along the first diagonal (bottom-left to top-right). Default is True.
 
     direct : bool, optional
-        If True, triangle vertices are ordered counterclockwise. Default is True.
+        If True, triangle vertices are ordered counterclockwise for an observer looking from above. Default is True.
 
     uv_layout : int, optional
         The UV mapping strategy. Default is 0.
@@ -166,6 +127,107 @@ def create_linear_triangle_heightmap(
     -------
     TriangleMesh3D
         The generated surface mesh as a TriangleMesh3D object.
+
+
+    Geometry of the mesh
+    ------------------------
+
+    Diagonal selection
+    ~~~~~~~~~~~~~~~~~~~
+
+    According to the ``first_diagonal`` parameter, each quadrilateral face is split into two triangles as follows:
+    
+    - If ``first_diagonal`` is ``True``:
+
+        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y)`, :math:`(i_X + 1, i_Y + 1)`
+        - Triangle 2: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y + 1)`, :math:`(i_X, i_Y + 1)`
+
+    - If ``first_diagonal`` is ``False``:
+
+        - Triangle 1: :math:`(i_X, i_Y)`, :math:`(i_X + 1, i_Y)`, :math:`(i_X, i_Y + 1)`
+        - Triangle 2: :math:`(i_X, i_Y + 1)`, :math:`(i_X + 1, i_Y)`, :math:`(i_X + 1, i_Y + 1)`
+
+    .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_diagonal.png
+        :width: 400
+        :align: center
+
+        Diagonal selection for splitting quadrilaterals into triangles.
+
+    Triangle orientation
+    ~~~~~~~~~~~~~~~~~~~~~~
+
+    - If ``direct`` is ``True``, triangles are oriented counterclockwise for an observer looking from above (See the Diagonal selection section).
+    - If ``direct`` is ``False``, triangles are oriented clockwise for an observer looking from above. Switch the order of the last two vertices in each triangle defined above.
+
+    UV Mapping
+    ~~~~~~~~~~
+
+    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).
+    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.
+
+    An image is defined by its four corners:
+
+    - Lower-left corner : pixel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left
+    - Upper-left corner : pixel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left
+    - Lower-right corner : pixel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right
+    - Upper-right corner : pixel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right
+
+    The following options are available for ``uv_layout`` and their corresponding vertex mapping:
+
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|
+    +=================+=========================+=========================+==========================+==========================+   
+    | 0               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 1               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+
+    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.
+
+    .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_uv_layout.png
+        :width: 400
+        :align: center
+
+        UV mapping strategies for different ``uv_layout`` options.
+
+    To check the UV mapping, you can use the following code:
+
+    .. code-block:: python
+
+        import numpy as np
+        from pysdic.geometry import create_linear_triangle_heightmap
+        import cv2
+
+        surface_mesh = create_linear_triangle_heightmap(
+            height_function=lambda x, y: 0.5 * np.sin(np.pi * x) * np.cos(np.pi * y),
+            x_bounds=(-1.0, 1.0),
+            y_bounds=(-1.0, 1.0),
+            n_x=50,
+            n_y=50,
+            uv_layout=3,
+        ) 
+
+        image = cv2.imread("lena_image.png")
+        surface_mesh.visualize_texture(image)
+
+    .. figure:: ../../../pysdic/resources/create_linear_triangle_heightmap_lena_texture.png
+        :width: 400
+        :align: center
+
+        UV mapping of the Lena image on a sinusoidal height map.
+
     """
     # Check the input parameters
     if frame is None:
@@ -216,85 +278,94 @@ def create_linear_triangle_heightmap(
     y_max = y_bounds[1]
 
     # Get the indices of the vertices in the array
-    index = lambda ih, it: it*n_x + ih
+    index = lambda ix, iy: iy*n_x + ix
 
-    # Set the UV mapping strategy (list of 3D points -> [(0,0) ; (0,Nt) ; (Nh,0) ; (Nh,Nt)])
+    # Set the UV mapping strategy (list of 3D points -> [(0,0) ; (Nx,0) ; (0,Ny) ; (Nx,Ny)])
     lower_left = numpy.array([0.0, 0.0])
-    lower_right = numpy.array([1.0, 0.0])
     upper_left = numpy.array([0.0, 1.0])
+    lower_right = numpy.array([1.0, 0.0])
     upper_right = numpy.array([1.0, 1.0])
+
     if uv_layout == 0:
         uv_mapping = [lower_left, lower_right, upper_left, upper_right]
     elif uv_layout == 1:
         uv_mapping = [lower_left, upper_left, lower_right, upper_right]
     elif uv_layout == 2:
-        uv_mapping = [upper_left, upper_right, lower_left, lower_right]
-    elif uv_layout == 3:
         uv_mapping = [upper_left, lower_left, upper_right, lower_right]
+    elif uv_layout == 3:
+        uv_mapping = [upper_left, upper_right, lower_left, lower_right]
     elif uv_layout == 4:
-        uv_mapping = [lower_right, lower_left, upper_right, upper_left]
-    elif uv_layout == 5:
         uv_mapping = [lower_right, upper_right, lower_left, upper_left]
+    elif uv_layout == 5:
+        uv_mapping = [lower_right, lower_left, upper_right, upper_left]
     elif uv_layout == 6:
-        uv_mapping = [upper_right, upper_left, lower_right, lower_left]
-    elif uv_layout == 7:
         uv_mapping = [upper_right, lower_right, upper_left, lower_left]
+    elif uv_layout == 7:
+        uv_mapping = [upper_right, upper_left, lower_right, lower_left]
 
     # Generate the vertices
     vertices_uvmap = numpy.zeros((n_x*n_y, 2))
     vertices = numpy.zeros((n_x*n_y, 3))
 
-    for it in range(n_y):
-        for ih in range(n_x):
+    for iy in range(n_y):
+        for ix in range(n_x):
             # Compute the coordinates of the vertex in the local frame.
-            y = y_min + (y_max - y_min)*it/(n_y-1)
-            x = x_min + (x_max - x_min)*ih/(n_x-1)
+            y = y_min + (y_max - y_min)*iy/(n_y-1)
+            x = x_min + (x_max - x_min)*ix/(n_x-1)
             z = height_function(x, y)
 
             # Convert the local point to the global frame
             local_point = numpy.array([x, y, z]).reshape((3,1))
-            vertices[index(ih, it), :] = transform.transform(point=local_point).flatten()
+            vertices[index(ix, iy), :] = transform.transform(point=local_point).flatten()
 
             # Compute the uvmap (UV Mapping for vertices)
-            vertices_uvmap[index(ih, it), :] = uv_mapping[0] + ih/(n_x-1)*(uv_mapping[2] - uv_mapping[0]) + it/(n_y-1)*(uv_mapping[1] - uv_mapping[0])
+            vertices_uvmap[index(ix, iy), :] = uv_mapping[0] + ix/(n_x-1)*(uv_mapping[1] - uv_mapping[0]) + iy/(n_y-1)*(uv_mapping[2] - uv_mapping[0])
 
 
     # Generate the mesh
-    triangles = []
-    triangles_uvmap = []
+    triangles = numpy.zeros((2 * (n_x - 1) * (n_y - 1), 3), dtype=numpy.int64)
+    triangles_uvmap = numpy.zeros((2 * (n_x - 1) * (n_y - 1), 3, 2), dtype=numpy.float32)
 
-    for it in range(n_y-1):
-        for ih in range(n_x-1):
-            if first_diagonal and direct:
-                triangles.append([index(ih, it), index(ih, it+1), index(ih+1, it+1)])
-                triangles.append([index(ih, it), index(ih+1, it+1), index(ih+1, it)])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it), :], vertices_uvmap[index(ih, it+1), :], vertices_uvmap[index(ih+1, it+1), :]])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it), :], vertices_uvmap[index(ih+1, it+1), :], vertices_uvmap[index(ih+1, it), :]])
+    for iy in range(n_y-1):
+        for ix in range(n_x-1):
+            # Select the nodes of the two triangles            
+            if first_diagonal:
+                node_1 = index(ix, iy)
+                node_2 = index(ix+1, iy)
+                node_3 = index(ix+1, iy+1)
+                node_4 = index(ix, iy)
+                node_5 = index(ix+1, iy+1)
+                node_6 = index(ix, iy+1)
+            else:
+                node_1 = index(ix, iy)
+                node_2 = index(ix+1, iy)
+                node_3 = index(ix, iy+1)
+                node_4 = index(ix, iy+1)
+                node_5 = index(ix+1, iy)
+                node_6 = index(ix+1, iy+1)
+            
+            # Compute the triangle indices
+            triangle_1 = 2 * (node_1 - iy)
+            triangle_2 = 2 * (node_1 - iy) + 1
 
-            elif first_diagonal and not direct:
-                triangles.append([index(ih, it), index(ih+1, it+1), index(ih, it+1)])
-                triangles.append([index(ih, it), index(ih+1, it), index(ih+1, it+1)])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it), :], vertices_uvmap[index(ih+1, it+1), :], vertices_uvmap[index(ih, it+1), :]])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it), :], vertices_uvmap[index(ih+1, it), :], vertices_uvmap[index(ih+1, it+1), :]])
+            # Set the triangles and their UV map
+            if direct:
+                triangles[triangle_1, :] = [node_1, node_2, node_3]
+                triangles[triangle_2, :] = [node_4, node_5, node_6]
+                triangles_uvmap[triangle_1, :, :] = [vertices_uvmap[node_1, :], vertices_uvmap[node_2, :], vertices_uvmap[node_3, :]]
+                triangles_uvmap[triangle_2, :, :] = [vertices_uvmap[node_4, :], vertices_uvmap[node_5, :], vertices_uvmap[node_6, :]]
+            else:
+                triangles[triangle_1, :] = [node_1, node_3, node_2]
+                triangles[triangle_2, :] = [node_4, node_6, node_5]
+                triangles_uvmap[triangle_1, :, :] = [vertices_uvmap[node_1, :], vertices_uvmap[node_3, :], vertices_uvmap[node_2, :]]
+                triangles_uvmap[triangle_2, :, :] = [vertices_uvmap[node_4, :], vertices_uvmap[node_6, :], vertices_uvmap[node_5, :]]
 
-            elif not first_diagonal and direct:
-                triangles.append([index(ih, it), index(ih, it+1), index(ih+1, it)])
-                triangles.append([index(ih, it+1), index(ih+1, it+1), index(ih+1, it)])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it), :], vertices_uvmap[index(ih, it+1), :], vertices_uvmap[index(ih+1, it), :]])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it+1), :], vertices_uvmap[index(ih+1, it+1), :], vertices_uvmap[index(ih+1, it), :]])
-
-            elif not first_diagonal and not direct:
-                triangles.append([index(ih, it), index(ih+1, it), index(ih, it+1)])
-                triangles.append([index(ih, it+1), index(ih+1, it), index(ih+1, it+1)])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it), :], vertices_uvmap[index(ih+1, it), :], vertices_uvmap[index(ih, it+1), :]])
-                triangles_uvmap.append([vertices_uvmap[index(ih, it+1), :], vertices_uvmap[index(ih+1, it), :], vertices_uvmap[index(ih+1, it+1), :]])
-
-    triangles = numpy.array(triangles) # (Ntriangles, 3)
-    triangles_uvmap = numpy.array(triangles_uvmap) # (Ntriangles, 3, 2)
     triangles_uvmap = triangles_uvmap.reshape((triangles_uvmap.shape[0], 6)) # (Ntriangles, 6) - (u1,v1,u2,v2,u3,v3)
 
     # Prepare the mesh
     mesh = LinearTriangleMesh3D(vertices=vertices, connectivity=triangles)
+    
     # Set the UV map
     mesh.elements_uvmap = triangles_uvmap
+    
     return mesh

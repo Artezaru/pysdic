@@ -3,4 +3,4 @@ weights
 
 .. currentmodule:: pysdic.geometry
 
-.. autoproperty:: IntegratedPoints.weights
+.. autoproperty:: IntegrationPoints.weights

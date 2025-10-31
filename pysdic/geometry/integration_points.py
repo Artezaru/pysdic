@@ -17,13 +17,13 @@ from __future__ import annotations
 from typing import Optional
 import numpy
 
-class IntegratedPoints(object):
+class IntegrationPoints(object):
     r"""
-    Base class to store integrated points for numerical integration over elements and localisation of points into :class:`Mesh3D` objects.
+    Base class to store integration points for numerical integration over elements and localisation of points into :class:`Mesh3D` objects.
 
-    Integrated points are defined in the reference element using natural coordinates, element indices, and weights.
+    integration points are defined in the reference element using natural coordinates, element indices, and weights.
 
-    The natural coordinates (:math:`\xi, \eta, \zeta, ...`) for the integrated points satisfy:
+    The natural coordinates (:math:`\xi, \eta, \zeta, ...`) for the integration points satisfy:
 
     - :math:`0 \leq \xi, \eta, \zeta, ... \leq 1`
     - :math:`\xi + \eta + \zeta + ... \leq 1`
@@ -32,24 +32,24 @@ class IntegratedPoints(object):
 
     .. note::
 
-        If the weights are not provided, equal weights are assumed for all integrated points.
-        By default the weights are set to 1 for all integrated points (and not :math:`1/Np`).
+        If the weights are not provided, equal weights are assumed for all integration points.
+        By default the weights are set to 1 for all integration points (and not :math:`1/Np`).
 
     If a specific specific point is not include in any element, it can be identified by setting its element ID to -1 and its natural coordinates to NaN.
 
     Parameters
     ----------
     natural_coordinates : numpy.ndarray
-        The natural coordinates of the integrated points as a numpy ndarray with shape (Np, d),
-        where Np is the number of integrated points and d is the topological dimension of the element.
+        The natural coordinates of the integration points as a numpy ndarray with shape (Np, d),
+        where Np is the number of integration points and d is the topological dimension of the element.
 
     element_indices : numpy.ndarray
-        The element indices of the integrated points as a numpy ndarray with shape (Np,),
-        where Np is the number of integrated points.
+        The element indices of the integration points as a numpy ndarray with shape (Np,),
+        where Np is the number of integration points.
 
     weights : Optional[numpy.ndarray], optional
-        The weights of the integrated points as a numpy ndarray with shape (Np,),
-        where Np is the number of integrated points, by default None means equal weights of 1 for all points.
+        The weights of the integration points as a numpy ndarray with shape (Np,),
+        where Np is the number of integration points, by default None means equal weights of 1 for all points.
 
     n_dimension: Optional[int], optional
         The topological dimension of the element, by default None means it will be inferred from the shape of the natural_coordinates.
@@ -61,26 +61,26 @@ class IntegratedPoints(object):
     Examples
     --------
 
-    Create a IntegratedPoints object with 4 integrated points in a 2D element (triangle - :math:`d=2`):
+    Create a IntegrationPoints object with 4 integration points in a 2D element (triangle - :math:`d=2`):
 
     .. code-block:: python
 
         import numpy
-        from pysdic import IntegratedPoints
+        from pysdic import IntegrationPoints
 
         natural_coordinates = numpy.array([[0.5, 0.5], [0.5, 0.0], [0.0, 0.5], [1/3, 1/3]])
         element_indices = numpy.array([0, 0, 0, 1])
         weights = numpy.array([1.0, 1.0, 1.0, 1.0])
 
-        integrated_points = IntegratedPoints(natural_coordinates, element_indices, weights)
-        print(integrated_points.n_points)  # Output: 4
-        print(integrated_points.n_dimensions)  # Output: 2
+        integration_points = IntegrationPoints(natural_coordinates, element_indices, weights)
+        print(integration_points.n_points)  # Output: 4
+        print(integration_points.n_dimensions)  # Output: 2
 
     Operations
     ----------
 
-    - ``len(integrated_points)``: Returns the number of points in the integrated points (see :meth:`n_points`).
-    - ``integrated_points1 + integrated_points2``: Concatenates two integrated points (The new integrated points is a copy of original integrated points, not same instance).
+    - ``len(integration_points)``: Returns the number of points in the integration points (see :meth:`n_points`).
+    - ``integration_points1 + integration_points2``: Concatenates two integration points (The new integration points is a copy of original integration points, not same instance).
 
     """
     __slots__ = ['_natural_coordinates', '_element_ids', '_weights', '_n_dimensions', '_internal_bypass']
@@ -97,11 +97,11 @@ class IntegratedPoints(object):
         if element_indices.ndim != 1:
             raise ValueError("element_indices should be a 1D array of shape (Np,).")
         if natural_coordinates.shape[0] != element_indices.shape[0]:
-            raise ValueError("The number of integrated points Np in natural_coordinates and element_indices should match.")
+            raise ValueError("The number of integration points Np in natural_coordinates and element_indices should match.")
         if weights is not None and weights.ndim != 1:
             raise ValueError("weights should be a 1D array of shape (Np,).")
         if weights is not None and weights.shape[0] != element_indices.shape[0]:
-            raise ValueError("The number of integrated points Np in weights and element_indices should match.")
+            raise ValueError("The number of integration points Np in weights and element_indices should match.")
         if n_dimensions is not None and (not isinstance(n_dimensions, int) or n_dimensions <= 0):
             raise ValueError("n_dimensions should be a positive integer.")
         if n_dimensions is not None and natural_coordinates.shape[1] != n_dimensions:
@@ -211,6 +211,7 @@ class IntegratedPoints(object):
             valid_element_ids = self._element_ids[self._element_ids != -1]
             if numpy.any(valid_element_ids < 0):
                 raise ValueError("All element IDs should be non-negative.")
+
         if weights and self._weights is not None:
             if numpy.any(self._weights < 0):
                 raise ValueError("All weights should be non-negative.")
@@ -225,15 +226,15 @@ class IntegratedPoints(object):
     @property
     def natural_coordinates(self) -> numpy.ndarray:
         r"""
-        Get or set the natural coordinates of the integrated points as a numpy ndarray with shape (Np, d),
-        where Np is the number of integrated points and d is the topological dimension of the element.
+        Get or set the natural coordinates of the integration points as a numpy ndarray with shape (Np, d),
+        where Np is the number of integration points and d is the topological dimension of the element.
 
         If a point is not included in any element, its natural coordinates should be set to NaN.
 
         .. note::
 
-            If the number of integrated points (Np) is changed, the properties should be updated accordingly.
-            To avoid inconsistencies, it is recommended to create a new IntegratedPoints instance with the updated coordinates and ids or use the appropriate methods to modify the points.
+            If the number of integration points (Np) is changed, the properties should be updated accordingly.
+            To avoid inconsistencies, it is recommended to create a new IntegrationPoints instance with the updated coordinates and ids or use the appropriate methods to modify the points.
 
             Otherwise, you should set `internal_bypass` to True before modifying the connectivity, and set it back to False afterwards.
 
@@ -248,19 +249,19 @@ class IntegratedPoints(object):
 
         .. seealso::
 
-            - :meth:`remove_points` to remove specific integrated points.
-            - :meth:`add_points` to add new integrated points.
-            - :meth:`disable_points` to disable specific integrated points without removing them.
+            - :meth:`remove_points` to remove specific integration points.
+            - :meth:`add_points` to add new integration points.
+            - :meth:`disable_points` to disable specific integration points without removing them.
 
         Parameters
         ----------
         value : numpy.ndarray
-            The new natural coordinates of the integrated points as a numpy ndarray with shape (Np, d).
+            The new natural coordinates of the integration points as a numpy ndarray with shape (Np, d).
 
         Returns
         -------
         numpy.ndarray
-            The natural coordinates of the integrated points.
+            The natural coordinates of the integration points.
         """
         return self._natural_coordinates
     
@@ -273,15 +274,15 @@ class IntegratedPoints(object):
     @property
     def element_indices(self) -> numpy.ndarray:
         r"""
-        Get or set the element indices of the integrated points as a numpy ndarray with shape (Np,),
-        where Np is the number of integrated points.
+        Get or set the element indices of the integration points as a numpy ndarray with shape (Np,),
+        where Np is the number of integration points.
 
         if a point is not included in any element, its element ID should be set to -1.
 
         .. note::
 
-            If the number of integrated points (Np) is changed, the properties should be updated accordingly.
-            To avoid inconsistencies, it is recommended to create a new IntegratedPoints instance with the updated coordinates and ids or use the appropriate methods to modify the points.
+            If the number of integration points (Np) is changed, the properties should be updated accordingly.
+            To avoid inconsistencies, it is recommended to create a new IntegrationPoints instance with the updated coordinates and ids or use the appropriate methods to modify the points.
 
             Otherwise, you should set `internal_bypass` to True before modifying the connectivity, and set it back to False afterwards.
 
@@ -296,19 +297,19 @@ class IntegratedPoints(object):
 
         .. seealso::
 
-            - :meth:`remove_points` to remove specific integrated points.
-            - :meth:`add_points` to add new integrated points.
-            - :meth:`disable_points` to disable specific integrated points without removing them.
+            - :meth:`remove_points` to remove specific integration points.
+            - :meth:`add_points` to add new integration points.
+            - :meth:`disable_points` to disable specific integration points without removing them.
 
         Parameters
         ----------
         value : numpy.ndarray
-            The new element IDs of the integrated points as a numpy ndarray with shape (Np,).
+            The new element IDs of the integration points as a numpy ndarray with shape (Np,).
 
         Returns
         -------
         numpy.ndarray
-            The element IDs of the integrated points.
+            The element IDs of the integration points.
         """
         return self._element_ids
 
@@ -321,15 +322,15 @@ class IntegratedPoints(object):
     @property
     def weights(self) -> numpy.ndarray:
         r"""
-        Get or set the weights of the integrated points as a numpy ndarray with shape (Np,),
-        where Np is the number of integrated points.
+        Get or set the weights of the integration points as a numpy ndarray with shape (Np,),
+        where Np is the number of integration points.
 
         If weights are not provided, equal weights of 1 are assumed for all points.
 
         .. note::
 
-            If the number of integrated points (Np) is changed, the properties should be updated accordingly.
-            To avoid inconsistencies, it is recommended to create a new IntegratedPoints instance with the updated coordinates and ids or use the appropriate methods to modify the points.
+            If the number of integration points (Np) is changed, the properties should be updated accordingly.
+            To avoid inconsistencies, it is recommended to create a new IntegrationPoints instance with the updated coordinates and ids or use the appropriate methods to modify the points.
 
             Otherwise, you should set `internal_bypass` to True before modifying the connectivity, and set it back to False afterwards.
 
@@ -344,14 +345,14 @@ class IntegratedPoints(object):
             
         .. seealso::
 
-            - :meth:`remove_points` to remove specific integrated points.
-            - :meth:`add_points` to add new integrated points.
-            - :meth:`disable_points` to disable specific integrated points without removing them.
+            - :meth:`remove_points` to remove specific integration points.
+            - :meth:`add_points` to add new integration points.
+            - :meth:`disable_points` to disable specific integration points without removing them.
 
         Returns
         -------
         numpy.ndarray
-            The weights of the integrated points. If not provided, returns an array of ones with shape (Np,).
+            The weights of the integration points. If not provided, returns an array of ones with shape (Np,).
 
         """
         if self._weights is None:
@@ -384,37 +385,37 @@ class IntegratedPoints(object):
     @property
     def n_points(self) -> int:
         r"""
-        The number of integrated points.
+        The number of integration points.
 
         Returns
         -------
         int
-            The number of integrated points Np.
+            The number of integration points Np.
         """
         return self._natural_coordinates.shape[0]
     
     @property
     def n_valids(self) -> int:
         r"""
-        The number of valid integrated points (points included in an element).
+        The number of valid integration points (points included in an element).
 
         A point is considered valid if its element index is not -1.
 
         Returns
         -------
         int
-            The number of valid integrated points.
+            The number of valid integration points.
         """
         return numpy.sum(self._element_ids != -1)
     
     def shape(self) -> tuple[int, int]:
         r"""
-        The shape of the integrated points data.
+        The shape of the integration points data.
 
         Returns
         -------
         tuple[int, int]
-            A tuple (Np, d) where Np is the number of integrated points and d is the topological dimension of the element.
+            A tuple (Np, d) where Np is the number of integration points and d is the topological dimension of the element.
         """
         return (self.n_points, self.n_dimensions)
     
@@ -423,42 +424,42 @@ class IntegratedPoints(object):
     # =======================
     def __len__(self) -> int:
         r"""
-        Get the number of integrated points.
+        Get the number of integration points.
 
         Returns
         -------
         int
-            The number of integrated points Np.
+            The number of integration points Np.
         """
         return self.n_points
     
-    def __add__(self, other: IntegratedPoints) -> IntegratedPoints:
+    def __add__(self, other: IntegrationPoints) -> IntegrationPoints:
         r"""
-        Concatenate two IntegratedPoints instances.
+        Concatenate two IntegrationPoints instances.
 
-        The new IntegratedPoints instance is a copy of the original instances, not the same instance.
+        The new IntegrationPoints instance is a copy of the original instances, not the same instance.
 
         Parameters
         ----------
-        other : IntegratedPoints
-            Another IntegratedPoints instance to concatenate with.
+        other : IntegrationPoints
+            Another IntegrationPoints instance to concatenate with.
 
         Returns
         -------
-        IntegratedPoints
-            A new IntegratedPoints instance containing the concatenated data.
+        IntegrationPoints
+            A new IntegrationPoints instance containing the concatenated data.
 
         Raises
         ------
         TypeError
-            If the other object is not an IntegratedPoints instance.
+            If the other object is not an IntegrationPoints instance.
         ValueError
-            If the dimensions of the two IntegratedPoints instances do not match.
+            If the dimensions of the two IntegrationPoints instances do not match.
         """
-        if not isinstance(other, IntegratedPoints):
-            raise TypeError("Can only concatenate with another IntegratedPoints instance.")
+        if not isinstance(other, IntegrationPoints):
+            raise TypeError("Can only concatenate with another IntegrationPoints instance.")
         if self.n_dimensions != other.n_dimensions:
-            raise ValueError("Cannot concatenate IntegratedPoints with different dimensions.")
+            raise ValueError("Cannot concatenate IntegrationPoints with different dimensions.")
         
         new_natural_coordinates = numpy.vstack((self.natural_coordinates, other.natural_coordinates))
         new_element_ids = numpy.hstack((self.element_indices, other.element_indices))
@@ -470,14 +471,14 @@ class IntegratedPoints(object):
             other_weights = other.weights 
             new_weights = numpy.hstack((current_weights, other_weights))
 
-        return IntegratedPoints(new_natural_coordinates, new_element_ids, new_weights, self.n_dimensions, self.internal_bypass and other.internal_bypass)
+        return IntegrationPoints(new_natural_coordinates, new_element_ids, new_weights, self.n_dimensions, self.internal_bypass and other.internal_bypass)
 
     # =======================
     # Methods
     # =======================
     def validate(self) -> None:
         r"""
-        Validate the consistency of the IntegratedPoints instance.
+        Validate the consistency of the IntegrationPoints instance.
 
         This method checks the internal consistency of the attributes and raises an error if any inconsistency is found.
 
@@ -490,25 +491,25 @@ class IntegratedPoints(object):
         """
         self._internal_check_consistency(coord=True, ids=True, weights=True)
 
-    def copy(self) -> IntegratedPoints:
+    def copy(self) -> IntegrationPoints:
         r"""
-        Create a deep copy of the IntegratedPoints instance.
+        Create a deep copy of the IntegrationPoints instance.
 
         Returns
         -------
-        IntegratedPoints
-            A new IntegratedPoints instance with the same attributes as the original.
+        IntegrationPoints
+            A new IntegrationPoints instance with the same attributes as the original.
         """
-        return IntegratedPoints(self.natural_coordinates.copy(), self.element_indices.copy(), None if self._weights is None else self._weights.copy(), self.n_dimensions, self.internal_bypass)
+        return IntegrationPoints(self.natural_coordinates.copy(), self.element_indices.copy(), None if self._weights is None else self._weights.copy(), self.n_dimensions, self.internal_bypass)
 
     def remove_points(self, indices: numpy.ndarray) -> None:
         r"""
-        Remove specific integrated points by their indices.
+        Remove specific integration points by their indices.
 
         Parameters
         ----------
         indices : numpy.ndarray
-            The indices of the integrated points to remove as a numpy ndarray with shape (R,),
+            The indices of the integration points to remove as a numpy ndarray with shape (R,),
             where R is the number of points to remove.
 
         Raises
@@ -535,7 +536,7 @@ class IntegratedPoints(object):
 
     def remove_invalids(self) -> None:
         r"""
-        Remove all invalid integrated points (points not included in any element).
+        Remove all invalid integration points (points not included in any element).
 
         A point is considered invalid if its element index is -1.
         """
@@ -544,20 +545,20 @@ class IntegratedPoints(object):
 
     def add_points(self, natural_coordinates: numpy.ndarray, element_indices: numpy.ndarray, weights: Optional[numpy.ndarray] = None) -> None:
         r"""
-        Add new integrated points.
+        Add new integration points.
 
         Parameters
         ----------
         natural_coordinates : numpy.ndarray
-            The natural coordinates of the new integrated points as a numpy ndarray with shape (A, d),
+            The natural coordinates of the new integration points as a numpy ndarray with shape (A, d),
             where A is the number of points to add and d is the topological dimension of the element.
 
         element_indices : numpy.ndarray
-            The element IDs of the new integrated points as a numpy ndarray with shape (A,),
+            The element IDs of the new integration points as a numpy ndarray with shape (A,),
             where A is the number of points to add.
 
         weights : Optional[numpy.ndarray], optional
-            The weights of the new integrated points as a numpy ndarray with shape (A,),
+            The weights of the new integration points as a numpy ndarray with shape (A,),
             where A is the number of points to add, by default None means equal weights of 1 for all new points.
 
         Raises
@@ -596,7 +597,7 @@ class IntegratedPoints(object):
 
     def disable_points(self, indices: numpy.ndarray) -> None:
         r"""
-        Disable specific integrated points by their indices without removing them.
+        Disable specific integration points by their indices without removing them.
 
         Disabled points will have their element indices set to -1 and their natural coordinates set to NaN.
 
@@ -605,7 +606,7 @@ class IntegratedPoints(object):
         Parameters
         ----------
         indices : numpy.ndarray
-            The indices of the integrated points to disable as a numpy ndarray with shape (R,),
+            The indices of the integration points to disable as a numpy ndarray with shape (R,),
             where R is the number of points to disable.
 
         Raises

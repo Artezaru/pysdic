@@ -3,4 +3,4 @@ shape
 
 .. currentmodule:: pysdic.geometry
 
-.. automethod:: IntegratedPoints.shape
+.. automethod:: IntegrationPoints.shape

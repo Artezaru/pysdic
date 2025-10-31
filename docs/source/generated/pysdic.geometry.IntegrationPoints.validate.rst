@@ -3,4 +3,4 @@ validate
 
 .. currentmodule:: pysdic.geometry
 
-.. automethod:: IntegratedPoints.validate
+.. automethod:: IntegrationPoints.validate

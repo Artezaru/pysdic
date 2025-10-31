@@ -96,6 +96,15 @@ def test_allclose(random_point_cloud):
     modified_cloud = PointCloud3D.from_array(modified_points)
     assert not random_point_cloud.allclose(modified_cloud, rtol=1e-5, atol=1e-8)
 
+def test_copy_object(random_point_cloud):
+    point_cloud_copy = random_point_cloud.copy()
+    assert isinstance(point_cloud_copy, PointCloud3D)
+    assert point_cloud_copy.n_points == random_point_cloud.n_points
+    np.testing.assert_array_equal(point_cloud_copy.points, random_point_cloud.points)
+    # Ensure it's a deep copy
+    point_cloud_copy.points[0] += 1.0
+    assert not np.array_equal(point_cloud_copy.points, random_point_cloud.points)
+
 def test_as_array(random_point_cloud):
     array = random_point_cloud.as_array()
     assert isinstance(array, np.ndarray)

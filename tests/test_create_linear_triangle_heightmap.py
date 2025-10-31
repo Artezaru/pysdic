@@ -25,6 +25,6 @@ def test_create_linear_triangle_heightmap():
         pattern = cv2.imread(TEXTURE)
         surface_mesh.visualize_texture(pattern, show_edges=False)
         vertices_normals = surface_mesh.compute_vertices_normals()
-        surface_mesh.set_vertices_property("normals", vertices_normals[:,0].reshape(-1, 1))
-        surface_mesh.visualize_vertices_property("normals")
+        surface_mesh.set_vertices_property("normals", vertices_normals)
+        surface_mesh.visualize_vertices_property("normals", property_axis=2)
         

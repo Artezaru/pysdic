@@ -3,4 +3,4 @@ copy
 
 .. currentmodule:: pysdic.geometry
 
-.. automethod:: IntegratedPoints.copy
+.. automethod:: IntegrationPoints.copy

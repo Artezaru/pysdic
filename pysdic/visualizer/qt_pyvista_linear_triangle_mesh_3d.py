@@ -19,8 +19,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from pyvistaqt import QtInteractor
 import matplotlib.pyplot as plt
 
-
-from ..geometry import LinearTriangleMesh3D, IntegratedPoints
+from ..geometry import LinearTriangleMesh3D, IntegrationPoints
 
 class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
     r"""
@@ -33,7 +32,7 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
 
     The window contains a ComboBox to select the texture to apply on the mesh.
 
-    The window can also display integrated points given in ``points_clouds`` argument.
+    The window can also display integration points given in ``points_clouds`` argument.
 
     Parameters
     ----------
@@ -46,15 +45,15 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
     textures : dict[str, numpy.ndarray], optional
         A dictionary mapping texture names to numpy arrays representing images to apply on the mesh.
 
-    integrated_points : dict[str, IntegratedPoints], optional
-        A dictionary mapping names to IntegratedPoints instances to visualize alongside the mesh.
+    integration_points : dict[str, IntegrationPoints], optional
+        A dictionary mapping names to IntegrationPoints instances to visualize alongside the mesh.
 
     """
     def __init__(self, 
         mesh: LinearTriangleMesh3D, 
         property_arrays: Optional[Dict[str, numpy.ndarray]] = None,
         textures: Optional[Dict[str, numpy.ndarray]] = None,
-        integrated_points: Optional[Dict[str, IntegratedPoints]] = None,
+        integration_points: Optional[Dict[str, IntegrationPoints]] = None,
     ) -> None:
         super().__init__()
         self.setWindowTitle("Visualisation LinearTriangleMesh3D with pyvista")
@@ -62,15 +61,15 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         # ----- Save the inputs -------
         self.mesh = mesh
         self.textures = textures
-        self.integrated_points = integrated_points
+        self.integration_points = integration_points
         self.property_arrays = property_arrays
 
         if self.property_arrays is None:
             self.property_arrays = {}
         if self.textures is None:
             self.textures = {}
-        if self.integrated_points is None:
-            self.integrated_points = {}
+        if self.integration_points is None:
+            self.integration_points = {}
 
         # ----- Check the inputs -------
         if not isinstance(self.mesh, LinearTriangleMesh3D):
@@ -113,16 +112,16 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
                     raise ValueError(f"textures[{key}] must have dtype numpy.uint8 with values in [0, 255].")
                 
 
-        if len(self.integrated_points) > 0:
-            if not isinstance(self.integrated_points, dict):
-                raise TypeError("integrated_points must be a dictionary mapping strings to IntegratedPoints instances.")
-            for key, points in self.integrated_points.items():
+        if len(self.integration_points) > 0:
+            if not isinstance(self.integration_points, dict):
+                raise TypeError("integration_points must be a dictionary mapping strings to IntegrationPoints instances.")
+            for key, points in self.integration_points.items():
                 if not isinstance(key, str):
-                    raise TypeError("All keys in integrated_points must be strings.")
-                if not isinstance(points, IntegratedPoints):
-                    raise TypeError(f"integrated_points[{key}] must be an instance of IntegratedPoints.")
+                    raise TypeError("All keys in integration_points must be strings.")
+                if not isinstance(points, IntegrationPoints):
+                    raise TypeError(f"integration_points[{key}] must be an instance of IntegrationPoints.")
                 if points.n_dimensions != self.mesh._n_dimensions:
-                    raise ValueError(f"integrated_points must have {self.mesh._n_dimensions} dimensions.")
+                    raise ValueError(f"integration_points must have {self.mesh._n_dimensions} dimensions.")
 
         # ----- Create the PyVista widget -------
         self.plotter = QtInteractor(self)
@@ -199,8 +198,8 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
             modes.append("Property")
         if len(self.textures) > 0:
             modes.append("Texture")
-        if len(self.integrated_points) > 0:
-            modes.append("Integrated Points")
+        if len(self.integration_points) > 0:
+            modes.append("Integration Points")
 
         self.mode_combo.addItems(modes)
         self.mode_combo.currentTextChanged.connect(self._on_change_mode)
@@ -224,11 +223,11 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
             self.texture_combo.currentTextChanged.connect(self._on_change_texture)
             groupbox_layout.addWidget(self.texture_combo)
 
-        self.integrated_points_combo = QtWidgets.QComboBox()
-        if len(self.integrated_points) > 0:
-            self.integrated_points_combo.addItems(self.integrated_points.keys())
-            self.integrated_points_combo.currentTextChanged.connect(self._on_change_integrated_points)
-            groupbox_layout.addWidget(self.integrated_points_combo)
+        self.integration_points_combo = QtWidgets.QComboBox()
+        if len(self.integration_points) > 0:
+            self.integration_points_combo.addItems(self.integration_points.keys())
+            self.integration_points_combo.currentTextChanged.connect(self._on_change_integration_points)
+            groupbox_layout.addWidget(self.integration_points_combo)
 
         
         # ------ Create the Scroll Area for controls -------
@@ -450,51 +449,51 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         self._current_use_RGB_texture = True
 
 
-        subgroupbox = QtWidgets.QGroupBox("Integrated Points Display Settings")
+        subgroupbox = QtWidgets.QGroupBox("integration points Display Settings")
         subgroupbox.setMaximumHeight(200)
         subgroupbox.setStyleSheet("QGroupBox { font-weight: bold; font-size: 14px; }")
-        subgroupbox.setVisible(len(self.integrated_points) > 0)
+        subgroupbox.setVisible(len(self.integration_points) > 0)
         groupbox_layout.addWidget(subgroupbox)
         subgroupbox_layout = QtWidgets.QVBoxLayout(subgroupbox)
 
-        label = QtWidgets.QLabel("Integrated Points Color:")
+        label = QtWidgets.QLabel("integration points Color:")
         subgroupbox_layout.addWidget(label)
-        self.integrated_points_color_combo = QtWidgets.QComboBox()
-        self.integrated_points_color_combo.addItems(["black", "white", "gray", "red", "green", "blue", "yellow", "cyan", "magenta", "orange"])
-        self.integrated_points_color_combo.currentTextChanged.connect(self._on_change_integrated_points_color)
-        subgroupbox_layout.addWidget(self.integrated_points_color_combo)
-        self._current_integrated_points_color = "black"
+        self.integration_points_color_combo = QtWidgets.QComboBox()
+        self.integration_points_color_combo.addItems(["black", "white", "gray", "red", "green", "blue", "yellow", "cyan", "magenta", "orange"])
+        self.integration_points_color_combo.currentTextChanged.connect(self._on_change_integration_points_color)
+        subgroupbox_layout.addWidget(self.integration_points_color_combo)
+        self._current_integration_points_color = "black"
 
-        label = QtWidgets.QLabel("Integrated Points Size:")
+        label = QtWidgets.QLabel("integration points Size:")
         subgroupbox_layout.addWidget(label)
-        self.integrated_points_size_slider = QtWidgets.QSlider(orientation=QtCore.Qt.Horizontal)
-        self.integrated_points_size_slider.setMinimum(1)
-        self.integrated_points_size_slider.setMaximum(50)
-        self.integrated_points_size_slider.setValue(10)
-        self.integrated_points_size_slider.valueChanged.connect(self._on_change_integrated_points_size)
-        self._current_integrated_points_size = 10
-        self.integrated_points_size_label = QtWidgets.QLabel(f"{self._current_integrated_points_size} px")
-        self.integrated_points_size_label.setFixedWidth(70)
-        self.integrated_points_size_label.setAlignment(QtCore.Qt.AlignRight)
+        self.integration_points_size_slider = QtWidgets.QSlider(orientation=QtCore.Qt.Horizontal)
+        self.integration_points_size_slider.setMinimum(1)
+        self.integration_points_size_slider.setMaximum(50)
+        self.integration_points_size_slider.setValue(10)
+        self.integration_points_size_slider.valueChanged.connect(self._on_change_integration_points_size)
+        self._current_integration_points_size = 10
+        self.integration_points_size_label = QtWidgets.QLabel(f"{self._current_integration_points_size} px")
+        self.integration_points_size_label.setFixedWidth(70)
+        self.integration_points_size_label.setAlignment(QtCore.Qt.AlignRight)
         horizontal_layout = QtWidgets.QHBoxLayout()
-        horizontal_layout.addWidget(self.integrated_points_size_slider)
-        horizontal_layout.addWidget(self.integrated_points_size_label)
+        horizontal_layout.addWidget(self.integration_points_size_slider)
+        horizontal_layout.addWidget(self.integration_points_size_label)
         subgroupbox_layout.addLayout(horizontal_layout)
 
-        label = QtWidgets.QLabel("Integrated Points Opacity (%):")
+        label = QtWidgets.QLabel("integration points Opacity (%):")
         subgroupbox_layout.addWidget(label)
-        self.integrated_points_opacity_slider = QtWidgets.QSlider(orientation=QtCore.Qt.Horizontal)
-        self.integrated_points_opacity_slider.setMinimum(0)
-        self.integrated_points_opacity_slider.setMaximum(100)
-        self.integrated_points_opacity_slider.setValue(100)
-        self.integrated_points_opacity_slider.valueChanged.connect(self._on_change_integrated_points_opacity)
-        self._current_integrated_points_opacity = 1.0
-        self.integrated_points_opacity_label = QtWidgets.QLabel(f"{self._current_integrated_points_opacity * 100:.0f} %")
-        self.integrated_points_opacity_label.setFixedWidth(70)
-        self.integrated_points_opacity_label.setAlignment(QtCore.Qt.AlignRight)
+        self.integration_points_opacity_slider = QtWidgets.QSlider(orientation=QtCore.Qt.Horizontal)
+        self.integration_points_opacity_slider.setMinimum(0)
+        self.integration_points_opacity_slider.setMaximum(100)
+        self.integration_points_opacity_slider.setValue(100)
+        self.integration_points_opacity_slider.valueChanged.connect(self._on_change_integration_points_opacity)
+        self._current_integration_points_opacity = 1.0
+        self.integration_points_opacity_label = QtWidgets.QLabel(f"{self._current_integration_points_opacity * 100:.0f} %")
+        self.integration_points_opacity_label.setFixedWidth(70)
+        self.integration_points_opacity_label.setAlignment(QtCore.Qt.AlignRight)
         horizontal_layout = QtWidgets.QHBoxLayout()
-        horizontal_layout.addWidget(self.integrated_points_opacity_slider)
-        horizontal_layout.addWidget(self.integrated_points_opacity_label)
+        horizontal_layout.addWidget(self.integration_points_opacity_slider)
+        horizontal_layout.addWidget(self.integration_points_opacity_label)
         subgroupbox_layout.addLayout(horizontal_layout)
 
 
@@ -524,7 +523,7 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         self._current_property = list(self.all_properties.keys())[0] if len(self.all_properties) != 0 else None
         self._current_property_axis = list(self.all_properties[self._current_property].keys())[0] if len(self.all_properties) != 0 else None
         self._current_texture = list(textures.keys())[0] if textures is not None else None
-        self._current_integrated_points = list(integrated_points.keys())[0] if integrated_points is not None else None
+        self._current_integration_points = list(integration_points.keys())[0] if integration_points is not None else None
         self._on_change_mode(self._current_mode)
 
     def _hide_show_mode(self) -> None:
@@ -532,25 +531,25 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
             self.vertices_property_combo.setVisible(False)
             self.vertices_property_axis_combo.setVisible(False)
             self.texture_combo.setVisible(False)
-            self.integrated_points_combo.setVisible(False)
+            self.integration_points_combo.setVisible(False)
     
         elif self._current_mode == "Property":
             self.vertices_property_combo.setVisible(True)
             self.vertices_property_axis_combo.setVisible(True)
             self.texture_combo.setVisible(False)
-            self.integrated_points_combo.setVisible(False)
+            self.integration_points_combo.setVisible(False)
 
         elif self._current_mode == "Texture":
             self.vertices_property_combo.setVisible(False)
             self.vertices_property_axis_combo.setVisible(False)
             self.texture_combo.setVisible(True)
-            self.integrated_points_combo.setVisible(False)
+            self.integration_points_combo.setVisible(False)
 
-        elif self._current_mode == "Integrated Points":
+        elif self._current_mode == "Integration Points":
             self.vertices_property_combo.setVisible(False)
             self.vertices_property_axis_combo.setVisible(False)
             self.texture_combo.setVisible(False)
-            self.integrated_points_combo.setVisible(True)
+            self.integration_points_combo.setVisible(True)
 
     def _on_change_mode(self, mode: str) -> None:
         self._current_mode = mode
@@ -562,8 +561,8 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
             self._plot_property_mode()
         elif mode == "Texture":
             self._plot_texture_mode()
-        elif mode == "Integrated Points":
-            self._plot_integrated_points_mode()
+        elif mode == "Integration Points":
+            self._plot_integration_points_mode()
 
     def _on_change_vertices_property(self, property_name: str) -> None:
         self._current_property = property_name
@@ -589,9 +588,9 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         self._current_texture = texture_name
         self._plot_texture_mode()
 
-    def _on_change_integrated_points(self, points_name: str) -> None:
-        self._current_integrated_points = points_name
-        self._plot_integrated_points_mode()
+    def _on_change_integration_points(self, points_name: str) -> None:
+        self._current_integration_points = points_name
+        self._plot_integration_points_mode()
 
     def _clear_plot(self) -> None:
         self.plotter.clear()
@@ -700,17 +699,17 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         self._plot_vertices()
         self._render()
 
-    def _plot_integrated_points_mode(self) -> None:
+    def _plot_integration_points_mode(self) -> None:
         self._clear_plot()
         self._plot_mesh() 
         self._plot_edges()
         self._plot_vertices()
 
-        global_coords = self.mesh.natural_to_global_points(self.integrated_points[self._current_integrated_points]).points
+        global_coords = self.mesh.integration_points_to_global_coordinates(self.integration_points[self._current_integration_points])
         self.plotter.add_points(
             global_coords, 
-            color=self._current_integrated_points_color, 
-            point_size=self._current_integrated_points_size,
+            color=self._current_integration_points_color, 
+            point_size=self._current_integration_points_size,
             render_points_as_spheres=True,
         )
 
@@ -777,20 +776,20 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         if self._update_continuously:
             self._on_change_mode(self._current_mode)
 
-    def _on_change_integrated_points_color(self, color: str) -> None:
-        self._current_integrated_points_color = color
+    def _on_change_integration_points_color(self, color: str) -> None:
+        self._current_integration_points_color = color
         if self._update_continuously:
             self._on_change_mode(self._current_mode)
 
-    def _on_change_integrated_points_size(self, value: int) -> None:
-        self._current_integrated_points_size = value
-        self.integrated_points_size_label.setText(f"{self._current_integrated_points_size} px")
+    def _on_change_integration_points_size(self, value: int) -> None:
+        self._current_integration_points_size = value
+        self.integration_points_size_label.setText(f"{self._current_integration_points_size} px")
         if self._update_continuously:
             self._on_change_mode(self._current_mode)
 
-    def _on_change_integrated_points_opacity(self, value: int) -> None:
-        self._current_integrated_points_opacity = value / 100.0
-        self.integrated_points_opacity_label.setText(f"{self._current_integrated_points_opacity * 100:.0f} %")
+    def _on_change_integration_points_opacity(self, value: int) -> None:
+        self._current_integration_points_opacity = value / 100.0
+        self.integration_points_opacity_label.setText(f"{self._current_integration_points_opacity * 100:.0f} %")
         if self._update_continuously:
             self._on_change_mode(self._current_mode)
 
@@ -827,9 +826,9 @@ class QtPyvistaLinearTriangleMesh3D(QtWidgets.QMainWindow):
         if self._update_continuously:
             self._on_change_mode(self._current_mode)
 
-    def _on_change_integrated_points_size(self, value: int) -> None:
-        self._current_integrated_points_size = value
-        self.integrated_points_size_label.setText(f"{self._current_integrated_points_size} px")
+    def _on_change_integration_points_size(self, value: int) -> None:
+        self._current_integration_points_size = value
+        self.integration_points_size_label.setText(f"{self._current_integration_points_size} px")
         if self._update_continuously:
             self._on_change_mode(self._current_mode)
 
@@ -857,7 +856,7 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
     mesh: LinearTriangleMesh3D, 
     property_arrays: Optional[Dict[str, numpy.ndarray]] = None,
     textures: Optional[Dict[str, numpy.ndarray]] = None,
-    integrated_points: Optional[Dict[str, IntegratedPoints]] = None,
+    integration_points: Optional[Dict[str, IntegrationPoints]] = None,
 ) -> None:
     """
     Launch the QT application to visualize a :class:`pysdic.geometry.LinearTriangleMesh3D` with ``pyvista`` and ``pyqt5``.
@@ -869,7 +868,7 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
 
     The window contains a ComboBox to select the texture to apply on the mesh.
 
-    The window can also display integrated points given in ``points_clouds`` argument.
+    The window can also display integration points given in ``points_clouds`` argument.
 
     Parameters
     ----------
@@ -885,9 +884,9 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
         Each array must have shape (height, width, 3) for RGB textures or (height, width) for grayscale textures.
         Integer arrays with values in [0, 255] with dtype ``numpy.uint8``.
 
-    integrated_points : dict[str, IntegratedPoints], optional
-        A dictionary mapping names to IntegratedPoints instances to visualize alongside the mesh.
-        Each IntegratedPoints instance must have a valid point cloud to visualize.
+    integration_points : dict[str, IntegrationPoints], optional
+        A dictionary mapping names to IntegrationPoints instances to visualize alongside the mesh.
+        Each IntegrationPoints instance must have a valid point cloud to visualize.
 
         
     Examples
@@ -924,7 +923,7 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
             "Displacement": displacement,  # Vectorial property stored as a separate array
         }
 
-    Select some integrated points to visualize. They can be constructed using the :class:`pysdic.geometry.IntegratedPoints` class.
+    Select some integration points to visualize. They can be constructed using the :class:`pysdic.geometry.IntegrationPoints` class.
     
     .. code-block:: python
 
@@ -955,7 +954,7 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
             "Coconut Texture": np.random.randint(0, 256, (16, 16, 3), dtype=np.uint8),  # Random RGB texture with shape (16, 16, 3)
         }
 
-    Visualize the mesh with the properties, textures and integrated points.
+    Visualize the mesh with the properties, textures and integration points.
 
     .. code-block:: python   
 
@@ -965,7 +964,7 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
         visualize_qt_pyvista_linear_triangle_mesh_3d(
             mesh=surface_mesh,
             property_arrays=properties,
-            integrated_points=intersection_points,
+            integration_points=intersection_points,
             textures=textures,
         )
 
@@ -986,10 +985,10 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
         :width: 500px
         :alt: QT PyVista Linear Triangle Mesh 3D Example (Texture Mode)
 
-    .. figure:: ../../../pysdic/resources/qt_pyvista_linear_triangle_mesh_3d_example_integrated_points.png
+    .. figure:: ../../../pysdic/resources/qt_pyvista_linear_triangle_mesh_3d_example_integration_points.png
         :align: center
         :width: 500px
-        :alt: QT PyVista Linear Triangle Mesh 3D Example (Integrated Points Mode)    
+        :alt: QT PyVista Linear Triangle Mesh 3D Example (integration points Mode)    
 
     """
     app = QtWidgets.QApplication([])
@@ -997,7 +996,7 @@ def visualize_qt_pyvista_linear_triangle_mesh_3d(
         mesh=mesh,
         property_arrays=property_arrays,
         textures=textures,
-        integrated_points=integrated_points,
+        integration_points=integration_points,
     )
     window.show()
     app.exec_()

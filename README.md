@@ -4,6 +4,8 @@
 
 Python Stereo Digital Image Correlation Toolbox.
 
+All input arrays are automatically converted to `numpy.float64` so that every calculation is performed in double‑precision, guaranteeing numerical stability throughout the library.
+
 ## Authors
 
 - Artezaru <artezaru.github@proton.me>

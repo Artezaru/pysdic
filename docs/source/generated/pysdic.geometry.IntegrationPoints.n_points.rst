@@ -3,4 +3,4 @@ n\_points
 
 .. currentmodule:: pysdic.geometry
 
-.. autoproperty:: IntegratedPoints.n_points
+.. autoproperty:: IntegrationPoints.n_points

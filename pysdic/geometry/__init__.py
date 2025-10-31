@@ -17,8 +17,8 @@ __all__ = []
 from .point_cloud_3d import PointCloud3D
 __all__.extend(['PointCloud3D'])
 
-from .integrated_points import IntegratedPoints
-__all__.extend(['IntegratedPoints'])
+from .integration_points import IntegrationPoints
+__all__.extend(['IntegrationPoints'])
 
 from .mesh_3d import Mesh3D
 __all__.extend(['Mesh3D'])
