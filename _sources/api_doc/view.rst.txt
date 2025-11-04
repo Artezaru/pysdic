@@ -52,9 +52,9 @@ The view can be instantiated with an image as follows:
 .. code-block:: python
 
     import numpy
-    from pysdic.imaging import View
+    from pysdic.imaging import View, Image
 
-    image = numpy.zeros((480, 640, 3), dtype=numpy.uint8)
+    image = Image.from_array(numpy.zeros((480, 640, 3), dtype=numpy.uint8))
 
     view = View(
         camera=camera,
@@ -73,23 +73,8 @@ You can access the view attributes such as camera and image.
 
     View.camera
     View.image
-    View.interpolation_function
     View.image_shape
     View.camera_size
-
-Several views can have the same camera.
-Any modification of the camera will be reflected in all the views using that camera.
-
-.. warning::
-
-    If you use the ``internal_bypass = True`` feature on cameras to avoid checking the consistency of the parameters, the updates methods below must be called manually after any modification of the parameters on a transformations to propagate the changes to the camera.
-
-.. autosummary::
-   :toctree: ../generated/
-
-    View.camera_update
-    View.camera_size_change
-
 
 Manipulating View objects
 -------------------------------------------
@@ -99,10 +84,8 @@ The view can be used to project 3D points into the 2D image plane.
 .. autosummary::
    :toctree: ../generated/
 
-    View.assembly_image_projection
-    View.evaluate_image_at_pixel_points
-    View.evaluate_image_jacobian_dx_at_pixel_points
-    View.evaluate_image_jacobian_dy_at_pixel_points
+    View.project
+    View.project_points
     View.image_project
     View.image_project_points
 

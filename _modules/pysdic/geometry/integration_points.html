@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.geometry.integration_points &#8212; pysdic 0.4.0 documentation</title>
+    <title>pysdic.geometry.integration_points &#8212; pysdic 0.5.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6c02275b"></script>
+    <script src="../../../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/integration_points';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.4.0 documentation</p>
+    <p class="title logo__title">pysdic 0.5.0 documentation</p>
   
 </a></div>
     
@@ -328,6 +328,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <div class="viewcode-block" id="IntegrationPoints">
 <a class="viewcode-back" href="../../../api_doc/integration_points.html#pysdic.geometry.IntegrationPoints">[docs]</a>
@@ -532,6 +533,87 @@
             <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one weight should be positive.&quot;</span><span class="p">)</span>
 
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># I/O Methods</span>
+    <span class="c1"># ==========================</span>
+<div class="viewcode-block" id="IntegrationPoints.from_npz">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.from_npz.html#pysdic.geometry.IntegrationPoints.from_npz">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_npz</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load integration points from a .npz file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            The path to the .npz file containing the integration points data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            A new IntegrationPoints instance loaded from the .npz file.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If the specified file does not exist.</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            If required keys are missing in the .npz file.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from pysdic import IntegrationPoints</span>
+
+<span class="sd">            integration_points = IntegrationPoints.from_npz(&quot;path/to/integration_points.npz&quot;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The specified file does not exist: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;natural_coordinates&#39;</span><span class="p">]</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;element_indices&#39;</span><span class="p">]</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;weights&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="IntegrationPoints.to_npz">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.to_npz.html#pysdic.geometry.IntegrationPoints.to_npz">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_npz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the integration points to a .npz file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            The path to the .npz file where the integration points data will be saved.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from pysdic import IntegrationPoints</span>
+
+<span class="sd">            natural_coordinates = ...</span>
+<span class="sd">            element_indices = ...</span>
+<span class="sd">            weights = ...</span>
+
+<span class="sd">            integration_points = IntegrationPoints(natural_coordinates, element_indices, weights)</span>
+<span class="sd">            integration_points.to_npz(&quot;path/to/integration_points.npz&quot;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                               <span class="n">natural_coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">,</span>
+                               <span class="n">element_indices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">,</span>
+                               <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span></div>
 
 
     <span class="c1"># =======================</span>
@@ -773,22 +855,30 @@
 <span class="sd">        ValueError</span>
 <span class="sd">            If the dimensions of the two IntegrationPoints instances do not match.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">IntegrationPoints</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only concatenate with another IntegrationPoints instance.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot concatenate IntegrationPoints with different dimensions.&quot;</span><span class="p">)</span>
-        
-        <span class="n">new_natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">))</span>
-        <span class="n">new_element_ids</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">element_indices</span><span class="p">))</span>
-        
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">new_weights</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">current_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> 
-            <span class="n">other_weights</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">weights</span> 
-            <span class="n">new_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">current_weights</span><span class="p">,</span> <span class="n">other_weights</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concatenate two IntegrationPoints instances in place.</span>
 
-        <span class="k">return</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="n">new_natural_coordinates</span><span class="p">,</span> <span class="n">new_element_ids</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : IntegrationPoints</span>
+<span class="sd">            Another IntegrationPoints instance to concatenate with.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            The current IntegrationPoints instance containing the concatenated data.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the other object is not an IntegrationPoints instance.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the dimensions of the two IntegrationPoints instances do not match.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># =======================</span>
     <span class="c1"># Methods</span>
@@ -811,6 +901,93 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_internal_check_consistency</span><span class="p">(</span><span class="n">coord</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="IntegrationPoints.concatenate">
+<a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.concatenate.html#pysdic.geometry.IntegrationPoints.concatenate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concatenate two IntegrationPoints instances.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : IntegrationPoints</span>
+<span class="sd">            Another IntegrationPoints instance to concatenate with.</span>
+
+<span class="sd">        inplace : bool, optional</span>
+<span class="sd">            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            An new IntegrationPoints instance containing the concatenated data or the modified current instance if `inplace` is True.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the other object is not an IntegrationPoints instance.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the dimensions of the two IntegrationPoints instances do not match.</span>
+
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy</span>
+<span class="sd">            from pysdic import IntegrationPoints</span>
+
+<span class="sd">            natural_coordinates1 = numpy.array([[0.5, 0.5], [0.5, 0.0]])</span>
+<span class="sd">            element_indices1 = numpy.array([0, 0])</span>
+<span class="sd">            weights1 = numpy.array([1.0, 1.0])</span>
+
+<span class="sd">            integration_points1 = IntegrationPoints(natural_coordinates1, element_indices1, weights1)</span>
+
+<span class="sd">            natural_coordinates2 = numpy.array([[0.0, 0.5], [1/3, 1/3]])</span>
+<span class="sd">            element_indices2 = numpy.array([0, 1])</span>
+<span class="sd">            weights2 = numpy.array([1.0, 1.0])</span>
+
+<span class="sd">            integration_points2 = IntegrationPoints(natural_coordinates2, element_indices2, weights2)</span>
+
+<span class="sd">            # Concatenate two IntegrationPoints instances</span>
+<span class="sd">            combined_integration_points = integration_points1 + integration_points2</span>
+<span class="sd">            print(combined_integration_points.n_points)  # Output: 4</span>
+
+<span class="sd">            # In-place concatenation</span>
+<span class="sd">            integration_points1 += integration_points2</span>
+<span class="sd">            print(integration_points1.n_points)  # Output: 4</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">IntegrationPoints</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can only concatenate with another IntegrationPoints instance.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot concatenate IntegrationPoints with different dimensions.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inplace</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;inplace must be a boolean.&quot;</span><span class="p">)</span>
+        
+        <span class="n">new_natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">))</span>
+        <span class="n">new_element_ids</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">element_indices</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_weights</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> 
+            <span class="n">other_weights</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">weights</span> 
+            <span class="n">new_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">current_weights</span><span class="p">,</span> <span class="n">other_weights</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="n">current_internal_bypass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">new_natural_coordinates</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">=</span> <span class="n">new_element_ids</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">new_weights</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="n">current_internal_bypass</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">return</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="n">new_natural_coordinates</span><span class="p">,</span> <span class="n">new_element_ids</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="IntegrationPoints.copy">
 <a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.copy.html#pysdic.geometry.IntegrationPoints.copy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
@@ -825,9 +1002,10 @@
         <span class="k">return</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">)</span></div>
 
 
+
 <div class="viewcode-block" id="IntegrationPoints.remove_points">
 <a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.remove_points.html#pysdic.geometry.IntegrationPoints.remove_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove specific integration points by their indices.</span>
 
@@ -837,44 +1015,100 @@
 <span class="sd">            The indices of the integration points to remove as a numpy ndarray with shape (R,),</span>
 <span class="sd">            where R is the number of points to remove.</span>
 
+<span class="sd">        inplace : bool, optional</span>
+<span class="sd">            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            A new IntegrationPoints instance with the specified points removed or the modified current instance if `inplace` is True.</span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        IndexError</span>
 <span class="sd">            If any index is out of bounds.</span>
+
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import numpy</span>
+<span class="sd">            from pysdic import IntegrationPoints </span>
+<span class="sd">            natural_coordinates = numpy.array([[0.5, 0.5], [0.5, 0.0], [0.0, 0.5], [1/3, 1/3]])</span>
+<span class="sd">            element_indices = numpy.array([0, 0, 0, 1])</span>
+<span class="sd">            weights = numpy.array([1.0, 1.0, 1.0, 1.0])</span>
+
+<span class="sd">            integration_points = IntegrationPoints(natural_coordinates, element_indices, weights)</span>
+<span class="sd">            print(integration_points.n_points)  # Output: 4</span>
+
+<span class="sd">            # Remove points at indices 1 and 2</span>
+<span class="sd">            new_integration_points = integration_points.remove_points(numpy.array([1, 2]))</span>
+<span class="sd">            print(new_integration_points.n_points)  # Output: 2</span>
+
+<span class="sd">            # Remove points at indices 0 and 1 in place</span>
+<span class="sd">            integration_points.remove_points(numpy.array([0, 1]), inplace=True)</span>
+<span class="sd">            print(integration_points.n_points)  # Output: 2</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;indices should be a 1D array of shape (R,).&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Some indices are out of bounds.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inplace</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;inplace must be a boolean.&quot;</span><span class="p">)</span>
         
         <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
         <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="n">current_bypass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="n">current_bypass</span></div>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="n">current_bypass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="n">current_bypass</span>
+        
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">return</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="IntegrationPoints.remove_invalids">
 <a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.remove_invalids.html#pysdic.geometry.IntegrationPoints.remove_invalids">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">remove_invalids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_invalids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove all invalid integration points (points not included in any element).</span>
 
 <span class="sd">        A point is considered invalid if its element index is -1.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`remove_points` to remove specific integration points.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inplace : bool, optional</span>
+<span class="sd">            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            A new IntegrationPoints instance with the invalid points removed or the modified current instance if `inplace` is True.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">remove_points</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_points</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="IntegrationPoints.add_points">
 <a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.add_points.html#pysdic.geometry.IntegrationPoints.add_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natural_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">natural_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add new integration points.</span>
 
@@ -891,6 +1125,9 @@
 <span class="sd">        weights : Optional[numpy.ndarray], optional</span>
 <span class="sd">            The weights of the new integration points as a numpy ndarray with shape (A,),</span>
 <span class="sd">            where A is the number of points to add, by default None means equal weights of 1 for all new points.</span>
+
+<span class="sd">        inplace : bool, optional</span>
+<span class="sd">            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -914,22 +1151,20 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of new points A in weights and element_indices should match.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The n_dimensions d of the new natural_coordinates does not match the existing dimension.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inplace</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;inplace must be a boolean.&quot;</span><span class="p">)</span>
 
-        <span class="n">current_bypass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">natural_coordinates</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">current_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span>
-            <span class="n">new_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weights</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">current_weights</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="n">current_bypass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span></div>
+        <span class="c1"># Create new arrays</span>
+        <span class="n">new_points</span> <span class="o">=</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">)</span>
+        
+        <span class="c1"># Concatenate</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">new_points</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="IntegrationPoints.disable_points">
 <a class="viewcode-back" href="../../../generated/pysdic.geometry.IntegrationPoints.disable_points.html#pysdic.geometry.IntegrationPoints.disable_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">disable_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">disable_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Disable specific integration points by their indices without removing them.</span>
 
@@ -943,6 +1178,14 @@
 <span class="sd">            The indices of the integration points to disable as a numpy ndarray with shape (R,),</span>
 <span class="sd">            where R is the number of points to disable.</span>
 
+<span class="sd">        inplace : bool, optional</span>
+<span class="sd">            If True, modify the current instance in place. If False, return a new IntegrationPoints instance (default is False).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        IntegrationPoints</span>
+<span class="sd">            A new IntegrationPoints instance with the specified points disabled or the modified current instance if `inplace` is True.</span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        IndexError</span>
@@ -953,15 +1196,27 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;indices should be a 1D array of shape (R,).&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indices</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Some indices are out of bounds.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inplace</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;inplace must be a boolean.&quot;</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="n">current_bypass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="n">current_bypass</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
-        <span class="n">current_bypass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span> <span class="o">=</span> <span class="n">current_bypass</span></div>
+        <span class="c1"># Create copies</span>
+        <span class="n">new_natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new_element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_indices</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new_natural_coordinates</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">new_element_indices</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">IntegrationPoints</span><span class="p">(</span><span class="n">new_natural_coordinates</span><span class="p">,</span> <span class="n">new_element_indices</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_bypass</span><span class="p">)</span></div>
 </div>
 
-        
 </pre></div>
 
                 </article>

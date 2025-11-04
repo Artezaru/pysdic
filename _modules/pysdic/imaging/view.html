@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.imaging.view &#8212; pysdic 0.4.0 documentation</title>
+    <title>pysdic.imaging.view &#8212; pysdic 0.5.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6c02275b"></script>
+    <script src="../../../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/imaging/view';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 0.4.0 documentation</p>
+    <p class="title logo__title">pysdic 0.5.0 documentation</p>
   
 </a></div>
     
@@ -319,7 +319,10 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.image_projection_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageProjectionResult</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.projection_result</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProjectionResult</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">.camera</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">..geometry.point_cloud_3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud3D</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..geometry.mesh_3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh3D</span>
 
@@ -331,34 +334,52 @@
 
 <span class="sd">    If the sensor size of the camera changes, the image must be updated to reflect the new sensor dimensions.</span>
 
-<span class="sd">    .. note::</span>
-
-<span class="sd">        If multiple views has the same camera, a change on the camera&#39;s parameters will affect all views using that camera.</span>
-
 <span class="sd">    .. warning::</span>
-<span class="sd">        </span>
-<span class="sd">        If the image is updated directly without using the setter, you must be call the method ``image_update()`` to indicate that the image has been updated in order the class reconstruct the interpolation function of the image.</span>
+
+<span class="sd">        - If multiple views share the same camera, a change on the camera&#39;s parameters will affect all views using that camera.</span>
+<span class="sd">        - If multiple views share the same image, a change on the image will affect all views using that image.</span>
+<span class="sd">        - An error will be raised if the image shape does not match the camera sensor size or if the camera sensor size or image shape change after the view creation.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :class:`Camera` for camera model and parameters.</span>
+<span class="sd">        - :class:`Image` for image representation and processing.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    camera : Camera</span>
 <span class="sd">        The camera that will be used to view the image.</span>
 <span class="sd">    </span>
-<span class="sd">    image : Optional[numpy.ndarray]</span>
-<span class="sd">        The image that is viewed by the camera. The image must be in a unsigned bit integer format (e.g., `numpy.uint8`) and must have a shape of (height, width). If not provided, the image will be set to None.</span>
+<span class="sd">    image : Image</span>
+<span class="sd">        The image that is viewed by the camera.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;_camera&quot;</span><span class="p">,</span> 
         <span class="s2">&quot;_image&quot;</span><span class="p">,</span> 
-        <span class="s2">&quot;_interpolation_function&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;_camera_size&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;_saved_camera_size&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_saved_image_shape&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_no_size_updates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that no major updates have occurred to the camera or image.</span>
+
+<span class="sd">        This method checks if the camera&#39;s sensor size or the image&#39;s shape has changed since the last check.</span>
+<span class="sd">        If any changes are detected, a warning is printed to inform the user.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera_size</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_camera_size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[View] Warning: Camera size has changed from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_saved_camera_size</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">camera_size</span><span class="si">}</span><span class="s2"> since last check. Create a new View with the updated camera.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_image_shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[View] Warning: Image shape has changed from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_saved_image_shape</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">image_shape</span><span class="si">}</span><span class="s2"> since last check. Create a new View with the updated image.&quot;</span><span class="p">)</span>
 
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Properties</span>
@@ -382,61 +403,34 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">Camera</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Camera must be an instance of Camera.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">camera</span>
-        <span class="c1"># Reset the previous camera size to trigger image update if necessary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">camera_update</span><span class="p">()</span>
+        <span class="c1"># Save the current camera size for future checks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_saved_camera_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">)</span>
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or set the image viewed by the camera.</span>
 
-<span class="sd">        The shape of the image must be (height, width) with a grayscale image.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        image : Optional[numpy.ndarray]</span>
-<span class="sd">            The image that is viewed by the camera. The image must be in a unsigned bit integer format (e.g., `numpy.uint8`) and must have a shape of (height, width). If not provided, the image will be set to None.</span>
+<span class="sd">        image : Image</span>
+<span class="sd">            The image to be viewed by the camera.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span>
     
     <span class="nd">@image</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]):</span>
-        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Image must be a numpy.ndarray.&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unsignedinteger</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Image must be in an unsigned bit integer format (e.g., numpy.uint8).&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Image must have shape (height, width) with a grayscale image.&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image shape </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match camera sensor size </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">Image</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Image must be an instance of Image.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Image data is None. Please set a valid image.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image shape </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> does not match camera sensor size </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="o">=</span> <span class="n">image</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">image_update</span><span class="p">()</span>
+        <span class="c1"># Save the current image shape for future checks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_saved_image_shape</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
 
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">interpolation_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RectBivariateSpline</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the interpolation function for the image.</span>
-<span class="sd">        The interpolation function is an object `scipy.interpolate.RectBivariateSpline`.</span>
-
-<span class="sd">        The interpolation function is used to evaluate pixel values at arbitrary points in the image.</span>
-
-<span class="sd">        .. warning::</span>
-
-<span class="sd">            The interpolation function takes ``pixel_points`` as input, which are a swap of the camera&#39;s image points !</span>
-<span class="sd">            See documentation of ``pycvcam`` (https://github.com/Artezaru/pycvcam) for more details on the name and usage of these points.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Optional[scipy.interpolate.RectBivariateSpline]</span>
-<span class="sd">            The interpolation function for the image, or None if not set.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span>
-    
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">image_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
@@ -466,249 +460,113 @@
 <span class="sd">        Tuple[int, int]</span>
 <span class="sd">            The size of the camera&#39;s sensor as a tuple (height, width).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_size</span>
-
-    <span class="c1"># ===================================================================</span>
-    <span class="c1"># Indicate an update</span>
-    <span class="c1"># ===================================================================</span>
-<div class="viewcode-block" id="View.camera_update">
-<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.camera_update.html#pysdic.imaging.View.camera_update">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">camera_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Indicate that the camera has been updated.</span>
-
-<span class="sd">        This method should be called whenever the camera parameters are updated to ensure that the view reflects the new camera state.</span>
-
-<span class="sd">        - resets the ``image`` attribute to None (uncalculated) if the camera&#39;s sensor size has changed.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">camera_size_change</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">sensor_width</span>
 
 
- 
-    <span class="k">def</span><span class="w"> </span><span class="nf">image_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Indicate that the image has been updated.</span>
-
-<span class="sd">        This method should be called whenever the image is updated to ensure that the view reflects the new image state.</span>
-
-<span class="sd">        - resets the interpolation function of the image.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">construct_interpolation_function</span><span class="p">()</span>
-
-
-<div class="viewcode-block" id="View.camera_size_change">
-<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.camera_size_change.html#pysdic.imaging.View.camera_size_change">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">camera_size_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Callback for when the camera&#39;s sensor size changes.</span>
-
-<span class="sd">        This method is called when the camera&#39;s sensor size is updated, allowing the view to adjust accordingly.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        height : int</span>
-<span class="sd">            The new sensor height.</span>
-<span class="sd">        width : int</span>
-<span class="sd">            The new sensor width.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Height and width must be integers.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">height</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">width</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Height and width must be positive integers.&quot;</span><span class="p">)</span>
-        <span class="n">old_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">old_size</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_size</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[View] Camera size changed from </span><span class="si">{</span><span class="n">old_size</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_size</span><span class="si">}</span><span class="s2">. current image will be removed, please set a new image.&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-
-    <span class="c1"># ===================================================================</span>
-    <span class="c1"># Processing methods</span>
-    <span class="c1"># ===================================================================</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">construct_interpolation_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Construct the interpolation function for the image.</span>
-
-<span class="sd">        The interpolation function is used to evaluate pixel values at arbitrary points in the image.</span>
-
-<span class="sd">        .. warning::</span>
-
-<span class="sd">            The interpolation function takes ``pixel_points`` as input, which are a swap of the camera&#39;s image points !</span>
-<span class="sd">            See documentation of ``pycvcam`` (https://github.com/Artezaru/pycvcam) for more details on the name and usage of these points.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">return</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">RectBivariateSpline</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">kx</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ky</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="View.evaluate_image_at_pixel_points">
-<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.evaluate_image_at_pixel_points.html#pysdic.imaging.View.evaluate_image_at_pixel_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_image_at_pixel_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Evaluate the image at given pixel points.</span>
-
-<span class="sd">        .. seealso::</span>
-
-<span class="sd">            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the x-axis (columns).</span>
-<span class="sd">            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the y-axis (rows).</span>
-
-<span class="sd">        Pixel out of bounds will be masked and the value at these points will be set to numpy.nan.</span>
-
-<span class="sd">        .. warning::</span>
-
-<span class="sd">            The interpolation function takes ``pixel_points`` as input, which are a swap of the camera&#39;s image points !</span>
-<span class="sd">            See documentation of ``pycvcam`` (https://github.com/Artezaru/pycvcam) for more details on the name and usage of these points.</span>
-
-<span class="sd">            You can use :meth:`pysdic.imaging.Camera.image_points_to_pixel_points` to achieve this conversion.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pixel_points : numpy.ndarray</span>
-<span class="sd">            The pixel points at which to evaluate the image. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        numpy.ndarray</span>
-<span class="sd">            The evaluated pixel values with shape (N,). If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Interpolation function is not constructed. Please set an image first.&quot;</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Pixel points must be a numpy.ndarray.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pixel_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel points must have shape (N, 2) where N is the number of points.&quot;</span><span class="p">)</span>
-        
-        <span class="c1"># Mask out-of-bounds points</span>
-        <span class="n">valid_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="c1"># Create the values array with NaNs</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-
-        <span class="c1"># Evaluate only valid points</span>
-        <span class="n">values</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pixel_points</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">values</span></div>
-
-    
-
-<div class="viewcode-block" id="View.evaluate_image_jacobian_dx_at_pixel_points">
-<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.evaluate_image_jacobian_dx_at_pixel_points.html#pysdic.imaging.View.evaluate_image_jacobian_dx_at_pixel_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_image_jacobian_dx_at_pixel_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Evaluate the Jacobian of the image at given pixel points along the x-axis (columns).</span>
-
-<span class="sd">        .. seealso::</span>
-
-<span class="sd">            - :meth:`evaluate_image_at_pixel_points` for evaluating the image at pixel points.</span>
-<span class="sd">            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the y-axis (rows).</span>
-
-<span class="sd">        Pixel out of bounds will be masked and the value at these points will be set to numpy.nan.</span>
-
-<span class="sd">        .. warning::</span>
-
-<span class="sd">            The interpolation function takes ``pixel_points`` as input, which are a swap of the camera&#39;s image points !</span>
-<span class="sd">            See documentation of ``pycvcam`` (https://github.com/Artezaru/pycvcam) for more details on the name and usage of these points.</span>
-
-<span class="sd">            You can use :meth:`pysdic.imaging.Camera.image_points_to_pixel_points` to achieve this conversion.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pixel_points : numpy.ndarray</span>
-<span class="sd">            The pixel points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        numpy.ndarray</span>
-<span class="sd">            The evaluated Jacobian values with shape (N,). If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Interpolation function is not constructed. Please set an image first.&quot;</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Pixel points must be a numpy.ndarray.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pixel_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel points must have shape (N, 2) where N is the number of points.&quot;</span><span class="p">)</span>
-        
-        <span class="c1"># Mask out-of-bounds points</span>
-        <span class="n">valid_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="c1"># Create the values array with NaNs</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-
-        <span class="c1"># Evaluate only valid points</span>
-        <span class="c1"># For scipy dx -&gt; rows, dy -&gt; columns, we need to swap them to have derivative along x-axis (columns)</span>
-        <span class="n">values</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pixel_points</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">values</span></div>
-
-    
-
-<div class="viewcode-block" id="View.evaluate_image_jacobian_dy_at_pixel_points">
-<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.evaluate_image_jacobian_dy_at_pixel_points.html#pysdic.imaging.View.evaluate_image_jacobian_dy_at_pixel_points">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_image_jacobian_dy_at_pixel_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Evaluate the Jacobian of the image at given pixel points along the y-axis (rows).</span>
-
-<span class="sd">        .. seealso::</span>
-
-<span class="sd">            - :meth:`evaluate_image_at_pixel_points` for evaluating the image at pixel points.</span>
-<span class="sd">            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the x-axis (columns).</span>
-
-<span class="sd">        Pixel out of bounds will be masked and the value at these points will be set to numpy.nan.</span>
-
-<span class="sd">        .. warning::</span>
-
-<span class="sd">            The interpolation function takes ``pixel_points`` as input, which are a swap of the camera&#39;s image points !</span>
-<span class="sd">            See documentation of ``pycvcam`` (https://github.com/Artezaru/pycvcam) for more details on the name and usage of these points.</span>
-
-<span class="sd">            You can use :meth:`pysdic.imaging.Camera.image_points_to_pixel_points` to achieve this conversion.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pixel_points : numpy.ndarray</span>
-<span class="sd">            The pixel points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        numpy.ndarray</span>
-<span class="sd">            The evaluated Jacobian values with shape (N,). If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Interpolation function is not constructed. Please set an image first.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Pixel points must be a numpy.ndarray.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pixel_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel points must have shape (N, 2) where N is the number of points.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Mask out-of-bounds points</span>
-        <span class="n">valid_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pixel_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="c1"># Create the values array with NaNs</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-
-        <span class="c1"># Evaluate only valid points</span>
-        <span class="c1"># For scipy dx -&gt; rows, dy -&gt; columns, we need to swap them to have derivative along y-axis (rows)</span>
-        <span class="n">values</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolation_function</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pixel_points</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">values</span></div>
-
-    
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Application composition methods</span>
     <span class="c1"># ===================================================================</span>
+<div class="viewcode-block" id="View.project">
+<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.project.html#pysdic.imaging.View.project">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ddistortion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProjectionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Project 3D world points to 2D pixel points using the camera&#39;s intrinsic, extrinsic, and distortion parameters.</span>
+
+<span class="sd">        This method is a convenience wrapper around the camera&#39;s own project method.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`pysdic.imaging.Camera.project` for the camera&#39;s own projection method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        world_points : numpy.ndarray</span>
+<span class="sd">            The 3D world points to be projected. The shape should be (N, 3) where N is the number of points and each point is represented by its (x, y, z) coordinates.</span>
+
+<span class="sd">        dx : bool, optional</span>
+<span class="sd">            If True, the function will also return the jacobian of the pixel points with respect to the world points. Default is False.</span>
+
+<span class="sd">        dintrinsic : bool, optional</span>
+<span class="sd">            If True, compute the Jacobian of the pixel points with respect to the intrinsic parameters.</span>
+
+<span class="sd">        ddistortion : bool, optional</span>
+<span class="sd">            If True, compute the Jacobian of the pixel points with respect to the distortion parameters.</span>
+
+<span class="sd">        dextrinsic : bool, optional</span>
+<span class="sd">            If True, compute the Jacobian of the pixel points with respect to the extrinsic parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ProjectionResult</span>
+<span class="sd">            A ProjectionResult object containing the projected image points and optionally the jacobians.</span>
+
+<span class="sd">            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).</span>
+<span class="sd">            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.</span>
+<span class="sd">            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.</span>
+<span class="sd">            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.</span>
+<span class="sd">            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_no_size_updates</span><span class="p">()</span>
+
+        <span class="n">projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">world_points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">projection_result</span></div>
+
+    
+<div class="viewcode-block" id="View.project_points">
+<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.project_points.html#pysdic.imaging.View.project_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">project_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world_points</span><span class="p">:</span> <span class="n">PointCloud3D</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ddistortion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProjectionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Project 3D world points to 2D pixel points using the camera&#39;s intrinsic, extrinsic, and distortion parameters from a PointCloud3D instance.</span>
+
+<span class="sd">        This method is a convenience wrapper around the camera&#39;s own project method.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :class:`pysdic.geometry.PointCloud3D` for the structure of the input.</span>
+<span class="sd">            - :meth:`pysdic.imaging.Camera.project_points` for the camera&#39;s own projection method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        world_points : PointCloud3D</span>
+<span class="sd">            The 3D world points to be projected.</span>
+
+<span class="sd">        dx : bool, optional</span>
+<span class="sd">            If True, the function will also return the jacobian of the pixel points with respect to the world points. Default is False.</span>
+
+<span class="sd">        dintrinsic : bool, optional</span>
+<span class="sd">            If True, compute the Jacobian of the pixel points with respect to the intrinsic parameters.</span>
+
+<span class="sd">        ddistortion : bool, optional</span>
+<span class="sd">            If True, compute the Jacobian of the pixel points with respect to the distortion parameters.</span>
+
+<span class="sd">        dextrinsic : bool, optional</span>
+<span class="sd">            If True, compute the Jacobian of the pixel points with respect to the extrinsic parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ProjectionResult</span>
+<span class="sd">            A ProjectionResult object containing the projected image points and optionally the jacobians.</span>
+
+<span class="sd">            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).</span>
+<span class="sd">            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.</span>
+<span class="sd">            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.</span>
+<span class="sd">            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.</span>
+<span class="sd">            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_no_size_updates</span><span class="p">()</span>
+
+        <span class="n">projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">project_points</span><span class="p">(</span><span class="n">world_points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">projection_result</span></div>
+
+
+
 <div class="viewcode-block" id="View.image_project">
 <a class="viewcode-back" href="../../../generated/pysdic.imaging.View.image_project.html#pysdic.imaging.View.image_project">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">image_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ddistortion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageProjectionResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Project 3D world points to gray level using the camera&#39;s intrinsic, extrinsic, distortion parameters and image interpolation function.</span>
+<span class="sd">        Project 3D world points to gray level or image values using the camera&#39;s intrinsic, extrinsic, distortion parameters and image interpolation function.</span>
 
 <span class="sd">        .. seealso::</span>
 
@@ -737,13 +595,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        ImageProjectionResult</span>
 <span class="sd">            An instance of ImageProjectionResult containing:</span>
-<span class="sd">            </span>
-<span class="sd">            - `gray_levels`: A 1D array of shape (N, ) representing the image values at the projected pixel points.</span>
+
+<span class="sd">            - `gray_levels`: 2D array of shape (N, channels) representing the image values at the projected pixel points.</span>
 <span class="sd">            - `jacobian_dx`: (optional) A 3D array of shape (N, 1, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.</span>
 <span class="sd">            - `jacobian_dintrinsic`: (optional) A 3D array of shape (N, 1, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.</span>
 <span class="sd">            - `jacobian_ddistortion`: (optional) A 3D array of shape (N, 1, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.</span>
 <span class="sd">            - `jacobian_dextrinsic`: (optional) A 3D array of shape (N, 1, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.</span>
-<span class="sd">        </span>
 <span class="sd">            </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -753,7 +610,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            import numpy</span>
-<span class="sd">            from pysdic.imaging import Camera</span>
+<span class="sd">            from pysdic.imaging import Camera, Image, View</span>
 <span class="sd">            from pycvcam import Cv2Extrinsic, Cv2Intrinsic</span>
 
 <span class="sd">            rotation_vector = numpy.array([0.1, 0.2, 0.3])</span>
@@ -775,7 +632,7 @@
 <span class="sd">            )</span>
 
 <span class="sd">            # Create a simple view with a blank image</span>
-<span class="sd">            image = numpy.zeros((480, 640), dtype=numpy.uint8)</span>
+<span class="sd">            image = Image.from_array(numpy.zeros((480, 640), dtype=numpy.uint8))</span>
 <span class="sd">            view = View(camera=camera, image=image)</span>
 
 <span class="sd">            # Define some 3D world points</span>
@@ -793,16 +650,18 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            gray_levels = image_projection_result.image_points # The projected 2D image points of shape (4, )</span>
+<span class="sd">            gray_levels = image_projection_result.image_points # The projected 2D image points of shape (4, 1)</span>
 <span class="sd">            jacobian_dx = image_projection_result.jacobian_dx # The jacobian with respect to the world points of shape (4, 1, 3)</span>
 <span class="sd">            jacobian_dintrinsic = image_projection_result.jacobian_dintrinsic # The jacobian with respect to the intrinsic parameters of shape (4, 1, 4)</span>
 <span class="sd">            jacobian_dextrinsic = image_projection_result.jacobian_dextrinsic # The jacobian with respect to the extrinsic parameters of shape (4, 1, 6)</span>
-
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_no_size_updates</span><span class="p">()</span>
+
         <span class="n">projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">world_points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
-        <span class="n">image_projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assembly_image_projection</span><span class="p">(</span><span class="n">projection_result</span><span class="p">,</span> <span class="n">world_points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
+        <span class="n">image_projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assembly_image_projection</span><span class="p">(</span><span class="n">projection_result</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">image_projection_result</span></div>
+
 
 
 <div class="viewcode-block" id="View.image_project_points">
@@ -845,8 +704,8 @@
 <span class="sd">        -------</span>
 <span class="sd">        ImageProjectionResult</span>
 <span class="sd">            An instance of ImageProjectionResult containing:</span>
-<span class="sd">            </span>
-<span class="sd">            - `gray_levels`: A 1D array of shape (N, ) representing the image values at the projected pixel points.</span>
+
+<span class="sd">            - `gray_levels`: A 2D array of shape (N, channels) representing the image values at the projected pixel points.</span>
 <span class="sd">            - `jacobian_dx`: (optional) A 3D array of shape (N, 1, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.</span>
 <span class="sd">            - `jacobian_dintrinsic`: (optional) A 3D array of shape (N, 1, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.</span>
 <span class="sd">            - `jacobian_ddistortion`: (optional) A 3D array of shape (N, 1, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.</span>
@@ -861,7 +720,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            import numpy</span>
-<span class="sd">            from pysdic.imaging import Camera</span>
+<span class="sd">            from pysdic.imaging import Camera, Image, View</span>
 <span class="sd">            from pysdic.geometry import PointCloud3D</span>
 <span class="sd">            from pycvcam import Cv2Extrinsic, Cv2Intrinsic</span>
 
@@ -883,7 +742,7 @@
 <span class="sd">            )</span>
 
 <span class="sd">            # Create a simple view with a blank image</span>
-<span class="sd">            image = numpy.zeros((480, 640), dtype=numpy.uint8)</span>
+<span class="sd">            image = Image.from_array(numpy.zeros((480, 640), dtype=numpy.uint8))</span>
 <span class="sd">            view = View(camera=camera, image=image)</span>
 
 <span class="sd">            # Define some 3D world points in a PointCloud3D instance</span>
@@ -902,22 +761,22 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            gray_levels = image_projection_result.image_points # The projected 2D image points of shape (4, )</span>
+<span class="sd">            gray_levels = image_projection_result.image_points # The projected 2D image points of shape (4, 1)</span>
 <span class="sd">            jacobian_dx = image_projection_result.jacobian_dx # The jacobian with respect to the world points of shape (4, 1, 3)</span>
 <span class="sd">            jacobian_dintrinsic = image_projection_result.jacobian_dintrinsic # The jacobian with respect to the intrinsic parameters of shape (4, 1, 4)</span>
 <span class="sd">            jacobian_dextrinsic = image_projection_result.jacobian_dextrinsic # The jacobian with respect to the extrinsic parameters of shape (4, 1, 6)</span>
 <span class="sd">           </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_no_size_updates</span><span class="p">()</span>
+
         <span class="n">projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">world_points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
-        <span class="n">image_projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assembly_image_projection</span><span class="p">(</span><span class="n">projection_result</span><span class="p">,</span> <span class="n">world_points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
+        <span class="n">image_projection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assembly_image_projection</span><span class="p">(</span><span class="n">projection_result</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="n">dintrinsic</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="n">ddistortion</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="n">dextrinsic</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">image_projection_result</span></div>
 
     
     
 
-<div class="viewcode-block" id="View.assembly_image_projection">
-<a class="viewcode-back" href="../../../generated/pysdic.imaging.View.assembly_image_projection.html#pysdic.imaging.View.assembly_image_projection">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">assembly_image_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection_result</span><span class="p">:</span> <span class="n">ProjectionResult</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ddistortion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageProjectionResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assemble the image projection result from the camera&#39;s projection result and the world points.</span>
@@ -935,7 +794,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        projection_result : pycvcam.core.TransformResult</span>
+<span class="sd">        projection_result : ProjectionResult</span>
 <span class="sd">            The result of the camera&#39;s projection method containing the projected pixel points and optionally the jacobians.</span>
 <span class="sd">        </span>
 <span class="sd">        dx : bool, optional</span>
@@ -954,19 +813,23 @@
 <span class="sd">        -------</span>
 <span class="sd">        ImageProjectionResult</span>
 <span class="sd">            An instance of ImageProjectionResult containing:</span>
-<span class="sd">            </span>
-<span class="sd">            - `gray_levels`: A 1D array of shape (N, ) representing the image values at the projected pixel points.</span>
+
+<span class="sd">            - `gray_levels`: A 2D array of shape (N, channels) representing the image values at the projected pixel points.</span>
 <span class="sd">            - `jacobian_dx`: (optional) A 3D array of shape (N, 1, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.</span>
 <span class="sd">            - `jacobian_dintrinsic`: (optional) A 3D array of shape (N, 1, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.</span>
 <span class="sd">            - `jacobian_ddistortion`: (optional) A 3D array of shape (N, 1, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.</span>
 <span class="sd">            - `jacobian_dextrinsic`: (optional) A 3D array of shape (N, 1, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection_result</span><span class="p">,</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">TransformResult</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;projection_result must be an instance of pycvcam.core.TransformResult.&quot;</span><span class="p">)</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_no_size_updates</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection_result</span><span class="p">,</span>  <span class="n">ProjectionResult</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;projection_result must be an instance of ProjectionResult.&quot;</span><span class="p">)</span>
+
         <span class="c1"># Compute the image values at the projected pixel points</span>
         <span class="n">pixel_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">image_points_to_pixel_points</span><span class="p">(</span><span class="n">projection_result</span><span class="o">.</span><span class="n">image_points</span><span class="p">)</span>
-        <span class="n">gray_levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_image_at_pixel_points</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">)</span>
+        <span class="n">gray_levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">evaluate_image_at_pixel_points</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">)</span> <span class="c1"># Shape (N,) or (N, channels)</span>
+        <span class="n">gray_levels</span> <span class="o">=</span> <span class="n">gray_levels</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># Ensure shape is (N, channels)</span>
 
         <span class="c1"># Initialize jacobians as None</span>
         <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="kc">None</span>
@@ -976,11 +839,14 @@
 
         <span class="c1"># Construct the image jacobian -&gt; \nabla_{x}[I](P(\vec{X}))</span>
         <span class="k">if</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">dintrinsic</span> <span class="ow">or</span> <span class="n">ddistortion</span> <span class="ow">or</span> <span class="n">dextrinsic</span><span class="p">:</span>
-            <span class="n">image_dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_image_jacobian_dx_at_pixel_points</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">)</span> <span class="c1"># Shape (N,)</span>
-            <span class="n">image_dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_image_jacobian_dy_at_pixel_points</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">)</span> <span class="c1"># Shape (N,)</span>
-            <span class="n">image_jacobian</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-            <span class="n">image_jacobian</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_dx</span>
-            <span class="n">image_jacobian</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_dy</span>
+            <span class="n">image_dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">evaluate_image_jacobian_dx_at_pixel_points</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">)</span> <span class="c1"># Shape (N,) or (N, channels)</span>
+            <span class="n">image_dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">evaluate_image_jacobian_dy_at_pixel_points</span><span class="p">(</span><span class="n">pixel_points</span><span class="p">)</span> <span class="c1"># Shape (N,) or (N, channels)</span>
+            <span class="n">image_dx</span> <span class="o">=</span> <span class="n">image_dx</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># Ensure shape is (N, channels)</span>
+            <span class="n">image_dy</span> <span class="o">=</span> <span class="n">image_dy</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># Ensure shape is (N, channels)</span>
+            <span class="n">image_jacobian</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">pixel_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">n_channels</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">n_channels</span><span class="p">):</span>
+                <span class="n">image_jacobian</span><span class="p">[:,</span> <span class="n">channel</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_dx</span><span class="p">[:,</span> <span class="n">channel</span><span class="p">]</span>
+                <span class="n">image_jacobian</span><span class="p">[:,</span> <span class="n">channel</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_dy</span><span class="p">[:,</span> <span class="n">channel</span><span class="p">]</span>
 
         <span class="c1"># Compute the jacobian with respect to dx if requested</span>
         <span class="k">if</span> <span class="n">dx</span><span class="p">:</span>
@@ -988,7 +854,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Projection result must contain jacobian_dx if dx is True.&quot;</span><span class="p">)</span>
             <span class="n">projection_dx</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_dx</span> <span class="c1"># shape (N, 2, 3)</span>
 
-            <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_dx</span><span class="p">)</span>  <span class="c1"># (N, 1, 2) @ (N, 2, 3) = (N, 1, 3)</span>
+            <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_dx</span><span class="p">)</span>  <span class="c1"># (N, C, 2) @ (N, 2, 3) = (N, C, 3)</span>
 
         <span class="c1"># Compute the jacobian with respect to dintrinsic if requested</span>
         <span class="k">if</span> <span class="n">dintrinsic</span><span class="p">:</span>
@@ -996,7 +862,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Projection result must contain jacobian_dintrinsic if dintrinsic is True.&quot;</span><span class="p">)</span>
             <span class="n">projection_dintrinsic</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_dintrinsic</span>  <span class="c1"># shape (N, 2, Nintrinsic)</span>
 
-            <span class="n">jacobian_dintrinsic</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_dintrinsic</span><span class="p">)</span>  <span class="c1"># (N, 1, 2) @ (N, 2, Nintrinsic) = (N, 1, Nintrinsic)</span>
+            <span class="n">jacobian_dintrinsic</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_dintrinsic</span><span class="p">)</span>  <span class="c1"># (N, C, 2) @ (N, 2, Nintrinsic) = (N, C, Nintrinsic)</span>
 
         <span class="c1"># Compute the jacobian with respect to ddistortion if requested</span>
         <span class="k">if</span> <span class="n">ddistortion</span><span class="p">:</span>
@@ -1004,7 +870,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Projection result must contain jacobian_ddistortion if ddistortion is True.&quot;</span><span class="p">)</span>
             <span class="n">projection_ddistortion</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_ddistortion</span>
 
-            <span class="n">jacobian_ddistortion</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_ddistortion</span><span class="p">)</span>  <span class="c1"># (N, 1, 2) @ (N, 2, Ndistortion) = (N, 1, Ndistortion)</span>
+            <span class="n">jacobian_ddistortion</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_ddistortion</span><span class="p">)</span>  <span class="c1"># (N, C, 2) @ (N, 2, Ndistortion) = (N, C, Ndistortion)</span>
 
         <span class="c1"># Compute the jacobian with respect to dextrinsic if requested</span>
         <span class="k">if</span> <span class="n">dextrinsic</span><span class="p">:</span>
@@ -1012,7 +878,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Projection result must contain jacobian_dextrinsic if dextrinsic is True.&quot;</span><span class="p">)</span>
             <span class="n">projection_dextrinsic</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_dextrinsic</span>
 
-            <span class="n">jacobian_dextrinsic</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_dextrinsic</span><span class="p">)</span>  <span class="c1"># (N, 1, 2) @ (N, 2, Nextrinsic) = (N, 1, Nextrinsic)</span>
+            <span class="n">jacobian_dextrinsic</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">image_jacobian</span><span class="p">,</span> <span class="n">projection_dextrinsic</span><span class="p">)</span>  <span class="c1"># (N, C, 2) @ (N, 2, Nextrinsic) = (N, C, Nextrinsic)</span>
 
         <span class="c1"># Create the ImageProjectionResult instance</span>
         <span class="n">image_projection_result</span> <span class="o">=</span> <span class="n">ImageProjectionResult</span><span class="p">(</span>
@@ -1022,8 +888,7 @@
             <span class="n">jacobian_ddistortion</span><span class="o">=</span><span class="n">jacobian_ddistortion</span><span class="p">,</span>
             <span class="n">jacobian_dextrinsic</span><span class="o">=</span><span class="n">jacobian_dextrinsic</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">image_projection_result</span></div>
-
+        <span class="k">return</span> <span class="n">image_projection_result</span>
 
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Visualization methods</span>
@@ -1055,6 +920,7 @@
         <span class="n">points_opacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">clip_sensor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_pixel_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Visualize the projected 2D points of a :class:`pysdic.geometry.PointCloud3D` on a 2D plot using matplotlib.</span>
@@ -1088,6 +954,9 @@
 <span class="sd">        show_pixel_grid : bool, optional</span>
 <span class="sd">            If True, a grid representing the pixel layout of the camera sensor is displayed in the background. Default is False.</span>
 
+<span class="sd">        title : Optional[str], optional</span>
+<span class="sd">            An optional title for the plot. If None, no title is displayed. Default is None.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">visualize_projected_point_cloud</span><span class="p">(</span>
             <span class="n">point_cloud</span><span class="o">=</span><span class="n">point_cloud</span><span class="p">,</span>
@@ -1097,6 +966,7 @@
             <span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="p">,</span>
             <span class="n">clip_sensor</span><span class="o">=</span><span class="n">clip_sensor</span><span class="p">,</span>
             <span class="n">show_pixel_grid</span><span class="o">=</span><span class="n">show_pixel_grid</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -1118,6 +988,7 @@
         <span class="n">show_vertices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_edges</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">show_faces</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Visualize the projected 2D mesh of a :class:`pysdic.geometry.Mesh3D` on a 2D plot using matplotlib.</span>
@@ -1174,6 +1045,9 @@
 
 <span class="sd">        show_faces : bool, optional</span>
 <span class="sd">            Whether to show the mesh faces (default is True).</span>
+<span class="sd">        </span>
+<span class="sd">        title : Optional[str], optional</span>
+<span class="sd">            An optional title for the plot. If None, no title is displayed. Default is None.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">visualize_projected_mesh</span><span class="p">(</span>
@@ -1192,6 +1066,7 @@
             <span class="n">show_vertices</span><span class="o">=</span><span class="n">show_vertices</span><span class="p">,</span>
             <span class="n">show_edges</span><span class="o">=</span><span class="n">show_edges</span><span class="p">,</span>
             <span class="n">show_faces</span><span class="o">=</span><span class="n">show_faces</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
