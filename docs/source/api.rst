@@ -41,6 +41,7 @@ The submodule ``pysdic.imaging`` contains objects and functions to project 3D ge
    :caption: pysdic.imaging class module
 
    ./api_doc/camera.rst
+   ./api_doc/image.rst
    ./api_doc/view.rst
 
 The projection results are stored into specialized objects:
@@ -51,6 +52,19 @@ The projection results are stored into specialized objects:
 
    ./api_doc/projection_result.rst
    ./api_doc/image_projection_result.rst
+
+
+Assemblers Submodule
+--------------------
+
+The submodule ``pysdic.assemblers`` contains functions to assemble the residuals and Jacobians for different SDIC measurement types.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: pysdic.assemblers functions
+
+   ./api_doc/assembly_FESDIC_displacement.rst
+   ./api_doc/assembly_SDIC_distortion.rst
 
 
 Visualizer Submodule

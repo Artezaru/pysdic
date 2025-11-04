@@ -170,6 +170,8 @@ class Mesh3D(ABC):
             return
         if not isinstance(self.vertices, PointCloud3D):
             raise TypeError(f"Vertices must be a PointCloud3D instance, got {type(self.vertices)}.")
+        if not numpy.isfinite(self.vertices.points).all():
+            raise ValueError("Vertices contain NaN or infinite values.")
 
     def _internal_check_connectivity(self) -> None:
         r"""
@@ -192,6 +194,8 @@ class Mesh3D(ABC):
             raise ValueError("Connectivity must have at least two columns (for edges).")
         if numpy.any(self.connectivity < 0) or numpy.any(self.connectivity >= len(self.vertices)):
             raise ValueError("Connectivity contains invalid vertex indices.")
+        if not numpy.issubdtype(self.connectivity.dtype, numpy.integer):
+            raise TypeError(f"Connectivity must have integer type, got {self.connectivity.dtype}.")
         
     def _internal_check_vertices_property(self, key: str) -> None:
         r"""

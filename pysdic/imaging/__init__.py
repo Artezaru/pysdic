@@ -17,9 +17,11 @@ __all__ = []
 from .camera import Camera
 __all__.extend(['Camera'])
 
+from .image import Image
+__all__.extend(['Image'])
+
 from .view import View
 __all__.extend(['View'])
-
 
 from .projection_result import ProjectionResult
 __all__.extend(['ProjectionResult'])

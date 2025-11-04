@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import numpy
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 from numbers import Integral
 
 import matplotlib.pyplot as plt
@@ -23,6 +23,7 @@ from .projection_result import ProjectionResult
 from ..geometry.point_cloud_3d import PointCloud3D
 from ..geometry.mesh_3d import Mesh3D
 
+from .image import Image
 
 class Camera(object):
     r"""
@@ -680,9 +681,9 @@ class Camera(object):
         Returns
         -------
         ProjectionResult
-            A ProjectionResult object containing the projected pixel points and optionally the jacobians.
+            A ProjectionResult object containing the projected image points and optionally the jacobians.
 
-            - `image_points`: An array of shape (..., 2) representing the projected pixel points in the image coordinate system.
+            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).
             - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
             - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
             - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
@@ -788,9 +789,9 @@ class Camera(object):
         Returns
         -------
         ProjectionResult
-            A ProjectionResult object containing the projected pixel points and optionally the jacobians.
+            A ProjectionResult object containing the projected image points and optionally the jacobians.
 
-            - `image_points`: An array of shape (..., 2) representing the projected pixel points in the image coordinate system.
+            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).
             - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
             - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
             - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
@@ -934,18 +935,18 @@ class Camera(object):
         self._check_and_perform_changes()
         pixel_points = numpy.indices((self.sensor_height, self.sensor_width), dtype=numpy.float64).reshape(2, -1).T
 
-        if mask is None:
-            mask = numpy.ones((self.sensor_height, self.sensor_width), dtype=numpy.bool_)
+        if mask is not None:
+            if not isinstance(mask, numpy.ndarray):
+                raise TypeError("mask must be a numpy.ndarray.")
+            if not numpy.issubdtype(mask.dtype, numpy.bool_):
+                raise TypeError("mask must be a boolean numpy.ndarray.")
+            if not (mask.ndim == 1 and mask.shape[0] == self.sensor_height * self.sensor_width) and not (mask.ndim == 2 and mask.shape == (self.sensor_height, self.sensor_width)):
+                raise ValueError("mask must be a 1D array of shape (H*W,) or a 2D array of shape (H, W) where H is the height and W is the width of the camera sensor.")
+        
+            mask = mask.flatten()
+            pixel_points = pixel_points[mask, :]
 
-        if not isinstance(mask, numpy.ndarray):
-            raise TypeError("mask must be a numpy.ndarray.")
-        if not numpy.issubdtype(mask.dtype, numpy.bool_):
-            raise TypeError("mask must be a boolean numpy.ndarray.")
-        if not (mask.ndim == 1 and mask.shape[0] == self.sensor_height * self.sensor_width) and not (mask.ndim == 2 and mask.shape == (self.sensor_height, self.sensor_width)):
-            raise ValueError("mask must be a 1D array of shape (H*W,) or a 2D array of shape (H, W) where H is the height and W is the width of the camera sensor.")
-                
-        mask = mask.flatten()
-        return pixel_points[mask, :]
+        return pixel_points
     
 
     def get_camera_normalized_points(self, mask: Optional[numpy.ndarray] = None) -> numpy.ndarray:
@@ -1043,9 +1044,10 @@ class Camera(object):
         points_color: str = "black",
         points_size: int = 5,
         points_opacity: float = 1.0,
-        image: Optional[numpy.ndarray] = None,
+        image: Optional[Union[numpy.ndarray, Image]] = None,
         clip_sensor: bool = True,
         show_pixel_grid: bool = False,
+        title: Optional[str] = None,
     ) -> None:
         r"""
         Visualize the projected 2D points of a :class:`pysdic.geometry.PointCloud3D` on a 2D plot using matplotlib.
@@ -1071,7 +1073,7 @@ class Camera(object):
         points_opacity : float, optional
             The opacity of the projected points in the plot. Default is 1.0 (fully opaque).
 
-        image : Optional[numpy.ndarray], optional
+        image : Optional[Union[numpy.ndarray, Image]], optional
             An optional background image to display behind the projected points. If provided, the image should have dimensions matching the camera sensor size. Default is None.
 
         clip_sensor : bool, optional
@@ -1079,6 +1081,9 @@ class Camera(object):
 
         show_pixel_grid : bool, optional
             If True, a grid representing the pixel layout of the camera sensor is displayed in the background. Default is False.
+
+        title : Optional[str], optional
+            An optional title for the plot. Default is None with eefault title 'Projected Points on Image Plane'.
 
             
         Examples
@@ -1142,6 +1147,8 @@ class Camera(object):
             raise ValueError("points_opacity must be a float between 0.0 and 1.0.")
         if not isinstance(clip_sensor, bool):
             raise TypeError("clip_sensor must be a boolean.")
+        if title is not None and not isinstance(title, str):
+            raise TypeError("title must be a string or None.")
 
         # Project the 3D points to 2D image points
         image_points = self.project_points(point_cloud).image_points
@@ -1152,8 +1159,10 @@ class Camera(object):
 
         # If an image is provided, display it as the background
         if image is not None:
-            if not isinstance(image, numpy.ndarray):
-                raise TypeError("image must be a numpy.ndarray.")
+            if not isinstance(image, (numpy.ndarray, Image)):
+                raise TypeError("image must be a numpy.ndarray or Image object.")
+            if isinstance(image, Image):
+                image = image.to_array()
             if image.ndim != 2 and image.ndim != 3:
                 raise ValueError("image must be a 2D (grayscale) or 3D (color) array.")
             if image.shape[0] != self.sensor_height or image.shape[1] != self.sensor_width:
@@ -1181,7 +1190,10 @@ class Camera(object):
         # Set labels
         ax.set_xlabel('Image X (pixels)')
         ax.set_ylabel('Image Y (pixels)')
-        ax.set_title('Projected 2D Points on Image Plane')
+        if title is not None:
+            ax.set_title(title)
+        else:
+            ax.set_title('Projected Points on Image Plane')
         ax.set_aspect('equal', adjustable='box')
         plt.show()
 
@@ -1197,12 +1209,13 @@ class Camera(object):
         edges_opacity: float = 1.0,
         faces_color: str = "red",
         faces_opacity: float = 0.5,
-        image: Optional[numpy.ndarray] = None,
+        image: Optional[Union[numpy.ndarray, Image]] = None,
         clip_sensor: bool = True,
         show_pixel_grid: bool = False,
         show_vertices: bool = True,
         show_edges: bool = True,
         show_faces: bool = True,
+        title: Optional[str] = None,
     ) -> None:
         r"""
         Visualize the projected 2D mesh of a :class:`pysdic.geometry.Mesh3D` on a 2D plot using matplotlib.
@@ -1243,7 +1256,7 @@ class Camera(object):
         faces_opacity : float, optional
             The opacity of the mesh faces (default is 0.5).
 
-        image : Optional[numpy.ndarray], optional
+        image : Optional[Union[numpy.ndarray, Image]], optional
             An image to display as the background (default is None).
 
         clip_sensor : bool, optional
@@ -1260,6 +1273,9 @@ class Camera(object):
 
         show_faces : bool, optional
             Whether to show the mesh faces (default is True).
+
+        title : Optional[str], optional
+            An optional title for the plot. Default is None with default title 'Projected Mesh on Image Plane'.
 
 
         Examples
@@ -1347,6 +1363,8 @@ class Camera(object):
             raise TypeError("show_edges must be a boolean.")
         if not isinstance(show_faces, bool):
             raise TypeError("show_faces must be a boolean.")
+        if title is not None and not isinstance(title, str):
+            raise TypeError("title must be a string or None.")
         
         # Project the 3D vertices to 2D image points
         image_points = self.project_points(mesh.vertices).image_points
@@ -1357,8 +1375,10 @@ class Camera(object):
 
         # If an image is provided, display it as the background
         if image is not None:
-            if not isinstance(image, numpy.ndarray):
-                raise TypeError("image must be a numpy.ndarray.")
+            if not isinstance(image, (numpy.ndarray, Image)):
+                raise TypeError("image must be a numpy.ndarray or Image.")
+            if isinstance(image, Image):
+                image = image.to_array()
             if image.ndim != 2 and image.ndim != 3:
                 raise ValueError("image must be a 2D (grayscale) or 3D (color) array.")
             if image.shape[0] != self.sensor_height or image.shape[1] != self.sensor_width:
@@ -1399,6 +1419,9 @@ class Camera(object):
         # Set plot labels
         ax.set_xlabel('Image X (pixels)')
         ax.set_ylabel('Image Y (pixels)')
-        ax.set_title('Projected 2D Mesh on Image Plane')
+        if title is not None:
+            ax.set_title(title)
+        else:
+            ax.set_title('Projected 2D Mesh on Image Plane')
         ax.set_aspect('equal', adjustable='box')
         plt.show()

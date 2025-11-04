@@ -471,7 +471,7 @@ class LinearTriangleMesh3D(Mesh3D):
         return centroids   
 
 
-    def cast_rays(self, ray_origins: numpy.ndarray, ray_directions: numpy.ndarray, weights: Optional[numpy.ndarray] = None) -> IntegrationPoints:
+    def cast_rays(self, ray_origins: numpy.ndarray, ray_directions: numpy.ndarray, weights: Optional[numpy.ndarray] = None, nan_open3d_errors: bool = False) -> IntegrationPoints:
         r"""
         Cast rays into the mesh and compute the intersection points.
 
@@ -515,6 +515,9 @@ class LinearTriangleMesh3D(Mesh3D):
         weights : Optional[numpy.ndarray], optional
             An array of shape (Nr, ) representing weights for each ray, by default None. Meaning all weights are 1.
 
+        nan_open3d_errors : bool, optional
+            Due to float32 precision issues in Open3D, some rays may produce coordinates with natural coordinates slightly outside the valid range [0, 1]. Setting this to True will replace such errors with NaN values in the output, by default False (an error will be raised instead).
+
         Returns
         -------
         IntegrationPoints
@@ -552,6 +555,24 @@ class LinearTriangleMesh3D(Mesh3D):
         intersect_true = results["t_hit"].isfinite().numpy()
         natural_coordinates[intersect_true] = results["primitive_uvs"].numpy().astype(numpy.float64)[intersect_true]
         element_indices[intersect_true] = results["primitive_ids"].numpy().astype(int)[intersect_true]
+
+        # Handle NaN errors due to Open3D float32 precision issues
+        if nan_open3d_errors:
+            invalid_coords = numpy.logical_or.reduce((
+                natural_coordinates[..., 0] < 0,
+                natural_coordinates[..., 0] > 1,
+                natural_coordinates[..., 1] < 0,
+                natural_coordinates[..., 1] > 1,
+                natural_coordinates[..., 0] + natural_coordinates[..., 1] > 1,
+            ))
+            natural_coordinates[invalid_coords] = numpy.nan
+            element_indices[invalid_coords] = -1
+        else:
+            if numpy.any(natural_coordinates[..., 0] < 0) or numpy.any(natural_coordinates[..., 0] > 1) or \
+               numpy.any(natural_coordinates[..., 1] < 0) or numpy.any(natural_coordinates[..., 1] > 1) or \
+               numpy.any(natural_coordinates[..., 0] + natural_coordinates[..., 1] > 1):
+                raise ValueError("Some intersection natural coordinates are out of bounds [0, 1] with open3d. "
+                                 "Consider setting nan_open3d_errors=True to handle these cases.")
 
         # Construct the output
         intersect_points = IntegrationPoints(natural_coordinates, element_indices, weights=weights, n_dimensions=self._n_dimensions)
@@ -664,6 +685,9 @@ class LinearTriangleMesh3D(Mesh3D):
             show_vertices: bool = True,
             show_edges: bool = True,
             show_faces: bool = True,
+            title: Optional[str] = None,
+            show_axes: bool = True,
+            show_grid: bool = True,
         ) -> None:
         r"""
         Visualize the 3D triangular mesh using PyVista.
@@ -715,6 +739,15 @@ class LinearTriangleMesh3D(Mesh3D):
 
         show_faces : bool, optional
             Whether to display the faces of the mesh, by default True.
+
+        title : Optional[str], optional
+            Title of the plot, by default None.
+
+        show_axes : bool, optional
+            Whether to display the axes in the plot, by default True.
+
+        show_grid : bool, optional
+            Whether to display the grid in the plot, by default True.
 
 
         More Information
@@ -780,6 +813,13 @@ class LinearTriangleMesh3D(Mesh3D):
             raise ValueError("show_edges must be a boolean.")
         if not isinstance(show_faces, bool):
             raise ValueError("show_faces must be a boolean.")
+        if not isinstance(show_axes, bool):
+            raise ValueError("show_axis must be a boolean.")
+        if not isinstance(show_grid, bool):
+            raise ValueError("show_grid must be a boolean.")
+        
+        if title is not None and not isinstance(title, str):
+            raise ValueError("Title must be a string.")
         
         # Create a PyVista mesh
         pv_mesh = pyvista.PolyData(self.vertices.points, numpy.hstack((numpy.full((self.n_elements, 1), 3), self.connectivity)).astype(numpy.int64))
@@ -816,8 +856,12 @@ class LinearTriangleMesh3D(Mesh3D):
             )
 
         # Show the plot
-        plotter.show_axes() 
-        plotter.show_grid()
+        if title is not None:
+            plotter.add_title(title)
+        if show_axes:
+            plotter.show_axes() 
+        if show_grid:
+            plotter.show_grid()
         plotter.show()
 
 
@@ -840,6 +884,9 @@ class LinearTriangleMesh3D(Mesh3D):
             faces_opacity: float = 1.0,
             show_vertices: bool = True,
             show_edges: bool = True,
+            title: Optional[str] = None,
+            show_axes: bool = True,
+            show_grid: bool = True,
             ) -> None:
         r"""
         Visualize a vertex property on the 3D triangular mesh using PyVista.
@@ -910,6 +957,15 @@ class LinearTriangleMesh3D(Mesh3D):
 
         show_edges : bool, optional
             Whether to display the edges of the mesh, by default True.
+
+        title : Optional[str], optional
+            Title of the plot, by default None.
+
+        show_axes : bool, optional
+            Whether to display the axes in the plot, by default True.
+
+        show_grid : bool, optional
+            Whether to display the grid in the plot, by default True.
 
             
         More Information
@@ -1032,6 +1088,14 @@ class LinearTriangleMesh3D(Mesh3D):
             raise ValueError("show_edges must be a boolean.")
         if not isinstance(use_log_scale, bool):
             raise ValueError("use_log_scale must be a boolean.")
+        
+        if not isinstance(show_axes, bool):
+            raise ValueError("show_axis must be a boolean.")
+        if not isinstance(show_grid, bool):
+            raise ValueError("show_grid must be a boolean.")
+        
+        if title is not None and not isinstance(title, str):
+            raise ValueError("Title must be a string.")
     
         
         # Extract the cmap
@@ -1079,8 +1143,12 @@ class LinearTriangleMesh3D(Mesh3D):
             )
 
         # Show the plot
-        plotter.show_axes()
-        plotter.show_grid()
+        if title is not None:
+            plotter.add_title(title)
+        if show_axes:
+            plotter.show_axes()
+        if show_grid:
+            plotter.show_grid()
         plotter.show()
 
 
@@ -1098,6 +1166,9 @@ class LinearTriangleMesh3D(Mesh3D):
             faces_opacity: float = 1.0,
             show_vertices: bool = True,
             show_edges: bool = True,
+            title: Optional[str] = None,
+            show_axes: bool = True,
+            show_grid: bool = True,
         ) -> None:
         r"""
         Visualize the texture of the mesh using a texture image.
@@ -1159,6 +1230,14 @@ class LinearTriangleMesh3D(Mesh3D):
         show_edges : bool, optional
             Whether to display the edges of the mesh, by default True.
 
+        title : Optional[str], optional
+            Title of the plot, by default None.
+
+        show_axes : bool, optional
+            Whether to display the axes in the plot, by default True.
+
+        show_grid : bool, optional
+            Whether to display the grid in the plot, by default True.
 
         More Information
         -------------------------
@@ -1241,6 +1320,14 @@ class LinearTriangleMesh3D(Mesh3D):
             raise ValueError("show_vertices must be a boolean.")
         if not isinstance(show_edges, bool):
             raise ValueError("show_edges must be a boolean.")
+        
+        if not isinstance(show_axes, bool):
+            raise ValueError("show_axis must be a boolean.")
+        if not isinstance(show_grid, bool):
+            raise ValueError("show_grid must be a boolean.")
+        
+        if title is not None and not isinstance(title, str):
+            raise ValueError("Title must be a string.")
 
         # Duplicate points per face
         fictive_vertices = numpy.zeros((self.n_elements * 3, 3), dtype=numpy.float64)
@@ -1313,8 +1400,12 @@ class LinearTriangleMesh3D(Mesh3D):
             )
 
         # Show the plot
-        plotter.show_axes()
-        plotter.show_grid()
+        if title is not None:
+            plotter.add_title(title)
+        if show_axes:
+            plotter.show_axes()
+        if show_grid:
+            plotter.show_grid()
         plotter.show()
 
 
@@ -1335,6 +1426,9 @@ class LinearTriangleMesh3D(Mesh3D):
             show_vertices: bool = True,
             show_edges: bool = True,
             show_faces: bool = True,
+            title: Optional[str] = None,
+            show_axes: bool = True,
+            show_grid: bool = True,
         ) -> None:
         r"""
         Visualize the 3D triangular mesh along with integration points using PyVista.
@@ -1400,6 +1494,14 @@ class LinearTriangleMesh3D(Mesh3D):
         show_faces : bool, optional
             Whether to display the faces of the mesh, by default True.
 
+        title : Optional[str], optional
+            Title of the plot, by default None.
+
+        show_axes : bool, optional
+            Whether to display the axes in the plot, by default True.
+
+        show_grid : bool, optional
+            Whether to display the grid in the plot, by default True.
 
         More Information
         -------------------------
@@ -1486,6 +1588,14 @@ class LinearTriangleMesh3D(Mesh3D):
         if not isinstance(show_faces, bool):
             raise ValueError("show_faces must be a boolean.")
         
+        if not isinstance(show_axes, bool):
+            raise ValueError("show_axis must be a boolean.")
+        if not isinstance(show_grid, bool):
+            raise ValueError("show_grid must be a boolean.")
+        
+        if title is not None and not isinstance(title, str):
+            raise ValueError("Title must be a string.")
+        
         # Create a PyVista mesh
         pv_mesh = pyvista.PolyData(self.vertices.points, numpy.hstack((numpy.full((self.n_elements, 1), 3), self.connectivity)).astype(numpy.int64))
 
@@ -1531,6 +1641,10 @@ class LinearTriangleMesh3D(Mesh3D):
         )
 
         # Show the plot
-        plotter.show_axes() 
-        plotter.show_grid()
+        if title is not None:
+            plotter.add_title(title)
+        if show_axes:
+            plotter.show_axes()
+        if show_grid:
+            plotter.show_grid()
         plotter.show()

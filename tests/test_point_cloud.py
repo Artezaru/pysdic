@@ -57,6 +57,153 @@ def test_from_empty():
     assert isinstance(point_cloud, PointCloud3D)
     assert point_cloud.points.shape == (0, 3)
 
+
+def test_from_to_xyz(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    xyz_filepath = tmp_path / "test_point_cloud.xyz"
+    point_cloud.to_xyz(str(xyz_filepath))
+    
+    loaded_cloud = PointCloud3D.from_xyz(str(xyz_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+
+def test_from_to_xyz_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    xyz_filepath = tmp_path / "test_point_cloud.xyz"
+    point_cloud.to_xyz(str(xyz_filepath))
+    
+    loaded_cloud = PointCloud3D.from_xyz(str(xyz_filepath))
+    assert np.array_equal(loaded_cloud.points, points, equal_nan=True)
+
+
+def test_from_to_obj(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    obj_filepath = tmp_path / "test_point_cloud.obj"
+    point_cloud.to_obj(str(obj_filepath))
+    
+    loaded_cloud = PointCloud3D.from_obj(str(obj_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+
+def test_from_to_obj_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    obj_filepath = tmp_path / "test_point_cloud.obj"
+    point_cloud.to_obj(str(obj_filepath))
+    
+    loaded_cloud = PointCloud3D.from_obj(str(obj_filepath))
+    assert np.array_equal(loaded_cloud.points, points, equal_nan=True)
+
+
+def test_from_to_obj_binary(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    obj_filepath = tmp_path / "test_point_cloud.obj"
+    point_cloud.to_obj(str(obj_filepath), binary=True)
+    
+    loaded_cloud = PointCloud3D.from_obj(str(obj_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+
+def test_from_to_obj_binary_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    obj_filepath = tmp_path / "test_point_cloud.obj"
+    point_cloud.to_obj(str(obj_filepath), binary=True)
+    
+    loaded_cloud = PointCloud3D.from_obj(str(obj_filepath))
+    assert np.array_equal(loaded_cloud.points, points, equal_nan=True)
+
+
+def test_from_to_ply(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    ply_filepath = tmp_path / "test_point_cloud.ply"
+    point_cloud.to_ply(str(ply_filepath))
+    
+    loaded_cloud = PointCloud3D.from_ply(str(ply_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+def test_from_to_ply_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    ply_filepath = tmp_path / "test_point_cloud.ply"
+    point_cloud.to_ply(str(ply_filepath))
+    
+    loaded_cloud = PointCloud3D.from_ply(str(ply_filepath))
+    assert np.array_equal(loaded_cloud.points, points, equal_nan=True)
+
+def test_from_to_ply_binary(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    ply_filepath = tmp_path / "test_point_cloud.ply"
+    point_cloud.to_ply(str(ply_filepath), binary=True)
+    
+    loaded_cloud = PointCloud3D.from_ply(str(ply_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+def test_from_to_ply_binary_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    ply_filepath = tmp_path / "test_point_cloud.ply"
+    point_cloud.to_ply(str(ply_filepath), binary=True)
+    
+    loaded_cloud = PointCloud3D.from_ply(str(ply_filepath))
+    assert np.array_equal(loaded_cloud.points, points, equal_nan=True)
+
+def test_from_to_vtk(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    vtk_filepath = tmp_path / "test_point_cloud.vtk"
+    point_cloud.to_vtk(str(vtk_filepath))
+    
+    loaded_cloud = PointCloud3D.from_vtk(str(vtk_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+def test_from_to_vtk_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    vtk_filepath = tmp_path / "test_point_cloud.vtk"
+    point_cloud.to_vtk(str(vtk_filepath), only_finite=True)
+    
+    loaded_cloud = PointCloud3D.from_vtk(str(vtk_filepath))
+    assert np.array_equal(loaded_cloud.points, points[np.isfinite(points).all(axis=1)], equal_nan=True)
+
+def test_from_to_vtk_binary(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    vtk_filepath = tmp_path / "test_point_cloud.vtk"
+    point_cloud.to_vtk(str(vtk_filepath), binary=True)
+    
+    loaded_cloud = PointCloud3D.from_vtk(str(vtk_filepath))
+    np.testing.assert_array_equal(loaded_cloud.points, points)
+
+def test_from_to_vtk_binary_with_nans(tmp_path):
+    points = np.array([[0, 0, 0], [1, 1, 1], [2, 2, 2], [np.nan, np.nan, np.nan]])
+    point_cloud = PointCloud3D.from_array(points)
+    
+    vtk_filepath = tmp_path / "test_point_cloud.vtk"
+    point_cloud.to_vtk(str(vtk_filepath), binary=True, only_finite=True)
+    
+    loaded_cloud = PointCloud3D.from_vtk(str(vtk_filepath))
+    assert np.array_equal(loaded_cloud.points, points[np.isfinite(points).all(axis=1)], equal_nan=True)
+
 # ==========================================
 # Attribute Tests
 # ==========================================
@@ -130,7 +277,7 @@ def test_concatenate(random_point_cloud, other_random_point_cloud):
 
 def test_concatenate_inplace(random_point_cloud, other_random_point_cloud):
     original_n_points = random_point_cloud.n_points
-    random_point_cloud.concatenate_inplace(other_random_point_cloud)
+    random_point_cloud.concatenate(other_random_point_cloud, inplace=True)
     assert random_point_cloud.n_points == original_n_points + other_random_point_cloud.n_points
     np.testing.assert_array_equal(random_point_cloud.points[original_n_points:], other_random_point_cloud.points)
 
@@ -153,7 +300,7 @@ def test_frame_transform(random_point_cloud, input_frame, output_frame):
 
 def test_frame_transform_inplace(random_point_cloud, input_frame, output_frame):
     original_points = random_point_cloud.points.copy()
-    random_point_cloud.frame_transform_inplace(input_frame, output_frame)
+    random_point_cloud.frame_transform(input_frame, output_frame, inplace=True)
     expected_points = original_points - np.array([1.0, 2.0, 3.0])
     np.testing.assert_array_almost_equal(random_point_cloud.points, expected_points)
 
@@ -183,7 +330,7 @@ def test_keep_points_inplace(random_point_cloud):
     kept_cloud = PointCloud3D.from_array(kept_points)
 
     # Perform inplace operation
-    random_point_cloud.keep_points_inplace(kept_cloud)
+    random_point_cloud.keep_points(kept_cloud, inplace=True)
     np.testing.assert_array_equal(random_point_cloud.points, original_points[indices])
     assert random_point_cloud.n_points == 50
 
@@ -196,7 +343,7 @@ def test_keep_points_at(random_point_cloud):
 def test_keep_points_at_inplace(random_point_cloud):
     indices = np.random.choice(random_point_cloud.n_points, size=30, replace=False)
     original_points = random_point_cloud.points.copy()
-    random_point_cloud.keep_points_at_inplace(indices)
+    random_point_cloud.keep_points_at(indices, inplace=True)
     assert random_point_cloud.n_points == 30
     np.testing.assert_array_equal(random_point_cloud.points, original_points[indices])
 
@@ -223,7 +370,7 @@ def test_merge_inplace(random_point_cloud):
     kept_points = np.vstack([kept_points, np.random.rand(10, 3) + 10])  # Points far away
     kept_cloud = PointCloud3D.from_array(kept_points)
     original_n_points = random_point_cloud.n_points
-    random_point_cloud.merge_inplace(kept_cloud)
+    random_point_cloud.merge(kept_cloud, inplace=True)
 
     # The merged cloud should have the same points as the original since all kept points are already present
     assert random_point_cloud.n_points == original_n_points + 10  # 10 new points added
@@ -252,7 +399,7 @@ def test_remove_points_inplace(random_point_cloud):
     removed_cloud = PointCloud3D.from_array(removed_points)
     original_n_points = random_point_cloud.n_points
     original_points = random_point_cloud.points.copy()
-    random_point_cloud.remove_points_inplace(removed_cloud)
+    random_point_cloud.remove_points(removed_cloud, inplace=True)
     expected_points = original_points[50:]
     np.testing.assert_array_equal(random_point_cloud.points, expected_points)
     assert random_point_cloud.n_points == original_n_points - 50
@@ -268,7 +415,7 @@ def test_remove_points_at_inplace(random_point_cloud):
     indices = np.arange(50)  # Remove first 50 points
     original_n_points = random_point_cloud.n_points
     original_points = random_point_cloud.points.copy()
-    random_point_cloud.remove_points_at_inplace(indices)
+    random_point_cloud.remove_points_at(indices, inplace=True)
     expected_points = original_points[50:]
     np.testing.assert_array_equal(random_point_cloud.points, expected_points)
     assert random_point_cloud.n_points == original_n_points - 50
@@ -299,7 +446,7 @@ def test_unique_inplace():
                     [1.0, 1.0, 1.0],
                     [3.0, 3.0, 3.0]])
     cloud_with_duplicates = PointCloud3D.from_array(array)
-    cloud_with_duplicates.unique_inplace()
+    cloud_with_duplicates.unique(inplace=True)
     assert cloud_with_duplicates.n_points == 4
     expected = np.array([[0.0, 0.0, 0.0],
                          [1.0, 1.0, 1.0],
@@ -322,18 +469,6 @@ def test_inplace_addition(random_point_cloud, other_random_point_cloud):
     random_point_cloud += other_random_point_cloud
     assert random_point_cloud.n_points == original_n_points + other_random_point_cloud.n_points
     np.testing.assert_array_equal(random_point_cloud.points[original_n_points:], other_random_point_cloud.points)
-
-def test_equality(random_point_cloud):
-    point_cloud_copy = PointCloud3D.from_cls(random_point_cloud)
-    assert random_point_cloud == point_cloud_copy
-
-    modified_points = random_point_cloud.points.copy()
-    modified_points[0] += 1.0  # Change one point
-    modified_cloud = PointCloud3D.from_array(modified_points)
-    assert random_point_cloud != modified_cloud
-
-def test_inequality(random_point_cloud, other_random_point_cloud):
-    assert random_point_cloud != other_random_point_cloud
 
 def test_len(random_point_cloud):
     assert len(random_point_cloud) == random_point_cloud.n_points

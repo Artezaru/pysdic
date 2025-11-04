@@ -21,3 +21,4 @@ __all__ = [
 from . import geometry
 from . import imaging
 from . import visualizer
+from . import assemblers

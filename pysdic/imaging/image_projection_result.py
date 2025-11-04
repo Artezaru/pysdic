@@ -18,7 +18,7 @@ class ImageProjectionResult:
     ----------
     gray_levels : numpy.ndarray
         The values in gray levels after the projection of the 3D world points in the image.
-        Shape (N,)
+        Shape (N, channels) where channels is 1 for grayscale images and 3 for RGB images.
 
     jacobian_dx : Optional[numpy.ndarray]
         The Jacobian matrix of the gray levels with respect to the world points.

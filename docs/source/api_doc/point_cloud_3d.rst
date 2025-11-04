@@ -13,7 +13,7 @@ PointCloud3D class
 
 .. autoclass:: PointCloud3D
 
-Instantiate a PointCloud3D object.
+Instantiate and export PointCloud3D object
 -------------------------------------------
 
 To Instantiate a PointCloud3D object, use one of the following class methods:
@@ -24,21 +24,39 @@ To Instantiate a PointCloud3D object, use one of the following class methods:
    PointCloud3D.from_array
    PointCloud3D.from_cls
    PointCloud3D.from_empty
+   PointCloud3D.from_obj
+   PointCloud3D.from_ply
+   PointCloud3D.from_vtk
+   PointCloud3D.from_xyz
+   
 
-Accessing PointCloud3D attributes
--------------------------------------------
-
-The attributes of a PointCloud3D object can be accessed as follows:
+The PointCloud3D can then be exported to different formats using the following methods:
 
 .. autosummary::
    :toctree: ../generated/
 
+   PointCloud3D.as_array
+   PointCloud3D.to_array
+   PointCloud3D.to_obj
+   PointCloud3D.to_ply
+   PointCloud3D.to_vtk
+   PointCloud3D.to_xyz
+
+Accessing PointCloud3D attributes
+-------------------------------------------
+
+The public attributes of a PointCloud3D object can be accessed using the following properties:
+
+.. autosummary::
+   :toctree: ../generated/
+
+   PointCloud3D.coordinates
    PointCloud3D.points
    PointCloud3D.n_points
    PointCloud3D.shape
 
-Manipulating PointCloud3D points
--------------------------------------------
+Add, remove or modify points in PointCloud3D objects
+-----------------------------------------------------
 
 The points of a PointCloud3D object can be manipulated using the following methods:
 
@@ -46,38 +64,46 @@ The points of a PointCloud3D object can be manipulated using the following metho
    :toctree: ../generated/
 
    PointCloud3D.allclose
-   PointCloud3D.as_array
-   PointCloud3D.bounding_box
    PointCloud3D.concatenate
-   PointCloud3D.concatenate_inplace
    PointCloud3D.copy
    PointCloud3D.frame_transform
-   PointCloud3D.frame_transform_inplace
    PointCloud3D.keep_points
-   PointCloud3D.keep_points_inplace
    PointCloud3D.keep_points_at
-   PointCloud3D.keep_points_at_inplace
    PointCloud3D.merge
-   PointCloud3D.merge_inplace
    PointCloud3D.remove_points
-   PointCloud3D.remove_points_inplace
    PointCloud3D.remove_points_at
-   PointCloud3D.remove_points_at_inplace
    PointCloud3D.unique
-   PointCloud3D.unique_inplace
 
-Operating on PointCloud3D objects
+Operations on PointCloud3D objects
 -------------------------------------------
 
 The following methods can be used to operate on PointCloud3D objects:
 
 - ``+`` operator: Concatenate two PointCloud3D objects.
 - ``+=`` operator: In-place concatenation of two PointCloud3D objects.
-- ``==`` operator: Check if two PointCloud3D objects are equal (based on their points).
-- ``!=`` operator: Check if two PointCloud3D objects are not equal (based on their points).
 - ``len()`` function: Get the number of points in a PointCloud3D object.
 
-Visualizing PointCloud3D objects
+.. autosummary::
+   :toctree: ../generated/
+
+   PointCloud3D.__add__
+   PointCloud3D.__iadd__
+   PointCloud3D.__len__
+
+
+PointCloud3D object geometric computations
+-------------------------------------------
+
+The following methods can be used to perform geometric computations on PointCloud3D objects:
+
+.. autosummary::
+   :toctree: ../generated/
+
+   PointCloud3D.bounding_box
+   PointCloud3D.bounding_sphere
+
+
+Visualize PointCloud3D objects
 -------------------------------------------
 
 Visualizing a PointCloud3D object can be done using the following method:

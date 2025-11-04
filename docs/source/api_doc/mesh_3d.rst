@@ -13,7 +13,7 @@ Mesh3D class
 
 .. autoclass:: Mesh3D
 
-Instantiate a Mesh3D object
+Instantiate and export PointCloud3D object
 -------------------------------------------
 
 The Mesh3D class is an ABC (Abstract Base Class) and cannot be instantiated directly.
@@ -32,9 +32,6 @@ The subclasses of Mesh3D can also use the following methods to instantiate a Mes
    Mesh3D.from_empty
    Mesh3D.from_mesh
 
-Exporting Mesh3D objects
--------------------------------------------
-
 The Mesh3D class provides methods to export the mesh to various file formats.
 
 .. autosummary::
@@ -47,7 +44,7 @@ The Mesh3D class provides methods to export the mesh to various file formats.
 Accessing Mesh3D attributes
 -------------------------------------------
 
-The attributes of a PointCloud3D object can be accessed as follows:
+The  public attributes of a Mesh3D object can be accessed using the following properties:
 
 .. autosummary::
    :toctree: ../generated/
@@ -85,8 +82,10 @@ These properties can be accessed and modified using the following methods:
     Mesh3D.list_vertices_properties
 
 
-Manage mesh topology
--------------------------------------------
+Add, remove or modify vertices or connectivity of the Mesh3D objects
+--------------------------------------------------------------------
+
+To manipulate only the geometry of the mesh, access the ``vertices`` attribute (:class:`pysdic.geometry.PointCloud3D`) and use its methods.
 
 The topology of the mesh can be modified using the following methods:
 
@@ -103,10 +102,11 @@ The topology of the mesh can be modified using the following methods:
     Mesh3D.remove_vertices
 
 
-Operating on Mesh3D objects
--------------------------------------------
 
-To manipulate only the geometry of the mesh, access the ``vertices`` attribute (:class:`pysdic.geometry.PointCloud3D`) and use its methods.
+Mesh3D geometric computations and interpolations
+-------------------------------------------------
+
+Some methods are provided to perform geometric computations and property interpolations on Mesh3D objects:
 
 .. autosummary::
    :toctree: ../generated/

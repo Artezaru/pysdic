@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Optional
 import numpy
+import os
 
 class IntegrationPoints(object):
     r"""
@@ -219,6 +220,81 @@ class IntegrationPoints(object):
                 raise ValueError("At least one weight should be positive.")
 
 
+    # ==========================
+    # I/O Methods
+    # ==========================
+    def from_npz(file_path: str) -> IntegrationPoints:
+        r"""
+        Load integration points from a .npz file.
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the .npz file containing the integration points data.
+
+        Returns
+        -------
+        IntegrationPoints
+            A new IntegrationPoints instance loaded from the .npz file.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the specified file does not exist.
+        KeyError
+            If required keys are missing in the .npz file.
+        
+        Examples
+        --------
+
+        .. code-block:: python
+
+            from pysdic import IntegrationPoints
+
+            integration_points = IntegrationPoints.from_npz("path/to/integration_points.npz")
+
+        """
+        path = os.path.abspath(file_path)
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"The specified file does not exist: {file_path}")
+
+        data = numpy.load(path)
+        natural_coordinates = data['natural_coordinates']
+        element_indices = data['element_indices']
+        weights = data['weights'] if 'weights' in data else None
+        return IntegrationPoints(natural_coordinates, element_indices, weights)
+
+
+    def to_npz(self, file_path: str) -> None:
+        r"""
+        Save the integration points to a .npz file.
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the .npz file where the integration points data will be saved.
+
+        Examples
+        --------
+
+        .. code-block:: python
+
+            from pysdic import IntegrationPoints
+
+            natural_coordinates = ...
+            element_indices = ...
+            weights = ...
+
+            integration_points = IntegrationPoints(natural_coordinates, element_indices, weights)
+            integration_points.to_npz("path/to/integration_points.npz")
+
+        """
+        path = os.path.abspath(file_path)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        numpy.savez_compressed(path,
+                               natural_coordinates=self.natural_coordinates,
+                               element_indices=self.element_indices,
+                               weights=self.weights)
 
     # =======================
     # Properties
@@ -456,22 +532,30 @@ class IntegrationPoints(object):
         ValueError
             If the dimensions of the two IntegrationPoints instances do not match.
         """
-        if not isinstance(other, IntegrationPoints):
-            raise TypeError("Can only concatenate with another IntegrationPoints instance.")
-        if self.n_dimensions != other.n_dimensions:
-            raise ValueError("Cannot concatenate IntegrationPoints with different dimensions.")
-        
-        new_natural_coordinates = numpy.vstack((self.natural_coordinates, other.natural_coordinates))
-        new_element_ids = numpy.hstack((self.element_indices, other.element_indices))
-        
-        if self._weights is None and other._weights is None:
-            new_weights = None
-        else:
-            current_weights = self.weights 
-            other_weights = other.weights 
-            new_weights = numpy.hstack((current_weights, other_weights))
+        return self.concatenate(other, inplace=False)
+    
+    def __iadd__(self, other: IntegrationPoints) -> IntegrationPoints:
+        r"""
+        Concatenate two IntegrationPoints instances in place.
 
-        return IntegrationPoints(new_natural_coordinates, new_element_ids, new_weights, self.n_dimensions, self.internal_bypass and other.internal_bypass)
+        Parameters
+        ----------
+        other : IntegrationPoints
+            Another IntegrationPoints instance to concatenate with.
+
+        Returns
+        -------
+        IntegrationPoints
+            The current IntegrationPoints instance containing the concatenated data.
+
+        Raises
+        ------
+        TypeError
+            If the other object is not an IntegrationPoints instance.
+        ValueError
+            If the dimensions of the two IntegrationPoints instances do not match.
+        """
+        return self.concatenate(other, inplace=True)
 
     # =======================
     # Methods
@@ -491,6 +575,90 @@ class IntegrationPoints(object):
         """
         self._internal_check_consistency(coord=True, ids=True, weights=True)
 
+
+    def concatenate(self, other: IntegrationPoints, inplace: bool = False) -> IntegrationPoints:
+        r"""
+        Concatenate two IntegrationPoints instances.
+
+        Parameters
+        ----------
+        other : IntegrationPoints
+            Another IntegrationPoints instance to concatenate with.
+
+        inplace : bool, optional
+            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).
+
+        Returns
+        -------
+        IntegrationPoints
+            An new IntegrationPoints instance containing the concatenated data or the modified current instance if `inplace` is True.
+
+        Raises
+        ------
+        TypeError
+            If the other object is not an IntegrationPoints instance.
+        ValueError
+            If the dimensions of the two IntegrationPoints instances do not match.
+
+        
+        Examples
+        --------
+
+        .. code-block:: python
+
+            import numpy
+            from pysdic import IntegrationPoints
+
+            natural_coordinates1 = numpy.array([[0.5, 0.5], [0.5, 0.0]])
+            element_indices1 = numpy.array([0, 0])
+            weights1 = numpy.array([1.0, 1.0])
+
+            integration_points1 = IntegrationPoints(natural_coordinates1, element_indices1, weights1)
+
+            natural_coordinates2 = numpy.array([[0.0, 0.5], [1/3, 1/3]])
+            element_indices2 = numpy.array([0, 1])
+            weights2 = numpy.array([1.0, 1.0])
+
+            integration_points2 = IntegrationPoints(natural_coordinates2, element_indices2, weights2)
+
+            # Concatenate two IntegrationPoints instances
+            combined_integration_points = integration_points1 + integration_points2
+            print(combined_integration_points.n_points)  # Output: 4
+
+            # In-place concatenation
+            integration_points1 += integration_points2
+            print(integration_points1.n_points)  # Output: 4
+
+        """
+        if not isinstance(other, IntegrationPoints):
+            raise TypeError("Can only concatenate with another IntegrationPoints instance.")
+        if self.n_dimensions != other.n_dimensions:
+            raise ValueError("Cannot concatenate IntegrationPoints with different dimensions.")
+        if not isinstance(inplace, bool):
+            raise TypeError("inplace must be a boolean.")
+        
+        new_natural_coordinates = numpy.vstack((self.natural_coordinates, other.natural_coordinates))
+        new_element_ids = numpy.hstack((self.element_indices, other.element_indices))
+        
+        if self._weights is None and other._weights is None:
+            new_weights = None
+        else:
+            current_weights = self.weights 
+            other_weights = other.weights 
+            new_weights = numpy.hstack((current_weights, other_weights))
+
+        if inplace:
+            current_internal_bypass = self.internal_bypass
+            self.internal_bypass = True
+            self.natural_coordinates = new_natural_coordinates
+            self.element_indices = new_element_ids
+            self._weights = new_weights
+            self.internal_bypass = current_internal_bypass
+            return self
+
+        return IntegrationPoints(new_natural_coordinates, new_element_ids, new_weights, self.n_dimensions, self.internal_bypass and other.internal_bypass)
+
+
     def copy(self) -> IntegrationPoints:
         r"""
         Create a deep copy of the IntegrationPoints instance.
@@ -502,7 +670,8 @@ class IntegrationPoints(object):
         """
         return IntegrationPoints(self.natural_coordinates.copy(), self.element_indices.copy(), None if self._weights is None else self._weights.copy(), self.n_dimensions, self.internal_bypass)
 
-    def remove_points(self, indices: numpy.ndarray) -> None:
+
+    def remove_points(self, indices: numpy.ndarray, inplace: bool = False) -> IntegrationPoints:
         r"""
         Remove specific integration points by their indices.
 
@@ -512,38 +681,94 @@ class IntegrationPoints(object):
             The indices of the integration points to remove as a numpy ndarray with shape (R,),
             where R is the number of points to remove.
 
+        inplace : bool, optional
+            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).
+
+        Returns
+        -------
+        IntegrationPoints
+            A new IntegrationPoints instance with the specified points removed or the modified current instance if `inplace` is True.
+
         Raises
         ------
         IndexError
             If any index is out of bounds.
+
+        
+        Examples
+        --------
+
+        .. code-block:: python
+
+            import numpy
+            from pysdic import IntegrationPoints 
+            natural_coordinates = numpy.array([[0.5, 0.5], [0.5, 0.0], [0.0, 0.5], [1/3, 1/3]])
+            element_indices = numpy.array([0, 0, 0, 1])
+            weights = numpy.array([1.0, 1.0, 1.0, 1.0])
+
+            integration_points = IntegrationPoints(natural_coordinates, element_indices, weights)
+            print(integration_points.n_points)  # Output: 4
+
+            # Remove points at indices 1 and 2
+            new_integration_points = integration_points.remove_points(numpy.array([1, 2]))
+            print(new_integration_points.n_points)  # Output: 2
+
+            # Remove points at indices 0 and 1 in place
+            integration_points.remove_points(numpy.array([0, 1]), inplace=True)
+            print(integration_points.n_points)  # Output: 2
+
         """
         indices = numpy.asarray(indices, dtype=int)
         if indices.ndim != 1:
             raise ValueError("indices should be a 1D array of shape (R,).")
         if numpy.any(indices < 0) or numpy.any(indices >= self.n_points):
             raise IndexError("Some indices are out of bounds.")
+        if not isinstance(inplace, bool):
+            raise TypeError("inplace must be a boolean.")
         
         mask = numpy.ones(self.n_points, dtype=bool)
         mask[indices] = False
 
-        current_bypass = self.internal_bypass
-        self.internal_bypass = True
-        self.natural_coordinates = self.natural_coordinates[mask]
-        self.element_indices = self.element_indices[mask]
-        if self._weights is not None:
-            self.weights = self.weights[mask]
-        self.internal_bypass = current_bypass
+        if inplace:
+            current_bypass = self.internal_bypass
+            self.internal_bypass = True
+            self.natural_coordinates = self.natural_coordinates[mask]
+            self.element_indices = self.element_indices[mask]
+            if self._weights is not None:
+                self.weights = self.weights[mask]
+            self.internal_bypass = current_bypass
+        
+            return self
 
-    def remove_invalids(self) -> None:
+        return IntegrationPoints(self.natural_coordinates[mask].copy(), self.element_indices[mask].copy(), None if self._weights is None else self.weights[mask].copy(), self.n_dimensions, self.internal_bypass)
+
+
+    def remove_invalids(self, inplace: bool = False) -> IntegrationPoints:
         r"""
         Remove all invalid integration points (points not included in any element).
 
         A point is considered invalid if its element index is -1.
+
+        .. seealso::
+
+            - :meth:`remove_points` to remove specific integration points.
+
+        Parameters
+        ----------
+        inplace : bool, optional
+            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).
+
+        Returns
+        -------
+        IntegrationPoints
+            A new IntegrationPoints instance with the invalid points removed or the modified current instance if `inplace` is True.
+
         """
         mask = self.element_indices == -1
-        self.remove_points(numpy.where(mask)[0])
+        return self.remove_points(numpy.where(mask)[0], inplace=inplace)
 
-    def add_points(self, natural_coordinates: numpy.ndarray, element_indices: numpy.ndarray, weights: Optional[numpy.ndarray] = None) -> None:
+
+    def add_points(self, natural_coordinates: numpy.ndarray, element_indices: numpy.ndarray, weights: Optional[numpy.ndarray] = None, inplace: bool = False) -> IntegrationPoints:
         r"""
         Add new integration points.
 
@@ -560,6 +785,9 @@ class IntegrationPoints(object):
         weights : Optional[numpy.ndarray], optional
             The weights of the new integration points as a numpy ndarray with shape (A,),
             where A is the number of points to add, by default None means equal weights of 1 for all new points.
+
+        inplace : bool, optional
+            If True, modify the current instance in place, and return itself. If False, return a new IntegrationPoints instance (default is False).
 
         Raises
         ------
@@ -583,19 +811,17 @@ class IntegrationPoints(object):
             raise ValueError("The number of new points A in weights and element_indices should match.")
         if natural_coordinates.shape[1] != self.n_dimensions:
             raise ValueError("The n_dimensions d of the new natural_coordinates does not match the existing dimension.")
+        if not isinstance(inplace, bool):
+            raise TypeError("inplace must be a boolean.")
 
-        current_bypass = self.internal_bypass
-        self.internal_bypass = True
-        self.natural_coordinates = numpy.vstack((self.natural_coordinates, natural_coordinates))
-        self.element_indices = numpy.hstack((self.element_indices, element_indices))
-        if self._weights is not None or weights is not None:
-            current_weights = self.weights
-            new_weights = numpy.ones(element_indices.shape[0], dtype=numpy.float64) if weights is None else weights
-            self.weights = numpy.hstack((current_weights, new_weights))
-        self.internal_bypass = current_bypass
-        self.validate()
+        # Create new arrays
+        new_points = IntegrationPoints(natural_coordinates, element_indices, weights, self.n_dimensions, self.internal_bypass)
+        
+        # Concatenate
+        return self.concatenate(new_points, inplace=inplace)
 
-    def disable_points(self, indices: numpy.ndarray) -> None:
+
+    def disable_points(self, indices: numpy.ndarray, inplace: bool = False) -> IntegrationPoints:
         r"""
         Disable specific integration points by their indices without removing them.
 
@@ -609,6 +835,14 @@ class IntegrationPoints(object):
             The indices of the integration points to disable as a numpy ndarray with shape (R,),
             where R is the number of points to disable.
 
+        inplace : bool, optional
+            If True, modify the current instance in place. If False, return a new IntegrationPoints instance (default is False).
+
+        Returns
+        -------
+        IntegrationPoints
+            A new IntegrationPoints instance with the specified points disabled or the modified current instance if `inplace` is True.
+
         Raises
         ------
         IndexError
@@ -619,10 +853,22 @@ class IntegrationPoints(object):
             raise ValueError("indices should be a 1D array of shape (R,).")
         if numpy.any(indices < 0) or numpy.any(indices >= self.n_points):
             raise IndexError("Some indices are out of bounds.")
+        if not isinstance(inplace, bool):
+            raise TypeError("inplace must be a boolean.")
+    
+        if inplace:
+            current_bypass = self.internal_bypass
+            self.internal_bypass = True
+            self.natural_coordinates[indices, :] = numpy.nan
+            self.element_indices[indices] = -1
+            self.internal_bypass = current_bypass
+            return self
 
-        current_bypass = self.internal_bypass
-        self.internal_bypass = True
-        self.natural_coordinates[indices, :] = numpy.nan
-        self.element_indices[indices] = -1
-        self.internal_bypass = current_bypass
-        
+        # Create copies
+        new_natural_coordinates = self.natural_coordinates.copy()
+        new_element_indices = self.element_indices.copy()
+        new_weights = self.weights.copy()
+        new_natural_coordinates[indices, :] = numpy.nan
+        new_element_indices[indices] = -1
+
+        return IntegrationPoints(new_natural_coordinates, new_element_indices, new_weights, self.n_dimensions, self.internal_bypass)
