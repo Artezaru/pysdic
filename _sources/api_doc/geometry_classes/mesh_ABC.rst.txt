@@ -1,0 +1,140 @@
+.. currentmodule:: pysdic.geometry
+
+Mesh structures [Abstract Base Class]
+==================================================================
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 1
+   :backlinks: top
+
+
+
+
+
+Mesh class
+-------------------------------------------
+
+.. autoclass:: Mesh
+
+Instantiate and export Mesh object
+-------------------------------------------
+
+The Mesh class is an ABC (Abstract Base Class) and cannot be instantiated directly.
+
+By default, the meshes are created from a set of vertices and connectivity. 
+The vertices are represented as a :class:`pysdic.geometry.PointCloud` object, and the connectivity is represented as a NumPy array of shape (:math:`N_e`, :math:`N_{vpe}`),
+where each row contains the indices of the vertices that form an element and :math:`N_e` is the number of elements and :math:`N_{vpe}` is the number of vertices per element.
+
+The subclasses of Mesh can also use the following methods to instantiate a Mesh object from different file formats.
+
+.. autosummary::
+   :toctree: ../../generated/geometry_classes/
+
+   Mesh.from_meshio
+   Mesh.from_vtk
+
+The Mesh class provides methods to export the mesh to various file formats.
+
+.. autosummary::
+   :toctree:../../generated/geometry_classes/
+
+    Mesh.to_meshio
+    Mesh.to_vtk
+
+
+Accessing Mesh attributes
+-------------------------------------------
+
+The public attributes of a Mesh object can be accessed using the following properties:
+
+.. autosummary::
+   :toctree: ../../generated/geometry_classes/
+
+    Mesh.internal_bypass
+    Mesh.connectivity
+    Mesh.elements
+    Mesh.n_vertices
+    Mesh.N_v
+    Mesh.n_elements
+    Mesh.N_e
+    Mesh.n_vertices_per_element
+    Mesh.N_vpe
+    Mesh.n_dimensions
+    Mesh.E
+    Mesh.n_topological_dimensions
+    Mesh.K
+    Mesh.meshio_cell_type
+    Mesh.vertices
+
+
+Manage vertices and elements properties
+-------------------------------------------
+
+Several properties can be associated with the vertices and elements of the mesh.
+These properties can be accessed and modified using the following methods:
+
+.. autosummary::
+   :toctree: ../../generated/geometry_classes/
+
+    Mesh.clear_elements_properties
+    Mesh.clear_vertices_properties
+    Mesh.clear_properties
+    Mesh.get_elements_property
+    Mesh.get_vertices_property
+    Mesh.remove_elements_property
+    Mesh.remove_vertices_property
+    Mesh.set_elements_property
+    Mesh.set_vertices_property
+    Mesh.list_elements_properties
+    Mesh.list_vertices_properties
+
+
+Add, remove or modify vertices or connectivity of the Mesh objects
+--------------------------------------------------------------------
+
+To manipulate only the geometry of the mesh, access the ``vertices`` attribute (:class:`pysdic.geometry.PointCloud`) and use its methods.
+
+The topology of the mesh can be modified using the following methods:
+
+.. autosummary::
+   :toctree: ../../generated/geometry_classes/
+
+    Mesh.add_elements
+    Mesh.add_vertices
+    Mesh.are_used_vertices
+    Mesh.is_empty
+    Mesh.keep_elements
+    Mesh.remove_elements
+    Mesh.remove_unused_vertices
+    Mesh.remove_vertices
+
+
+
+Mesh geometric computations and interpolations
+-------------------------------------------------
+
+Some methods are provided to perform geometric computations and property interpolations on Mesh objects:
+
+.. autosummary::
+   :toctree: ../../generated/geometry_classes/
+
+    Mesh.copy
+    Mesh.shape_functions
+    Mesh.validate
+
+
+.. seealso::
+
+    - :func:`pysdic.geometry.construct_jacobian` : Function to construct the Jacobian matrix for coordinate transformations using shape functions.
+    - :func:`pysdic.geometry.interpolate_property` : Function to interpolate properties within elements using shape functions.
+    - :func:`pysdic.geometry.project_property_to_vertices` : Function to project properties from integration points back to element nodes using shape functions.
+
+
+
+
+Surfacique Mesh classes (SurfaceMesh)
+-------------------------------------------
+
+The package provides a :class:`pysdic.geometry.SurfaceMesh` class that inherits from the :class:`pysdic.geometry.Mesh` ABC.
+This class is designed to represent 2D topological meshes (:math:`K=2`) used for SDIC computations.

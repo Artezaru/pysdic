@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SurfaceMesh Structure [Abstract Base Class] &#8212; pysdic 0.6.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_doc/geometry_classes/surface_mesh_ABC';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="elements_uvmap" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.elements_uvmap.html" />
+    <link rel="prev" title="validate" href="../../generated/geometry_classes/pysdic.geometry.Mesh.validate.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 0.6.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">pysdic.geometry classes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="point_cloud.html">PointCloud structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_array.html">from_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_cls.html">from_cls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_meshio.html">from_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_obj.html">from_obj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_ply.html">from_ply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_vtk.html">from_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.from_xyz.html">from_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.to_array.html">to_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.to_meshio.html">to_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.to_obj.html">to_obj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.to_ply.html">to_ply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.to_vtk.html">to_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.to_xyz.html">to_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.coordinates.html">coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.points.html">points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.n_dimensions.html">n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.n_points.html">n_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.all_close.html">all_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.all_finite.html">all_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.concatenate.html">concatenate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.frame_transform.html">frame_transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.is_finite.html">is_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.is_nan.html">is_nan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.keep_points.html">keep_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.keep_points_at.html">keep_points_at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.merge.html">merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.remove_not_finite.html">remove_not_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.remove_points.html">remove_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.remove_points_at.html">remove_points_at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.unique.html">unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.extend_n_dimensions.html">extend_n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.__add__.html">__add__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.__iadd__.html">__iadd__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.__len__.html">__len__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.bounding_box.html">bounding_box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.bounding_sphere.html">bounding_sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.PointCloud.visualize.html">visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mesh_ABC.html">Mesh structures [Abstract Base Class]</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.from_meshio.html">from_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.from_vtk.html">from_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.connectivity.html">connectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.elements.html">elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.n_vertices.html">n_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.N_v.html">N_v</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.n_elements.html">n_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.N_e.html">N_e</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.n_vertices_per_element.html">n_vertices_per_element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.N_vpe.html">N_vpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.n_dimensions.html">n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.E.html">E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.n_topological_dimensions.html">n_topological_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.K.html">K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.meshio_cell_type.html">meshio_cell_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.vertices.html">vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.clear_elements_properties.html">clear_elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.clear_vertices_properties.html">clear_vertices_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.clear_properties.html">clear_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.get_elements_property.html">get_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.get_vertices_property.html">get_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.remove_elements_property.html">remove_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.remove_vertices_property.html">remove_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.set_elements_property.html">set_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.set_vertices_property.html">set_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.list_elements_properties.html">list_elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.list_vertices_properties.html">list_vertices_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.add_elements.html">add_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.add_vertices.html">add_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.are_used_vertices.html">are_used_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.is_empty.html">is_empty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.keep_elements.html">keep_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.remove_elements.html">remove_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.remove_unused_vertices.html">remove_unused_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.remove_vertices.html">remove_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.shape_functions.html">shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.Mesh.validate.html">validate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">SurfaceMesh Structure [Abstract Base Class]</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.elements_uvmap.html">elements_uvmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize.html">visualize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize_integration_points.html">visualize_integration_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize_texture.html">visualize_texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize_vertices_property.html">visualize_vertices_property</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pysdic.geometry functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../geometry_functions/shape_functions.html">Shape Functions Collection (1D, 2D)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.segment_2_shape_functions.html">segment_2_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.segment_3_shape_functions.html">segment_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.triangle_3_shape_functions.html">triangle_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../geometry_functions/integrated_points_operations.html">Operations on Integrated Points (interpolation, projection, etc.)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.assemble_shape_function_matrix.html">assemble_shape_function_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.construct_jacobian.html">construct_jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.derivate_property.html">derivate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.interpolate_property.html">interpolate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.project_property_to_vertices.html">project_property_to_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/geometry_functions/pysdic.geometry.remap_vertices_coordinates.html">remap_vertices_coordinates</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pysdic.geometry utility functions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../create_linear_triangle_axisymmetric.html">pysdic.geometry.create_linear_triangle_axisymmetric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_linear_triangle_heightmap.html">pysdic.geometry.create_linear_triangle_heightmap</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">pysdic.operators classes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../operators_functions/derivation_operator.html">Build derivation operators to regularize temporal derivatives</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/operators_functions/pysdic.operators.compute_central_finite_difference_coefficients.html">compute_central_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/operators_functions/pysdic.operators.compute_forward_finite_difference_coefficients.html">compute_forward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/operators_functions/pysdic.operators.compute_backward_finite_difference_coefficients.html">compute_backward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/operators_functions/pysdic.operators.assemble_central_finite_difference_matrix.html">assemble_central_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/operators_functions/pysdic.operators.assemble_forward_finite_difference_matrix.html">assemble_forward_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/operators_functions/pysdic.operators.assemble_backward_finite_difference_matrix.html">assemble_backward_finite_difference_matrix</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">SurfaceMesh Structure [Abstract Base Class]</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="surfacemesh-structure-abstract-base-class">
+<h1>SurfaceMesh Structure [Abstract Base Class]<a class="headerlink" href="#surfacemesh-structure-abstract-base-class" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#surfacemesh-class" id="id1">SurfaceMesh class</a></p></li>
+<li><p><a class="reference internal" href="#instantiate-and-export-surfacemesh-object" id="id2">Instantiate and export SurfaceMesh object</a></p></li>
+<li><p><a class="reference internal" href="#additional-surfacemesh-attributes" id="id3">Additional SurfaceMesh attributes</a></p></li>
+<li><p><a class="reference internal" href="#manipulating-surfacemesh-objects" id="id4">Manipulating SurfaceMesh objects</a></p></li>
+<li><p><a class="reference internal" href="#visualize-surfacemesh-objects" id="id5">Visualize SurfaceMesh objects</a></p></li>
+</ul>
+</nav>
+<section id="surfacemesh-class">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">SurfaceMesh class</a><a class="headerlink" href="#surfacemesh-class" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysdic.geometry.SurfaceMesh">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysdic.geometry.</span></span><span class="sig-name descname"><span class="pre">SurfaceMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectivity</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal_bypass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pysdic/geometry/mesh_ABC.html#SurfaceMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.geometry.SurfaceMesh" title="Link to this definition">#</a></dt>
+<dd><p>Abstract Base Class for 2D topological Meshes (<span class="math notranslate nohighlight">\(K=2\)</span>).</p>
+<p>This class extends the <a class="reference internal" href="mesh_ABC.html#pysdic.geometry.Mesh" title="pysdic.geometry.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></a> abstract base class to represent 2D meshes.
+It serves as a base for specific surfacique mesh implementations.</p>
+<p>This mesh is characterized by having 2D elements (e.g., triangles, quadrilaterals) defined in a space of dimension <span class="math notranslate nohighlight">\(E &gt;= 2\)</span>.</p>
+<p>The coordinates of a point into the mesh can be accessed by the natural coordinates
+in the reference element. The number of natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta)\)</span> with a topological dimension of <span class="math notranslate nohighlight">\(K=2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<a class="reference internal" href="point_cloud.html#pysdic.geometry.PointCloud" title="pysdic.geometry.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a>) – The vertices of the mesh as a <a class="reference internal" href="point_cloud.html#pysdic.geometry.PointCloud" title="pysdic.geometry.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance with shape (<span class="math notranslate nohighlight">\(N_v\)</span>, :math`E`), where <span class="math notranslate nohighlight">\(N_v\)</span> is the number of vertices and <span class="math notranslate nohighlight">\(E\)</span> is the embedding dimension.</p></li>
+<li><p><strong>connectivity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – The connectivity of the mesh as a numpy ndarray with shape (<span class="math notranslate nohighlight">\(N_e\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>), where <span class="math notranslate nohighlight">\(N_e\)</span> is the number of elements and <span class="math notranslate nohighlight">\(N_{vpe}\)</span> is the number of vertices per element.</p></li>
+<li><p><strong>vertices_properties</strong> (Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>], optional) – A dictionary to store properties of the vertices, each property should be a numpy ndarray of shape (<span class="math notranslate nohighlight">\(N_v\)</span>, :math`A`) where <span class="math notranslate nohighlight">\(N_v\)</span> is the number of vertices and <span class="math notranslate nohighlight">\(A\)</span> is the number of attributes for that property, by default None.</p></li>
+<li><p><strong>elements_properties</strong> (Optional[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>], optional) – A dictionary to store properties of the elements, each property should be a numpy ndarray of shape (<span class="math notranslate nohighlight">\(N_e\)</span>, :math`B`) where <span class="math notranslate nohighlight">\(N_e\)</span> is the number of elements and <span class="math notranslate nohighlight">\(B\)</span> is the number of attributes for that property, by default None.</p></li>
+<li><p><strong>internal_bypass</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, internal checks are bypassed for better performance, by default <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="instantiate-and-export-surfacemesh-object">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Instantiate and export SurfaceMesh object</a><a class="headerlink" href="#instantiate-and-export-surfacemesh-object" title="Link to this heading">#</a></h2>
+<p>The SurfaceMesh class is an ABC (Abstract Base Class) and cannot be instantiated directly.</p>
+<p>By default, the meshes are created from a set of vertices and connectivity (see example below).
+The vertices are represented as a <a class="reference internal" href="point_cloud.html#pysdic.geometry.PointCloud" title="pysdic.geometry.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.PointCloud</span></code></a> object, and the connectivity is represented as a NumPy array of shape (<span class="math notranslate nohighlight">\(N_e\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>),
+where each row contains the indices of the vertices that form an element.</p>
+<p>See the methods of the parent class <a class="reference internal" href="mesh_ABC.html#pysdic.geometry.Mesh" title="pysdic.geometry.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.Mesh</span></code></a> for more details on how to instantiate and export SurfaceMesh objects.</p>
+</section>
+<section id="additional-surfacemesh-attributes">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Additional SurfaceMesh attributes</a><a class="headerlink" href="#additional-surfacemesh-attributes" title="Link to this heading">#</a></h2>
+<p>For the common attributes inherited from <a class="reference internal" href="mesh_ABC.html#pysdic.geometry.Mesh" title="pysdic.geometry.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.Mesh</span></code></a>, see the class documentation of <a class="reference internal" href="mesh_ABC.html#pysdic.geometry.Mesh" title="pysdic.geometry.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.Mesh</span></code></a>.</p>
+<p>An additional <code class="docutils literal notranslate"><span class="pre">elements_property</span></code> under the key <code class="docutils literal notranslate"><span class="pre">&quot;uvmap&quot;</span></code> can be used to store the UV mapping of the mesh.
+The UV mapping associates 2D coordinates at each vertex of each element in order to map a texture onto the surface.
+The property can be accessed using the following attribute :</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.elements_uvmap.html#pysdic.geometry.SurfaceMesh.elements_uvmap" title="pysdic.geometry.SurfaceMesh.elements_uvmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceMesh.elements_uvmap</span></code></a></p></td>
+<td><p>Get or set the UV mapping of each triangular element.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="manipulating-surfacemesh-objects">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Manipulating SurfaceMesh objects</a><a class="headerlink" href="#manipulating-surfacemesh-objects" title="Link to this heading">#</a></h2>
+<p>To manipulate only the geometry of the mesh, access the <code class="docutils literal notranslate"><span class="pre">vertices</span></code> attribute (<a class="reference internal" href="point_cloud.html#pysdic.geometry.PointCloud" title="pysdic.geometry.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.PointCloud</span></code></a>) and use its methods.
+For the common methods inherited from <a class="reference internal" href="mesh_ABC.html#pysdic.geometry.Mesh" title="pysdic.geometry.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.Mesh</span></code></a>, see the class documentation of <a class="reference internal" href="mesh_ABC.html#pysdic.geometry.Mesh" title="pysdic.geometry.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.geometry.Mesh</span></code></a> for other inherited methods.</p>
+</section>
+<section id="visualize-surfacemesh-objects">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Visualize SurfaceMesh objects</a><a class="headerlink" href="#visualize-surfacemesh-objects" title="Link to this heading">#</a></h2>
+<p>The SurfaceMesh class provides methods to visualize the mesh and its properties using PyVista for meshes with embedded dimension <span class="math notranslate nohighlight">\(E \leq 3\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize.html#pysdic.geometry.SurfaceMesh.visualize" title="pysdic.geometry.SurfaceMesh.visualize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceMesh.visualize</span></code></a>([vertices_color, ...])</p></td>
+<td><p>Visualize the surface mesh using PyVista (only for <span class="math notranslate nohighlight">\(E \leq 3\)</span> meshes).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize_integration_points.html#pysdic.geometry.SurfaceMesh.visualize_integration_points" title="pysdic.geometry.SurfaceMesh.visualize_integration_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceMesh.visualize_integration_points</span></code></a>(...)</p></td>
+<td><p>Visualize the 3D surface mesh with integration points using PyVista.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize_texture.html#pysdic.geometry.SurfaceMesh.visualize_texture" title="pysdic.geometry.SurfaceMesh.visualize_texture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceMesh.visualize_texture</span></code></a>(texture[, ...])</p></td>
+<td><p>Visualize the texture of the mesh using a texture image.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.visualize_vertices_property.html#pysdic.geometry.SurfaceMesh.visualize_vertices_property" title="pysdic.geometry.SurfaceMesh.visualize_vertices_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceMesh.visualize_vertices_property</span></code></a>([...])</p></td>
+<td><p>Visualize a vertex property on the 3D surface mesh using PyVista.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../generated/geometry_classes/pysdic.geometry.Mesh.validate.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">validate</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../generated/geometry_classes/pysdic.geometry.SurfaceMesh.elements_uvmap.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">elements_uvmap</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#surfacemesh-class">SurfaceMesh class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.geometry.SurfaceMesh"><code class="docutils literal notranslate"><span class="pre">SurfaceMesh</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instantiate-and-export-surfacemesh-object">Instantiate and export SurfaceMesh object</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-surfacemesh-attributes">Additional SurfaceMesh attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulating-surfacemesh-objects">Manipulating SurfaceMesh objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-surfacemesh-objects">Visualize SurfaceMesh objects</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api_doc/geometry_classes/surface_mesh_ABC.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2025, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
