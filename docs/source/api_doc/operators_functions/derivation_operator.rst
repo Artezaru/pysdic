@@ -89,9 +89,3 @@ The regularization term can be development such as :
 .. math::
 
    \min \| D^n U - \hat{g} \|^2 \leftrightarrow (D^n)^T D^n U = (D^n)^T \hat{g} \leftrightarrow (D^n)^T D^n dU = (D^n)^T (\hat{g} - D^n U_{\text{init}})
-
-Especially, if we want to regularize only a given time step :math:`t_k` we obtain :
-
-.. math::
-
-   (D^n)^T D^n dU = (D^n)^T (\hat{g} - D^n U_{\text{init}}) \leftrightarrow (D^n)^T D^n dU[:, k] = (D^n)^T (\hat{g} - D^n U_{\text{init}})[:, k]
