@@ -14,6 +14,6 @@
 
 __all__ = []
 
-from .qt_pyvista_linear_triangle_mesh_3d import QtPyvistaLinearTriangleMesh3D, visualize_qt_pyvista_linear_triangle_mesh_3d
-__all__.extend(["QtPyvistaLinearTriangleMesh3D", "visualize_qt_pyvista_linear_triangle_mesh_3d"])
+from .qt_pyvista_surface_mesh_3d import QtPyvistaSurfaceMesh3D, visualize_qt_pyvista_surface_mesh_3d
+__all__.extend(["QtPyvistaSurfaceMesh3D", "visualize_qt_pyvista_surface_mesh_3d"])
 

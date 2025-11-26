@@ -13,12 +13,12 @@ Mesh3D class
 
 .. autoclass:: Mesh3D
 
-Instantiate and export PointCloud3D object
+Instantiate and export Mesh3D object
 -------------------------------------------
 
 The Mesh3D class is an ABC (Abstract Base Class) and cannot be instantiated directly.
 
-By default, the meshes are created from a set of vertices and connectivity (see example below). 
+By default, the meshes are created from a set of vertices and connectivity. 
 The vertices are represented as a :class:`pysdic.geometry.PointCloud3D` object, and the connectivity is represented as a NumPy array of shape (M, K), 
 where each row contains the indices of the vertices that form an element.
 

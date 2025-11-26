@@ -16,7 +16,7 @@ LinearTriangleMesh3D class
 Instantiate a LinearTriangleMesh3D object
 -------------------------------------------
 
-The LinearTriangleMesh3D is a subclass of Mesh3D and can be instantiated directly or using the methods inherited from :class:`pysdic.geometry.Mesh3D`.
+The LinearTriangleMesh3D is a subclass of Mesh3D and can be instantiated directly or using the methods inherited from :class:`pysdic.geometry.Mesh3D` and :class:`pysdic.geometry.SurfaceMesh3D`.
 
 The LinearTriangleMesh3D class can also be instantiated from an Open3D TriangleMesh object using the class method :meth:`from_open3d`.
 
@@ -26,24 +26,13 @@ The LinearTriangleMesh3D class can also be instantiated from an Open3D TriangleM
     LinearTriangleMesh3D.from_open3d
     LinearTriangleMesh3D.to_open3d
 
-Additional LinearTriangleMesh3D attributes
--------------------------------------------
-
-For the common attributes inherited from :class:`pysdic.geometry.Mesh3D`, see the class documentation of :class:`pysdic.geometry.Mesh3D`.
-
-An additional ``elements_property`` under the key ``"uvmap"`` can be used to store the UV mapping of the mesh. The property can be accessed using the following attribute :
-
-.. autosummary::
-   :toctree: ../generated/
-
-    LinearTriangleMesh3D.elements_uvmap
-
 
 Manipulating LinearTriangleMesh3D objects
 -------------------------------------------
 
 To manipulate only the geometry of the mesh, access the ``vertices`` attribute (:class:`pysdic.geometry.PointCloud3D`) and use its methods.
 For the common methods inherited from :class:`pysdic.geometry.Mesh3D`, see the class documentation of :class:`pysdic.geometry.Mesh3D` for other inherited methods.
+For the common methods inherited from :class:`pysdic.geometry.SurfaceMesh3D`, see the class documentation of :class:`pysdic.geometry.SurfaceMesh3D` for other inherited methods.
 
 The LinearTriangleMesh3D class also provides the following additional methods:
 
@@ -54,21 +43,13 @@ The LinearTriangleMesh3D class also provides the following additional methods:
     LinearTriangleMesh3D.compute_elements_areas
     LinearTriangleMesh3D.compute_elements_normals
     LinearTriangleMesh3D.compute_vertices_normals
+    LinearTriangleMesh3D.extract_unique_edges
     LinearTriangleMesh3D.shape_functions
 
 Visualize LinearTriangleMesh3D objects
 -------------------------------------------
 
-The LinearTriangleMesh3D class provides methods to visualize the mesh and its properties using PyVista.
-
-.. autosummary::
-   :toctree: ../generated/
-   
-    LinearTriangleMesh3D.visualize
-    LinearTriangleMesh3D.visualize_integration_points
-    LinearTriangleMesh3D.visualize_texture
-    LinearTriangleMesh3D.visualize_vertices_property
-
+To visualize the mesh and its properties, use the methods inherited from :class:`pysdic.geometry.SurfaceMesh3D`.
 
 Examples of a simple PointCloud3D workflow
 -------------------------------------------
@@ -94,7 +75,7 @@ Creating a LinearTriangleMesh3D from vertices and connectivity:
       [1, 2, 3],
    ])
 
-   mesh = LinearTriangleMesh3D.from_vertices_and_connectivity(
+   mesh = LinearTriangleMesh3D(
       vertices=vertices,
       connectivity=connectivity,
    )

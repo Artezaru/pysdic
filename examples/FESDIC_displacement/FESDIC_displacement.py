@@ -13,14 +13,14 @@ import tqdm
 from pysdic.geometry import LinearTriangleMesh3D, IntegrationPoints, PointCloud3D, integration_points
 from pysdic.imaging import Image, Camera, View
 from pysdic.assemblers import assembly_FESDIC_displacement, assembly_SDIC_distortion
-from pysdic.visualizer import visualize_qt_pyvista_linear_triangle_mesh_3d
+from pysdic.visualizer import visualize_qt_pyvista_surface_mesh_3d
 
 work_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(work_dir))
 
 from create_polygon_mask import create_polygon_mask
 
-DISPLAY = False
+DISPLAY = True
 DEFINE_MASK = False
 COMPUTE_DISPLACEMENT = False
 REDUCE_FACTOR = 2 # Factor to reduce the number of rays for integration points creation (square root of the downsampling factor)
@@ -480,4 +480,4 @@ if DISPLAY or True:
     plt.savefig(os.path.join(work_dir, "Results FESDIC Displacement", "FESDIC_Displacement_Convergence.png"))
     plt.show()
 
-visualize_qt_pyvista_linear_triangle_mesh_3d(DIC_mesh, integration_points={"integration_points": integration_points})
+visualize_qt_pyvista_surface_mesh_3d(DIC_mesh, integration_points={"integration_points": integration_points})

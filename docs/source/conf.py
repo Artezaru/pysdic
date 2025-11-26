@@ -48,6 +48,8 @@ autodoc_typehints = "description"
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 
+html_static_path = ['_static']
+
 # 3. Options for Latex output
 
 latex_elements = {
@@ -60,3 +62,4 @@ latex_documents = [
     ("index", "pysdic.tex", "pysdic Documentation",
      "Artezaru", "manual"),
 ]
+

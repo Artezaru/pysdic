@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 from numbers import Number
 from py3dframe import Frame, FrameTransform
 
@@ -569,8 +569,6 @@ class PointCloud3D(object):
         r"""
         Convert the point cloud to a NumPy array of shape (N, 3).
 
-        Similar to :meth:`as_array` method.
-
         .. note::
 
             The returned array is a copy of the internal points array. Modifying it will not affect the original point cloud.
@@ -578,7 +576,7 @@ class PointCloud3D(object):
         .. seealso::
 
             - :meth:`points` property for accessing and modifying the points of the point cloud.
-            - :meth:`as_array` method for converting the point cloud to a NumPy array.
+            - :meth:`from_array` class method for creating a PointCloud3D object from a NumPy array.
 
         Returns
         -------
@@ -605,52 +603,6 @@ class PointCloud3D(object):
 
             # Convert the point cloud back to a NumPy array
             points_array = point_cloud.to_array()
-            print(points_array)
-            # Output: A NumPy array of shape (100, 3) containing the coordinates
-        
-        """
-        return self.as_array()
-    
-
-    def as_array(self) -> numpy.ndarray:
-        r"""
-        Convert the point cloud to a NumPy array of shape (N, 3).
-
-        Similar to :meth:`to_array` method.
-
-        .. note::
-
-            The returned array is a copy of the internal points array. Modifying it will not affect the original point cloud.
-
-        .. seealso::
-
-            - :meth:`points` property for accessing and modifying the points of the point cloud.
-
-        Returns
-        -------
-        numpy.ndarray
-            A NumPy array of shape (N, 3) containing the coordinates of the points in the cloud.
-
-            
-        Examples
-        --------
-        Creating a PointCloud3D object from a random NumPy array.      
-
-        .. code-block:: python
-
-            import numpy as np
-            from pysdic.geometry import PointCloud3D
-
-            # Create a random point cloud with 100 points
-            random_points = np.random.rand(100, 3)  # shape (100, 3)
-            point_cloud = PointCloud3D.from_array(random_points)
-
-        Convert back to a NumPy array using the `as_array` method.
-
-        .. code-block:: python
-
-            # Convert the point cloud back to a NumPy array
-            points_array = point_cloud.as_array()
             print(points_array)
             # Output: A NumPy array of shape (100, 3) containing the coordinates
         
@@ -921,22 +873,24 @@ class PointCloud3D(object):
     # ==========================
     # Methods Geometry Manipulation
     # ==========================
-    def allclose(self, other: PointCloud3D, rtol: float = 1e-05, atol: float = 1e-08) -> bool:
+    def all_close(self, other: Union[PointCloud3D, numpy.ndarray], rtol: float = 1e-05, atol: float = 1e-08, nan_equal: bool = True, ordered: bool = True, ) -> bool:
         r"""
         Check if all points in the current point cloud are approximately equal to the points in another PointCloud3D instance within a tolerance.
 
         This method compares the points of the current point cloud with those of another PointCloud3D instance and returns True if all corresponding points are approximately equal within the specified relative and absolute tolerances.
 
+        .. note::
+
+            If the number of points in both point clouds differ, the method will return False.
+
         .. seealso::
 
-            - :meth:`numpy.allclose` for more details on the comparison.
-
-        Nans are considered equal.
+            - :func:`numpy.allclose` for more details on the comparison.
 
         Parameters
         ----------
-        other : PointCloud3D
-            Another PointCloud3D instance to compare with the current point cloud.
+        other : Union[PointCloud3D, numpy.ndarray]
+            Another PointCloud3D instance or a NumPy array with shape (n_points, 3) to compare with the current point cloud.
 
         rtol : float, optional
             The relative tolerance parameter (default is 1e-05).
@@ -944,16 +898,25 @@ class PointCloud3D(object):
         atol : float, optional
             The absolute tolerance parameter (default is 1e-08).
 
+        nan_equal : bool, optional
+            If True, NaN values are considered equal (default is True).
+
+        ordered : bool, optional
+            If True, the points are compared in order. If False, the points are compared without considering the order (default is True).
+
+            
         Returns
         -------
         bool
             True if all points are approximately equal within the specified tolerances, False otherwise.
 
+            
         Raises
         ------
         ValueError
-            If the input is not an instance of PointCloud3D or if the point clouds have different shapes.
+            If the input is not an instance of PointCloud3D.
 
+            
         Examples
         --------
         Creating a PointCloud3D object from a random NumPy array.
@@ -976,7 +939,7 @@ class PointCloud3D(object):
             point_cloud2 = PointCloud3D.from_array(random_points + noise)
 
             # Check if the two point clouds are approximately equal
-            are_close = point_cloud1.allclose(point_cloud2, rtol=1e-5, atol=1e-8)
+            are_close = point_cloud1.all_close(point_cloud2, rtol=1e-5, atol=1e-8)
             print(are_close)
             # Output: True (most likely, depending on the noise)
 
@@ -987,17 +950,73 @@ class PointCloud3D(object):
             # Create a third point cloud that is significantly different
             different_points = np.random.rand(100, 3) + 1.0  # Shifted by 1.0
             point_cloud3 = PointCloud3D.from_array(different_points)
-            are_close = point_cloud1.allclose(point_cloud3, rtol=1e-5, atol=1e-8)
+            are_close = point_cloud1.all_close(point_cloud3, rtol=1e-5, atol=1e-8)
             print(are_close)
             # Output: False
 
         """
-        if not isinstance(other, PointCloud3D):
-            raise ValueError("Input must be an instance of PointCloud3D.")
-        if self.shape != other.shape:
-            raise ValueError("Point clouds must have the same shape to compare.")
+        if not isinstance(rtol, Number):
+            raise ValueError("rtol must be a numeric value.")
+        if not isinstance(atol, Number):
+            raise ValueError("atol must be a numeric value.")
+        if not isinstance(nan_equal, bool):
+            raise ValueError("nan_equal must be a boolean value.")
+        if not isinstance(ordered, bool):
+            raise ValueError("ordered must be a boolean value.")
+
+        if isinstance(other, PointCloud3D):
+            other_points = other.points
+        else:
+            other_points = numpy.asarray(other, dtype=numpy.float64)
+            if not (other_points.ndim == 2 and other_points.shape[1] == 3):
+                raise ValueError(f" PointCloud3D.all_close: Input must be a other PointCloud3D instance or a 2D NumPy array with shape (N, 3), got shape {other_points.shape}.")
+
+        if self.points.shape != other_points.shape:
+            return False
         
-        return numpy.allclose(self.points, other.points, rtol=rtol, atol=atol, equal_nan=True)
+        if ordered:
+            return numpy.allclose(self.points, other_points, rtol=rtol, atol=atol, equal_nan=nan_equal)
+        else:
+            # argsort rows lexicographically
+            self_sorted = self.points[numpy.lexsort(self.points.T[::-1])]
+            other_sorted = other_points[numpy.lexsort(other_points.T[::-1])]
+
+            # Compare the sorted views
+            return numpy.allclose(self_sorted, other_sorted, rtol=rtol, atol=atol, equal_nan=nan_equal)
+    
+
+    def all_finite(self) -> bool:
+        r"""
+        Check if all points in the point cloud are finite (i.e., not NaN or infinite).
+
+        Returns
+        -------
+        bool
+            True if all points are finite, False otherwise.
+
+        Examples
+        --------
+        Creating a PointCloud3D object and checking if all points are finite.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import PointCloud3D
+
+            # Create a point cloud with some finite and non-finite points
+            points = np.array([[0.0, 1.0, 2.0],
+                               [3.0, 4.0, 5.0],
+                               [numpy.nan, 7.0, 8.0],
+                               [9.0, numpy.inf, 11.0]])
+            point_cloud = PointCloud3D.from_array(points)
+
+            # Check if all points are finite
+            all_finite = point_cloud.all_finite()
+            print(all_finite)
+            # Output: False
+
+        """
+        return numpy.isfinite(self.points).all()
 
 
     def concatenate(self, other: PointCloud3D, inplace: bool = False) -> PointCloud3D:
@@ -1212,6 +1231,86 @@ class PointCloud3D(object):
             return self
         else:
             return PointCloud3D.from_array(transformed_points.copy())
+        
+
+    def is_finite(self) -> numpy.ndarray:
+        r"""
+        Check which points in the point cloud are finite (not NaN or infinite).
+
+        This method returns a boolean mask indicating which points in the point cloud are finite.
+
+        Returns
+        -------
+        numpy.ndarray
+            A 1D boolean NumPy array of shape (N,) where N is the number of points in the point cloud.
+            Each element is True if the corresponding point is finite, and False otherwise.
+
+        Examples
+        --------
+        Create a PointCloud3D from a NumPy array containing some NaN and infinite values.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import PointCloud3D
+
+            # Create a point cloud with some NaN and infinite values
+            points = np.array([[0.0, 1.0, 2.0],
+                               [np.nan, 1.0, 2.0],
+                               [3.0, np.inf, 4.0],
+                               [5.0, 6.0, 7.0]])
+            point_cloud = PointCloud3D.from_array(points)
+
+        Check which points are finite using the `is_finite` method.
+
+        .. code-block:: python
+
+            finite_mask = point_cloud.is_finite()
+            print(finite_mask)
+            # Output: [ True False False  True]
+
+        """
+        return numpy.isfinite(self.points).all(axis=1)
+    
+
+    def is_nan(self) -> numpy.ndarray:
+        r"""
+        Check which points in the point cloud are NaN.
+
+        This method returns a boolean mask indicating which points in the point cloud contain NaN values.
+
+        Returns
+        -------
+        numpy.ndarray
+            A 1D boolean NumPy array of shape (N,) where N is the number of points in the point cloud.
+            Each element is True if the corresponding point contains any NaN value, and False otherwise.
+
+        Examples
+        --------
+        Create a PointCloud3D from a NumPy array containing some NaN values.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import PointCloud3D
+
+            # Create a point cloud with some NaN values
+            points = np.array([[0.0, 1.0, 2.0],
+                               [np.nan, 1.0, 2.0],
+                               [3.0, 4.0, 5.0],
+                               [6.0, np.nan, 8.0]])
+            point_cloud = PointCloud3D.from_array(points)
+
+        Check which points are NaN using the `is_nan` method.
+
+        .. code-block:: python
+
+            nan_mask = point_cloud.is_nan()
+            print(nan_mask)
+            # Output: [False  True False  True]
+
+        """
+        return numpy.isnan(self.points).any(axis=1)
     
 
     def keep_points(self, other: PointCloud3D, inplace: bool = False) -> PointCloud3D:
@@ -1376,68 +1475,6 @@ class PointCloud3D(object):
         else:
             return PointCloud3D.from_array(self.points[indices].copy())
         
-
-    def remove_not_finite(self, inplace: bool = False) -> PointCloud3D:
-        r"""
-        Remove points from the point cloud that contain non-finite values (NaN or Inf).
-
-        This method returns a new PointCloud3D object with all points containing NaN or Inf values removed.
-
-        .. seealso::
-
-            - :meth:`remove_not_finite_inplace` for removing non-finite points in place.
-
-        Parameters
-        ----------
-        inplace : bool, optional
-            If True, modifies the current point cloud in place and returns itself. If False, returns a new PointCloud3D instance (default is False).
-
-        Returns
-        -------
-        PointCloud3D
-            A new PointCloud3D object containing only the finite points or the modified current instance if `inplace` is True.
-
-            
-        Examples
-        --------
-        Create a PointCloud3D from a NumPy array with some non-finite values.
-
-        .. code-block:: python
-
-            import numpy as np
-            from pysdic.geometry import PointCloud3D
-
-            # Create a point cloud with some non-finite values
-            points_with_nan = np.array([[0.0, 1.0, 2.0],
-                                        [np.nan, 1.0, 2.0],
-                                        [3.0, np.inf, 4.0],
-                                        [5.0, 6.0, 7.0]])
-
-            point_cloud = PointCloud3D.from_array(points_with_nan)
-
-        Removing non-finite points from the point cloud.
-
-        .. code-block:: python
-
-            # Remove non-finite points
-            finite_point_cloud = point_cloud.remove_not_finite()
-            print(finite_point_cloud.points)
-            # Output: A NumPy array of shape (2, 3) containing only the finite points
-        """
-        if not isinstance(inplace, bool):
-            raise ValueError("inplace must be a boolean value.")
-        
-        # Create a mask for finite points
-        mask = numpy.isfinite(self.points).all(axis=1)
-        finite_points = self.points[mask]
-
-        # Return new instance or modify in place
-        if inplace:
-            self.points = finite_points
-            return self
-        else:
-            return PointCloud3D.from_array(finite_points.copy())
-
         
     def merge(self, other: PointCloud3D, inplace: bool = False) -> PointCloud3D:
         r"""
@@ -1542,7 +1579,69 @@ class PointCloud3D(object):
         else:
             return PointCloud3D.from_array(merged_points.copy())
         
+    
+    def remove_not_finite(self, inplace: bool = False) -> PointCloud3D:
+        r"""
+        Remove points from the point cloud that contain non-finite values (NaN or Inf).
 
+        This method returns a new PointCloud3D object with all points containing NaN or Inf values removed.
+
+        .. seealso::
+
+            - :meth:`remove_not_finite_inplace` for removing non-finite points in place.
+
+        Parameters
+        ----------
+        inplace : bool, optional
+            If True, modifies the current point cloud in place and returns itself. If False, returns a new PointCloud3D instance (default is False).
+
+        Returns
+        -------
+        PointCloud3D
+            A new PointCloud3D object containing only the finite points or the modified current instance if `inplace` is True.
+
+            
+        Examples
+        --------
+        Create a PointCloud3D from a NumPy array with some non-finite values.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic.geometry import PointCloud3D
+
+            # Create a point cloud with some non-finite values
+            points_with_nan = np.array([[0.0, 1.0, 2.0],
+                                        [np.nan, 1.0, 2.0],
+                                        [3.0, np.inf, 4.0],
+                                        [5.0, 6.0, 7.0]])
+
+            point_cloud = PointCloud3D.from_array(points_with_nan)
+
+        Removing non-finite points from the point cloud.
+
+        .. code-block:: python
+
+            # Remove non-finite points
+            finite_point_cloud = point_cloud.remove_not_finite()
+            print(finite_point_cloud.points)
+            # Output: A NumPy array of shape (2, 3) containing only the finite points
+        """
+        if not isinstance(inplace, bool):
+            raise ValueError("inplace must be a boolean value.")
+        
+        # Create a mask for finite points
+        mask = numpy.isfinite(self.points).all(axis=1)
+        finite_points = self.points[mask]
+
+        # Return new instance or modify in place
+        if inplace:
+            self.points = finite_points
+            return self
+        else:
+            return PointCloud3D.from_array(finite_points.copy())
+
+        
     def remove_points(self, other: PointCloud3D, inplace: bool = False) -> PointCloud3D:
         r"""
         Remove points from the current point cloud that are present in another PointCloud3D instance.

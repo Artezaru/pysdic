@@ -46,6 +46,9 @@ clean:
 autosummary:
 	@echo "Generating autosummary files in docs/source/api_doc/*.rst"
 	@sphinx-autogen -o docs/source/generated/ docs/source/api_doc/*.rst
+	@sphinx-autogen -o docs/source/generated/geometry_functions/ docs/source/api_doc/geometry_functions/*.rst
+	@sphinx-autogen -o docs/source/generated/operators_functions/ docs/source/api_doc/operators_functions/*.rst
+	@sphinx-autogen -o docs/source/generated/geometry_classes/ docs/source/api_doc/geometry_classes/*.rst
 	@echo "Autosummary generation complete."
 	@echo "Run python autosummary_change_titles.py to update the names in the generated files."
 	@python3 docs/source/autosummary_change_titles.py

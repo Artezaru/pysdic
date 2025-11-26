@@ -168,9 +168,9 @@ class Mesh3D(ABC):
         """
         if self.internal_bypass:
             return
-        if not isinstance(self.vertices, PointCloud3D):
-            raise TypeError(f"Vertices must be a PointCloud3D instance, got {type(self.vertices)}.")
-        if not numpy.isfinite(self.vertices.points).all():
+        if not isinstance(self._vertices, PointCloud3D):
+            raise TypeError(f"Vertices must be a PointCloud3D instance, got {type(self._vertices)}.")
+        if not self._vertices.all_finite():
             raise ValueError("Vertices contain NaN or infinite values.")
 
     def _internal_check_connectivity(self) -> None:
@@ -186,16 +186,16 @@ class Mesh3D(ABC):
         """
         if self.internal_bypass:
             return
-        if not isinstance(self.connectivity, numpy.ndarray):
-            raise TypeError(f"Connectivity must be a numpy ndarray, got {type(self.connectivity)}.")
-        if self.connectivity.ndim != 2:
-            raise ValueError(f"Connectivity must be a 2D array, got {self.connectivity.ndim}D array.")
-        if self.connectivity.shape[1] != self.n_vertices_per_element:
+        if not isinstance(self._connectivity, numpy.ndarray):
+            raise TypeError(f"Connectivity must be a numpy ndarray, got {type(self._connectivity)}.")
+        if self._connectivity.ndim != 2:
+            raise ValueError(f"Connectivity must be a 2D array, got {self._connectivity.ndim}D array.")
+        if self._connectivity.shape[1] != self.n_vertices_per_element:
             raise ValueError("Connectivity must have at least two columns (for edges).")
-        if numpy.any(self.connectivity < 0) or numpy.any(self.connectivity >= len(self.vertices)):
+        if numpy.any(self._connectivity < 0) or numpy.any(self._connectivity >= len(self._vertices)):
             raise ValueError("Connectivity contains invalid vertex indices.")
-        if not numpy.issubdtype(self.connectivity.dtype, numpy.integer):
-            raise TypeError(f"Connectivity must have integer type, got {self.connectivity.dtype}.")
+        if not numpy.issubdtype(self._connectivity.dtype, numpy.integer):
+            raise TypeError(f"Connectivity must have integer type, got {self._connectivity.dtype}.")
         
     def _internal_check_vertices_property(self, key: str) -> None:
         r"""
