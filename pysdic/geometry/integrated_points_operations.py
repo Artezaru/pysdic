@@ -1067,6 +1067,8 @@ def project_property_to_vertices(
 
         # Solve the normal equations
         reduced_projected_property = scipy.sparse.linalg.spsolve(reduced_A, reduced_b)  # (N_valid, P)
+        if reduced_projected_property.ndim == 1:
+            reduced_projected_property = reduced_projected_property[:, numpy.newaxis]  # Convert to 2D array with shape (N_valid, 1)
         projected_property[valid_rows, :] = reduced_projected_property
 
     else:
@@ -1081,6 +1083,8 @@ def project_property_to_vertices(
 
         # Solve the normal equations
         reduced_projected_property = numpy.linalg.solve(A, b)  # (N_valid, P)
+        if reduced_projected_property.ndim == 1:
+            reduced_projected_property = reduced_projected_property[:, numpy.newaxis]  # Convert to 2D array with shape (N_valid, 1)
         projected_property[valid_rows, :] = reduced_projected_property
     
     # Return unaffected mask if requested

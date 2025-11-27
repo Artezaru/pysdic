@@ -302,7 +302,8 @@ def test_interpolate_property_with_m1():
         assert numpy.allclose(interpolated_properties[i], expected_property)
 
 
-def test_project_property():
+@pytest.mark.parametrize("P", [0, 1, 2, 3])
+def test_project_property(P):
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -314,14 +315,20 @@ def test_project_property():
         [8, 9, 0],
     ])
 
-    natural_coordinates = numpy.random.rand(8, 2) # Ensure sum < 1 for triangle
-    mask = natural_coordinates.sum(axis=1) > 1.0
-    natural_coordinates[mask] = natural_coordinates[mask] / natural_coordinates.sum(axis=1)[mask][:, None]
-    element_indices = numpy.random.randint(0, 5, size=(8,))
+    N_e = element_connectivity.shape[0]
+
+    natural_coordinates = numpy.array([[0.3, 0.3], [0.2, 0.5], [0.5, 0.2], [0.1, 0.1]])
+    N_p = natural_coordinates.shape[0]
+    natural_coordinates = numpy.vstack([natural_coordinates] * N_e)
+    element_indices = numpy.repeat(numpy.arange(N_e), N_p)
+    N_p = natural_coordinates.shape[0]
 
     shape_functions = pg.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
 
-    vertex_properties = numpy.random.rand(10, 4)
+    if P != 0:
+        vertex_properties = numpy.random.rand(10, P)
+    else:
+        vertex_properties = numpy.random.rand(10)
 
     integrated_points_properties = pg.interpolate_property(
         vertex_properties,
@@ -330,4 +337,61 @@ def test_project_property():
         element_indices
     )
 
-    projected_properties = pg.project_property(
+    projected_properties = pg.project_property_to_vertices(
+        integrated_points_properties,
+        shape_functions,
+        element_connectivity,
+        element_indices,
+        vertices_number=10
+    )
+
+    assert projected_properties.shape == (10, 1) if P == 0 else (10, P)
+    assert numpy.allclose(projected_properties.sum(axis=0), vertex_properties.sum(axis=0))
+
+
+@pytest.mark.parametrize("P", [0, 1, 2, 3])
+def test_project_property(P):
+    numpy.random.seed(42)
+    vertices_coordinates = numpy.random.rand(10, 3)
+
+    element_connectivity = numpy.array([
+        [0, 1, 2],
+        [2, 3, 4],
+        [4, 5, 6],
+        [6, 7, 8],
+        [8, 9, 0],
+    ])
+
+    N_e = element_connectivity.shape[0]
+
+    natural_coordinates = numpy.array([[0.3, 0.3], [0.2, 0.5], [0.5, 0.2], [0.1, 0.1]])
+    N_p = natural_coordinates.shape[0]
+    natural_coordinates = numpy.vstack([natural_coordinates] * N_e)
+    element_indices = numpy.repeat(numpy.arange(N_e), N_p)
+    N_p = natural_coordinates.shape[0]
+
+    shape_functions = pg.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
+
+    if P != 0:
+        vertex_properties = numpy.random.rand(10, P)
+    else:
+        vertex_properties = numpy.random.rand(10)
+
+    integrated_points_properties = pg.interpolate_property(
+        vertex_properties,
+        shape_functions,
+        element_connectivity,
+        element_indices
+    )
+
+    projected_properties = pg.project_property_to_vertices(
+        integrated_points_properties,
+        shape_functions,
+        element_connectivity,
+        element_indices,
+        vertices_number=10,
+        sparse=True
+    )
+
+    assert projected_properties.shape == (10, 1) if P == 0 else (10, P)
+    assert numpy.allclose(projected_properties.sum(axis=0), vertex_properties.sum(axis=0))
