@@ -977,13 +977,13 @@ def assemble_central_finite_difference_matrix(
     
     # Central FD coefficients
     coeffs = compute_central_finite_difference_coefficients(order, spacing, accuracy)
-    half_size = (len(coeffs) + 1) // 2
+    half_size = (len(coeffs) - 1) // 2
 
     # Create the non-zero first columns of the Toeplitz matrix
-    col = coeffs[half_size:]
+    col = coeffs[0:(half_size+1)][::-1]
 
     # Create the non-zero first rows of the Toeplitz matrix
-    row = coeffs[(half_size-1)::-1]
+    row = coeffs[(half_size):]
 
     return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse)
 
