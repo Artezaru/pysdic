@@ -42,6 +42,16 @@ The package provides functions to construct finite difference stencil coefficien
     compute_forward_finite_difference_coefficients
     compute_backward_finite_difference_coefficients
 
+The finite difference stencil coefficients are used to approximate the temporal derivative of a function at discrete time steps.
+To apply the finite difference scheme to a time-dependent function, we can convolve the function with the stencil coefficients.
+
+.. autosummary::
+   :toctree: ../../generated/operators_functions/
+
+    apply_central_finite_difference
+    apply_forward_finite_difference
+    apply_backward_finite_difference
+    
     
 
 Temporal Derivation Matrix :math:`D^n`

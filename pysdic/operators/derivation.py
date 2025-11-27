@@ -114,7 +114,7 @@ def compute_forward_finite_difference_coefficients(order: Integral, spacing: Num
         The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).
 
     spacing : :class:`Number`, optional
-        The time step size. Default is :obj:`1.0`.
+        The time step size :math:`h`. Default is :obj:`1.0`.
 
     accuracy : :class:`int`, optional
         The desired accuracy order of the approximation. Default is :obj:`1`.
@@ -123,7 +123,7 @@ def compute_forward_finite_difference_coefficients(order: Integral, spacing: Num
     Returns
     -------
     :class:`numpy.ndarray`
-        The coefficients for the forward finite difference approximation of the derivative in the form of a 1D array :obj`[c_{th}, c_{(t+1)h}, ..., c_{(t+N)h}]`.
+        The coefficients for the forward finite difference approximation of the derivative in the form of a 1D array :obj:`[c_{th}, c_{(t+1)h}, ..., c_{(t+N)h}]`.
 
 
     Raises
@@ -241,7 +241,7 @@ def compute_backward_finite_difference_coefficients(order: Integral, spacing: Nu
         The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).
 
     spacing : :class:`Number`, optional
-        The time step size. Default is :obj:`1.0`.
+        The time step size :math:`h`. Default is :obj:`1.0`.
 
     accuracy : :class:`int`, optional
         The desired accuracy order of the approximation. Default is :obj:`1`.
@@ -250,7 +250,7 @@ def compute_backward_finite_difference_coefficients(order: Integral, spacing: Nu
     Returns
     -------
     :class:`numpy.ndarray`
-        The coefficients for the backward finite difference approximation of the derivative in the form of a 1D array :obj`[c_{th}, c_{(t-1)h}, ..., c_{(t-N)h}]`.
+        The coefficients for the backward finite difference approximation of the derivative in the form of a 1D array :obj:`[c_{th}, c_{(t-1)h}, ..., c_{(t-N)h}]`.
 
 
     Raises
@@ -349,7 +349,7 @@ def compute_central_finite_difference_coefficients(order: Integral, spacing: Num
         The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).
 
     spacing : :class:`Number`, optional
-        The time step size. Default is :obj:`1.0`.
+        The time step size :math:`h`. Default is :obj:`1.0`.
 
     accuracy : :class:`int`, optional
         The desired accuracy order of the approximation. Must be a even integer. Default is :obj:`2`.
@@ -358,7 +358,7 @@ def compute_central_finite_difference_coefficients(order: Integral, spacing: Num
     Returns
     -------
     :class:`numpy.ndarray`
-        The coefficients for the central finite difference approximation of the derivative in the form of a 1D array :obj`[c_{-Mh}, ..., c_{-h}, c_{0}, c_{h}, ..., c_{Mh}]`.
+        The coefficients for the central finite difference approximation of the derivative in the form of a 1D array :obj:`[c_{-Mh}, ..., c_{-h}, c_{0}, c_{h}, ..., c_{Mh}]`.
 
     
     Raises
@@ -468,6 +468,353 @@ def compute_central_finite_difference_coefficients(order: Integral, spacing: Num
 
 
 
+def apply_forward_finite_difference(
+    data: numpy.ndarray,
+    order: Integral,
+    axis: Optional[Integral] = -1,
+    spacing: Number = 1.0,
+    accuracy: Integral = 1,
+    mode: str = 'reflect',
+    value: Number = 0.0,
+) -> numpy.ndarray:
+    r"""
+    Apply the forward finite difference operator to a time series data array along a specified axis.
+
+    A convolution operation is performed between the input data and the forward finite difference kernel
+    to approximate the temporal derivative of the specified order.
+
+    The available modes for handling borders are: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'.
+
+    +=================+================================================================+
+    | Mode            | Description                                                    |
+    +=================+================================================================+
+    | 'reflect'       | (d c b a | a b c d | d c b a)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'constant'      | (k k k k | a b c d | k k k k)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'nearest'       | (a a a a | a b c d | d d d d)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'mirror'        | (d c b | a b c d | c b a)                                      |
+    +-----------------+----------------------------------------------------------------+
+    | 'wrap'          | (a b c d | a b c d | a b c d)                                  |
+    +-----------------+----------------------------------------------------------------+
+
+    .. seealso::
+
+        - :func:`compute_forward_finite_difference_coefficients` to compute the forward finite difference coefficients.
+        - :func:`apply_backward_finite_difference` to apply the backward finite difference operator.
+        - :func:`apply_central_finite_difference` to apply the central finite difference operator.
+
+    Parameters
+    ----------
+    data : :class:`numpy.ndarray`
+        The input time series data array.
+
+    order : :class:`int`
+        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).
+
+    axis : :class:`int`, optional
+        The axis along which to apply the finite difference operator. Default is :obj:`-1`.
+
+    spacing : :class:`Number`, optional
+        The time step size :math:`h`. Default is :obj:`1.0`.
+
+    accuracy : :class:`int`, optional
+        The desired accuracy order of the approximation. Default is :obj:`1`.
+
+    mode : :class:`str`, optional
+        The mode parameter determines how the input array is extended when the filter overlaps a border.
+        Default is :obj:`'reflect'`.
+
+    value : :class:`Number`, optional
+        The value to use for padding when :obj:`mode` is set to :obj:`'constant'`. Default is :obj:`0.0`.
+
+    Returns
+    -------
+    :class:`numpy.ndarray`
+        The resulting array after applying the forward finite difference operator with the same shape as the input data.
+
+    
+    Raises
+    ------
+    ValueError
+        If the order or accuracy are not positive integers.
+        If the spacing is not a strictly positive number.
+        If the mode is not a valid string option for :func:`scipy.ndimage.correlate1d`.
+
+
+    Examples
+    --------
+
+    >>> data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])
+    >>> apply_forward_finite_difference(data, order=1, spacing=1.0, accuracy=1)
+    array([1., 3., 5., 7., 0.])
+
+    >>> data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])
+    >>> apply_forward_finite_difference(data, order=2, spacing=1.0, accuracy=1)
+    array([2., 2., 2., -7, -7])
+    
+        
+    """
+    data = numpy.asarray(data)
+    if not numpy.issubdtype(data.dtype, numpy.floating):
+        data = data.astype(numpy.float64)
+
+    if not isinstance(axis, Integral):
+        raise TypeError("Axis must be an integer.")
+    if axis < -data.ndim or axis >= data.ndim:
+        raise ValueError("Axis is out of bounds for the input data array.")
+    
+    if not isinstance(mode, str):
+        raise TypeError("Mode must be a string.")
+    valid_modes = ['reflect', 'constant', 'nearest', 'mirror', 'wrap']
+    if mode not in valid_modes:
+        raise ValueError(f"Mode must be one of {valid_modes}.")
+    
+    if not isinstance(value, Number):
+        raise TypeError("Value must be a numeric type.")
+    
+    coeffs = compute_forward_finite_difference_coefficients(order, spacing, accuracy)
+
+    # Shift coefficients for convolution
+    # For forward difference, the first coefficient corresponds to the current point
+    if len(coeffs) % 2 == 0:
+        origin = -(len(coeffs) // 2)
+    else:
+        origin = -(len(coeffs) - 1) // 2
+
+    return scipy.ndimage.correlate1d(data, coeffs, axis=axis, mode=mode, cval=value, origin=origin)
+
+
+
+def apply_backward_finite_difference(
+    data: numpy.ndarray,
+    order: Integral,
+    axis: Optional[Integral] = -1,
+    spacing: Number = 1.0,
+    accuracy: Integral = 1,
+    mode: str = 'reflect',
+    value: Number = 0.0,
+) -> numpy.ndarray:
+    r"""
+    Apply the backward finite difference operator to a time series data array along a specified axis.
+
+    A convolution operation is performed between the input data and the backward finite difference kernel
+    to approximate the temporal derivative of the specified order.
+
+    The available modes for handling borders are: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'.
+
+    +=================+================================================================+
+    | Mode            | Description                                                    |
+    +=================+================================================================+
+    | 'reflect'       | (d c b a | a b c d | d c b a)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'constant'      | (k k k k | a b c d | k k k k)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'nearest'       | (a a a a | a b c d | d d d d)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'mirror'        | (d c b | a b c d | c b a)                                      |
+    +-----------------+----------------------------------------------------------------+
+    | 'wrap'          | (a b c d | a b c d | a b c d)                                  |
+    +-----------------+----------------------------------------------------------------+
+
+    .. seealso::
+
+        - :func:`compute_backward_finite_difference_coefficients` to compute the backward finite difference coefficients.
+        - :func:`apply_forward_finite_difference` to apply the forward finite difference operator.
+        - :func:`apply_central_finite_difference` to apply the central finite difference operator.
+
+    Parameters
+    ----------
+    data : :class:`numpy.ndarray`
+        The input time series data array.
+
+    order : :class:`int`
+        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).
+
+    axis : :class:`int`, optional
+        The axis along which to apply the finite difference operator. Default is :obj:`-1`.
+
+    spacing : :class:`Number`, optional
+        The time step size :math:`h`. Default is :obj:`1.0`.
+
+    accuracy : :class:`int`, optional
+        The desired accuracy order of the approximation. Default is :obj:`1`.
+
+    mode : :class:`str`, optional
+        The mode parameter determines how the input array is extended when the filter overlaps a border.
+        Default is :obj:`'reflect'`.
+
+    value : :class:`Number`, optional
+        The value to use for padding when :obj:`mode` is set to :obj:`'constant'`. Default is :obj:`0.0`.
+
+    Returns
+    -------
+    :class:`numpy.ndarray`
+        The resulting array after applying the backward finite difference operator with the same shape as the input data.
+
+    
+    Raises
+    ------
+    ValueError
+        If the order or accuracy are not positive integers.
+        If the spacing is not a strictly positive number.
+        If the mode is not a valid string option for :func:`scipy.ndimage.correlate1d`.
+
+
+    Examples
+    --------
+
+    >>> data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])
+    >>> apply_backward_finite_difference(data, order=1, spacing=1.0, accuracy=1)
+    array([ 0.,  1.,  3.,  5.,  7.])
+
+    >>> data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])
+    >>> apply_backward_finite_difference(data, order=2, spacing=1.0, accuracy=1)
+    array([ 1.,  1.,  2.,  2., 2])
+        
+    """
+    data = numpy.asarray(data)
+    if not numpy.issubdtype(data.dtype, numpy.floating):
+        data = data.astype(numpy.float64)
+
+    if not isinstance(axis, Integral):
+        raise TypeError("Axis must be an integer.")
+    if axis < -data.ndim or axis >= data.ndim:
+        raise ValueError("Axis is out of bounds for the input data array.")
+    
+    if not isinstance(mode, str):
+        raise TypeError("Mode must be a string.")
+    valid_modes = ['reflect', 'constant', 'nearest', 'mirror', 'wrap']
+    if mode not in valid_modes:
+        raise ValueError(f"Mode must be one of {valid_modes}.")
+    
+    if not isinstance(value, Number):
+        raise TypeError("Value must be a numeric type.")
+
+    coeffs = compute_backward_finite_difference_coefficients(order, spacing, accuracy)
+
+    # Inverse the order of coefficients for backward difference
+    coeffs = coeffs[::-1]
+
+    # Shift coefficients for convolution
+    # For backward difference, the last coefficient corresponds to the current point
+    if len(coeffs) % 2 == 0:
+        origin = len(coeffs) // 2 - 1
+    else:
+        origin = (len(coeffs) - 1) // 2
+
+    return scipy.ndimage.correlate1d(data, coeffs, axis=axis, mode=mode, cval=value, origin=origin)
+
+
+
+def apply_central_finite_difference(
+    data: numpy.ndarray,
+    order: Integral,
+    axis: Optional[Integral] = -1,
+    spacing: Number = 1.0,
+    accuracy: Integral = 2,
+    mode: str = 'reflect',
+    value: Number = 0.0,
+) -> numpy.ndarray:
+    r"""
+    Apply the central finite difference operator to a time series data array along a specified axis.
+
+    A convolution operation is performed between the input data and the central finite difference kernel
+    to approximate the temporal derivative of the specified order.
+
+    The available modes for handling borders are: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'.
+
+    +=================+================================================================+
+    | Mode            | Description                                                    |
+    +=================+================================================================+
+    | 'reflect'       | (d c b a | a b c d | d c b a)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'constant'      | (k k k k | a b c d | k k k k)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'nearest'       | (a a a a | a b c d | d d d d)                                  |
+    +-----------------+----------------------------------------------------------------+
+    | 'mirror'        | (d c b | a b c d | c b a)                                      |
+    +-----------------+----------------------------------------------------------------+
+    | 'wrap'          | (a b c d | a b c d | a b c d)                                  |
+    +-----------------+----------------------------------------------------------------+
+
+    .. seealso::
+
+        - :func:`compute_central_finite_difference_coefficients` to compute the central finite difference coefficients.
+        - :func:`apply_forward_finite_difference` to apply the forward finite difference operator.
+        - :func:`apply_backward_finite_difference` to apply the backward finite difference operator.
+
+    Parameters
+    ----------
+    data : :class:`numpy.ndarray`
+        The input time series data array.
+
+    order : :class:`int`
+        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).
+
+    axis : :class:`int`, optional
+        The axis along which to apply the finite difference operator. Default is :obj:`-1`.
+
+    spacing : :class:`Number`, optional
+        The time step size :math:`h`. Default is :obj:`1.0`.
+
+    accuracy : :class:`int`, optional
+        The desired accuracy order of the approximation. Must be a even integer. Default is :obj:`2`.
+
+    mode : :class:`str`, optional
+        The mode parameter determines how the input array is extended when the filter overlaps a border.
+        Default is :obj:`'reflect'`.
+
+    value : :class:`Number`, optional
+        The value to use for padding when :obj:`mode` is set to :obj:`'constant'`. Default is :obj:`0.0`.
+
+    Returns
+    -------
+    :class:`numpy.ndarray`
+        The resulting array after applying the central finite difference operator with the same shape as the input data.
+
+    
+    Raises
+    ------
+    ValueError
+        If the order or accuracy are not positive integers.
+        If the accuracy is not an even integer.
+        If the spacing is not a strictly positive number.
+        If the mode is not a valid string option for :func:`scipy.ndimage.correlate1d`.
+
+
+    Examples
+    --------
+
+    >>> data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])
+    >>> apply_central_finite_difference(data, order=1, spacing=1.0, accuracy=2)
+    array([0.5, 2., 4., 6., 3.5])
+        
+    """
+    data = numpy.asarray(data)
+    if not numpy.issubdtype(data.dtype, numpy.floating):
+        data = data.astype(numpy.float64)
+
+    if not isinstance(axis, Integral):
+        raise TypeError("Axis must be an integer.")
+    if axis < -data.ndim or axis >= data.ndim:
+        raise ValueError("Axis is out of bounds for the input data array.")
+
+    if not isinstance(mode, str):
+        raise TypeError("Mode must be a string.")
+    valid_modes = ['reflect', 'constant', 'nearest', 'mirror', 'wrap']
+    if mode not in valid_modes:
+        raise ValueError(f"Mode must be one of {valid_modes}.")
+
+    if not isinstance(value, Number):
+        raise TypeError("Value must be a numeric type.")
+
+    coeffs = compute_central_finite_difference_coefficients(order, spacing, accuracy)
+    return scipy.ndimage.correlate1d(data, coeffs, axis=axis, mode=mode, cval=value)
+
+
+
 
 
 def _assemble_toeplitz_matrix(
@@ -476,6 +823,7 @@ def _assemble_toeplitz_matrix(
     n_times: Integral,
     n_dim: Integral,
     sparse: bool,
+    weights: Optional[numpy.ndarray] = None,
 ) -> Union[numpy.ndarray, scipy.sparse.csr_matrix]:
     r"""
     Assemble the Toeplitz matrix given the semi-row and semi-column vectors.
@@ -501,11 +849,34 @@ def _assemble_toeplitz_matrix(
     sparse : :class:`bool`
         Whether to return a sparse matrix.
 
+    weights : :class:`numpy.ndarray`, optional
+        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.
+
     Returns
     -------
     :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`
         The assembled Toeplitz matrix with shape :obj:`(n_times * n_dim, n_times * n_dim)`.
     """
+    if weights is None:
+        if sparse:
+            weights = scipy.sparse.eye(n_dim)
+        else:
+            weights = numpy.eye(n_dim)
+    else:
+        weights = numpy.asarray(weights)
+        if weights.ndim == 1:
+            if weights.shape[0] != n_dim:
+                raise ValueError("Weights array must have shape (n_dim,) for diagonal weighting.")
+            if sparse:
+                weights = scipy.sparse.diags(weights)
+            else:
+                weights = numpy.diag(weights)
+        elif weights.ndim == 2:
+            if weights.shape != (n_dim, n_dim):
+                raise ValueError("Weights array must have shape (n_dim, n_dim) for full weighting.")
+        else:
+            raise ValueError("Weights array must be either 1D or 2D.")
+
     length_col = min(len(semi_col), n_times)
     length_row = min(len(semi_row), n_times)
 
@@ -528,7 +899,7 @@ def _assemble_toeplitz_matrix(
         T = scipy.sparse.diags(diagonals, offsets, shape=(n_times, n_times), format='csr')
 
         # Kronecker product with identity matrix for spatial dimensions
-        D = scipy.sparse.kron(T, scipy.sparse.eye(n_dim), format='csr')
+        D = scipy.sparse.kron(T, weights, format='csr')
 
     # Dense version
     else:
@@ -542,9 +913,10 @@ def _assemble_toeplitz_matrix(
         T = scipy.linalg.toeplitz(first_col, first_row)
 
         # Kronecker product with identity matrix for spatial dimensions
-        D = numpy.kron(T, numpy.eye(n_dim))
+        D = numpy.kron(T, weights)
 
     return D
+
 
 
 
@@ -557,6 +929,7 @@ def assemble_forward_finite_difference_matrix(
     spacing: Number = 1.0,
     accuracy: Integral = 1,
     sparse: bool = False,
+    weights: Optional[numpy.ndarray] = None,
 ) -> Union[numpy.ndarray, scipy.sparse.csr_matrix]:
     r"""
     Assemble the temporal derivation operator matrix for finite difference approximation with forward scheme.
@@ -625,6 +998,9 @@ def assemble_forward_finite_difference_matrix(
     sparse : :class:`bool`, optional
         Whether to return a sparse matrix. Default is :obj:`False`.
 
+    weights : :class:`numpy.ndarray`, optional
+        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.
+
     Returns
     -------
     :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`
@@ -690,7 +1066,7 @@ def assemble_forward_finite_difference_matrix(
     # Create the non-zero first rows of the Toeplitz matrix
     row = coeffs
 
-    return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse)
+    return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse, weights=weights)
 
 
 
@@ -701,6 +1077,7 @@ def assemble_backward_finite_difference_matrix(
     spacing: Number = 1.0,
     accuracy: Integral = 1,
     sparse: bool = False,
+    weights: Optional[numpy.ndarray] = None,
 ) -> Union[numpy.ndarray, scipy.sparse.csr_matrix]:
     r"""
     Assemble the temporal derivation operator matrix for finite difference approximation with backward scheme.
@@ -767,6 +1144,10 @@ def assemble_backward_finite_difference_matrix(
 
     sparse : :class:`bool`, optional
         Whether to return a sparse matrix. Default is :obj:`False`.
+    
+    weights : :class:`numpy.ndarray`, optional
+        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.
+
 
     Returns
     -------
@@ -835,7 +1216,7 @@ def assemble_backward_finite_difference_matrix(
     # Create the non-zero first rows of the Toeplitz matrix
     row = numpy.array([coeffs[0]])
 
-    return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse)
+    return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse, weights=weights)
 
 
 
@@ -846,6 +1227,7 @@ def assemble_central_finite_difference_matrix(
     spacing: Number = 1.0,
     accuracy: Integral = 2,
     sparse: bool = False,
+    weights: Optional[numpy.ndarray] = None,
 ) -> Union[numpy.ndarray, scipy.sparse.csr_matrix]:
     r"""
     Assemble the temporal derivation operator matrix for finite difference approximation with central scheme.
@@ -914,6 +1296,10 @@ def assemble_central_finite_difference_matrix(
     sparse : :class:`bool`, optional
         Whether to return a sparse matrix. Default is :obj:`False`.
 
+    weights : :class:`numpy.ndarray`, optional
+        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.
+
+
     Returns
     -------
     :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`
@@ -941,12 +1327,12 @@ def assemble_central_finite_difference_matrix(
     >>> assemble_central_finite_difference_matrix(1, 4, n_dim=2, spacing=0.1, accuracy=4)
     array([[ -500/2,      0,   400/3,      0, -100/12,       0,       0,       0],
            [      0, -500/2,       0,  400/3,       0, -100/12,       0,       0],
-           [ 100/12,      0,  -500/2,      0,   400/3,       0, -100/12,       0],
-           [      0, 100/12,       0, -500/2,       0,   400/3,       0, -100/12],
-           [      0,      0,  100/12,      0,  -500/2,       0,   400/3,       0],
-           [      0,      0,       0, 100/12,       0,  -500/2,       0,   400/3],
-           [      0,      0,       0,      0,  100/12,       0,  -500/2,       0],
-           [      0,      0,       0,      0,       0,  100/12,       0,  -500/2]])
+           [  400/3,      0,  -500/2,      0,   400/3,       0, -100/12,       0],
+           [      0,  400/3,       0, -500/2,       0,   400/3,       0, -100/12],
+           [-100/12,      0,   400/3,      0,  -500/2,       0,   400/3,       0],
+           [      0,-100/12,       0,  400/3,       0,  -500/2,       0,   400/3],
+           [      0,      0, -100/12,      0,   400/3,       0,  -500/2,       0],
+           [      0,      0,       0,-100/12,      0,   400/3,       0,  -500/2]])
 
     """
     if not isinstance(n_times, Integral):
@@ -985,7 +1371,7 @@ def assemble_central_finite_difference_matrix(
     # Create the non-zero first rows of the Toeplitz matrix
     row = coeffs[(half_size):]
 
-    return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse)
+    return _assemble_toeplitz_matrix(row, col, n_times, n_dim, sparse, weights=weights)
 
 
 
@@ -1045,3 +1431,47 @@ if __name__ == "__main__":
         computed = compute_central_finite_difference_coefficients(order, 1.0, accuracy)
         assert numpy.allclose(computed, numpy.array(expected)), f"Central FD coefficients mismatch for order {order} and accuracy {accuracy}: expected {expected}, got {computed}"
     print("All central finite difference coefficient tests passed.")
+
+
+    data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])
+
+    central_solution = {
+        (1, 2): numpy.array([0.5, 2., 4., 6., 3.5]),
+    }
+
+    for key, expected in central_solution.items():
+        order, accuracy = key
+        computed = apply_central_finite_difference(data, order=order, spacing=1.0, accuracy=accuracy)
+        assert numpy.allclose(computed, expected), f"Central FD application mismatch for order {order} and accuracy {accuracy}: expected {expected}, got {computed}"
+        computed_multi = apply_central_finite_difference(numpy.tile(data, (3, 1)).T, order=order, spacing=1.0, accuracy=accuracy, axis=0)
+        expected_multi = numpy.tile(expected, (3, 1)).T
+        assert numpy.allclose(computed_multi, expected_multi), f"Central FD application mismatch for multi-dimensional data for order {order} and accuracy {accuracy}: expected {expected_multi}, got {computed_multi}"
+    print("All central finite difference application tests passed.")
+
+    forward_solution = {
+        (1, 1): numpy.array([1., 3., 5., 7., 0.]),
+        (2, 1): numpy.array([2., 2., 2., -7., -7.]),
+    }
+
+    for key, expected in forward_solution.items():
+        order, accuracy = key
+        computed = apply_forward_finite_difference(data, order=order, spacing=1.0, accuracy=accuracy)
+        assert numpy.allclose(computed, expected), f"Forward FD application mismatch for order {order} and accuracy {accuracy}: expected {expected}, got {computed}"
+        computed_multi = apply_forward_finite_difference(numpy.tile(data, (2, 1)).T, order=order, spacing=1.0, accuracy=accuracy, axis=0)
+        expected_multi = numpy.tile(expected, (2, 1)).T
+        assert numpy.allclose(computed_multi, expected_multi), f"Forward FD application mismatch for multi-dimensional data for order {order} and accuracy {accuracy}: expected {expected_multi}, got {computed_multi}"
+    print("All forward finite difference application tests passed.")
+
+    backward_solution = {
+        (1, 1): numpy.array([0., 1., 3., 5., 7.]),
+        (2, 1): numpy.array([1., 1., 2., 2., 2.]),
+    }
+
+    for key, expected in backward_solution.items():
+        order, accuracy = key
+        computed = apply_backward_finite_difference(data, order=order, spacing=1.0, accuracy=accuracy)
+        assert numpy.allclose(computed, expected), f"Backward FD application mismatch for order {order} and accuracy {accuracy}: expected {expected}, got {computed}"
+        computed_multi = apply_backward_finite_difference(numpy.tile(data, (2, 1)).T, order=order, spacing=1.0, accuracy=accuracy, axis=0)
+        expected_multi = numpy.tile(expected, (2, 1)).T
+        assert numpy.allclose(computed_multi, expected_multi), f"Backward FD application mismatch for multi-dimensional data for order {order} and accuracy {accuracy}: expected {expected_multi}, got {computed_multi}"
+    print("All backward finite difference application tests passed.")
