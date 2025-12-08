@@ -14,28 +14,30 @@ PointCloud class
 .. autoclass:: PointCloud
 
 Instantiate and export PointCloud object
--------------------------------------------
+--------------------------------------------------
 
-To Instantiate a PointCloud object, use one of the following class methods:
+To Instantiate a :class:`PointCloud` object, use one of the following class methods:
 
 .. autosummary::
    :toctree: ../generated/
 
    PointCloud.from_array
-   PointCloud.from_cls
    PointCloud.from_meshio
+   PointCloud.from_npz
    PointCloud.from_obj
    PointCloud.from_ply
    PointCloud.from_vtk
    PointCloud.from_xyz
+
    
-The PointCloud can then be exported to different formats using the following methods:
+The :class:`PointCloud` can then be exported to different formats using the following methods:
 
 .. autosummary::
    :toctree: ../generated/
 
    PointCloud.to_array
    PointCloud.to_meshio
+   PointCloud.to_npz
    PointCloud.to_obj
    PointCloud.to_ply
    PointCloud.to_vtk
@@ -45,7 +47,7 @@ The PointCloud can then be exported to different formats using the following met
 Accessing PointCloud attributes
 -------------------------------------------
 
-The public attributes of a PointCloud object can be accessed using the following properties:
+The public attributes of a :class:`PointCloud` object can be accessed using the following properties:
 
 .. autosummary::
    :toctree: ../generated/
@@ -60,7 +62,7 @@ The public attributes of a PointCloud object can be accessed using the following
 Add, remove or modify points in PointCloud objects
 -----------------------------------------------------
 
-The points of a PointCloud object can be manipulated using the following methods:
+The points of a :class:`PointCloud` object can be manipulated using the following methods:
 
 .. autosummary::
    :toctree: ../generated/
@@ -83,22 +85,24 @@ The points of a PointCloud object can be manipulated using the following methods
 Change the dimension of PointCloud objects
 -----------------------------------------------------
 
-The dimension of a PointCloud object can be changed using the following methods:
+The dimension of a :class:`PointCloud` object can be changed using the following methods:
 
 .. autosummary::
    :toctree: ../generated/
 
+   PointCloud.extend_as_hyperplane
    PointCloud.extend_n_dimensions
+   PointCloud.reduce_to_hyperplane
 
 
 Operations on PointCloud objects
 -------------------------------------------
 
-The following methods can be used to operate on PointCloud objects:
+The following methods can be used to operate on :class:`PointCloud` objects:
 
-- ``+`` operator: Concatenate two PointCloud objects.
-- ``+=`` operator: In-place concatenation of two PointCloud objects.
-- ``len()`` function: Get the number of points in a PointCloud object.
+- ``+`` operator: Concatenate two :class:`PointCloud` objects.
+- ``+=`` operator: In-place concatenation of two :class:`PointCloud` objects.
+- ``len()`` function: Get the number of points in a :class:`PointCloud` object.
 
 .. autosummary::
    :toctree: ../generated/
@@ -111,7 +115,7 @@ The following methods can be used to operate on PointCloud objects:
 PointCloud object geometric computations
 -------------------------------------------
 
-The following methods can be used to perform geometric computations on PointCloud objects:
+The following methods can be used to perform geometric computations on :class:`PointCloud` objects:
 
 .. autosummary::
    :toctree: ../generated/
@@ -123,7 +127,7 @@ The following methods can be used to perform geometric computations on PointClou
 Visualize PointCloud object (1D, 2D, 3D only)
 ----------------------------------------------
 
-The PointCloud class provides a method to visualize the point cloud in 1D, 2D, or 3D space using ``pyvista``:
+The :class:`PointCloud` class provides a method to visualize the point cloud in 1D, 2D, or 3D space using ``pyvista``:
 
 .. autosummary::
    :toctree: ../generated/
@@ -134,9 +138,9 @@ The PointCloud class provides a method to visualize the point cloud in 1D, 2D, o
 Example of a simple PointCloud workflow
 -------------------------------------------
 
-Here is an example of a simple workflow using the PointCloud class:
+Here is an example of a simple workflow using the :class:`PointCloud` class:
 
-First create a PointCloud object from a NumPy array:
+First create a :class:`PointCloud` object from a NumPy array:
 
 .. code-block:: python
 
@@ -146,7 +150,7 @@ First create a PointCloud object from a NumPy array:
    # Create a random NumPy array of shape (100, 3)
    points_array = numpy.random.rand(100, 3)
 
-   # Instantiate a PointCloud object from the NumPy array
+   # Instantiate a :class:`PointCloud` object from the NumPy array
    point_cloud = PointCloud.from_array(points_array)
 
 Now lets change the frame of reference of the point cloud by applying a translation:

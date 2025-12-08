@@ -112,6 +112,7 @@ def compute_BRDF_ward(
     --------
 
     >>> import numpy as np
+    >>> from pysdic import compute_BRDF_ward
     >>> surface_point = np.array([0.0, 0.0, 0.0])
     >>> surface_normal = np.array([0.0, 0.0, 1.0])
     >>> light_positions = np.array([10.0, 0.0, 10.0])
@@ -126,10 +127,13 @@ def compute_BRDF_ward(
         roughness=0.2
     )
     >>> print(brdf_values) # float value
-    0.15915494
+    0.1753778555153093
 
     Deeling with multiple observers:
 
+    >>> surface_point = np.array([0.0, 0.0, 0.0])
+    >>> surface_normal = np.array([0.0, 0.0, 1.0])
+    >>> light_positions = np.array([10.0, 0.0, 10.0])
     >>> observer_positions = np.array([[0.0, 0.0, 10.0], [10.0, 0.0, 10.0]])
     >>> brdf_values = compute_BRDF_ward(
         surface_point, # 1D
@@ -141,11 +145,14 @@ def compute_BRDF_ward(
         roughness=0.2
     )
     >>> print(brdf_values) # Array of shape (N_o,)
-    [ 0.15915494, 0.07957747]
+    [0.17537786 0.15915494]
 
     Deeling with multiple light sources:
 
+    >>> surface_point = np.array([0.0, 0.0, 0.0])
+    >>> surface_normal = np.array([0.0, 0.0, 1.0])
     >>> light_positions = np.array([[10.0, 0.0, 10.0], [0.0, 10.0, 10.0]])
+    >>> observer_positions = np.array([0.0, 0.0, 10.0])
     >>> brdf_values = compute_BRDF_ward(
         surface_point, # 1D
         surface_normal, # 1D
@@ -156,10 +163,12 @@ def compute_BRDF_ward(
         roughness=0.2
     )
     >>> print(brdf_values) # Array of shape (N_l,)
-    [ 0.15915494  0.15915494]
+    [0.17537786 0.17537786]
 
     Deeling with multiple points, light sources and observers:
 
+    >>> surface_point = np.array([0.0, 0.0, 0.0])
+    >>> surface_normal = np.array([0.0, 0.0, 1.0])
     >>> light_positions = np.array([[10.0, 0.0, 10.0], [0.0, 10.0, 10.0]])
     >>> observer_positions = np.array([[0.0, 0.0, 10.0], [10.0, 0.0, 10.0]])
     >>> brdf_values = compute_BRDF_ward(
@@ -172,8 +181,8 @@ def compute_BRDF_ward(
         roughness=0.2
     ) 
     >>> print(brdf_values) # Array of shape (N_p, N_l, N_o)
-    [[ 0.15915494  0.07957747]
-     [ 0.07957747  0.15915494]]
+    [[[0.17537786 0.15915494]
+      [0.17537786 0.15916019]]]
 
     """
     skip_point_dim = False
@@ -383,11 +392,12 @@ def compute_BRDF_beckmann(
     --------
     
     >>> import numpy as np
+    >>> from pysdic import compute_BRDF_beckmann
     >>> surface_point = np.array([0.0, 0.0, 0.0])
     >>> surface_normal = np.array([0.0, 0.0, 1.0])
     >>> light_positions = np.array([10.0, 0.0, 10.0])
     >>> observer_positions = np.array([0.0, 0.0, 10.0])
-    >>> brdf_values = compute_BRDF_ward(
+    >>> brdf_values = compute_BRDF_beckmann(
         surface_point, # 1D
         surface_normal, # 1D
         light_positions, # 1D
@@ -397,12 +407,15 @@ def compute_BRDF_beckmann(
         rms=0.2
     )
     >>> print(brdf_values) # float value
-    0.15915494
+    0.23405289334762058
 
     Deeling with multiple observers:
 
+    >>> surface_point = np.array([0.0, 0.0, 0.0])
+    >>> surface_normal = np.array([0.0, 0.0, 1.0])
+    >>> light_positions = np.array([10.0, 0.0, 10.0])
     >>> observer_positions = np.array([[0.0, 0.0, 10.0], [10.0, 0.0, 10.0]])
-    >>> brdf_values = compute_BRDF_ward(
+    >>> brdf_values = compute_BRDF_beckmann(
         surface_point, # 1D
         surface_normal, # 1D
         light_positions, # 1D
@@ -412,12 +425,15 @@ def compute_BRDF_beckmann(
         rms=0.2
     )
     >>> print(brdf_values) # Array of shape (N_o,)
-    [ 0.15915494, 0.07957747]
+    [0.23405289 0.15915494]
 
     Deeling with multiple light sources:
 
+    >>> surface_point = np.array([0.0, 0.0, 0.0])
+    >>> surface_normal = np.array([0.0, 0.0, 1.0])
     >>> light_positions = np.array([[10.0, 0.0, 10.0], [0.0, 10.0, 10.0]])
-    >>> brdf_values = compute_BRDF_ward(
+    >>> observer_positions = np.array([0.0, 0.0, 10.0])
+    >>> brdf_values = compute_BRDF_beckmann(
         surface_point, # 1D
         surface_normal, # 1D
         light_positions, # 2D
@@ -427,13 +443,15 @@ def compute_BRDF_beckmann(
         rms=0.2
     )
     >>> print(brdf_values) # Array of shape (N_l,)
-    [ 0.15915494  0.15915494]
+    [0.23405289 0.23405289]
 
     Deeling with multiple points, light sources and observers:
 
+    >>> surface_point = np.array([0.0, 0.0, 0.0])
+    >>> surface_normal = np.array([0.0, 0.0, 1.0])
     >>> light_positions = np.array([[10.0, 0.0, 10.0], [0.0, 10.0, 10.0]])
     >>> observer_positions = np.array([[0.0, 0.0, 10.0], [10.0, 0.0, 10.0]])
-    >>> brdf_values = compute_BRDF_ward(
+    >>> brdf_values = compute_BRDF_beckmann(
         surface_point.reshape(1, -1), # 2D
         surface_normal.reshape(1, -1), # 2D
         light_positions, # 2D
@@ -443,8 +461,8 @@ def compute_BRDF_beckmann(
         rms=0.2
     ) 
     >>> print(brdf_values) # Array of shape (N_p, N_l, N_o)
-    [[ 0.15915494  0.07957747]
-     [ 0.07957747  0.15915494]]
+    [[[0.23405289 0.15915494]
+      [0.23405289 0.15918831]]]
 
     """
     skip_point_dim = False

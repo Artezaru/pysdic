@@ -82,7 +82,7 @@ class PointCloud(object):
     @property
     def points(self) -> numpy.ndarray:
         r"""
-        An numpy array of shape (:math:`N_p`, :math:`E`) representing the coordinates of the points in the cloud.
+        [Get or Set] An numpy array of shape (:math:`N_p`, :math:`E`) representing the coordinates of the points in the cloud.
 
         .. note::
 
@@ -165,7 +165,7 @@ class PointCloud(object):
     @property
     def coordinates(self) -> numpy.ndarray:
         r"""
-        Alias for :meth:`points` property.
+        [Get or Set] Alias for :meth:`points` property.
         """
         return self.points
 
@@ -177,7 +177,7 @@ class PointCloud(object):
     @property
     def n_points(self) -> int:
         r"""
-        The number of points :math:`N_p` in the point cloud.
+        [Get] The number of points :math:`N_p` in the point cloud.
 
         .. note::
 
@@ -230,7 +230,7 @@ class PointCloud(object):
     @property
     def shape(self) -> tuple[int, int]:
         r"""
-        The shape of the points array (:math:`N_p`, :math:`E`).
+        [Get] The shape of the points array (:math:`N_p`, :math:`E`).
 
         .. seealso::
 
@@ -270,7 +270,7 @@ class PointCloud(object):
     @property
     def n_dimensions(self) -> int:
         r"""
-        The dimension :math:`E` of the point cloud.
+        [Get] The dimension :math:`E` of the point cloud.
 
         .. seealso::
 
@@ -396,56 +396,7 @@ class PointCloud(object):
         
         """
         return self.points.copy()
-    
-
-    @classmethod
-    def from_cls(cls, other: PointCloud) -> PointCloud:
-        r"""
-        Create a :class:`PointCloud` object from another :class:`PointCloud` instance.
-
-        .. seealso::
-
-            - :meth:`to_array` method for converting the point cloud back to a NumPy array.
-            - :meth:`copy` method for creating a copy of the point cloud (similar functionality).
-
-        Parameters
-        ----------
-        other: :class:`PointCloud`
-            Another :class:`PointCloud` instance to copy the points from.
-
-        Returns
-        -------
-        :class:`PointCloud`
-            A new :class:`PointCloud` object containing the same points as the input :class:`PointCloud`.
-
-        Raises
-        ------
-        ValueError
-            If the input is not an instance of :class:`PointCloud`.
-
-
-        Examples
-        --------
-        Creating a :class:`PointCloud` object from another :class:`PointCloud` instance.
-
-        .. code-block:: python
-
-            from pysdic import PointCloud
-
-            # Create an initial point cloud
-            original_points = [[0, 0, 0], [1, 1, 1], [2, 2, 2]]
-            original_point_cloud = PointCloud.from_array(original_points)
-
-            # Create a new point cloud from the original one
-            new_point_cloud = PointCloud.from_cls(original_point_cloud)
-
-        Now, ``new_point_cloud`` is a :class:`PointCloud` object containing the same points as ``original_point_cloud``.
-
-        """
-        if not isinstance(other, PointCloud):
-            raise ValueError("Input must be an instance of PointCloud.")
-        return cls.from_array(other.points.copy())
-    
+ 
 
     @classmethod
     def from_meshio(cls, mesh: meshio.Mesh) -> PointCloud:
@@ -504,7 +455,7 @@ class PointCloud(object):
             raise ValueError("The mesh does not contain any points.")
         vertices = mesh.points.copy()
         return cls.from_array(vertices)
-
+    
 
     def to_meshio(self) -> meshio.Mesh:
         r"""
@@ -541,6 +492,98 @@ class PointCloud(object):
         Now, ``mesh`` is a :class:`meshio.Mesh` object containing the points of the point cloud as vertices.
         """
         return meshio.Mesh(points=self.points.copy(), cells=[])
+    
+
+    @classmethod
+    def from_npz(cls, filepath: str) -> PointCloud:
+        r"""
+        Create a :class:`PointCloud` object from a NPZ file.
+
+        The points are read using ``numpy.load``.
+
+        The NPZ file should contain an array named 'points' with shape (:math:`N_p`, :math:`E`).
+
+        .. seealso::
+
+            - :meth:`to_npz` method for saving the point cloud to a NPZ file.
+
+        Parameters
+        ----------
+        filepath : :class:`str`
+            The path to the NPZ file.
+
+        Returns
+        -------
+        :class:`PointCloud`
+            A :class:`PointCloud` object containing the points read from the NPZ file.
+
+            
+        Examples
+        --------
+        Creating a :class:`PointCloud` object from a NPZ file.
+
+        .. code-block:: python
+
+            from pysdic import PointCloud
+
+            # Create a point cloud from a NPZ file
+            point_cloud = PointCloud.from_npz('path/to/point_cloud.npz')
+
+        Now, ``point_cloud`` is a :class:`PointCloud` object containing the points read from the specified NPZ file.
+
+        """
+        path = os.path.expanduser(filepath)
+        if not os.path.isfile(path) or not os.path.exists(path):
+            raise FileNotFoundError(f"File not found: {filepath}")
+        
+        data = numpy.load(filepath)
+        if 'points' not in data:
+            raise ValueError("NPZ file must contain an array named 'points'.")
+        
+        points = data['points']
+        return cls.from_array(points)
+    
+
+    def to_npz(self, filepath: str) -> None:
+        r"""
+        Save the point cloud to a NPZ file.
+
+        The points are saved using ``numpy.savez``.
+
+        The NPZ file will contain an array named 'points' with shape (:math:`N_p`, :math:`E`).
+
+        .. seealso::
+
+            - :meth:`from_npz` method for creating a PointCloud object from a NPZ file.
+
+        Parameters
+        ----------
+        filepath : :class:`str`
+            The path to the output NPZ file.
+
+            
+        Examples
+        --------
+        Saving a :class:`PointCloud` object to a NPZ file.
+
+        .. code-block:: python
+
+            from pysdic import PointCloud
+            import numpy as np
+
+            # Create a random point cloud with 100 points
+            random_points = np.random.rand(100, 3)  # shape (100, 3)
+            point_cloud = PointCloud.from_array(random_points)
+
+            # Save the point cloud to a NPZ file
+            point_cloud.to_npz('path/to/output_point_cloud.npz')
+
+        This will save the points of the point cloud to the specified NPZ file.
+
+        """
+        path = os.path.expanduser(filepath)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        numpy.savez(path, points=self.points)
     
 
     @classmethod
@@ -982,7 +1025,9 @@ class PointCloud(object):
         path = os.path.expanduser(filepath)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         numpy.savetxt(path, self.points, delimiter=delimiter)
-    
+
+
+
 
     # ==========================
     # Operations
@@ -2207,6 +2252,135 @@ class PointCloud(object):
 
         return PointCloud.from_array(new_points)
 
+
+    def extend_as_hyperplane(self, axes: numpy.ndarray) -> PointCloud:
+        r"""
+        Extend the point cloud to a higher number of dimensions by embedding it in a hyperplane defined by specified axes.
+
+        This method returns a new :class:`PointCloud` object embedded in a higher-dimensional space, where the original points are placed along the specified axes and other dimensions are filled with zeros.
+        :obj:`axes` should contain the coordinates of the axis (:math:`\vec{e}_i`) of the current point cloud in the higher-dimensional space.
+
+        .. math::
+
+            \text{new\_point}_j = \sum_{i=1}^{E} \text{point}_{j,i} \cdot \vec{e}_i
+
+        .. seealso::
+
+            - :meth:`reduce_to_hyperplane` for reducing a point cloud to a lower-dimensional space using specified axes.
+
+        Parameters
+        ----------
+        axes : numpy.ndarray
+            A 2D NumPy array of shape (:math:`E, D`) where :math:`E` is the current number of dimensions and :math:`D` is the desired number of dimensions in the extended point cloud.
+
+        Returns
+        -------
+        :class:`PointCloud`
+            A new :class:`PointCloud` object embedded in the higher-dimensional space.
+
+        Raises
+        ------
+        ValueError
+            If the shape of `axes` is not (:math:`E, D`) where :math:`E` is the current number of dimensions or if :math:`D` is less than :math:`E`.
+
+            
+        Examples
+        --------
+        Create a 2D :class:`PointCloud` and extend it to 4D using specified axes.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic import PointCloud
+
+            # Create a 2D point cloud
+            points_2d = np.array([[1, 2], [3, 4], [5, 6]])  # shape (3, 2)
+            point_cloud_2d = PointCloud(points_2d)
+
+            # Define axes for embedding in 4D space
+            axes = np.array([[1, 0, 0, 0],
+                             [0, 1, 0, 0]])  # shape (2, 4)
+
+            # Extend to 4D
+            point_cloud_4d = point_cloud_2d.extend_as_hyperplane(axes)
+            print(point_cloud_4d.points)
+            # Output: A NumPy array of shape (3, 4) with points embedded in the specified hyperplane
+
+        """
+        axes = numpy.asarray(axes, dtype=numpy.float64)
+        if axes.ndim != 2 or axes.shape[0] != self.n_dimensions or axes.shape[1] < self.n_dimensions:
+            raise ValueError(f"axes must be a 2D array of shape ({self.n_dimensions}, D) with D >= {self.n_dimensions}.")
+        
+        # Create new points array in higher-dimensional space
+        new_points = self.points @ axes  # Matrix multiplication to embed points
+
+        return PointCloud.from_array(new_points)
+    
+
+    def reduce_to_hyperplane(self, axes: numpy.ndarray) -> PointCloud:
+        r"""
+        Reduce the point cloud to a lower number of dimensions by projecting it onto a hyperplane defined by specified axes.
+
+        This method returns a new :class:`PointCloud` object projected onto a lower-dimensional space, where the original points are represented in terms of the specified axes.
+
+        .. math::
+
+            \text{new\_point}_{j,i} = \text{point}_j \cdot \vec{e}_i
+
+        .. seealso::
+
+            - :meth:`extend_as_hyperplane` for extending a point cloud to a higher-dimensional space using specified axes.
+
+        Parameters
+        ----------
+        axes : numpy.ndarray
+            A 2D NumPy array of shape (:math:`D, E`) where :math:`D` is desired number of dimensions in the reduced point cloud and :math:`E` is the current number of dimensions.
+
+        Returns
+        -------
+        :class:`PointCloud`
+            A new :class:`PointCloud` object projected onto the lower-dimensional space.
+
+        Raises
+        ------
+        ValueError
+            If the shape of `axes` is not (:math:`D, E`) where :math:`E` is the current number of dimensions or if :math:`D` is greater than :math:`E`.
+
+
+        Examples
+        --------
+        Create a 4D :class:`PointCloud` and reduce it to 2D using specified axes.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic import PointCloud
+
+            # Create a 4D point cloud
+            points_4d = np.array([[1, 2, 3, 4],
+                                  [5, 6, 7, 8],
+                                  [9, 10, 11, 12]])  # shape (3, 4)
+            point_cloud_4d = PointCloud(points_4d)
+
+            # Define axes for projection to 2D space
+            axes = np.array([[1, 0, 0, 0],
+                             [0, 1, 0, 0]])  # shape (2, 4)
+
+            # Reduce to 2D
+            point_cloud_2d = point_cloud_4d.reduce_on_hyperplane(axes)
+            print(point_cloud_2d.points)
+            # Output: A NumPy array of shape (3, 2) with points projected onto the specified hyperplane
+
+        """
+        axes = numpy.asarray(axes, dtype=numpy.float64)
+        if axes.ndim != 2 or axes.shape[1] != self.n_dimensions or axes.shape[0] > self.n_dimensions:
+            raise ValueError(f"axes must be a 2D array of shape (D, {self.n_dimensions}) with D <= {self.n_dimensions}.")
+        
+        # Create new points array in lower-dimensional space
+        new_points = self.points @ axes.T  # Matrix multiplication to project points
+
+        return PointCloud.from_array(new_points)
+    
 
     # ==============
     # Visualization

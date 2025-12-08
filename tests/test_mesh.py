@@ -132,6 +132,39 @@ def test_to_from_meshio(mesh):
 
 
 @pytest.mark.parametrize("mesh", [simple_mesh(), simple_mesh_with_properties(), simple_mesh_with_complex_properties(), simple_heightmap()])
+def test_from_to_npz(mesh, tmp_path):
+    """ Test conversion to and from NPZ file. """
+    file = tmp_path / "temp_mesh.npz"
+
+    if not mesh.is_empty():
+        mesh.to_npz(file)
+    else:
+        # Check if empty mesh raises error
+        with pytest.raises(ValueError):
+            mesh.to_npz(file)
+        return
+    mesh_from_npz = Mesh.from_npz(file)
+
+    assert mesh.n_vertices == mesh_from_npz.n_vertices
+    assert mesh.n_elements == mesh_from_npz.n_elements
+
+    np.testing.assert_array_equal(mesh.connectivity, mesh_from_npz.connectivity)
+    np.testing.assert_array_equal(mesh.vertices.points, mesh_from_npz.vertices.points)
+
+    for key in mesh.list_vertices_properties():
+        np.testing.assert_array_equal(
+            mesh.get_vertices_property(key),
+            mesh_from_npz.get_vertices_property(key)
+        )
+
+    for key in mesh.list_elements_properties():
+        np.testing.assert_array_equal(
+            mesh.get_elements_property(key),
+            mesh_from_npz.get_elements_property(key)
+        )
+
+
+@pytest.mark.parametrize("mesh", [simple_mesh(), simple_mesh_with_properties(), simple_mesh_with_complex_properties(), simple_heightmap()])
 def test_from_to_vtk(mesh, tmp_path):
     """ Test conversion to and from VTK file. """
     file = tmp_path / "temp_mesh.vtk"

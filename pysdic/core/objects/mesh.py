@@ -778,6 +778,164 @@ class Mesh(ABC):
     
 
     @classmethod
+    def from_npz(cls, filename: str, element_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
+        r"""
+        Create a Mesh instance from a NPZ file. (Only for 3D embedding dimension meshes)
+
+        This method uses numpy to read the NPZ file and then converts it to a :class:`Mesh` instance.
+
+        .. seealso::
+
+            - :meth:`Mesh.to_npz` for the reverse operation.
+            - `numpy documentation <https://numpy.org/doc/stable/reference/generated/numpy.load.html>`_ for more information.
+            - :class:`Mesh` for more information on the Mesh class and element types.
+
+        Parameters
+        ----------
+        filename : :class:`str`
+            The path to the NPZ file.
+
+        element_type : Optional[:class:`str`], optional
+            The expected type of elements in the mesh, by default None.
+
+        load_properties : :class:`bool`, optional
+            If :obj:`True`, properties are extracted from the NPZ file, by default :obj:`True`.
+
+        internal_bypass : :class:`bool`, optional
+            If :obj:`True`, internal checks are bypassed for better performance, by default :obj:`False`.
+
+        Returns
+        -------
+        :class:`Mesh`
+            A :class:`Mesh` instance created from the NPZ file.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the file does not exist.
+        ValueError
+            If the file format is not supported or the mesh structure is invalid.
+
+        
+        Examples
+        --------
+        Create a simple :class:`meshio.Mesh` object.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic import Mesh
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            cells = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh = Mesh(vertices=points, connectivity=cells, element_type="triangle_3")
+            mesh.save_npz("simple_mesh.npz")
+
+        Create a :class:`Mesh` instance from the NPZ file.
+
+        .. code-block:: python
+
+            mesh3d = Mesh.from_npz("simple_mesh.npz")
+            print(mesh3d.vertices)
+            # Output: PointCloud with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        """
+        if not isinstance(load_properties, bool):
+            raise TypeError(f"load_properties must be a boolean, got {type(load_properties)}.")
+        
+        path = os.path.abspath(os.path.expanduser(filename))
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"File '{filename}' does not exist.")
+        
+        data = numpy.load(path, allow_pickle=True)
+        points = data["vertices"]
+        connectivity = data["connectivity"]
+        vertices_properties = {}
+        elements_properties = {}
+
+        if load_properties:
+            vertices_properties = data.get("vertices_properties", {}).item()
+            elements_properties = data.get("elements_properties", {}).item()
+
+        return cls(
+            vertices=PointCloud(points), 
+            connectivity=connectivity, 
+            vertices_properties=vertices_properties,
+            elements_properties=elements_properties,
+            element_type=element_type,
+            internal_bypass=internal_bypass
+        )
+    
+
+    def to_npz(self, filename: str, save_properties: bool = True) -> None:
+        r"""
+        Write the :class:`Mesh` instance to a NPZ file. (Only for 3D embedding dimension meshes)
+        
+        The mesh must not be empty.
+
+        This method uses numpy to write the Mesh instance to a NPZ file.
+
+        .. seealso::
+
+            - :meth:`Mesh.from_npz` for the reverse operation.
+            - `numpy documentation <https://numpy.org/doc/stable/reference/generated/numpy.savez.html>`_ for more information.
+
+        Parameters
+        ----------
+        filename : :class:`str`
+            The path to the output NPZ file.
+
+        save_properties : :class:`bool`, optional
+            If :obj:`True`, properties are saved to the NPZ file, by default :obj:`True`.
+
+        Raises
+        ------
+        ValueError
+            If the file format is not supported or the mesh is empty.
+
+            
+        Examples
+        --------
+        Create a simple :class:`Mesh` instance.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic import Mesh, PointCloud
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity)
+
+        Save the :class:`Mesh` instance to a NPZ file.
+
+        .. code-block:: python
+
+            mesh3d.to_npz("simple_mesh.npz")
+            # This will create a file named 'simple_mesh.npz' in the current directory.
+
+        """
+        if self.n_vertices == 0 or self.n_elements == 0:
+            raise ValueError("Cannot save an empty mesh to NPZ file.")
+        if not isinstance(save_properties, bool):
+            raise TypeError(f"save_properties must be a boolean, got {type(save_properties)}.")
+        
+        path = os.path.abspath(os.path.expanduser(filename))
+        if save_properties:
+            numpy.savez(
+                path,
+                vertices=self.vertices.points,
+                connectivity=self.connectivity,
+                vertices_properties=self._vertices_properties,
+                elements_properties=self._elements_properties
+            )
+        else:
+            numpy.savez(
+                path,
+                vertices=self.vertices.points,
+                connectivity=self.connectivity
+            )
+    
+
+    @classmethod
     def from_vtk(cls, filename: str, element_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
         r"""
         Create a Mesh instance from a VTK file. (Only for 3D embedding dimension meshes)
@@ -927,7 +1085,7 @@ class Mesh(ABC):
     @property
     def vertices(self) -> PointCloud:
         r"""
-        The vertices of the mesh in an :class:`PointCloud` instance.
+        [Get or Set] The vertices of the mesh in an :class:`PointCloud` instance.
 
         The vertices are represented as a PointCloud instance with shape (:math:`N_v`, :math:`E`) where :math:`N_v` is the number of vertices and :math:`E` is the embedding dimension.
 
@@ -935,26 +1093,16 @@ class Mesh(ABC):
 
             This property is settable.
 
-        To change the number of vertices, it is recommended to create a new Mesh instance with the updated vertices and connectivity
-        rather than modifying the vertices in place. For memory considerations, you can also modify the vertices in place, but please ensure that
-        all necessary checks are performed before using this mode.
-
-        You should set `internal_bypass` to True before modifying the vertices, and set it back to False afterwards.
-
-        .. code-block:: python
-
-            mesh.internal_bypass = True
-            mesh.vertices = new_vertices
-            mesh.connectivity = new_connectivity
-            mesh.clear_properties()  # Optional: clear properties if they are no longer valid
-            mesh.internal_bypass = False
-            mesh.validate()  # Optional: ensure the mesh is still valid
-
         .. warning::
 
             If the vertices are changed, the connectivity and properties may become invalid. 
             Please ensure to recompute or update them accordingly.
 
+            To change the number of vertices, it is recommended to create a new Mesh instance with the updated vertices and connectivity
+            rather than modifying the vertices in place. For memory considerations, you can also modify the vertices in place, but please ensure that
+            all necessary checks are performed before using this mode.
+
+            
         Parameters
         ----------
         value : Union[:class:`PointCloud`, :class:`numpy.ndarray`]
@@ -1000,33 +1148,25 @@ class Mesh(ABC):
     @property
     def connectivity(self) -> numpy.ndarray:
         r"""
-        Get or set the connectivity of the mesh.
+        [Get or Set] The connectivity of the mesh.
 
         The connectivity is represented as a numpy ndarray with shape (:math:`N_e`, :math:`N_{vpe}`)
         where :math:`N_e` is the number of elements and :math:`N_{vpe}` is the number of vertices per element.
-
-        An alias for this property is :attr:`mesh.elements`.
-
+        
         .. note::
-
-            If the connectivity is changed, the properties should be updated accordingly.
-            To avoid inconsistencies, it is recommended to create a new Mesh instance with the updated vertices and connectivity.
-
-            Otherwise, you should set `internal_bypass` to True before modifying the connectivity, and set it back to False afterwards.
-
-            .. code-block:: python
-
-                mesh.internal_bypass = True
-                mesh.connectivity = new_connectivity
-                mesh.clear_elements_properties()  # Optional: clear properties if they are no longer valid
-                mesh.elements_uvmap = new_uvmap  # Optional: set new uvmap if needed or other properties
-                mesh.internal_bypass = False
-                mesh.validate()  # Optional: ensure the mesh is still valid
+            
+            - An alias for this property is :attr:`mesh.elements`.
+            - This property is settable.
 
         .. warning::
 
             If the connectivity is changed, the properties may become invalid. 
             Please ensure to recompute or update them accordingly.        
+
+            If you change the connectivity, please ensure that all indices are valid with respect to the current vertices.
+            To change the connectivity, it is recommended to create a new Mesh instance with the updated vertices and connectivity
+            rather than modifying the connectivity in place. For memory considerations, you can also modify the connectivity in place, but please ensure that
+            all necessary checks are performed before using this mode.
 
         Parameters
         ----------
@@ -1072,7 +1212,7 @@ class Mesh(ABC):
     @property
     def elements(self) -> numpy.ndarray:
         r"""
-        Alias for :attr:`connectivity` property.
+        [Get or Set] Alias for :attr:`connectivity` property.
         """
         return self.connectivity
     
@@ -1083,7 +1223,7 @@ class Mesh(ABC):
     @property
     def n_vertices(self) -> int:
         r"""
-        Get the number of vertices :math:`N_v` in the mesh (same as :attr:`N_v`).
+        [Get] The number of vertices :math:`N_v` in the mesh (same as :attr:`N_v`).
 
         .. note::
 
@@ -1123,7 +1263,7 @@ class Mesh(ABC):
     @property
     def N_v(self) -> int:
         r"""
-        Alias for :attr:`n_vertices` property.
+        [Get] Alias for :attr:`n_vertices` property.
         """
         return self.n_vertices
     
@@ -1131,7 +1271,7 @@ class Mesh(ABC):
     @property
     def n_elements(self) -> int:
         r"""
-        Get the number of elements :math:`N_e` in the mesh (same as :attr:`N_e`).
+        [Get] The number of elements :math:`N_e` in the mesh (same as :attr:`N_e`).
 
         Returns
         -------
@@ -1165,7 +1305,7 @@ class Mesh(ABC):
     @property
     def N_e(self) -> int:
         r"""
-        Alias for :attr:`n_elements` property.
+        [Get] Alias for :attr:`n_elements` property.
         """
         return self.n_elements
     
@@ -1173,7 +1313,7 @@ class Mesh(ABC):
     @property
     def n_dimensions(self) -> int:
         r"""
-        Get the embedding dimension :math:`E` of the mesh (same as :attr:`E`).
+        [Get] The embedding dimension :math:`E` of the mesh (same as :attr:`E`).
 
         Returns
         -------
@@ -1207,14 +1347,14 @@ class Mesh(ABC):
     @property
     def E(self) -> int:
         r"""
-        Alias for :attr:`n_dimensions` property.
+        [Get] Alias for :attr:`n_dimensions` property.
         """
         return self.n_dimensions
 
     @property
     def n_vertices_per_element(self) -> int:
         r"""
-        Get the number of vertices per element :math:`N_{vpe}` in the mesh (same as :attr:`N_vpe`).
+        [Get] The number of vertices per element :math:`N_{vpe}` in the mesh (same as :attr:`N_vpe`).
 
         Returns
         -------
@@ -1249,14 +1389,14 @@ class Mesh(ABC):
     @property
     def N_vpe(self) -> int:
         r"""
-        Alias for :attr:`n_vertices_per_element` property.
+        [Get] Alias for :attr:`n_vertices_per_element` property.
         """
         return self.n_vertices_per_element
 
     @property
     def n_topological_dimensions(self) -> int:
         r"""
-        Get the topological dimension :math:`K` of the elements in the mesh (same as :attr:`K`).
+        [Get] The topological dimension :math:`K` of the elements in the mesh (same as :attr:`K`).
 
         Returns
         -------
@@ -1294,7 +1434,7 @@ class Mesh(ABC):
     @property
     def K(self) -> int:
         r"""
-        Alias for :attr:`n_topological_dimensions` property.
+        [Get] Alias for :attr:`n_topological_dimensions` property.
         """
         return self.n_topological_dimensions
     
@@ -1302,7 +1442,7 @@ class Mesh(ABC):
     @property
     def element_type(self) -> Optional[str]:
         r"""
-        Get the element type of the mesh.
+        [Get] The element type of the mesh.
 
         .. seealso::
 
@@ -1342,7 +1482,7 @@ class Mesh(ABC):
     @property
     def expected_N_vpe(self) -> Optional[int]:
         r"""
-        Get the expected number of vertices per element :math:`N_{vpe}` for the mesh.
+        [Get] The expected number of vertices per element :math:`N_{vpe}` for the mesh.
 
         .. seealso::
 
@@ -1382,7 +1522,7 @@ class Mesh(ABC):
     @property
     def expected_K(self) -> Optional[int]:
         r"""
-        Get the expected topological dimension :math:`K` for the mesh.
+        [Get] The expected topological dimension :math:`K` for the mesh.
 
         .. seealso::
 
@@ -1421,7 +1561,7 @@ class Mesh(ABC):
     @property
     def meshio_cell_type(self) -> Optional[str]:
         r"""
-        Get the corresponding meshio cell type for the mesh.
+        [Get] The corresponding meshio cell type for the mesh.
 
         .. seealso::
 
@@ -1460,7 +1600,7 @@ class Mesh(ABC):
     @property
     def vtk_cell_type(self) -> Optional[int]:
         r"""
-        Get the corresponding VTK cell type for the mesh.
+        [Get] The corresponding VTK cell type for the mesh.
 
         .. seealso::
 
@@ -2550,7 +2690,7 @@ class Mesh(ABC):
     @property
     def elements_uvmap(self) -> Optional[numpy.ndarray]:
         r"""
-        Get or set the UV mapping of each element in the mesh (only for surfacique meshes :math:`K=2`).
+        [Get or Set] The UV mapping of each element in the mesh (only for surfacique meshes :math:`K=2`).
 
         The UV mapping is stored as a numpy ndarray of shape (:math:`N_e`, 2 * :math:`N_{vpe}`), where :math:`N_e` is the number of elements and :math:`N_{vpe}` is the number of vertices per element.
 

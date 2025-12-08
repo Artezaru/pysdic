@@ -119,7 +119,6 @@ def test_from_to_obj_with_nans(tmp_path, Np, E):
     loaded_cloud = pysdic.PointCloud.from_obj(str(obj_filepath))
     assert numpy.array_equal(loaded_cloud.points, points, equal_nan=True)
 
-
 @pytest.mark.parametrize("Np, E", [(100, 3)])
 def test_from_to_ply(tmp_path, Np, E):
     points = numpy.random.rand(Np, E)
@@ -219,6 +218,17 @@ def test_from_to_vtk_binary_with_nans(tmp_path, Np, E):
     
     loaded_cloud = pysdic.PointCloud.from_vtk(str(vtk_filepath))
     assert numpy.array_equal(loaded_cloud.points, points[numpy.isfinite(points).all(axis=1)], equal_nan=True)
+
+@pytest.mark.parametrize("Np, E", [(100, 3)])
+def test_from_to_npz(tmp_path, Np, E):
+    points = numpy.random.rand(Np, E)
+    point_cloud = pysdic.PointCloud.from_array(points)
+    
+    npz_filepath = tmp_path / "test_point_cloud.npz"
+    point_cloud.to_npz(str(npz_filepath))
+    
+    loaded_cloud = pysdic.PointCloud.from_npz(str(npz_filepath))
+    numpy.testing.assert_array_equal(loaded_cloud.points, points)
 
 # ==========================================
 # Attribute Tests

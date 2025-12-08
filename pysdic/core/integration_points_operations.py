@@ -25,7 +25,7 @@ def assemble_shape_function_matrix(
     shape_functions: numpy.ndarray,
     element_connectivity: numpy.ndarray,
     element_indices: numpy.ndarray,
-    vertices_number: Optional[int] = None,
+    n_vertices: Optional[int] = None,
     *,
     sparse: bool = False,
     skip_m1: bool = True,
@@ -60,7 +60,7 @@ def assemble_shape_function_matrix(
     element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)
         An array containing the indices of each element corresponding to the :math:`M` integration points.
 
-    vertices_number : :class:`int`, optional
+    n_vertices : :class:`int`, optional
         The total number of vertices :math:`N_{v}` in the mesh.
         If not provided, it will be inferred as the maximum node index in :obj:`element_connectivity` plus one. 
 
@@ -150,16 +150,16 @@ def assemble_shape_function_matrix(
         raise ValueError("default must be a real number.")
     
     # Extract number of vertices
-    if vertices_number is None:
-        vertices_number = numpy.max(element_connectivity) + 1
+    if n_vertices is None:
+        n_vertices = numpy.max(element_connectivity) + 1
     
-    if not isinstance(vertices_number, Integral) or vertices_number <= 0:
-        raise ValueError("vertices_number must be a positive integer.")
+    if not isinstance(n_vertices, Integral) or n_vertices <= 0:
+        raise ValueError("n_vertices must be a positive integer.")
     
     # Extract dimensions
     M = shape_functions.shape[0]
     N_npe = shape_functions.shape[1]
-    N_v = vertices_number
+    N_v = n_vertices
 
     # Handle skip_m1 option
     if skip_m1:
@@ -329,7 +329,7 @@ def derivate_property(
     default: Real = numpy.nan,
 ) -> numpy.ndarray:
     r"""
-    Derivate a property defined at the nodes of a mesh to given integration points within elements using shape function derivatives. Derivation is performed with respect to global coordinates.
+    Derivate a property defined at the nodes of a mesh to given integration points within elements with respect to global coordinates :math:`(x,y,z,...)` using shape function derivatives.
 
     In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,
     The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.
@@ -749,7 +749,7 @@ def project_property_to_vertices(
     shape_functions: numpy.ndarray,
     element_connectivity: numpy.ndarray,
     element_indices: numpy.ndarray,
-    vertices_number: Optional[int] = None,
+    n_vertices: Optional[int] = None,
     points_weights: Optional[numpy.ndarray] = None,
     *,
     sparse: bool = False,
@@ -807,7 +807,7 @@ def project_property_to_vertices(
     element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)
         An array containing the indices of each element corresponding to the :math:`M` integration points.
 
-    vertices_number : :class:`int`, optional
+    n_vertices : :class:`int`, optional
         The total number of vertices :math:`N_{v}` in the mesh. If not provided, it will be inferred as the maximum index in :obj:`element_connectivity` plus one.
 
     points_weights : :class:`numpy.ndarray` of shape (:math:`M`,), optional
@@ -933,7 +933,7 @@ def project_property_to_vertices(
                                                        shape_functions,
                                                        element_connectivity,
                                                        element_indices,
-                                                       vertices_number=vertices_coordinates.shape[0])
+                                                       n_vertices=vertices_coordinates.shape[0])
 
         print("Original Properties at Nodes:")
         print(property_array)
@@ -981,11 +981,11 @@ def project_property_to_vertices(
         raise ValueError("skip_m1 must be a boolean value.")
     
     # Extract number of vertices
-    if vertices_number is None:
-        vertices_number = numpy.max(element_connectivity) + 1
+    if n_vertices is None:
+        n_vertices = numpy.max(element_connectivity) + 1
     
-    if not isinstance(vertices_number, Integral) or vertices_number <= 0:
-        raise ValueError("vertices_number must be a positive integer.")
+    if not isinstance(n_vertices, Integral) or n_vertices <= 0:
+        raise ValueError("n_vertices must be a positive integer.")
     
     # Extract weights
     if points_weights is None:
@@ -1000,14 +1000,14 @@ def project_property_to_vertices(
         shape_functions=shape_functions,
         element_connectivity=element_connectivity,
         element_indices=element_indices,
-        vertices_number=vertices_number,
+        n_vertices=n_vertices,
         sparse=sparse,
         skip_m1=skip_m1,
         default=0.0,
     )  # Shape: (M, N_v)
 
     # Initialize projected property
-    projected_property = numpy.zeros((vertices_number, property_array.shape[1]), dtype=numpy.float64)
+    projected_property = numpy.zeros((n_vertices, property_array.shape[1]), dtype=numpy.float64)
 
     # Construct weights matrix
     if sparse:
@@ -1045,7 +1045,7 @@ def project_property_to_vertices(
     
     # Return unaffected mask if requested
     if return_unaffected:
-        unaffected_mask = numpy.ones((vertices_number,), dtype=bool)
+        unaffected_mask = numpy.ones((n_vertices,), dtype=bool)
         unaffected_mask[valid_rows] = False
         return projected_property, unaffected_mask
     

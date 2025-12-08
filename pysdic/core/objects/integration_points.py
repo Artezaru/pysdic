@@ -72,12 +72,6 @@ class IntegrationPoints(object):
         print(integration_points.n_points)  # Output: 4
         print(integration_points.n_topological_dimensions)  # Output: 2
 
-    Operations
-    ----------
-
-    - ``len(integration_points)``: Returns the number of points in the integration points (see :meth:`n_points`).
-    - ``integration_points1 + integration_points2``: Concatenates two integration points (The new integration points is a copy of original integration points, not same instance).
-
     """
     __slots__ = ['_natural_coordinates', '_element_ids', '_weights', '_n_topological_dimensions', '_internal_bypass']
 
@@ -118,7 +112,7 @@ class IntegrationPoints(object):
     @property
     def internal_bypass(self) -> bool:
         r"""
-        Get and set the internal bypass mode status.
+        [Get or Set] The internal bypass mode status.
         When enabled, internal checks are skipped for better performance.
 
         This is useful for testing purposes, but should not be used in production code.
@@ -269,10 +263,14 @@ class IntegrationPoints(object):
     @property
     def natural_coordinates(self) -> numpy.ndarray:
         r"""
-        Get or set the natural coordinates of the integration points as a numpy ndarray with shape (:math:`N_p`, :math:`K`),
+        [Get or Set] The natural coordinates of the integration points as a numpy ndarray with shape (:math:`N_p`, :math:`K`),
         where :math:`N_p` is the number of integration points and :math:`K` is the topological dimension of the element.
 
         If a point is not included in any element, its natural coordinates should be set to NaN.
+
+        .. note::
+
+            This property is settable.
 
         .. seealso::
 
@@ -301,10 +299,14 @@ class IntegrationPoints(object):
     @property
     def element_indices(self) -> numpy.ndarray:
         r"""
-        Get or set the element indices of the integration points as a numpy ndarray with shape (:math:`N_p`,),
+        [Get or Set] The element indices of the integration points as a numpy ndarray with shape (:math:`N_p`,),
         where :math:`N_p` is the number of integration points.
 
         if a point is not included in any element, its element ID should be set to :obj:`-1`.
+
+        .. note::
+
+            This property is settable.
 
         .. seealso::
 
@@ -333,10 +335,14 @@ class IntegrationPoints(object):
     @property
     def weights(self) -> numpy.ndarray:
         r"""
-        Get or set the weights of the integration points as a numpy ndarray with shape (:math:`N_p`,),
+        [Get or Set] The weights of the integration points as a numpy ndarray with shape (:math:`N_p`,),
         where :math:`N_p` is the number of integration points.
 
         If weights are not provided, equal weights of :obj:`1` are assumed for all points.
+
+        .. note::
+
+            This property is settable.
             
         .. seealso::
 
@@ -366,7 +372,7 @@ class IntegrationPoints(object):
     @property
     def n_topological_dimensions(self) -> int:
         r"""
-        The topological dimension of the element.
+        [Get] The topological dimension of the element.
 
         This is inferred from the shape of the :attr:`natural_coordinates` if not provided during instantiation.
 
@@ -380,7 +386,7 @@ class IntegrationPoints(object):
     @property
     def n_points(self) -> int:
         r"""
-        The number of integration points.
+        [Get] The number of integration points.
 
         Returns
         -------
@@ -392,7 +398,7 @@ class IntegrationPoints(object):
     @property
     def n_valids(self) -> int:
         r"""
-        The number of valid integration points (points included in an element).
+        [Get] The number of valid integration points (points included in an element).
 
         A point is considered valid if its element index is not :obj:`-1`.
 
@@ -405,7 +411,7 @@ class IntegrationPoints(object):
     
     def shape(self) -> Tuple[int, int]:
         r"""
-        The shape of the integration points data.
+        [Get] The shape of the integration points data.
 
         Returns
         -------
@@ -419,7 +425,7 @@ class IntegrationPoints(object):
     # =======================
     def __len__(self) -> int:
         r"""
-        Get the number of integration points.
+        [Get] The number of integration points.
 
         Returns
         -------

@@ -9,14 +9,14 @@ pysdic.IntegrationPoints
 I/O IntegrationPoints objects
 -------------------------------------------
 
-The IntegrationPoints class can be instantiated using the following constructor:
+The :class:`IntegrationPoints` class can be instantiated using the following constructor:
 
 .. autosummary::
    :toctree: ../generated/
 
     IntegrationPoints.from_npz
 
-The IntegrationPoints can be exported to a .npz file using the following method:
+The :class:`IntegrationPoints` can be exported to a .npz file using the following method:
 
 .. autosummary::
    :toctree: ../generated/
@@ -57,9 +57,9 @@ Manipulating IntegrationPoints objects
 Operating on IntegrationPoints objects
 -------------------------------------------
 
-The following methods can be used to operate on IntegrationPoints objects:
+The following methods can be used to operate on :class:`IntegrationPoints` objects:
 
-- ``+`` operator: Concatenate two IntegrationPoints objects.
-- ``+=`` operator: In-place concatenation of two IntegrationPoints objects.
-- ``len()`` function: Get the number of points in a IntegrationPoints object.
+- ``+`` operator: Concatenate two :class:`IntegrationPoints` objects.
+- ``+=`` operator: In-place concatenation of two :class:`IntegrationPoints` objects.
+- ``len()`` function: Get the number of points in a :class:`IntegrationPoints` object.
 
