@@ -15,13 +15,12 @@
 import numpy
 import pytest
 
-import pysdic.geometry as pg
-
+import pysdic
 
 def test_segment_2_shape_functions():
     xi = numpy.array([-1.0, 0.0, 1.0, 1.5, numpy.nan])
     
-    shape_functions, shape_function_derivatives = pg.segment_2_shape_functions(xi, return_derivatives=True)
+    shape_functions, shape_function_derivatives = pysdic.segment_2_shape_functions(xi, return_derivatives=True)
 
     assert shape_functions.shape == (5, 2)
     assert shape_function_derivatives.shape == (5, 2, 1)
@@ -33,7 +32,7 @@ def test_segment_2_shape_functions():
 def test_segment_2_nodal():
     xi = numpy.array([-1.0, 1.0])
 
-    shape_functions = pg.segment_2_shape_functions(xi, return_derivatives=False)
+    shape_functions = pysdic.segment_2_shape_functions(xi, return_derivatives=False)
 
     expected_shape_functions = numpy.eye(2)
     assert numpy.allclose(shape_functions, expected_shape_functions)
@@ -42,7 +41,7 @@ def test_segment_2_nodal():
 def test_segment_3_shape_functions():
     xi = numpy.array([-1.0, 0.0, 1.0, 1.5, numpy.nan])
     
-    shape_functions, shape_function_derivatives = pg.segment_3_shape_functions(xi, return_derivatives=True)
+    shape_functions, shape_function_derivatives = pysdic.segment_3_shape_functions(xi, return_derivatives=True)
 
     assert shape_functions.shape == (5, 3)
     assert shape_function_derivatives.shape == (5, 3, 1)
@@ -54,7 +53,7 @@ def test_segment_3_shape_functions():
 def test_segment_3_nodal():
     xi = numpy.array([-1.0, 1.0, 0.0])
 
-    shape_functions = pg.segment_3_shape_functions(xi, return_derivatives=False)
+    shape_functions = pysdic.segment_3_shape_functions(xi, return_derivatives=False)
 
     expected_shape_functions = numpy.eye(3)
     assert numpy.allclose(shape_functions, expected_shape_functions)
@@ -63,7 +62,7 @@ def test_segment_3_nodal():
 def test_triangle_3_shape_functions():
     xi_eta = numpy.array([[0.3, 0.3], [0.5, 0.5], [0.6, 0.6], [-0.1, -0.1], [numpy.nan, numpy.nan]])
     
-    shape_functions, shape_function_derivatives = pg.triangle_3_shape_functions(xi_eta, return_derivatives=True)
+    shape_functions, shape_function_derivatives = pysdic.triangle_3_shape_functions(xi_eta, return_derivatives=True)
 
     assert shape_functions.shape == (5, 3)
     assert shape_function_derivatives.shape == (5, 3, 2)
@@ -75,7 +74,7 @@ def test_triangle_3_shape_functions():
 def test_triangle_3_nodal():
     xi_eta = numpy.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0]])
 
-    shape_functions = pg.triangle_3_shape_functions(xi_eta, return_derivatives=False)
+    shape_functions = pysdic.triangle_3_shape_functions(xi_eta, return_derivatives=False)
 
     expected_shape_functions = numpy.eye(3)
     assert numpy.allclose(shape_functions, expected_shape_functions)
@@ -84,7 +83,7 @@ def test_triangle_3_nodal():
 def test_triangle_6_shape_functions():
     xi_eta = numpy.array([[0.2, 0.2], [0.5, 0.5], [0.6, 0.6], [-0.1, -0.1], [numpy.nan, numpy.nan]])
     
-    shape_functions, shape_function_derivatives = pg.triangle_6_shape_functions(xi_eta, return_derivatives=True)
+    shape_functions, shape_function_derivatives = pysdic.triangle_6_shape_functions(xi_eta, return_derivatives=True)
 
     assert shape_functions.shape == (5, 6)
     assert shape_function_derivatives.shape == (5, 6, 2)
@@ -96,7 +95,7 @@ def test_triangle_6_shape_functions():
 def test_triangle_6_nodal():
     xi_eta = numpy.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [0.5, 0.0], [0.5, 0.5], [0.0, 0.5]])
 
-    shape_functions = pg.triangle_6_shape_functions(xi_eta, return_derivatives=False)
+    shape_functions = pysdic.triangle_6_shape_functions(xi_eta, return_derivatives=False)
 
     expected_shape_functions = numpy.eye(6)
     assert numpy.allclose(shape_functions, expected_shape_functions)
@@ -105,7 +104,7 @@ def test_triangle_6_nodal():
 def test_quadrangle_4_shape_functions():
     xi_eta = numpy.array([[0.0, 0.0], [0.5, 0.5], [1.5, 1.5], [-1.5, -1.5], [numpy.nan, numpy.nan]])
     
-    shape_functions, shape_function_derivatives = pg.quadrangle_4_shape_functions(xi_eta, return_derivatives=True)
+    shape_functions, shape_function_derivatives = pysdic.quadrangle_4_shape_functions(xi_eta, return_derivatives=True)
 
     assert shape_functions.shape == (5, 4)
     assert shape_function_derivatives.shape == (5, 4, 2)
@@ -117,7 +116,7 @@ def test_quadrangle_4_shape_functions():
 def test_quadrangle_4_nodal():
     xi_eta = numpy.array([[-1.0, -1.0], [1.0, -1.0], [1.0, 1.0], [-1.0, 1.0]])
 
-    shape_functions = pg.quadrangle_4_shape_functions(xi_eta, return_derivatives=False)
+    shape_functions = pysdic.quadrangle_4_shape_functions(xi_eta, return_derivatives=False)
 
     expected_shape_functions = numpy.eye(4)
     assert numpy.allclose(shape_functions, expected_shape_functions)
@@ -126,7 +125,7 @@ def test_quadrangle_4_nodal():
 def test_quadrangle_8_shape_functions():
     xi_eta = numpy.array([[0.0, 0.0], [0.5, 0.5], [1.5, 1.5], [-1.5, -1.5], [numpy.nan, numpy.nan]])
     
-    shape_functions, shape_function_derivatives = pg.quadrangle_8_shape_functions(xi_eta, return_derivatives=True)
+    shape_functions, shape_function_derivatives = pysdic.quadrangle_8_shape_functions(xi_eta, return_derivatives=True)
 
     assert shape_functions.shape == (5, 8)
     assert shape_function_derivatives.shape == (5, 8, 2)
@@ -139,7 +138,7 @@ def test_quadrangle_8_nodal():
     xi_eta = numpy.array([[-1.0, -1.0], [1.0, -1.0], [1.0, 1.0], [-1.0, 1.0],
                          [0.0, -1.0], [1.0, 0.0], [0.0, 1.0], [-1.0, 0.0]])
 
-    shape_functions = pg.quadrangle_8_shape_functions(xi_eta, return_derivatives=False)
+    shape_functions = pysdic.quadrangle_8_shape_functions(xi_eta, return_derivatives=False)
 
     expected_shape_functions = numpy.eye(8)
     assert numpy.allclose(shape_functions, expected_shape_functions)

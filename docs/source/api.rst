@@ -7,44 +7,86 @@ API Reference
    :backlinks: top
 
 
-Geometry Submodule
-------------------
+Manipulate meshes and integration points
+-----------------------------------------
 
-The submodule ``pysdic.geometry`` contains objects and functions to manipulate geometrical entities as 3-dimensional points and meshes.
-
-.. toctree::
-   :maxdepth: 1
-   :caption: pysdic.geometry classes
-
-   ./api_doc/geometry_classes/point_cloud.rst
-   ./api_doc/geometry_classes/mesh_ABC.rst
-   ./api_doc/geometry_classes/surface_mesh_ABC.rst
-   ./api_doc/geometry_classes/implemented_meshes.rst
+The package ``pysdic`` provides classes to store and manipulate geometrical entities such as point clouds, meshes, and integration points.
+The objective is to facilitate the handling of these entities in Stereo Digital Image Correlation (SDIC) analyses and building operators to solve the underlying optimization problems.
 
 .. toctree::
    :maxdepth: 1
-   :caption: pysdic.geometry functions
+   :caption: Shape Functions and Integration Points
 
-   ./api_doc/geometry_functions/shape_functions.rst
-   ./api_doc/geometry_functions/integrated_points_operations.rst
-
-Some utility functions to create specific meshes are also provided:
-
-.. toctree::
-   :maxdepth: 1
-   :caption: pysdic.geometry utility functions
-
-   ./api_doc/create_linear_triangle_axisymmetric.rst
-   ./api_doc/create_linear_triangle_heightmap.rst
-
-
-Operators Submodule
----------------------
-
-The submodule ``pysdic.operators`` contains objects and functions to build operators used in SDIC computations, such as derivation, integration, and interpolation operators.
+   ./api_documentation/shape_functions.rst
+   ./api_documentation/gauss_points.rst
+   ./api_documentation/integration_points_operations.rst
 
 .. toctree::
    :maxdepth: 1
-   :caption: pysdic.operators classes
+   :caption: Objects to store PointClouds, Meshes and Integration Points
 
-   ./api_doc/operators_functions/derivation_operator.rst
+   ./api_documentation/point_cloud.rst
+   ./api_documentation/mesh.rst
+   ./api_documentation/integration_points.rst
+   ./api_documentation/create_3D_surface_meshes.rst
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Operate on Specific Meshes
+
+   ./api_documentation/triangle_3_meshes_operations.rst
+
+
+Image Processing and camera manipulations
+-----------------------------------------
+
+The package ``pysdic`` provides functions to handle images and camera models commonly used in SDIC analyses.
+This allows users to project 3D points onto 2D image planes, undistort images, and perform other camera-related operations.
+
+.. seealso::
+
+    - Package ``pycvcam`` for advanced camera model manipulations and calibrations.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Objects and Functions to Handle Images, Cameras and Views
+
+   ./api_documentation/image.rst
+   ./api_documentation/camera.rst
+   ./api_documentation/view.rst
+   ./api_documentation/projection_result.rst
+   ./api_documentation/image_projection_result.rst
+
+
+Regularize displacements
+-----------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Temporal Derivation Operators
+
+   ./api_documentation/temporal_derivation.rst
+
+
+Implement Photometric considerations
+-----------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Photometric Quantities and Lighting Models
+
+   ./api_documentation/photometric_quantities.rst
+   ./api_documentation/BRDF_models.rst
+
+
+Submodule ``pysdic.build`` - Building Operators for SDIC
+-------------------------------------------------------------------------
+
+The submodule ``pysdic.build`` provides functions to build operators used in Stereo Digital Image Correlation (SDIC) analyses.
+These operators are essential for formulating and solving the optimization problems that arise in SDIC.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Building Operators for SDIC
+
+   ./api_documentation/build_displacement_operator.rst

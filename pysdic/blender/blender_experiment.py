@@ -26,7 +26,7 @@ from .blender_camera import BlenderCamera
 from .material_bsdf import MaterialBSDF
 from .spotlight import SpotLight
 
-from ..geometry import LinearTriangleMesh3D
+from ..core.objects.mesh import Mesh
 
 import os
 import numpy
@@ -568,11 +568,11 @@ class BlenderExperiment:
     # =======================================================
     # Blender Scene Management (MESH)
     # =======================================================
-    def add_mesh(self, name: str, mesh: LinearTriangleMesh3D, frames: Optional[List[bool]] = None) -> None:
+    def add_mesh(self, name: str, mesh: Mesh, frames: Optional[List[bool]] = None) -> None:
         r"""
         Add a mesh to the experiment.
 
-        The mesh must be an instance of LinearTriangleMesh3D.
+        The mesh must be an instance of Mesh.
 
         The frames parameter indicates which frames the mesh will be active.
         If None, the mesh will be active for all frames.
@@ -590,12 +590,12 @@ class BlenderExperiment:
             experiment = BlenderExperiment(Nb_frames=10)
             # Define the mesh properties here
             # ...
-            mesh = LinearTriangleMesh3D(vertices=..., triangles=...)
+            mesh = Mesh(vertices=..., triangles=...)
             experiment.add_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.meshes.LinearTriangleMesh3D` for more information on how to define a mesh.
+            - :class:`pyblenderSDIC.meshes.Mesh` for more information on how to define a mesh.
             - :meth:`pyblenderSDIC.BlenderExperiment.update_mesh` to update the mesh properties in the Blender scene.
             - :meth:`pyblenderSDIC.BlenderExperiment.add_mesh_material` to set the material of the mesh.
             - :meth:`pyblenderSDIC.BlenderExperiment.add_mesh_pattern` to set the pattern image of the mesh.
@@ -605,8 +605,8 @@ class BlenderExperiment:
         name : str
             The name of the mesh with less than 50 characters.
         
-        mesh : LinearTriangleMesh3D
-            The mesh object to be added. It must be an instance of LinearTriangleMesh3D.
+        mesh : Mesh
+            The mesh object to be added. It must be an instance of Mesh.
 
         frames : List[bool], optional
             A list of booleans indicating which frames the mesh will be active.
@@ -615,7 +615,7 @@ class BlenderExperiment:
         Raises
         -------
         TypeError
-            If name is not a string or mesh is not an instance of LinearTriangleMesh3D.
+            If name is not a string or mesh is not an instance of Mesh.
         ValueError
             If a mesh with the same name already exists in the experiment or in Blender data.
             If the length of frames is not equal to the number of frames in the experiment (end_frame).
@@ -649,8 +649,10 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} already exists.")
         if name in bpy.data.objects:
             raise ValueError(f"Object with name {name} already exists in Blender data.")
-        if not isinstance(mesh, LinearTriangleMesh3D):
-            raise TypeError("mesh must be an instance of LinearTriangleMesh3D")
+        if not isinstance(mesh, Mesh):
+            raise TypeError("mesh must be an instance of Mesh")
+        if not mesh.element_type == 'triangle_3' or not mesh.n_dimensions == 3:
+            raise ValueError("Only 3D triangular meshes are supported.")
         
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
@@ -767,19 +769,19 @@ class BlenderExperiment:
             experiment = BlenderExperiment(Nb_frames=10)
             # Define the mesh properties here
             # ...
-            mesh = LinearTriangleMesh3D(vertices=..., triangles=...)
+            mesh = Mesh(vertices=..., triangles=...)
             mesh.uvmap = ...
             experiment.add_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
             experiment.add_mesh_pattern(name="Mesh1", pattern_path="path/to/pattern.png")
 
         .. warning::
         
-            The UV coordinates of the mesh must be defined in the LinearTriangleMesh3D object.   
+            The UV coordinates of the mesh must be defined in the Mesh object.   
             as "uvmap" in the point_data dictionary.
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.meshes.LinearTriangleMesh3D` for more information on how to define a mesh.
+            - :class:`pyblenderSDIC.meshes.Mesh` for more information on how to define a mesh.
 
         Parameters
         ----------
@@ -892,7 +894,7 @@ class BlenderExperiment:
             experiment = BlenderExperiment(Nb_frames=10)
             # Define the mesh properties here
             # ...
-            mesh = LinearTriangleMesh3D(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
+            mesh = Mesh(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
             experiment.set_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
             material = MaterialBSDF()
             # Define the material properties here
@@ -1207,7 +1209,7 @@ class BlenderExperiment:
         return self._mesh_objects[name][1]
     
 
-    def get_mesh(self, name: str) -> Tuple[LinearTriangleMesh3D, Object]:
+    def get_mesh(self, name: str) -> Tuple[Mesh, Object]:
         r"""
         Get the mesh object and its Blender object.
         
@@ -1218,8 +1220,8 @@ class BlenderExperiment:
         
         Returns
         -------
-        Tuple[LinearTriangleMesh3D, Object]
-            A tuple containing the LinearTriangleMesh3D object and its corresponding Blender object.
+        Tuple[Mesh, Object]
+            A tuple containing the Mesh object and its corresponding Blender object.
         """
         if not isinstance(name, str):
             raise TypeError("name must be a string")
@@ -1236,8 +1238,8 @@ class BlenderExperiment:
         blender_mesh = bpy.data.objects[name]
 
         # Check the types of the objects
-        if not isinstance(mesh, LinearTriangleMesh3D):
-            raise TypeError("[ERROR] mesh must be an instance of LinearTriangleMesh3D")
+        if not isinstance(mesh, Mesh):
+            raise TypeError("[ERROR] mesh must be an instance of Mesh")
         if not isinstance(blender_mesh, Object):
             raise TypeError("[ERROR] blender_mesh must be an instance of Object")
         
@@ -1338,7 +1340,7 @@ class BlenderExperiment:
     def update_mesh(self, name: str) -> None:
         r"""
         Update the mesh properties in the Blender scene.
-        This method must be called after updating the mesh properties in the LinearTriangleMesh3D object.
+        This method must be called after updating the mesh properties in the Mesh object.
 
         .. code-block:: python
 
@@ -1346,7 +1348,7 @@ class BlenderExperiment:
             experiment = BlenderExperiment(Nb_frames=10)
             # Define the mesh properties here
             # ...
-            mesh = LinearTriangleMesh3D(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
+            mesh = Mesh(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
             experiment.add_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
             # Update some nodes of the mesh here
             # ...
@@ -1428,7 +1430,7 @@ class BlenderExperiment:
             experiment = BlenderExperiment(Nb_frames=10)
             # Define the mesh properties here
             # ...
-            mesh = LinearTriangleMesh3D(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
+            mesh = Mesh(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
             experiment.add_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
             experiment.add_mesh_pattern(name="Mesh1", pattern_path="path/to/pattern.png")
             experiment.change_mesh_pattern(name="Mesh1", pattern_path="path/to/new_pattern.png")

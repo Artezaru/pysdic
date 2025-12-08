@@ -7,20 +7,17 @@ import sys
 import time
 import scipy
 import matplotlib.pyplot as plt
-import multiprocessing
 import tqdm
 
-from pysdic.geometry import LinearTriangleMesh3D, IntegrationPoints, PointCloud3D, integration_points
-from pysdic.imaging import Image, Camera, View
-from pysdic.assemblers import assembly_FESDIC_displacement, assembly_SDIC_distortion
-from pysdic.visualizer import visualize_qt_pyvista_surface_mesh_3d
+import pysdic
+from pysdic import Camera, Image, View, IntegrationPoints, Mesh, PointCloud
 
 work_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(work_dir))
 
 from create_polygon_mask import create_polygon_mask
 
-DISPLAY = True
+DISPLAY = False
 DEFINE_MASK = False
 COMPUTE_DISPLACEMENT = False
 REDUCE_FACTOR = 2 # Factor to reduce the number of rays for integration points creation (square root of the downsampling factor)
@@ -97,8 +94,11 @@ This example shows how to setup the problem and visualize the results using PySD
 """
 
 # Create the reference and deformed meshes
-reference_mesh = LinearTriangleMesh3D.from_vtk(os.path.join(work_dir, "Meshes", "reference_mesh.vtk"))
-deformed_mesh = LinearTriangleMesh3D.from_vtk(os.path.join(work_dir, "Meshes", "deformed_mesh.vtk"))
+reference_mesh = Mesh.from_vtk(os.path.join(work_dir, "Meshes", "reference_mesh.vtk"), element_type='triangle_3')
+deformed_mesh = Mesh.from_vtk(os.path.join(work_dir, "Meshes", "deformed_mesh.vtk"), element_type='triangle_3')
+
+print(f"Reference mesh: {reference_mesh.n_vertices} vertices, {reference_mesh.n_elements} elements")
+print(f"Deformed mesh: {deformed_mesh.n_vertices} vertices, {deformed_mesh.n_elements} elements")
 
 if DISPLAY:
     reference_mesh.visualize(title="Reference Mesh")
@@ -179,8 +179,11 @@ if not os.path.exists(os.path.join(work_dir, "Integration_Points", "integration_
     left_rays_origin, left_rays_direction = reference_left_camera.get_camera_rays(mask=left_mask.astype(bool))
     right_rays_origin, right_rays_direction = reference_right_camera.get_camera_rays(mask=right_mask.astype(bool))
 
-    integration_points_left = reference_mesh.cast_rays(left_rays_origin, left_rays_direction, nan_open3d_errors=True)
-    integration_points_right = reference_mesh.cast_rays(right_rays_origin, right_rays_direction, nan_open3d_errors=True)
+    natural_coordinates_left, element_indices_left = pysdic.triangle_3_cast_rays(reference_mesh.vertices.points, reference_mesh.connectivity, left_rays_origin, left_rays_direction, nan_open3d_errors=True)
+    natural_coordinates_right, element_indices_right = pysdic.triangle_3_cast_rays(reference_mesh.vertices.points, reference_mesh.connectivity, right_rays_origin, right_rays_direction, nan_open3d_errors=True)
+
+    integration_points_left = IntegrationPoints(natural_coordinates_left, element_indices_left)
+    integration_points_right = IntegrationPoints(natural_coordinates_right, element_indices_right)
     integration_points_left.remove_invalids(inplace=True)
     integration_points_right.remove_invalids(inplace=True)
 
@@ -211,8 +214,8 @@ else:
 usefull_vertices = reference_mesh.connectivity[numpy.unique(integration_points.element_indices)]
 usefull_vertices = numpy.unique(usefull_vertices)
 
-if DISPLAY or True:
-    reference_mesh.visualize_integration_points(integration_points, title="Integration Points on Reference Mesh")
+if DISPLAY:
+    reference_mesh.visualize_integration_points(integration_points.natural_coordinates, integration_points.element_indices, title="Integration Points on Reference Mesh")
 
 
 
@@ -235,9 +238,13 @@ Project the integration points to both views in the reference and deformed confi
 """
 
 start_time = time.time()
+
+# Compute the shape functions
+shape_functions = reference_mesh.shape_functions(integration_points.natural_coordinates)
+
 # Convert integration points to 3D points in space for both meshes
-reference_points_3d = reference_mesh.interpolate_property_at_integration_points(integration_points, vertices_coordinates=True)
-deformed_points_3d = deformed_mesh.interpolate_property_at_integration_points(integration_points, vertices_coordinates=True)
+reference_points_3d = pysdic.interpolate_property(reference_mesh.vertices.points, shape_functions, reference_mesh.connectivity, integration_points.element_indices)
+deformed_points_3d = pysdic.interpolate_property(deformed_mesh.vertices.points, shape_functions, deformed_mesh.connectivity, integration_points.element_indices)
 
 # Project to both views and compute residuals (mean per integration point)
 projected_gray_level_reference_left = reference_left_view.image_project(reference_points_3d).gray_levels.reshape((-1,))
@@ -254,7 +261,7 @@ residuals = [
 ]
 
 residuals = numpy.hstack(residuals)  # Shape (total_Np,)
-perfect_residual = numpy.linalg.norm(residuals, axis=0) / residuals.shape[0]  # Mean residual per integration point per view link
+perfect_residual = numpy.linalg.norm(residuals, axis=0) / numpy.sqrt(residuals.shape[0])  # Mean residual per integration point per view link
 
 end_time = time.time()
 print(f"Time to compute the residual for the perfect deformation: {end_time - start_time:.2f} seconds")
@@ -276,17 +283,6 @@ Realize displacement measurement using FESDIC to minimize the residual error bet
 
 if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC_measured_mesh.vtk")) or COMPUTE_DISPLACEMENT:
 
-    def multiprocessing_full_assembly(task):
-        Residual, Jacobian = assembly_FESDIC_displacement(*task)
-        return Residual, Jacobian
-    
-    def multiprocessing_image_project(task):
-        return task[0].image_project(task[1], dx=task[2])
-    
-    def multiprocessing_last_assembly(task):
-        Residual, Jacobian = assembly_FESDIC_displacement(*task[:-2], bypass_image_projection_result_1=task[-2], bypass_image_projection_result_2=task[-1])
-        return Residual, Jacobian
-
     DIC_mesh = reference_mesh.copy()
     DIC_mesh.set_vertices_property("displacement", 1.0 * (deformed_mesh.vertices.points - reference_mesh.vertices.points))  # Initial guess with 90 % of the real displacement
 
@@ -304,25 +300,69 @@ if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC
         # Assemble the system
         assemble_start_time = time.time()
 
-        sparse = True  # Use sparse matrices for the Jacobian assembly
+        # Compute the 3D points in space for the current displacement field
+        world_points_reference = pysdic.interpolate_property(DIC_mesh.vertices.points, shape_functions, DIC_mesh.connectivity, integration_points.element_indices)
+        world_points_deformed = pysdic.interpolate_property(DIC_mesh.vertices.points + DIC_mesh.get_vertices_property("displacement"), shape_functions, DIC_mesh.connectivity, integration_points.element_indices)
 
-        # task = (Mesh, Integration_Points, Displacement_Name_1, Displacement_Name_2, View_1, View_2, is_operative_1, is_operative_2, sparse)
-        Tasks = [(DIC_mesh, integration_points, None, "displacement", reference_left_view, deformed_left_view, False, True, sparse),
-                 (DIC_mesh, integration_points, None, "displacement", reference_left_view, deformed_right_view, False, True, sparse),
-                 (DIC_mesh, integration_points, None, "displacement", reference_right_view, deformed_left_view, False, True, sparse),
-                 (DIC_mesh, integration_points, None, "displacement", reference_right_view, deformed_right_view, False, True, sparse),
-                 (DIC_mesh, integration_points, "displacement", "displacement", deformed_left_view, deformed_right_view, True, True, sparse)]
- 
-        outputs = []
-        with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-            for i in pool.imap(multiprocessing_full_assembly, Tasks):
-                outputs.append(i)
+        # project to both views
+        projected_gray_level_reference_left = reference_left_view.image_project(world_points_reference)
+        projected_gray_level_reference_right = reference_right_view.image_project(world_points_reference)
+        projected_gray_level_deformed_left = deformed_left_view.image_project(world_points_deformed, dx=True)
+        projected_gray_level_deformed_right = deformed_right_view.image_project(world_points_deformed, dx=True)
 
-        Residual = numpy.hstack([o[0] for o in outputs]) # Shape (total_Np,)
-        if sparse:
-            Jacobian = scipy.sparse.vstack([o[1] for o in outputs]) # Shape (total_Np, Nn * 3)
-        else:
-            Jacobian = numpy.vstack([o[1] for o in outputs]) # Shape (total_Np, Nn * 3)
+        projections = [ projected_gray_level_reference_left,
+                        projected_gray_level_deformed_left,
+                        projected_gray_level_reference_right,
+                        projected_gray_level_deformed_right, ]
+        
+        equations = [
+            (0, 1),  # Reference Left - Deformed Left
+            (0, 3),  # Reference Left - Deformed Right
+            (2, 1),  # Reference Right - Deformed Left
+            (2, 3),  # Reference Right - Deformed Right
+            (1, 3),  # Deformed Left - Deformed Right
+        ]
+
+        # Construct the residual and Jacobians
+        residuals = []
+        jacobians = []
+
+        for eq in equations:
+            proj_1 = projections[eq[0]]
+            proj_2 = projections[eq[1]]
+
+            # Create the jacobian an residual for this view pair
+            if proj_1.jacobian_dx is not None and proj_2.jacobian_dx is not None:
+                jacobian_dx = (proj_1.jacobian_dx - proj_2.jacobian_dx).reshape((-1, 3)) # Shape (Np, 3)
+                residual = (proj_2.gray_levels - proj_1.gray_levels).reshape((-1,))  # Shape (Np,)
+            elif proj_1.jacobian_dx is not None:
+                jacobian_dx = (proj_1.jacobian_dx).reshape((-1, 3)) # Shape (Np, 3)
+                residual = (proj_2.gray_levels - proj_1.gray_levels).reshape((-1,))  # Shape (Np,)
+            elif proj_2.jacobian_dx is not None:
+                jacobian_dx = (-proj_2.jacobian_dx).reshape((-1, 3)) # Shape (Np, 3)
+                residual = (proj_2.gray_levels - proj_1.gray_levels).reshape((-1,))  # Shape (Np,)
+            else:
+                raise ValueError("At least one of the two projections must have a valid jacobian_dx for FESDIC displacement computation.")
+            
+            # Assembly the valid jacobian 
+            jacobian_nodal = pysdic.build.build_displacement_operator(
+                jacobian_dx,
+                shape_functions,
+                DIC_mesh.connectivity,
+                integration_points.element_indices,
+                DIC_mesh.n_vertices,
+                sparse=True
+            )
+
+            residuals.append(residual)
+            jacobians.append(jacobian_nodal)
+
+        # Stack all residuals and jacobians
+        Residual = numpy.hstack(residuals) # Shape (total_Np,)
+        assert Residual.shape[0] == sum([r.shape[0] for r in residuals])
+        Jacobian = scipy.sparse.vstack(jacobians) # Shape (total_Np, Nn * 3)
+        assert Jacobian.shape[0] == sum([j.shape[0] for j in jacobians])
+        assert Jacobian.shape[1] == DIC_mesh.n_vertices * 3
 
         # Create the J.T @ J and J.T @ R matrices
         # Cost function to solve: |J @ dU - R|^2
@@ -330,27 +370,20 @@ if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC
         JTR = Jacobian.T @ Residual # Shape (Nn * 3,)
 
         # Search lines with only zeros in JTJ and remove them
-        if sparse:
-            non_zero_rows = numpy.where(JTJ.getnnz(axis=1) != 0)[0]
-            JTJ_reduced = JTJ[non_zero_rows, :][:, non_zero_rows]
-            JTR_reduced = JTR[non_zero_rows]    
-        else:
-            non_zero_rows = numpy.where(numpy.any(JTJ != 0, axis=1))[0]
-            JTJ_reduced = JTJ[non_zero_rows, :][:, non_zero_rows]
-            JTR_reduced = JTR[non_zero_rows]
+        non_zero_rows = numpy.where(JTJ.getnnz(axis=1) != 0)[0]
+        JTJ_reduced = JTJ[non_zero_rows, :][:, non_zero_rows]
+        JTR_reduced = JTR[non_zero_rows]    
 
-        # Solve the linear system
-        if sparse:
-            Delta_U_reduced = scipy.sparse.linalg.spsolve(JTJ_reduced, JTR_reduced)  # Shape (reduced_Nn * 3,)
-        else:
-            Delta_U_reduced = numpy.linalg.solve(JTJ_reduced, JTR_reduced)  # Shape (reduced_Nn * 3,)
+        # Solve the linear syste
+        Delta_U_reduced = scipy.sparse.linalg.spsolve(JTJ_reduced, JTR_reduced)  # Shape (reduced_Nn * 3,)
 
         # Rebuild the full Delta_U vector
         Delta_U = numpy.zeros(DIC_mesh.n_vertices * 3, dtype=numpy.float64)
-        Delta_U[non_zero_rows] = Delta_U_reduced
+        Delta_U[non_zero_rows] = Delta_U_reduced # Shape (Nn * 3,)
+        Delta_U = Delta_U.reshape((DIC_mesh.n_vertices, 3), order='F')  # Shape (Nn, 3)
 
         # Update the displacement field
-        DIC_mesh.set_vertices_property("displacement", DIC_mesh.get_vertices_property("displacement") + Delta_U.reshape((-1, 3)))
+        DIC_mesh.set_vertices_property("displacement", DIC_mesh.get_vertices_property("displacement") + Delta_U)
 
         # Time logging
         assemble_end_time = time.time()
@@ -358,16 +391,16 @@ if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC
 
         # Save the displacement at the current iteration
         DIC_mesh.set_vertices_property(f"displacement_iteration_{iteration}", DIC_mesh.get_vertices_property("displacement").copy())
-        DIC_mesh.set_vertices_property(f"delta_displacement_iteration_{iteration}", Delta_U.reshape((-1, 3)).copy())
+        DIC_mesh.set_vertices_property(f"delta_displacement_iteration_{iteration}", Delta_U.copy())
 
         # Compute norms for monitoring
-        norm_R = numpy.linalg.norm(Residual, axis=0) / Residual.shape[0]
-        norm_JR = numpy.linalg.norm(JTR, axis=0) / Residual.shape[0]
+        norm_R = numpy.linalg.norm(Residual, axis=0) / numpy.sqrt(Residual.shape[0])
+        norm_JR = numpy.linalg.norm(JTR, axis=0) / numpy.sqrt(Residual.shape[0])
         Norm_Rs.append(norm_R)
         Norm_JRs.append(norm_JR)
 
         # Check convergence
-        Delta_U_magnitude = numpy.linalg.norm(Delta_U, axis=0)
+        Delta_U_magnitude = numpy.linalg.norm(Delta_U.ravel(), axis=0)
         Norm_dUs.append(Delta_U_magnitude)
 
         tqdm.tqdm.write(f"{iteration}: ||R||_mean = {norm_R:.6f}, ||J.T@R||_mean = {norm_JR:.6f}, ||Delta_U|| = {Delta_U_magnitude:.6f}")
@@ -390,14 +423,13 @@ if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC
     numpy.savetxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_dUs.txt"), numpy.array(Norm_dUs))
 
 else:
-
-    DIC_mesh = LinearTriangleMesh3D.from_vtk(os.path.join(work_dir, "Results FESDIC Displacement", "DIC_measured_mesh.vtk"), load_properties=True)
+    DIC_mesh = Mesh.from_vtk(os.path.join(work_dir, "Results FESDIC Displacement", "DIC_measured_mesh.vtk"), load_properties=True, element_type='triangle_3')
     Norm_Rs = numpy.loadtxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_Rs.txt")).tolist()
     Norm_JRs = numpy.loadtxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_JRs.txt")).tolist()
     Norm_dUs = numpy.loadtxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_dUs.txt")).tolist()
 
 # Display the residuals curves and the errors in the displacement field along X, Y and Z
-if DISPLAY or True:
+if DISPLAY:
     errors = []
     relative_errors = []
     for iteration in range(1, len(Norm_Rs) + 1):
@@ -479,5 +511,3 @@ if DISPLAY or True:
     plt.tight_layout()
     plt.savefig(os.path.join(work_dir, "Results FESDIC Displacement", "FESDIC_Displacement_Convergence.png"))
     plt.show()
-
-visualize_qt_pyvista_surface_mesh_3d(DIC_mesh, integration_points={"integration_points": integration_points})
