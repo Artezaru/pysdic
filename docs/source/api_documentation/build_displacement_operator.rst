@@ -1,6 +1,6 @@
-.. currentmodule:: pysdic.build
+.. currentmodule:: pysdic.sdic
 
-pysdic.build.build_displacement_operator
+pysdic.sdic.build_displacement_operator
 ==========================================
 
 .. autofunction:: build_displacement_operator

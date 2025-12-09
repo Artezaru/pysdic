@@ -82,7 +82,7 @@ Implement Photometric considerations
 Submodule pysdic.build - Building Operators for SDIC
 -------------------------------------------------------------------------
 
-The submodule ``pysdic.build`` provides functions to build operators used in Stereo Digital Image Correlation (SDIC) analyses.
+The submodule ``pysdic.sdic`` provides functions to build operators used in Stereo Digital Image Correlation (SDIC) analyses.
 These operators are essential for formulating and solving the optimization problems that arise in SDIC.
 
 .. toctree::
