@@ -29,14 +29,14 @@ def simple_mesh():
     """Fixture to create a simple 2D triangle integration points instance."""
     points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
     connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-    mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+    mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
     return mesh3d
 
 def simple_mesh_with_properties():
     """Fixture to create a simple 2D triangle integration points instance."""
     points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
     connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-    mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+    mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
     mesh3d.set_vertices_property("temperature", np.array([100.0, 150.0, 200.0, 250.0]).reshape(-1, 1)) # shape (N, A)
     mesh3d.set_elements_property("material_id", np.array([1, 1, 2, 2]).reshape(-1, 1)) # shape (M, B)
@@ -47,7 +47,7 @@ def simple_mesh_with_complex_properties():
     """Fixture to create a simple 2D triangle integration points instance."""
     points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
     connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-    mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+    mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
     mesh3d.set_vertices_property("displacement", np.array([[0.0, 0.0, 0.0],
                                                            [0.1, 0.0, 0.0],

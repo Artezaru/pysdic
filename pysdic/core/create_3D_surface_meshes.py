@@ -366,7 +366,7 @@ def create_triangle_3_heightmap(
     triangles_uvmap = triangles_uvmap.reshape((triangles_uvmap.shape[0], 6)) # (Ntriangles, 6) - (u1,v1,u2,v2,u3,v3)
 
     # Prepare the mesh
-    mesh = Mesh(PointCloud.from_array(vertices), connectivity=triangles, element_type="triangle_3")
+    mesh = Mesh(PointCloud.from_array(vertices), connectivity=triangles, elements_type="triangle_3")
     
     # Set the UV map
     mesh.elements_uvmap = triangles_uvmap
@@ -822,7 +822,7 @@ def create_triangle_3_axisymmetric(
     triangles_uvmap = triangles_uvmap.reshape((triangles_uvmap.shape[0], 6)) # (Ntriangles, 6) - (u1,v1,u2,v2,u3,v3)
 
     # Prepare the mesh
-    mesh = Mesh(vertices=vertices, connectivity=triangles)
+    mesh = Mesh(vertices=vertices, connectivity=triangles, elements_type="triangle_3")
     
     # Set the UV map
     mesh.elements_uvmap = triangles_uvmap

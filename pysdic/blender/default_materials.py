@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .material_bsdf import MaterialBSDF
+from .blender_material_bsdf import BlenderMaterialBSDF
 
-def get_mirror_material() -> MaterialBSDF:
+def get_mirror_material() -> BlenderMaterialBSDF:
     r"""
     Returns a mirror material for use in Blender.
 
@@ -33,10 +33,10 @@ def get_mirror_material() -> MaterialBSDF:
 
     Returns
     -------
-    MaterialBSDF
-        A MaterialBSDF object representing a mirror material.
+    BlenderMaterialBSDF
+        A BlenderMaterialBSDF object representing a mirror material.
     """
-    return MaterialBSDF(
+    return BlenderMaterialBSDF(
         base_color=(1.0, 1.0, 1.0, 1.0), # White color
         roughness=0.0, # No roughness
         metallic=1.0, # Fully metallic
@@ -46,7 +46,7 @@ def get_mirror_material() -> MaterialBSDF:
     )
 
 
-def get_steel_material() -> MaterialBSDF:
+def get_steel_material() -> BlenderMaterialBSDF:
     r"""
     Returns a steel-like material.
 
@@ -65,10 +65,10 @@ def get_steel_material() -> MaterialBSDF:
 
     Returns
     -------
-    MaterialBSDF
-        A MaterialBSDF object representing polished steel.
+    BlenderMaterialBSDF
+        A BlenderMaterialBSDF object representing polished steel.
     """
-    return MaterialBSDF(
+    return BlenderMaterialBSDF(
         base_color=(0.55, 0.55, 0.55, 1.0),  # Neutral gray
         roughness=0.2,
         metallic=1.0,
@@ -78,7 +78,7 @@ def get_steel_material() -> MaterialBSDF:
     )
 
 
-def get_titanium_material() -> MaterialBSDF:
+def get_titanium_material() -> BlenderMaterialBSDF:
     r"""
     Returns a titanium-like material.
 
@@ -97,10 +97,10 @@ def get_titanium_material() -> MaterialBSDF:
 
     Returns
     -------
-    MaterialBSDF
-        A MaterialBSDF object representing titanium.
+    BlenderMaterialBSDF
+        A BlenderMaterialBSDF object representing titanium.
     """
-    return MaterialBSDF(
+    return BlenderMaterialBSDF(
         base_color=(0.5, 0.52, 0.6, 1.0),  # Slight bluish-gray
         roughness=0.25,
         metallic=1.0,
@@ -110,7 +110,7 @@ def get_titanium_material() -> MaterialBSDF:
     )
 
 
-def get_iron_material() -> MaterialBSDF:
+def get_iron_material() -> BlenderMaterialBSDF:
     r"""
     Returns an iron-like material.
 
@@ -129,10 +129,10 @@ def get_iron_material() -> MaterialBSDF:
 
     Returns
     -------
-    MaterialBSDF
-        A MaterialBSDF object representing iron.
+    BlenderMaterialBSDF
+        A BlenderMaterialBSDF object representing iron.
     """
-    return MaterialBSDF(
+    return BlenderMaterialBSDF(
         base_color=(0.3, 0.3, 0.3, 1.0),  # Dark gray
         roughness=0.35,
         metallic=1.0,
@@ -142,7 +142,7 @@ def get_iron_material() -> MaterialBSDF:
     )
 
 
-def get_copper_material() -> MaterialBSDF:
+def get_copper_material() -> BlenderMaterialBSDF:
     r"""
     Returns a copper-like material.
 
@@ -161,10 +161,10 @@ def get_copper_material() -> MaterialBSDF:
 
     Returns
     -------
-    MaterialBSDF
-        A MaterialBSDF object representing copper.
+    BlenderMaterialBSDF
+        A BlenderMaterialBSDF object representing copper.
     """
-    return MaterialBSDF(
+    return BlenderMaterialBSDF(
         base_color=(0.955, 0.637, 0.538, 1.0),  # Reddish-orange typical of copper
         roughness=0.2,
         metallic=1.0,

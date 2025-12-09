@@ -22,7 +22,7 @@ class ImageProjectionResult:
 
     jacobian_dx : Optional[:class:`numpy.ndarray`]
         The Jacobian matrix of the gray levels with respect to the world points.
-        Shape (:math:`N_p`, :math:`N_{\text{channels}}, 3) if :obj:`dx` is :obj:`True`, otherwise None.
+        Shape (:math:`N_p`, :math:`N_{\text{channels}}`, 3) if :obj:`dx` is :obj:`True`, otherwise None.
 
     jacobian_dintrinsic : Optional[:class:`numpy.ndarray`]
         The Jacobian matrix of the gray levels with respect to the intrinsic parameters.

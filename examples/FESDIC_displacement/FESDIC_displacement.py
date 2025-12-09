@@ -94,8 +94,8 @@ This example shows how to setup the problem and visualize the results using PySD
 """
 
 # Create the reference and deformed meshes
-reference_mesh = Mesh.from_vtk(os.path.join(work_dir, "Meshes", "reference_mesh.vtk"), element_type='triangle_3')
-deformed_mesh = Mesh.from_vtk(os.path.join(work_dir, "Meshes", "deformed_mesh.vtk"), element_type='triangle_3')
+reference_mesh = Mesh.from_vtk(os.path.join(work_dir, "Meshes", "reference_mesh.vtk"), elements_type='triangle_3')
+deformed_mesh = Mesh.from_vtk(os.path.join(work_dir, "Meshes", "deformed_mesh.vtk"), elements_type='triangle_3')
 
 print(f"Reference mesh: {reference_mesh.n_vertices} vertices, {reference_mesh.n_elements} elements")
 print(f"Deformed mesh: {deformed_mesh.n_vertices} vertices, {deformed_mesh.n_elements} elements")
@@ -423,7 +423,7 @@ if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC
     numpy.savetxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_dUs.txt"), numpy.array(Norm_dUs))
 
 else:
-    DIC_mesh = Mesh.from_vtk(os.path.join(work_dir, "Results FESDIC Displacement", "DIC_measured_mesh.vtk"), load_properties=True, element_type='triangle_3')
+    DIC_mesh = Mesh.from_vtk(os.path.join(work_dir, "Results FESDIC Displacement", "DIC_measured_mesh.vtk"), load_properties=True, elements_type='triangle_3')
     Norm_Rs = numpy.loadtxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_Rs.txt")).tolist()
     Norm_JRs = numpy.loadtxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_JRs.txt")).tolist()
     Norm_dUs = numpy.loadtxt(os.path.join(work_dir, "Results FESDIC Displacement", "norm_dUs.txt")).tolist()

@@ -20,7 +20,7 @@ from numbers import Number
 import json
 
 
-class MaterialBSDF:
+class BlenderMaterialBSDF:
     """
     Represents a material with detailed physical and visual properties for Blender's BSDF Principled shader.
     The class used the Blender's Principled BSDF shader as a base for the material. The parameters are based on the Blender's documentation.
@@ -563,21 +563,21 @@ class MaterialBSDF:
             key.lstrip('_'): (value.tolist() if isinstance(value, numpy.ndarray) else value)
             for key, value in self.__dict__.items() if value is not None
         }
-        return f"MaterialBSDF({', '.join(f'{k}={v}' for k, v in non_none_params.items())})"
+        return f"BlenderMaterialBSDF({', '.join(f'{k}={v}' for k, v in non_none_params.items())})"
 
 
 
     # Save and load methods
     def to_dict(self, description: str = "") -> Dict:
         r"""
-        Export the MaterialBSDF's data to a dictionary.
+        Export the BlenderMaterialBSDF's data to a dictionary.
 
         The structure of the dictionary is as follows:
 
         .. code-block:: python
 
             {
-                "type": "MaterialBSDF [pyblenderSDIC]",
+                "type": "BlenderMaterialBSDF",
                 "description": "Description of the material",
                 "base_color": [0.5, 0.5, 0.5, 1.0],
                 "metallic": 0.5,
@@ -594,7 +594,7 @@ class MaterialBSDF:
         Returns
         -------
         dict
-            A dictionary containing the MaterialBSDF's data.
+            A dictionary containing the BlenderMaterialBSDF's data.
 
         Raises
         ------
@@ -606,7 +606,7 @@ class MaterialBSDF:
             raise ValueError("description must be a string.")
         
         # Create the dictionary
-        return_dict = {"type": "MaterialBSDF [pyblenderSDIC]",}
+        return_dict = {"type": "BlenderMaterialBSDF",}
 
         # Add the description if it's not empty
         if description:
@@ -679,9 +679,9 @@ class MaterialBSDF:
 
     def to_json(self, filepath: str, description: str = "") -> None:
         r"""
-        Export the MaterialBSDF's data to a JSON file.
+        Export the BlenderMaterialBSDF's data to a JSON file.
 
-        The structure of the JSON file follows the :meth:`pyblenderSDIC.materials.MaterialBSDF.to_dict` method.
+        The structure of the JSON file follows the :meth:BlenderMaterialBSDF.to_dict` method.
 
         Parameters
         ----------
@@ -706,32 +706,32 @@ class MaterialBSDF:
 
     
     @classmethod
-    def from_dict(cls, data: Dict) -> MaterialBSDF:
+    def from_dict(cls, data: Dict) -> BlenderMaterialBSDF:
         r"""
-        Create a MaterialBSDF instance from a dictionary.
+        Create a BlenderMaterialBSDF instance from a dictionary.
 
-        The structure of the dictionary should be as provided by the :meth:`pyblenderSDIC.meshes.MaterialBSDF.to_dict` method.
+        The structure of the dictionary should be as provided by the :meth:`to_dict` method.
         The other fields of the dictionary are ignored.
 
         .. code-block:: python
 
-            from pyblenderSDIC.materials import MaterialBSDF
+            from pysdic.blender import BlenderMaterialBSDF
 
             mat_dict = {
-                "type": "MaterialBSDF [pyblenderSDIC]",
+                "type": "BlenderMaterialBSDF",
                 "description": "Description of the material",
                 "base_color": [0.5, 0.5, 0.5, 1.0],
                 "metallic": 0.5,
                 "roughness": 0.5,
             }
 
-            # Create a MaterialBSDF instance from the dictionary
-            material = MaterialBSDF.from_dict(mat_dict)
+            # Create a BlenderMaterialBSDF instance from the dictionary
+            material = BlenderMaterialBSDF.from_dict(mat_dict)
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.meshes.MaterialBSDF.to_dict` for saving the mesh to a dictionary.
-            - :meth:`pyblenderSDIC.meshes.MaterialBSDF.from_json` for loading from a JSON file.
+            - :meth:`to_dict` for saving the mesh to a dictionary.
+            - :meth:`from_json` for loading from a JSON file.
 
         Parameters
         ----------
@@ -740,8 +740,8 @@ class MaterialBSDF:
         
         Returns
         -------
-        MaterialBSDF
-            The MaterialBSDF instance.
+        BlenderMaterialBSDF
+            The BlenderMaterialBSDF instance.
 
         Raises
         ------
@@ -754,7 +754,7 @@ class MaterialBSDF:
         if not isinstance(data, dict):
             raise ValueError("data must be a dictionary.")
         
-        # Create a new MaterialBSDF instance
+        # Create a new BlenderMaterialBSDF instance
         material = cls()
         
         # Extract the properties from the dictionary
@@ -823,23 +823,23 @@ class MaterialBSDF:
     
 
     @classmethod
-    def from_json(cls, filepath: str) -> MaterialBSDF:
+    def from_json(cls, filepath: str) -> BlenderMaterialBSDF:
         r"""
-        Create a MaterialBSDF instance from a JSON file.
+        Create a BlenderMaterialBSDF instance from a JSON file.
 
-        The structure of the JSON file follows the :meth:`pyblenderSDIC.materials.MaterialBSDF.to_dict` method.
+        The structure of the JSON file follows the :meth:`to_dict` method.
 
         .. code-block:: python
 
-            from pyblenderSDIC.materials import MaterialBSDF
+            from pysdic.blender import BlenderMaterialBSDF
 
             # Load the mesh from a JSON file
-            material = MaterialBSDF.from_json("path/to/mesh.json")
+            material = BlenderMaterialBSDF.from_json("path/to/mesh.json")
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.materials.MaterialBSDF.to_json` for saving the material to a JSON file.
-            - :meth:`pyblenderSDIC.materials.MaterialBSDF.from_dict` for loading from a dictionary.
+            - :meth:`to_json` for saving the material to a JSON file.
+            - :meth:`from_dict` for loading from a dictionary.
 
         Parameters
         ----------
@@ -848,8 +848,8 @@ class MaterialBSDF:
         
         Returns
         -------
-        MaterialBSDF
-            A MaterialBSDF instance.
+        BlenderMaterialBSDF
+            A BlenderMaterialBSDF instance.
         
         Raises
         ------
@@ -869,7 +869,7 @@ class MaterialBSDF:
     @classmethod
     def get_details(cls) -> str:
         """
-        Get detailed descriptions of each parameter in the MaterialBSDF class.
+        Get detailed descriptions of each parameter in the BlenderMaterialBSDF class.
 
         Returns:
             str: A detailed description of all parameters and their roles in Blender materials.

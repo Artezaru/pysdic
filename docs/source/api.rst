@@ -79,7 +79,7 @@ Implement Photometric considerations
    ./api_documentation/BRDF_models.rst
 
 
-Submodule ``pysdic.build`` - Building Operators for SDIC
+Submodule pysdic.build - Building Operators for SDIC
 -------------------------------------------------------------------------
 
 The submodule ``pysdic.build`` provides functions to build operators used in Stereo Digital Image Correlation (SDIC) analyses.
@@ -90,3 +90,20 @@ These operators are essential for formulating and solving the optimization probl
    :caption: Building Operators for SDIC
 
    ./api_documentation/build_displacement_operator.rst
+
+
+Submodule pysdic.blender - Integrating with Blender
+-------------------------------------------------------------------------
+
+The submodule ``pysdic.blender`` provides classes and functions to generate and manipulate 3D scenes in Blender.
+This integration allows users to visualize and analyze SDIC results within the Blender environment.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Blender Integration
+
+   ./api_documentation/blender_experiment.rst
+   ./api_documentation/blender_camera.rst
+   ./api_documentation/blender_spotlight.rst
+   ./api_documentation/blender_mesh.rst
+   ./api_documentation/blender_material_bsdf.rst

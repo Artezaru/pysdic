@@ -442,9 +442,13 @@ class Camera(object):
     @property
     def sensor_height(self) -> int:
         r"""
-        Get or set the height of the camera sensor in pixels.
+        [Get or set] The height of the camera sensor in pixels (:math:`y`-axis).
+        
+        .. note::
 
-        As described in ``pycvcam`` (https://github.com/Artezaru/pycvcam), the height of the image is along the y-axis.
+            This property is settable.
+
+        As described in ``pycvcam`` (https://github.com/Artezaru/pycvcam), the height of the image is along the :math:`y`-axis.
 
         Must be a positive integer.
 
@@ -452,7 +456,7 @@ class Camera(object):
 
         Returns
         -------
-        int
+        :class:`int`
             The height of the camera sensor in pixels.
         """
         return self._sensor_height
@@ -469,9 +473,14 @@ class Camera(object):
     @property
     def sensor_width(self) -> int:
         r"""
-        Get or set the width of the camera sensor in pixels.
+        [Get or set] The width of the camera sensor in pixels (:math:`x`-axis).
 
-        As described in ``pycvcam`` (https://github.com/Artezaru/pycvcam), the width of the image is along the x-axis.
+        .. note::
+
+            This property is settable.
+
+
+        As described in ``pycvcam`` (https://github.com/Artezaru/pycvcam), the width of the image is along the :math:`x`-axis.
 
         Must be a positive integer.
 
@@ -479,7 +488,7 @@ class Camera(object):
 
         Returns
         -------
-        int
+        :class:`int`
             The width of the camera sensor in pixels.
         """
         return self._sensor_width
@@ -496,7 +505,11 @@ class Camera(object):
     @property
     def extrinsic(self) -> Optional[pycvcam.core.Extrinsic]:
         r"""
-        Get or set the extrinsic transformation of the camera.
+        [Get or set] The extrinsic transformation of the camera.
+
+        .. note::
+
+            This property is settable.
 
         The extrinsic transformation describes the position and orientation of the camera in the world.
 
@@ -508,7 +521,7 @@ class Camera(object):
 
         Returns
         -------
-        Optional[pycvcam.core.Extrinsic]
+        Optional[:class:`pycvcam.core.Extrinsic`]
             The extrinsic transformation of the camera.
         """
         return self._extrinsic
@@ -525,7 +538,11 @@ class Camera(object):
     @property
     def distortion(self) -> Optional[pycvcam.core.Distortion]:
         r"""
-        Get or set the distortion transformation of the camera.
+        [Get or set] The distortion transformation of the camera.
+
+        .. note::
+
+            This property is settable.
 
         The distortion transformation describes the optical distortion introduced by the camera lens.
 
@@ -537,7 +554,7 @@ class Camera(object):
 
         Returns
         -------
-        Optional[pycvcam.core.Distortion]
+        Optional[:class:`pycvcam.core.Distortion`]
             The distortion transformation of the camera.
         """
         return self._distortion
@@ -554,7 +571,11 @@ class Camera(object):
     @property
     def intrinsic(self) -> Optional[pycvcam.core.Intrinsic]:
         r"""
-        Get or set the intrinsic transformation of the camera.
+        [Get or set] The intrinsic transformation of the camera.
+
+        .. note::
+
+            This property is settable.
 
         The intrinsic transformation describes the internal parameters of the camera, such as focal length and optical center.
 
@@ -566,7 +587,7 @@ class Camera(object):
 
         Returns
         -------
-        Optional[pycvcam.core.Intrinsic]
+        Optional[:class:`pycvcam.core.Intrinsic`]
             The intrinsic transformation of the camera.
         """
         return self._intrinsic
@@ -653,7 +674,7 @@ class Camera(object):
 
         .. note::
 
-            The output are the ``image_points`` in the image coordinate system (x, y) and not the pixel points (rows, columns).
+            The output are the ``image_points`` in the image coordinate system :math:`(x, y)` and not the pixel points (rows, columns).
 
         .. seealso::
 
@@ -664,30 +685,30 @@ class Camera(object):
         Parameters
         ----------
         world_points : numpy.ndarray
-            An array of shape (..., 3) representing N 3D points in the world coordinate system.
+            An array of shape (..., 3) representing :math:`N_p` 3D points in the world coordinate system.
 
-        dx : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the world points. Default is False.
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the world points. Default is :obj:`False`.
 
-        dintrinsic : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the intrinsic parameters. Default is False.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the intrinsic parameters. Default is :obj:`False`.
 
-        ddistortion : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the distortion parameters. Default is False.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the distortion parameters. Default is :obj:`False`.
 
-        dextrinsic : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the extrinsic parameters. Default is False.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ProjectionResult
-            A ProjectionResult object containing the projected image points and optionally the jacobians.
+        :class:`ProjectionResult`
+            A :class:`ProjectionResult` object containing the projected image points and optionally the jacobians.
 
-            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).
-            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
+            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system :math:`(x, y)`.
+            - `jacobian_dx`: (optional) An array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) An array of shape (..., 2, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) An array of shape (..., 2, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) An array of shape (..., 2, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
 
     
         Examples
@@ -760,9 +781,9 @@ class Camera(object):
 
     def project_points(self, world_points: PointCloud, dx: bool = False, dintrinsic: bool = False, ddistortion: bool = False, dextrinsic: bool = False) -> ProjectionResult:
         r"""
-        Project 3D world points to 2D images points using the camera's intrinsic, extrinsic, and distortion parameters from an PointCloud instance.
+        Project 3D world points to 2D images points using the camera's intrinsic, extrinsic, and distortion parameters from an :class:`PointCloud` instance.
 
-        This method is a convenience wrapper around :meth:`project` that extracts the numpy array from the PointCloud instance.
+        This method is a convenience wrapper around :meth:`project` that extracts the numpy array from the :class:`PointCloud` instance.
 
         .. seealso::
 
@@ -771,36 +792,35 @@ class Camera(object):
 
         Parameters
         ----------
-        world_points : PointCloud
-            An instance of PointCloud containing the 3D points in the world coordinate system.
+        world_points : :class:`PointCloud`
+            An instance of :class:`PointCloud` containing the 3D points in the world coordinate system.
 
-        dx : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the world points. Default is False.
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the world points. Default is :obj:`False`.
 
-        dintrinsic : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the intrinsic parameters. Default is False.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the intrinsic parameters. Default is :obj:`False`.
 
-        ddistortion : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the distortion parameters. Default is False.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the distortion parameters. Default is :obj:`False`.
 
-        dextrinsic : bool, optional
-            If True, the function will also return the jacobian of the image points with respect to the extrinsic parameters. Default is False.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the image points with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ProjectionResult
-            A ProjectionResult object containing the projected image points and optionally the jacobians.
+        :class:`ProjectionResult`
+            A :class:`ProjectionResult` object containing the projected image points and optionally the jacobians.
 
-            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).
-            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
-
+            - `image_points`: A 2D array of shape (:math:`N_p`, 2) representing the projected images points in the image coordinate system :math:`(x, y)`.
+            - `jacobian_dx`: (optional) A 3D array of shape (:math:`N_p`, 2, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) A 3D array of shape (:math:`N_p`, 2, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) A 3D array of shape (:math:`N_p`, 2, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) A 3D array of shape (:math:`N_p`, 2, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
             
         Examples
         --------
-        Lets create a simple camera and project some 3D points from a PointCloud instance:
+        Lets create a simple camera and project some 3D points from a :class:`PointCloud` instance:
 
         .. code-block:: python
 
@@ -861,22 +881,22 @@ class Camera(object):
         r"""
         Convert pixel points to image points.
 
-        Only swap the x and y coordinates of the pixel points to convert them to image points.
+        Only swap the :math:`x` and :math:`y` coordinates of the pixel points to convert them to image points.
 
         .. note::
 
-            - The image points are defined in the image coordinate system (x, y).
-            - The pixel points are defined in the pixel coordinate system (u, v).
+            - The image points are defined in the image coordinate system :math:`(x, y)`.
+            - The pixel points are defined in the pixel coordinate system :math:`(u, v)`.
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
+        pixel_points : :class:`numpy.ndarray`
             A 2D array of shape (..., 2) representing the pixel points in pixel coordinate system (rows, columns).
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (..., 2) representing the image points in image coordinate system (x, y).
+        :class:`numpy.ndarray`
+            A 2D array of shape (..., 2) representing the image points in image coordinate system :math:`(x, y)`.
         """
         if not isinstance(pixel_points, numpy.ndarray):
             raise TypeError("pixel_points must be a numpy.ndarray.")
@@ -890,21 +910,21 @@ class Camera(object):
         r"""
         Convert image points to pixel points.
 
-        Only swap the x and y coordinates of the image points to convert them to pixel points.
+        Only swap the :math:`x` and :math:`y` coordinates of the image points to convert them to pixel points.
 
         .. note::
 
-            - The image points are defined in the image coordinate system (x, y).
-            - The pixel points are defined in the pixel coordinate system (u, v).
+            - The image points are defined in the image coordinate system :math:`(x, y)`.
+            - The pixel points are defined in the pixel coordinate system :math:`(u, v)`.
 
         Parameters
         ----------
-        image_points : numpy.ndarray
-            A 2D array of shape (..., 2) representing the image points in image coordinate system (x, y).
+        image_points : :class:`numpy.ndarray`
+            A 2D array of shape (..., 2) representing the image points in image coordinate system :math:`(x, y)`.
 
         Returns
         -------
-        numpy.ndarray
+        :class:`numpy.ndarray`
             A 2D array of shape (..., 2) representing the pixel points in pixel coordinate system (rows, columns).
         """
         if not isinstance(image_points, numpy.ndarray):
@@ -921,18 +941,18 @@ class Camera(object):
 
         If a mask is provided, it filters the pixel points based on the mask.
 
-        The coordinates of the first pixel point are (0, 0) and the coordinates of the last pixel point are (sensor_height - 1, sensor_width - 1).
+        The coordinates of the first pixel point are :math:`(0, 0)` and the coordinates of the last pixel point are :math:`(\text{sensor_height} - 1, \text{sensor_width} - 1)`.
 
         Parameters
         ----------
-        mask : Optional[numpy.ndarray], optional
+        mask : Optional[:class:`numpy.ndarray`], optional
             A boolean mask to filter the pixel points. If None, all pixel points are returned. Default is None.
-            Shape (H*W,) or (H, W) where H is the height and W is the width of the camera sensor.
+            Shape (:math:`H \times W`,) or (:math:`H`, :math:`W`) where :math:`H` is the height and :math:`W` is the width of the camera sensor.
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (N, 2) representing the pixel points in pixel coordinate system.
+        :class:`numpy.ndarray`
+            A 2D array of shape (:math:`N_p`, 2) representing the pixel points in pixel coordinate system.
         """
         self._check_and_perform_changes()
         pixel_points = numpy.indices((self.sensor_height, self.sensor_width), dtype=numpy.float64).reshape(2, -1).T
@@ -964,14 +984,14 @@ class Camera(object):
 
         Parameters
         ----------
-        mask : Optional[numpy.ndarray], optional
+        mask : Optional[:class:`numpy.ndarray`], optional
             A boolean mask to filter the normalized points. If None, all normalized points are returned. Default is None.
-            Shape (H*W,) or (H, W) where H is the height and W is the width of the camera sensor.
+            Shape (:math:`H \times W`,) or (:math:`H`, :math:`W`) where :math:`H` is the height and :math:`W` is the width of the camera sensor.
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (N, 2) representing the normalized points in normalized coordinate system.
+        :class:`numpy.ndarray`
+            A 2D array of shape (:math:`N_p`, 2) representing the normalized points in normalized coordinate system.
 
         """
         self._check_and_perform_changes()
@@ -1013,17 +1033,17 @@ class Camera(object):
 
         Parameters
         ----------
-        mask : Optional[numpy.ndarray], optional
+        mask : Optional[:class:`numpy.ndarray`], optional
             A boolean mask to filter the rays. If None, all rays are returned. Default is None.
-            Shape (H*W,) or (H, W) where H is the height and W is the width of the camera sensor.
+            Shape (:math:`H \times W`,) or (:math:`H`, :math:`W`) where :math:`H` is the height and :math:`W` is the width of the camera sensor.
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (N, 3) representing the origins of the rays in world coordinate system.
+        :class:`numpy.ndarray`
+            A 2D array of shape (:math:`N_p`, 3) representing the origins of the rays in world coordinate system.
 
-        numpy.ndarray
-            A 2D array of shape (N, 3) representing the directions of the rays in world coordinate system.
+        :class:`numpy.ndarray`
+            A 2D array of shape (:math:`N_p`, 3) representing the directions of the rays in world coordinate system.
 
         """
         self._check_and_perform_changes()
@@ -1052,7 +1072,7 @@ class Camera(object):
         title: Optional[str] = None,
     ) -> None:
         r"""
-        Visualize the projected 2D points of a :class:`pysdic.PointCloud` on a 2D plot using matplotlib.
+        Visualize the projected 2D points of a :class:`PointCloud` on a 2D plot using matplotlib.
 
         .. seealso::
 
@@ -1063,28 +1083,28 @@ class Camera(object):
 
         Parameters
         ----------
-        point_cloud : PointCloud
-            An instance of PointCloud containing the 3D points in the world coordinate system to be projected and visualized.
+        point_cloud : :class:`PointCloud`
+            An instance of :class:`PointCloud` containing the 3D points in the world coordinate system to be projected and visualized.
 
-        points_color : str, optional
-            The color of the projected points in the plot. Default is "black".
+        points_color : :class:`str`, optional
+            The color of the projected points in the plot. Default is :obj:`"black"`.
 
-        points_size : int, optional
-            The size of the projected points in the plot. Default is 5.
+        points_size : :class:`int`, optional
+            The size of the projected points in the plot. Default is :obj:`5`.
 
-        points_opacity : float, optional
-            The opacity of the projected points in the plot. Default is 1.0 (fully opaque).
+        points_opacity : :class:`float`, optional
+            The opacity of the projected points in the plot. Default is :obj:`1.0` (fully opaque).
 
-        image : Optional[Union[numpy.ndarray, Image]], optional
+        image : Optional[Union[:class:`numpy.ndarray`, :class:`Image`]], optional
             An optional background image to display behind the projected points. If provided, the image should have dimensions matching the camera sensor size. Default is None.
 
-        clip_sensor : bool, optional
-            If True, only the points that are projected within the camera sensor dimensions are visualized. Default is True.
+        clip_sensor : :class:`bool`, optional
+            If :obj:`True`, only the points that are projected within the camera sensor dimensions are visualized. Default is :obj:`True`.
 
-        show_pixel_grid : bool, optional
-            If True, a grid representing the pixel layout of the camera sensor is displayed in the background. Default is False.
+        show_pixel_grid : :class:`bool`, optional
+            If :obj:`True`, a grid representing the pixel layout of the camera sensor is displayed in the background. Default is :obj:`False`.
 
-        title : Optional[str], optional
+        title : Optional[:class:`str`], optional
             An optional title for the plot. Default is None with eefault title 'Projected Points on Image Plane'.
 
             
@@ -1222,7 +1242,7 @@ class Camera(object):
         title: Optional[str] = None,
     ) -> None:
         r"""
-        Visualize the projected 2D mesh of a :class:`pysdic.Mesh` on a 2D plot using matplotlib.
+        Visualize the projected 2D mesh of a :class:`Mesh` on a 2D plot using matplotlib.
         
         .. seealso::
 
@@ -1233,59 +1253,59 @@ class Camera(object):
 
         Parameters
         ----------
-        mesh : Mesh
+        mesh : :class:`Mesh`
             The 3D mesh to visualize.
 
-        vertices_color : str, optional
-            The color of the mesh vertices (default is "black").
+        vertices_color : :class:`str`, optional
+            The color of the mesh vertices (default is :obj:`"black"`).
 
-        vertices_size : int, optional
-            The size of the mesh vertices (default is 5).
+        vertices_size : :class:`int`, optional
+            The size of the mesh vertices (default is :obj:`5`).
 
-        vertices_opacity : float, optional
-            The opacity of the mesh vertices (default is 1.0).
+        vertices_opacity : :class:`float`, optional
+            The opacity of the mesh vertices (default is :obj:`1.0`).
 
-        edges_color : str, optional
-            The color of the mesh edges (default is "black").
+        edges_color : :class:`str`, optional
+            The color of the mesh edges (default is :obj:`"black"`).
 
-        edges_width : int, optional
-            The width of the mesh edges (default is 1).
+        edges_width : :class:`int`, optional
+            The width of the mesh edges (default is :obj:`1`).
 
-        edges_opacity : float, optional
-            The opacity of the mesh edges (default is 1.0).
+        edges_opacity : :class:`float`, optional
+            The opacity of the mesh edges (default is :obj:`1.0`).
 
-        faces_color : str, optional
-            The color of the mesh faces (default is "red").
+        faces_color : :class:`str`, optional
+            The color of the mesh faces (default is :obj:`"red"`).
 
-        faces_opacity : float, optional
-            The opacity of the mesh faces (default is 0.5).
+        faces_opacity : :class:`float`, optional
+            The opacity of the mesh faces (default is :obj:`0.5`).
 
-        image : Optional[Union[numpy.ndarray, Image]], optional
+        image : Optional[Union[:class:`numpy.ndarray`, :class:`Image`]], optional
             An image to display as the background (default is None).
 
-        clip_sensor : bool, optional
-            Whether to clip points outside the sensor dimensions (default is True).
+        clip_sensor : :class:`bool`, optional
+            Whether to clip points outside the sensor dimensions (default is :obj:`True`).
 
-        show_pixel_grid : bool, optional
-            Whether to show the pixel grid on the image (default is False).
+        show_pixel_grid : :class:`bool`, optional
+            Whether to show the pixel grid on the image (default is :obj:`False`).
 
-        show_vertices : bool, optional
-            Whether to show the mesh vertices (default is True).
+        show_vertices : :class:`bool`, optional
+            Whether to show the mesh vertices (default is :obj:`True`).
 
-        show_edges : bool, optional
-            Whether to show the mesh edges (default is True).
+        show_edges : :class:`bool`, optional
+            Whether to show the mesh edges (default is :obj:`True`).
 
-        show_faces : bool, optional
-            Whether to show the mesh faces (default is True).
+        show_faces : :class:`bool`, optional
+            Whether to show the mesh faces (default is :obj:`True`).
 
-        title : Optional[str], optional
+        title : Optional[:class:`str`], optional
             An optional title for the plot. Default is None with default title 'Projected Mesh on Image Plane'.
 
 
         Examples
         --------
 
-        Visualize a projected :class:`pysdic.Mesh` using a simple camera:
+        Visualize a projected :class:`Mesh` using a simple camera:
 
         .. code-block:: python
 

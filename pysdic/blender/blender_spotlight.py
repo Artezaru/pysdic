@@ -19,7 +19,7 @@ from py3dframe import Frame, Rotation
 import numpy
 from numbers import Number
 
-class SpotLight(object):
+class BlenderSpotLight(object):
     r"""
     Represents a spot light in 3D space with a defined position and orientation.
 
@@ -37,7 +37,7 @@ class SpotLight(object):
     It is defined as the angle between the two edges of the cone of light emitted by the spot light. 
     The figure below shows the definition of the spot light size in Blender (Image source: Blender Manual)
 
-    .. figure:: ../../../pyblenderSDIC/resources/doc/blender_spot_light_size.png
+    .. figure:: /_static/blender/blender_spot_light_size.png
         :width: 400
         :align: center
 
@@ -120,7 +120,7 @@ class SpotLight(object):
         It is defined as the angle between the two edges of the cone of light emitted by the spot light. 
         The figure below shows the definition of the spot light size in Blender (Image source: Blender Manual)
 
-        .. figure:: ../../../pyblenderSDIC/resources/doc/blender_spot_light_size.png
+        .. figure:: /_static/blender/blender_spot_light_size.png
             :width: 400
             :align: center
 
@@ -236,10 +236,10 @@ class SpotLight(object):
         r"""
         Get the rotation and translation of the light in the OpenGL format.
 
-        The axis of the light frame for OpenGL are different from the SpotLight frame:
-        - x-axis: The same as the SpotLight frame : right direction of the light (left to right).
-        - y-axis: The opposite of the SpotLight frame : up direction of the light (down to up).
-        - z-axis: The opposite of the SpotLight frame : (from the scene to the light).
+        The axis of the light frame for OpenGL are different from the BlenderSpotLight frame:
+        - x-axis: The same as the BlenderSpotLight frame : right direction of the light (left to right).
+        - y-axis: The opposite of the BlenderSpotLight frame : up direction of the light (down to up).
+        - z-axis: The opposite of the BlenderSpotLight frame : (from the scene to the light).
 
         Furthermore, the convention for OpenGL is :math:`X_{world} = R X_{cam} + T`, convention=0 for py3dframe.
 
@@ -267,10 +267,10 @@ class SpotLight(object):
         r"""
         Set the rotation and translation of the light in the OpenGL format.
 
-        The axis of the light frame for OpenGL are different from the SpotLight frame:
-        - x-axis: The same as the SpotLight frame : right direction of the light (left to right).
-        - y-axis: The opposite of the SpotLight frame : up direction of the light (down to up).
-        - z-axis: The opposite of the SpotLight frame : (from the scene to the light).
+        The axis of the light frame for OpenGL are different from the BlenderSpotLight frame:
+        - x-axis: The same as the BlenderSpotLight frame : right direction of the light (left to right).
+        - y-axis: The opposite of the BlenderSpotLight frame : up direction of the light (down to up).
+        - z-axis: The opposite of the BlenderSpotLight frame : (from the scene to the light).
 
         Furthermore, the convention for OpenGL is :math:`X_{world} = R X_{cam} + T`, convention=0 for py3dframe.
 
@@ -298,14 +298,14 @@ class SpotLight(object):
     # ==============================================
     def to_dict(self, description: Optional[str] = None) -> Dict:
         """
-        Export the SpotLight's data to a dictionary.
+        Export the BlenderSpotLight's data to a dictionary.
 
         The structure of the dictionary is as follows:
 
         .. code-block:: python
 
             {
-                "type": "SpotLight [pyblenderSDIC]",
+                "type": "BlenderSpotLight",
                 "description": "Description of the spot light",
                 "frame": {
                     "translation": [0.0, 0.0, 0.0],
@@ -337,7 +337,7 @@ class SpotLight(object):
         """
         # Create the dictionary
         data = {
-            "type": "SpotLight [pyblenderSDIC]",
+            "type": "BlenderSpotLight",
             "frame": self.frame.save_to_dict(),
             "energy": self.energy,
             "spot_size": self.spot_size,
@@ -355,11 +355,11 @@ class SpotLight(object):
 
 
     @classmethod
-    def from_dict(cls, data: Dict) -> SpotLight:
+    def from_dict(cls, data: Dict) -> BlenderSpotLight:
         """
-        Create a SpotLight instance from a dictionary.
+        Create a BlenderSpotLight instance from a dictionary.
 
-        The structure of the dictionary should be as provided by the :meth:`pyblenderSDIC.SpotLight.to_dict` method.
+        The structure of the dictionary should be as provided by the :meth:`to_dict` method.
 
         Parameters
         ----------
@@ -368,8 +368,8 @@ class SpotLight(object):
         
         Returns
         -------
-        SpotLight
-            The SpotLight instance.
+        BlenderSpotLight
+            The BlenderSpotLight instance.
 
         Raises
         ------
@@ -392,9 +392,9 @@ class SpotLight(object):
 
     def to_json(self, filepath: str, description: Optional[str] = None) -> None:
         """
-        Export the SpotLight's data to a JSON file.
+        Export the BlenderSpotLight's data to a JSON file.
 
-        The structure of the JSON file follows the :meth:`pyblenderSDIC.SpotLight.to_dict` method.
+        The structure of the JSON file follows the :meth:`to_dict` method.
 
         Parameters
         ----------
@@ -420,11 +420,11 @@ class SpotLight(object):
 
     
     @classmethod
-    def from_json(cls, filepath: str) -> SpotLight:
+    def from_json(cls, filepath: str) -> BlenderSpotLight:
         """
-        Create a SpotLight instance from a JSON file.
+        Create a BlenderSpotLight instance from a JSON file.
 
-        The structure of the JSON file follows the :meth:`pyblenderSDIC.SpotLight.to_dict` method.
+        The structure of the JSON file follows the :meth:`to_dict` method.
 
         Parameters
         ----------
@@ -433,8 +433,8 @@ class SpotLight(object):
         
         Returns
         -------
-        SpotLight
-            A SpotLight instance.
+        BlenderSpotLight
+            A BlenderSpotLight instance.
         
         Raises
         ------

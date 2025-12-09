@@ -26,7 +26,7 @@ from .objects.point_cloud import PointCloud
 
 def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh], internal_bypass: bool = False) -> Mesh:
     r"""
-    Create a :class:`Mesh` (:obj:`element_type` = "triangle_3") instance from an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
+    Create a :class:`Mesh` (:obj:`elements_type` = "triangle_3") instance from an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
 
     .. warning::
         
@@ -72,7 +72,7 @@ def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open
     if isinstance(mesh, open3d.geometry.TriangleMesh): # Legacy Open3D mesh
         vertices = numpy.asarray(mesh.vertices, dtype=numpy.float64)
         triangles = numpy.asarray(mesh.triangles, dtype=numpy.int64)
-        mesh_instance = Mesh(vertices=PointCloud.from_array(vertices), connectivity=triangles, element_type="triangle_3", internal_bypass=internal_bypass)
+        mesh_instance = Mesh(vertices=PointCloud.from_array(vertices), connectivity=triangles, elements_type="triangle_3", internal_bypass=internal_bypass)
         mesh_instance.validate()  # Validate the mesh structure
 
         # Check if UV mapping is available
@@ -85,7 +85,7 @@ def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open
     else: # Open3D T geometry mesh
         vertices = numpy.asarray(mesh.vertex.positions.numpy(), dtype=numpy.float64)
         triangles = numpy.asarray(mesh.triangle.indices.numpy(), dtype=numpy.int64)
-        mesh_instance = Mesh(vertices=vertices, connectivity=triangles, element_type="triangle_3", internal_bypass=internal_bypass)
+        mesh_instance = Mesh(vertices=vertices, connectivity=triangles, elements_type="triangle_3", internal_bypass=internal_bypass)
         mesh_instance.validate()  # Validate the mesh structure
 
         # Check if UV mapping is available
@@ -100,7 +100,7 @@ def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open
 
 def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = True) -> Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh]:
     r"""
-    Convert the :class:`Mesh` (:obj:`element_type` = "triangle_3") instance to an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
+    Convert the :class:`Mesh` (:obj:`elements_type` = "triangle_3") instance to an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
 
     The mesh must not be empty.
 
@@ -153,7 +153,7 @@ def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = Tr
         o3dmesh = to_open3d(mesh)
 
     """
-    if not mesh.element_type == "triangle_3":
+    if not mesh.elements_type == "triangle_3":
         raise TypeError("to_open3d function only supports 'triangle_3' element type meshes.")
     if mesh.n_vertices == 0 or mesh.n_elements == 0:
         raise ValueError("Cannot write an empty mesh to file.")
@@ -615,7 +615,7 @@ def triangle_3_cast_rays(
     o3d_mesh = triangle_3_mesh_to_open3d(Mesh(
         vertices=vertices_coordinates,
         connectivity=connectivity,
-        element_type="triangle_3",
+        elements_type="triangle_3",
         internal_bypass=True,
     ), legacy=False, uvmap=False)
 

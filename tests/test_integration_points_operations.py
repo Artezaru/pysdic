@@ -101,7 +101,7 @@ def test_assemble_shape_function_matrix():
 
     shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
 
-    shape_function_matrix = pysdic.assemble_shape_function_matrix(shape_functions, element_connectivity, element_indices, vertices_number=10)
+    shape_function_matrix = pysdic.assemble_shape_function_matrix(shape_functions, element_connectivity, element_indices, n_vertices=10)
 
     assert shape_function_matrix.shape == (8, 10)
     for i in range(8):
@@ -135,7 +135,7 @@ def test_assemble_shape_function_matrix_with_m1():
         shape_functions,
         element_connectivity,
         element_indices,
-        vertices_number=10,
+        n_vertices=10,
         skip_m1=True,
         default=default
     )
@@ -174,7 +174,7 @@ def test_assemble_shape_function_matrix_sparse_versus_dense():
         shape_functions,
         element_connectivity,
         element_indices,
-        vertices_number=10,
+        n_vertices=10,
         sparse=False
     )
 
@@ -182,7 +182,7 @@ def test_assemble_shape_function_matrix_sparse_versus_dense():
         shape_functions,
         element_connectivity,
         element_indices,
-        vertices_number=10,
+        n_vertices=10,
         sparse=True
     ).toarray()
 
@@ -342,7 +342,7 @@ def test_project_property(P):
         shape_functions,
         element_connectivity,
         element_indices,
-        vertices_number=10
+        n_vertices=10
     )
 
     assert projected_properties.shape == (10, 1) if P == 0 else (10, P)
@@ -389,7 +389,7 @@ def test_project_property(P):
         shape_functions,
         element_connectivity,
         element_indices,
-        vertices_number=10,
+        n_vertices=10,
         sparse=True
     )
 

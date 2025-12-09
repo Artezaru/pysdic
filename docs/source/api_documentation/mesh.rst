@@ -54,7 +54,8 @@ The public attributes of a :class:`Mesh` object can be accessed using the follow
    Mesh.internal_bypass
    Mesh.connectivity
    Mesh.elements
-   Mesh.element_type
+   Mesh.elements_type
+   Mesh.elements_properties
    Mesh.n_vertices
    Mesh.N_v
    Mesh.n_elements
@@ -66,7 +67,7 @@ The public attributes of a :class:`Mesh` object can be accessed using the follow
    Mesh.n_topological_dimensions
    Mesh.K
    Mesh.meshio_cell_type
-   Mesh.set_element_type
+   Mesh.set_elements_type
    Mesh.vertices
    Mesh.vtk_cell_type
 

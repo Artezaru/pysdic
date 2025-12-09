@@ -26,12 +26,12 @@ class Image(object):
     A class to represent a 2D image to interpolate gray or colors values.
 
     The image is associated with an interpolation function to evaluate pixel values at arbitrary points in the image.
-    The interpolation function is constructed using `scipy.interpolate.RectBivariateSpline` with cubic splines (kx=3, ky=3).
+    The interpolation function is constructed using :class:`scipy.interpolate.RectBivariateSpline` with cubic splines (kx=3, ky=3).
 
     The coordinates system used for the image is the same as the one used in `pycvcam` (See documentation of `pycvcam` at https://artezaru.github.io/pycvcam/).
 
-    - The ``pixel_coordinates`` are defined in the array coordinate system (u, v) where u is the row index and v is the column index.
-    - The ``image_coordinates`` are defined in the camera coordinate system (x, y) where x is the column index and y is the row index.
+    - The ``pixel_coordinates`` are defined in the array coordinate system :math:`(u, v)` where :math:`u` is the row index and :math:`v` is the column index.
+    - The ``image_coordinates`` are defined in the camera coordinate system :math:`(x, y)` where :math:`x` is the column index and :math:`y` is the row index.
 
     Parameters
     ----------
@@ -53,9 +53,13 @@ class Image(object):
     @property
     def image(self) -> Optional[numpy.ndarray]:
         r"""
-        Get or set the image viewed by the camera.
+        [Get or Set] The image data.
 
         The shape of the image must be (height, width) or (height, width, channels).
+
+        .. note::
+
+            This property is settable.
 
         .. warning::
 
@@ -63,8 +67,8 @@ class Image(object):
 
         Parameters
         ----------
-        image : Optional[numpy.ndarray]
-            The image that is viewed by the camera. The image must be in a unsigned bit integer format (e.g., `numpy.uint8`) and must have a shape of (height, width) or (height, width, channels). If not provided, the image will be set to None.
+        image : Optional[:class:`numpy.ndarray`]
+            The image data. The image must be in an unsigned bit integer format (e.g., :obj:`numpy.uint8`) and must have a shape of (height, width) or (height, width, channels). If not provided, the image will be set to None.
         """
         return self._image
     
@@ -83,13 +87,13 @@ class Image(object):
     @property
     def shape(self) -> Optional[Tuple[int, int]]:
         r"""
-        Get the shape of the image.
+        [Get] The shape of the image.
 
         The image shape is a tuple (height, width) representing the dimensions of the image.
 
         Returns
         -------
-        Optional[Tuple[int, int]]
+        Optional[Tuple[:class:`int`, :class:`int`]]
             The shape of the image as a tuple (height, width), or None if not set.
 
         """
@@ -100,11 +104,11 @@ class Image(object):
     @property
     def height(self) -> Optional[int]:
         r"""
-        Get the height of the image.
+        [Get] The height of the image.
 
         Returns
         -------
-        Optional[int]
+        Optional[:class:`int`]
             The height of the image, or None if not set.
 
         """
@@ -115,11 +119,11 @@ class Image(object):
     @property
     def width(self) -> Optional[int]:
         r"""
-        Get the width of the image.
+        [Get] The width of the image.
 
         Returns
         -------
-        Optional[int]
+        Optional[:class:`int`]
             The width of the image, or None if not set.
 
         """
@@ -130,7 +134,7 @@ class Image(object):
     @property
     def is_color(self) -> Optional[bool]:
         r"""
-        Check if the image is a color image (3D array).
+        [Get] Check if the image is a color image (3D array).
 
         .. note::
 
@@ -138,8 +142,8 @@ class Image(object):
 
         Returns
         -------
-        Optional[bool]
-            True if the image is a color image, False if it is grayscale, or None if not set.
+        Optional[:class:`bool`]
+            :obj:`True` if the image is a color image, :obj:`False` if it is grayscale, or None if not set.
 
         """
         if self._image is None:
@@ -149,7 +153,7 @@ class Image(object):
     @property
     def is_grayscale(self) -> Optional[bool]:
         r"""
-        Check if the image is grayscale (2D array).
+        [Get] Check if the image is grayscale (2D array).
 
         .. note::
 
@@ -157,8 +161,8 @@ class Image(object):
 
         Returns
         -------
-        Optional[bool]
-            True if the image is grayscale, False if it is color, or None if not set.
+        Optional[:class:`bool`]
+            :obj:`True` if the image is grayscale, :obj:`False` if it is color, or None if not set.
 
         """
         if self._image is None:
@@ -168,11 +172,11 @@ class Image(object):
     @property
     def n_channels(self) -> Optional[int]:
         r"""
-        Get the number of channels in the image.
+        [Get] The number of channels in the image.
 
         Returns
         -------
-        Optional[int]
+        Optional[:class:`int`]
             The number of channels in the image, or None if not set.
 
         """
@@ -185,11 +189,11 @@ class Image(object):
     @property
     def dtype(self) -> Optional[numpy.dtype]:
         r"""
-        Get the data type of the image.
+        [Get] The data type of the image.
 
         Returns
         -------
-        Optional[numpy.dtype]
+        Optional[:class:`numpy.dtype`]
             The data type of the image, or None if not set.
 
         """
@@ -200,11 +204,11 @@ class Image(object):
     @property
     def ndim(self) -> Optional[int]:
         r"""
-        Get the number of dimensions of the image.
+        [Get] The number of dimensions of the image.
 
         Returns
         -------
-        Optional[int]
+        Optional[:class:`int`]
             The number of dimensions of the image, or None if not set.
 
         """
@@ -232,20 +236,20 @@ class Image(object):
     @classmethod
     def from_array(cls, image_data: numpy.ndarray, copy: bool = False) -> Image:
         r"""
-        Create an Image object from raw image data.
+        Create an :class:`Image` object from raw image data.
 
         Parameters
         ----------
-        image_data : numpy.ndarray
-            The raw image data as a numpy array. The image must be in an unsigned bit integer format (e.g., `numpy.uint8`) and must have a shape of (height, width) or (height, width, channels).
+        image_data : :class:`numpy.ndarray`
+            The raw image data as a numpy array. The image must be in an unsigned bit integer format (e.g., :obj:`numpy.uint8`) and must have a shape of (height, width) or (height, width, channels).
 
-        copy : bool, optional
-            Whether to copy the image data or use it directly, by default False.
+        copy : :class:`bool`, optional
+            Whether to copy the image data or use it directly, by default :obj:`False`.
 
         Returns
         -------
-        Image
-            An Image object initialized with the provided image data.
+        :class:`Image`
+            An :class:`Image` object initialized with the provided image data.
 
 
         Examples
@@ -277,17 +281,17 @@ class Image(object):
     @classmethod
     def from_file(cls, file_path: str) -> Image:
         r"""
-        Create an Image object by loading image data from a file.
+        Create an :class:`Image` object by loading image data from a file.
 
         Parameters
         ----------
-        file_path : str
+        file_path : :class:`str`
             The path to the image file to be loaded.
 
         Returns
         -------
-        Image
-            An Image object initialized with the image data loaded from the specified file.
+        :class:`Image`
+            An :class:`Image` object initialized with the image data loaded from the specified file.
 
 
         Examples
@@ -311,7 +315,7 @@ class Image(object):
 
         Parameters
         ----------
-        file_path : str
+        file_path : :class:`str`
             The path where the image will be saved.
 
         """
@@ -326,12 +330,12 @@ class Image(object):
 
         Parameters
         ----------
-        copy : bool, optional
-            Whether to return a copy of the image data. If False, returns a reference to the internal image data, by default False.
+        copy : :class:`bool`, optional
+            Whether to return a copy of the image data. If False, returns a reference to the internal image data, by default :obj:`False`.
 
         Returns
         -------
-        Optional[numpy.ndarray]
+        Optional[:class:`numpy.ndarray`]
             The image data as a numpy array, or None if no image is set.
 
         """
@@ -369,12 +373,12 @@ class Image(object):
 
     def copy(self) -> Image:
         r"""
-        Create a copy of the Image object.
+        Create a copy of the :class:`Image` object.
 
         Returns
         -------
-        Image
-            A new Image object that is a copy of the current object.
+        :class:`Image`
+            A new :class:`Image` object that is a copy of the current object.
 
         """
         if self._image is None:
@@ -391,7 +395,7 @@ class Image(object):
             - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the x-axis (columns).
             - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the y-axis (rows).
 
-        Pixel out of bounds will be masked and the value at these points will be set to numpy.nan.
+        Pixel out of bounds will be masked and the value at these points will be set to :obj:`numpy.nan`.
 
         .. warning::
 
@@ -402,13 +406,13 @@ class Image(object):
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
-            The pixel points at which to evaluate the image. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.
+        pixel_points : :class:`numpy.ndarray`
+            The pixel points at which to evaluate the image. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (row, column) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated pixel values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated pixel values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         
         """
         if self._image is None:
@@ -451,13 +455,13 @@ class Image(object):
     
         Parameters
         ----------
-        image_points : numpy.ndarray
-            The image points at which to evaluate the image. The shape should be (N, 2) where N is the number of points and each point is represented by its (x, y) coordinates.
+        image_points : :class:`numpy.ndarray`
+            The image points at which to evaluate the image. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (:math:`x`, :math:`y`) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated pixel values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated pixel values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
 
         """
         pixel_points = self.image_points_to_pixel_points(image_points)
@@ -466,14 +470,14 @@ class Image(object):
 
     def evaluate_image_jacobian_dx_at_pixel_points(self, pixel_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given pixel points along the x-axis (columns).
+        Evaluate the Jacobian of the image at given pixel points along the :math:`x`-axis (columns).
 
         .. seealso::
 
             - :meth:`evaluate_image_at_pixel_points` for evaluating the image at pixel points.
-            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the y-axis (rows).
+            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the :math:`y`-axis (rows).
 
-        Pixel out of bounds will be masked and the value at these points will be set to numpy.nan.
+        Pixel out of bounds will be masked and the value at these points will be set to :obj:`numpy.nan`.
 
         .. warning::
 
@@ -484,13 +488,13 @@ class Image(object):
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
-            The pixel points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.
+        pixel_points : :class:`numpy.ndarray`
+            The pixel points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (row, column) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         if self._image is None:
             raise ValueError("No image data to evaluate. Please set an image first.")
@@ -522,47 +526,47 @@ class Image(object):
 
     def evaluate_image_jacobian_dv_at_pixel_points(self, pixel_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given pixel points along the v-axis (columns).
+        Evaluate the Jacobian of the image at given pixel points along the :math:`v`-axis (columns).
 
         This is a convenience method of the :meth:`evaluate_image_jacobian_dx_at_pixel_points` method as 'dx = dv' in pixel coordinates.
 
         .. seealso::
 
-            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the x-axis (columns).
+            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the :math:`x`-axis (columns).
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
-            The pixel points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.
+        pixel_points : :class:`numpy.ndarray`
+            The pixel points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (row, column) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         return self.evaluate_image_jacobian_dx_at_pixel_points(pixel_points)
     
 
     def evaluate_image_jacobian_dx_at_image_points(self, image_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given image points along the x-axis (columns).
+        Evaluate the Jacobian of the image at given image points along the :math:`x`-axis (columns).
 
-        This is a convenience method that converts image points to pixel points and then evaluates the Jacobian of the image at those pixel points along the x-axis.
+        This is a convenience method that converts image points to pixel points and then evaluates the Jacobian of the image at those pixel points along the :math:`x`-axis.
 
         .. seealso::
 
-            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the x-axis.
+            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the :math:`x`-axis.
             - :meth:`image_points_to_pixel_points` for converting image points to pixel points.
 
         Parameters
         ----------
-        image_points : numpy.ndarray
-            The image points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (x, y) coordinates.
+        image_points : :class:`numpy.ndarray`
+            The image points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its :math:`(x, y)` coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         pixel_points = self.image_points_to_pixel_points(image_points)
         return self.evaluate_image_jacobian_dx_at_pixel_points(pixel_points)
@@ -570,37 +574,37 @@ class Image(object):
 
     def evaluate_image_jacobian_dv_at_image_points(self, image_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given image points along the v-axis (columns).
+        Evaluate the Jacobian of the image at given image points along the :math:`v`-axis (columns).
 
         This is a convenience method of the :meth:`evaluate_image_jacobian_dx_at_image_points` method as 'dx = dv' in pixel coordinates.
 
         .. seealso::
 
-            - :meth:`evaluate_image_jacobian_dx_at_image_points` for evaluating the Jacobian of the image at image points along the x-axis (columns).
+            - :meth:`evaluate_image_jacobian_dx_at_image_points` for evaluating the Jacobian of the image at image points along the :math:`x`-axis (columns).
 
         Parameters
         ----------
-        image_points : numpy.ndarray
-            The image points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (x, y) coordinates.
+        image_points : :class:`numpy.ndarray`
+            The image points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (:math:`x`, :math:`y`) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         return self.evaluate_image_jacobian_dx_at_image_points(image_points)
 
 
     def evaluate_image_jacobian_dy_at_pixel_points(self, pixel_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given pixel points along the y-axis (rows).
+        Evaluate the Jacobian of the image at given pixel points along the :math:`y`-axis (rows).
 
         .. seealso::
 
             - :meth:`evaluate_image_at_pixel_points` for evaluating the image at pixel points.
-            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the x-axis (columns).
+            - :meth:`evaluate_image_jacobian_dx_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the :math:`x`-axis (columns).
 
-        Pixel out of bounds will be masked and the value at these points will be set to numpy.nan.
+        Pixel out of bounds will be masked and the value at these points will be set to :obj:`numpy.nan`.
 
         .. warning::
 
@@ -611,13 +615,13 @@ class Image(object):
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
-            The pixel points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.
+        pixel_points : :class:`numpy.ndarray`
+            The pixel points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (row, column) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         if self._image is None:
             raise ValueError("No image data to evaluate. Please set an image first.")
@@ -649,47 +653,47 @@ class Image(object):
 
     def evaluate_image_jacobian_du_at_pixel_points(self, pixel_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given pixel points along the u-axis (rows).
+        Evaluate the Jacobian of the image at given pixel points along the :math:`u`-axis (rows).
 
         This is a convenience method of the :meth:`evaluate_image_jacobian_dy_at_pixel_points` method as 'dy = du' in pixel coordinates.
 
         .. seealso::
 
-            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the y-axis (rows).
+            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the :math:`y`-axis (rows).
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
-            The pixel points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (row, column) coordinates.
+        pixel_points : :class:`numpy.ndarray`
+            The pixel points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (row, column) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         return self.evaluate_image_jacobian_dy_at_pixel_points(pixel_points)
     
 
     def evaluate_image_jacobian_dy_at_image_points(self, image_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given image points along the y-axis (rows).
+        Evaluate the Jacobian of the image at given image points along the :math:`y`-axis (rows).
 
-        This is a convenience method that converts image points to pixel points and then evaluates the Jacobian of the image at those pixel points along the y-axis.
+        This is a convenience method that converts image points to pixel points and then evaluates the Jacobian of the image at those pixel points along the :math:`y`-axis.
 
         .. seealso::
 
-            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the y-axis.
+            - :meth:`evaluate_image_jacobian_dy_at_pixel_points` for evaluating the Jacobian of the image at pixel points along the :math:`y`-axis.
             - :meth:`image_points_to_pixel_points` for converting image points to pixel points.
 
         Parameters
         ----------
-        image_points : numpy.ndarray
-            The image points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (x, y) coordinates.
+        image_points : :class:`numpy.ndarray`
+            The image points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (:math:`x`, :math:`y`) coordinates.
         
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`
         """
         pixel_points = self.image_points_to_pixel_points(image_points)
         return self.evaluate_image_jacobian_dy_at_pixel_points(pixel_points)
@@ -697,23 +701,23 @@ class Image(object):
 
     def evaluate_image_jacobian_du_at_image_points(self, image_points: numpy.ndarray) -> numpy.ndarray:
         r"""
-        Evaluate the Jacobian of the image at given image points along the u-axis (rows).
+        Evaluate the Jacobian of the image at given image points along the :math:`u`-axis (rows).
 
         This is a convenience method of the :meth:`evaluate_image_jacobian_dy_at_image_points` method as 'dy = du' in pixel coordinates.
 
         .. seealso::
 
-            - :meth:`evaluate_image_jacobian_dy_at_image_points` for evaluating the Jacobian of the image at image points along the y-axis (rows).
+            - :meth:`evaluate_image_jacobian_dy_at_image_points` for evaluating the Jacobian of the image at image points along the :math:`y`-axis (rows).
 
         Parameters
         ----------
-        image_points : numpy.ndarray
-            The image points at which to evaluate the Jacobian. The shape should be (N, 2) where N is the number of points and each point is represented by its (x, y) coordinates.
+        image_points : :class:`numpy.ndarray`
+            The image points at which to evaluate the Jacobian. The shape should be (:math:`N_p`, 2) where :math:`N_p` is the number of points and each point is represented by its (:math:`x`, :math:`y`) coordinates.
 
         Returns
         -------
-        numpy.ndarray
-            The evaluated Jacobian values with shape (N,) or (N, C) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to numpy.nan.
+        :class:`numpy.ndarray`
+            The evaluated Jacobian values with shape (:math:`N_p`,) or (:math:`N_p`, :math:`C`) if color image in float64 dtype. If a pixel point is out of bounds, the corresponding value will be set to :obj:`numpy.nan`.
         """
         return self.evaluate_image_jacobian_dy_at_image_points(image_points)
     
@@ -722,22 +726,22 @@ class Image(object):
         r"""
         Convert pixel points to image points.
 
-        Only swap the x and y coordinates of the pixel points to convert them to image points.
+        Only swap the :math:`x` and :math:`y` coordinates of the pixel points to convert them to image points.
 
         .. note::
 
-            - The image points are defined in the image coordinate system (x, y).
-            - The pixel points are defined in the pixel coordinate system (u, v).
+            - The image points are defined in the image coordinate system :math:`(x, y)`.
+            - The pixel points are defined in the pixel coordinate system :math:`(u, v)`.
 
         Parameters
         ----------
-        pixel_points : numpy.ndarray
+        pixel_points : :class:`numpy.ndarray`
             A 2D array of shape (..., 2) representing the pixel points in pixel coordinate system (rows, columns).
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (..., 2) representing the image points in image coordinate system (x, y).
+        :class:`numpy.ndarray`
+            A 2D array of shape (..., 2) representing the image points in image coordinate system (:math:`x`, :math:`y`).
         """
         if not isinstance(pixel_points, numpy.ndarray):
             raise TypeError("pixel_points must be a numpy.ndarray.")
@@ -751,21 +755,21 @@ class Image(object):
         r"""
         Convert image points to pixel points.
 
-        Only swap the x and y coordinates of the image points to convert them to pixel points.
+        Only swap the :math:`x` and :math:`y` coordinates of the image points to convert them to pixel points.
 
         .. note::
 
-            - The image points are defined in the image coordinate system (x, y).
-            - The pixel points are defined in the pixel coordinate system (u, v).
+            - The image points are defined in the image coordinate system :math:`(x, y)`.
+            - The pixel points are defined in the pixel coordinate system :math:`(u, v)`.
 
         Parameters
         ----------
-        image_points : numpy.ndarray
-            A 2D array of shape (..., 2) representing the image points in image coordinate system (x, y).
+        image_points : :class:`numpy.ndarray`
+            A 2D array of shape (..., 2) representing the image points in image coordinate system :math:`(x, y)`.
 
         Returns
         -------
-        numpy.ndarray
+        :class:`numpy.ndarray`
             A 2D array of shape (..., 2) representing the pixel points in pixel coordinate system (rows, columns).
         """
         if not isinstance(image_points, numpy.ndarray):
@@ -792,14 +796,14 @@ class Image(object):
 
         Parameters
         ----------
-        mask : Optional[numpy.ndarray], optional
+        mask : Optional[:class:`numpy.ndarray`], optional
             A boolean mask to filter the pixel points. If None, all pixel points are returned. Default is None.
-            Shape (H*W,) or (H, W) where H is the height and W is the width of the camera sensor.
+            Shape (:math:`H \times W`,) or (:math:`H`, :math:`W`) where :math:`H` is the height and :math:`W` is the width of the camera sensor.
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (N, 2) where N is the number of pixel points in float64 dtype. Each row represents a pixel point in pixel coordinate system (row, column).
+        :class:`numpy.ndarray`
+            A 2D array of shape (:math:`N_p`, 2) where :math:`N_p` is the number of pixel points in float64 dtype. Each row represents a pixel point in pixel coordinate system (row, column).
 
         Raises
         ------
@@ -843,14 +847,14 @@ class Image(object):
 
         Parameters
         ----------
-        mask : Optional[numpy.ndarray], optional
+        mask : Optional[:class:`numpy.ndarray`], optional
             A boolean mask to filter the image points. If None, all image points are returned. Default is None.
-            Shape (H*W,) or (H, W) where H is the height and W is the width of the camera sensor.
+            Shape (:math:`H \times W`,) or (:math:`H`, :math:`W`) where :math:`H` is the height and :math:`W` is the width of the camera sensor.
 
         Returns
         -------
-        numpy.ndarray
-            A 2D array of shape (N, 2) where N is the number of image points in float64 dtype. Each row represents an image point in image coordinate system (x, y).
+        :class:`numpy.ndarray`
+            A 2D array of shape (:math:`N_p`, 2) where :math:`N_p` is the number of image points in float64 dtype. Each row represents an image point in image coordinate system :math:`(x, y)`.
 
         Raises
         ------
@@ -877,12 +881,12 @@ class Image(object):
 
         Parameters
         ----------
-        channel : int
-            The channel index for color images. Defaults to 1 (the first channel). For a grayscale image, this parameter must be 1.
+        channel : :class:`int`, optional
+            The channel index for color images. Default to 1 (the first channel). For a grayscale image, this parameter must be 1.
 
         Returns
         -------
-        Optional[scipy.interpolate.RectBivariateSpline]
+        Optional[:class:`scipy.interpolate.RectBivariateSpline`]
             The interpolation function for the image, or None if not set.
 
         """
@@ -909,14 +913,14 @@ class Image(object):
 
         Parameters
         ----------
-        title : Optional[str], optional
+        title : Optional[:class:`str`], optional
             The title of the plot, by default None (which uses no title).
 
-        cmap : Optional[str], optional
+        cmap : Optional[:class:`str`], optional
             The colormap to use for grayscale images, by default None (which uses the default gray colormap).
 
-        figsize : Tuple[int, int], optional
-            The size of the figure in inches, by default (8, 6).
+        figsize : Tuple[:class:`int`, :class:`int`], optional
+            The size of the figure in inches, by default :obj:`(8, 6)`.
 
         Raises
         ------

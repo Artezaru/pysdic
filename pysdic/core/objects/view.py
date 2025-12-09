@@ -73,13 +73,17 @@ class View(object):
     @property
     def camera(self) -> Camera:
         r"""
-        Get or set the camera used by the view.
+        [Get or Set] The camera used by the view.
+
+        .. note::
+
+            This property is settable.
 
         If the camera's sensor size changes, a new image must be set to reflect the new sensor dimensions.
 
         Parameters
         ----------
-        camera : Camera
+        camera : :class:`Camera`
             The camera to be used by the view.
         """
         return self._camera
@@ -96,11 +100,15 @@ class View(object):
     @property
     def image(self) -> Image:
         r"""
-        Get or set the image viewed by the camera.
+        [Get or Set] The image viewed by the camera.
+
+        .. note::
+
+            This property is settable.
 
         Parameters
         ----------
-        image : Image
+        image : :class:`Image`
             The image to be viewed by the camera.
         """
         return self._image
@@ -121,13 +129,13 @@ class View(object):
     @property
     def image_shape(self) -> Optional[Tuple[int, int]]:
         r"""
-        Get the shape of the image.
+        [Get] The shape of the image.
 
         The image shape is a tuple (height, width) representing the dimensions of the image.
 
         Returns
         -------
-        Optional[Tuple[int, int]]
+        Optional[Tuple[:class:`int`, :class:`int`]]
             The shape of the image as a tuple (height, width), or None if not set.
 
         """
@@ -139,11 +147,11 @@ class View(object):
     @property
     def camera_size(self) -> Tuple[int, int]:
         r"""
-        Get the size of the camera's sensor.
+        [Get] The size of the camera's sensor.
 
         Returns
         -------
-        Tuple[int, int]
+        Tuple[:class:`int`, :class:`int`]
             The size of the camera's sensor as a tuple (height, width).
         """
         return self._camera.sensor_height, self._camera.sensor_width
@@ -164,31 +172,31 @@ class View(object):
 
         Parameters
         ----------
-        world_points : numpy.ndarray
-            The 3D world points to be projected. The shape should be (N, 3) where N is the number of points and each point is represented by its (x, y, z) coordinates.
+        world_points : :class:`numpy.ndarray`
+            The 3D world points to be projected. The shape should be (..., 3) representing :math:`N_p` is the number of points and each point is represented by its :math:`(x, y, z)` coordinates.
 
-        dx : bool, optional
-            If True, the function will also return the jacobian of the pixel points with respect to the world points. Default is False.
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the pixel points with respect to the world points. Default is :obj:`False`.
 
-        dintrinsic : bool, optional
-            If True, compute the Jacobian of the pixel points with respect to the intrinsic parameters.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the pixel points with respect to the intrinsic parameters. Default is :obj:`False`.
 
-        ddistortion : bool, optional
-            If True, compute the Jacobian of the pixel points with respect to the distortion parameters.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the pixel points with respect to the distortion parameters. Default is :obj:`False`.
 
-        dextrinsic : bool, optional
-            If True, compute the Jacobian of the pixel points with respect to the extrinsic parameters.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the pixel points with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ProjectionResult
-            A ProjectionResult object containing the projected image points and optionally the jacobians.
+        :class:`ProjectionResult`
+            A :class:`ProjectionResult` object containing the projected image points and optionally the jacobians.
 
-            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).
-            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
+            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system :math:`(x, y)`.
+            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
 
         """
         self._check_no_size_updates()
@@ -198,7 +206,7 @@ class View(object):
     
     def project_points(self, world_points: PointCloud, dx: bool = False, dintrinsic: bool = False, ddistortion: bool = False, dextrinsic: bool = False) -> ProjectionResult:
         r"""
-        Project 3D world points to 2D pixel points using the camera's intrinsic, extrinsic, and distortion parameters from a PointCloud instance.
+        Project 3D world points to 2D pixel points using the camera's intrinsic, extrinsic, and distortion parameters from a :class:`PointCloud` instance.
 
         This method is a convenience wrapper around the camera's own project method.
 
@@ -209,31 +217,31 @@ class View(object):
 
         Parameters
         ----------
-        world_points : PointCloud
+        world_points : :class:`PointCloud`
             The 3D world points to be projected.
 
-        dx : bool, optional
-            If True, the function will also return the jacobian of the pixel points with respect to the world points. Default is False.
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the pixel points with respect to the world points. Default is :obj:`False`.
 
-        dintrinsic : bool, optional
-            If True, compute the Jacobian of the pixel points with respect to the intrinsic parameters.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the pixel points with respect to the intrinsic parameters. Default is :obj:`False`.
 
-        ddistortion : bool, optional
-            If True, compute the Jacobian of the pixel points with respect to the distortion parameters.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the pixel points with respect to the distortion parameters. Default is :obj:`False`.
 
-        dextrinsic : bool, optional
-            If True, compute the Jacobian of the pixel points with respect to the extrinsic parameters.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the pixel points with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ProjectionResult
-            A ProjectionResult object containing the projected image points and optionally the jacobians.
+        :class:`ProjectionResult`
+            A :class:`ProjectionResult` object containing the projected image points and optionally the jacobians.
 
-            - `image_points`: An array of shape (..., 2) representing the projected images points in the image coordinate system (x, y).
-            - `jacobian_dx`: (optional) A 3D array of shape (..., 2, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (..., 2, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (..., 2, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (..., 2, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
+            - `image_points`: An array of shape (:math:`N_p`, 2) representing the projected images points in the image coordinate system :math:`(x, y)`.
+            - `jacobian_dx`: (optional) A 3D array of shape (:math:`N_p`, 2, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) A 3D array of shape (:math:`N_p`, 2, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) A 3D array of shape (:math:`N_p`, 2, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) A 3D array of shape (:math:`N_p`, 2, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
         
         """
         self._check_no_size_updates()
@@ -253,31 +261,31 @@ class View(object):
 
         Parameters
         ----------
-        world_points : numpy.ndarray
-            The 3D world points to be projected. The shape should be (N, 3) where N is the number of points and each point is represented by its (x, y, z) coordinates.
+        world_points : :class:`numpy.ndarray`
+            The 3D world points to be projected. The shape should be (..., 3) representing :math:`N_p` points and each point is represented by its :math:`(x, y, z)` coordinates.
         
-        dx : bool, optional
-            If True, the function will also return the jacobian of the gray levels with respect to the world points. Default is False.
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the gray levels with respect to the world points. Default is :obj:`False`.
         
-        dintrinsic : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the intrinsic parameters.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the intrinsic parameters. Default is :obj:`False`.
         
-        ddistortion : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the distortion parameters.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the distortion parameters. Default is :obj:`False`.
         
-        dextrinsic : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the extrinsic parameters.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ImageProjectionResult
-            An instance of ImageProjectionResult containing:
+        :class:`ImageProjectionResult`
+            An instance of :class:`ImageProjectionResult` containing:
 
-            - `gray_levels`: 2D array of shape (N, channels) representing the image values at the projected pixel points.
-            - `jacobian_dx`: (optional) A 3D array of shape (N, 1, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (N, 1, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (N, 1, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (N, 1, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
+            - `gray_levels`: An array of shape (..., channels) representing the image values at the projected pixel points.
+            - `jacobian_dx`: (optional) An array of shape (..., channels, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) An array of shape (..., channels, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) An array of shape (..., channels, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) An array of shape (..., channels, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
             
         Examples
         --------
@@ -342,9 +350,9 @@ class View(object):
 
     def image_project_points(self, world_points: PointCloud, dx: bool = False, dintrinsic: bool = False, ddistortion: bool = False, dextrinsic: bool = False) -> ImageProjectionResult:
         r"""
-        Project 3D world points to gray level using the camera's intrinsic, extrinsic, distortion parameters and image interpolation function from a PointCloud instance.
+        Project 3D world points to gray level using the camera's intrinsic, extrinsic, distortion parameters and image interpolation function from a :class:`PointCloud` instance.
 
-        This method is a convenience wrapper around :meth:`image_project` that extracts the numpy array from the PointCloud instance.
+        This method is a convenience wrapper around :meth:`image_project` that extracts the numpy array from the :class:`PointCloud` instance.
 
         .. seealso::
 
@@ -358,37 +366,38 @@ class View(object):
 
         Parameters
         ----------
-        world_points : PointCloud
+        world_points : :class:`PointCloud`
             The 3D world points to be projected.
+
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the gray levels with respect to the world points. Default is :obj:`False`.
         
-        dx : bool, optional
-            If True, the function will also return the jacobian of the gray levels with respect to the world points. Default is False.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the intrinsic parameters. Default is :obj:`False`.
         
-        dintrinsic : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the intrinsic parameters.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the distortion parameters. Default is :obj:`False`.
         
-        ddistortion : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the distortion parameters.
-        
-        dextrinsic : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the extrinsic parameters.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ImageProjectionResult
-            An instance of ImageProjectionResult containing:
+        :class:`ImageProjectionResult`
+            An instance of :class:`ImageProjectionResult` containing:
 
-            - `gray_levels`: A 2D array of shape (N, channels) representing the image values at the projected pixel points.
-            - `jacobian_dx`: (optional) A 3D array of shape (N, 1, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (N, 1, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (N, 1, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (N, 1, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
+            - `gray_levels`: A 2D array of shape (:math:`N_p`, channels) representing the image values at the projected pixel points.
+            - `jacobian_dx`: (optional) A 3D array of shape (:math:`N_p`, channels, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) A 3D array of shape (:math:`N_p`, channels, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) A 3D array of shape (:math:`N_p`, channels, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) A 3D array of shape (:math:`N_p`, channels, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
+            
         
         
         Examples
         --------
 
-        Lets create a simple view and project some 3D points from a PointCloud instance:
+        Lets create a simple view and project some 3D points from a :class:`PointCloud` instance:
 
         .. code-block:: python
 
@@ -455,8 +464,8 @@ class View(object):
 
         .. warning::
 
-            - If ``dx`` is True, the projection result must contain the jacobian of the image points with respect to the world points, otherwise it will raise an error.
-            - If ``dp`` is True, the projection result must contain the jacobian of the image points with respect to the camera parameters, otherwise it will raise an error.
+            - If ``dx`` is :obj:`True`, the projection result must contain the jacobian of the image points with respect to the world points, otherwise it will raise an error.
+            - If ``dp`` is :obj:`True`, the projection result must contain the jacobian of the image points with respect to the camera parameters, otherwise it will raise an error.
 
         The chain rule assembly is done as follows:
 
@@ -466,32 +475,32 @@ class View(object):
 
         Parameters
         ----------
-        projection_result : ProjectionResult
+        projection_result : :class:`ProjectionResult`
             The result of the camera's projection method containing the projected pixel points and optionally the jacobians.
         
-        dx : bool, optional
-            If True, the function will also return the jacobian of the gray levels with respect to the world points. Default is False.
+        dx : :class:`bool`, optional
+            If :obj:`True`, the function will also return the jacobian of the gray levels with respect to the world points. Default is :obj:`False`.
         
-        dintrinsic : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the intrinsic parameters.
+        dintrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the intrinsic parameters. Default is :obj:`False`.
         
-        ddistortion : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the distortion parameters.
+        ddistortion : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the distortion parameters. Default is :obj:`False`.
         
-        dextrinsic : bool, optional
-            If True, compute the Jacobian of the gray levels with respect to the extrinsic parameters.
+        dextrinsic : :class:`bool`, optional
+            If :obj:`True`, compute the Jacobian of the gray levels with respect to the extrinsic parameters. Default is :obj:`False`.
 
         Returns
         -------
-        ImageProjectionResult
-            An instance of ImageProjectionResult containing:
+        :class:`ImageProjectionResult`
+            An instance of :class:`ImageProjectionResult` containing:
 
-            - `gray_levels`: A 2D array of shape (N, channels) representing the image values at the projected pixel points.
-            - `jacobian_dx`: (optional) A 3D array of shape (N, 1, 3) representing the jacobian of the normalized points with respect to the world points if `dx` is True.
-            - `jacobian_dintrinsic`: (optional) A 3D array of shape (N, 1, Nintrinsic) representing the jacobian of the pixel points with respect to the intrinsic parameters if `dintrinsic` is True.
-            - `jacobian_ddistortion`: (optional) A 3D array of shape (N, 1, Ndistortion) representing the jacobian of the pixel points with respect to the distortion parameters if `ddistortion` is True.
-            - `jacobian_dextrinsic`: (optional) A 3D array of shape (N, 1, Nextrinsic) representing the jacobian of the pixel points with respect to the extrinsic parameters if `dextrinsic` is True.
-        
+            - `gray_levels`: An array of shape (..., channels) representing the image values at the projected pixel points.
+            - `jacobian_dx`: (optional) An array of shape (..., channels, 3) representing the jacobian of the normalized points with respect to the world points if :obj:`dx` is True.
+            - `jacobian_dintrinsic`: (optional) An array of shape (..., channels, :math:`N_{\text{intrinsic}}`) representing the jacobian of the pixel points with respect to the intrinsic parameters if :obj:`dintrinsic` is True.
+            - `jacobian_ddistortion`: (optional) An array of shape (..., channels, :math:`N_{\text{distortion}}`) representing the jacobian of the pixel points with respect to the distortion parameters if :obj:`ddistortion` is True.
+            - `jacobian_dextrinsic`: (optional) An array of shape (..., channels, :math:`N_{\text{extrinsic}}`) representing the jacobian of the pixel points with respect to the extrinsic parameters if :obj:`dextrinsic` is True.
+            
         """
         self._check_no_size_updates()
 
@@ -499,7 +508,9 @@ class View(object):
             raise TypeError("projection_result must be an instance of ProjectionResult.")
 
         # Compute the image values at the projected pixel points
-        pixel_points = self.camera.image_points_to_pixel_points(projection_result.image_points)
+        pixel_points = self.camera.image_points_to_pixel_points(projection_result.image_points) # Shape (..., 2)
+        shape_before = pixel_points.shape
+        pixel_points = pixel_points.reshape((-1, 2))  # Reshape to (N, 2) for evaluation
         gray_levels = self.image.evaluate_image_at_pixel_points(pixel_points) # Shape (N,) or (N, channels)
         gray_levels = gray_levels.reshape((pixel_points.shape[0], -1))  # Ensure shape is (N, channels)
 
@@ -551,6 +562,17 @@ class View(object):
             projection_dextrinsic = projection_result.jacobian_dextrinsic
 
             jacobian_dextrinsic = numpy.matmul(image_jacobian, projection_dextrinsic)  # (N, C, 2) @ (N, 2, Nextrinsic) = (N, C, Nextrinsic)
+
+        # Reshape jacobians back to original shape
+        gray_levels = gray_levels.reshape((*shape_before[:-1], gray_levels.shape[-1]))  # Shape (..., channels)
+        if jacobian_dx is not None:
+            jacobian_dx = jacobian_dx.reshape((*shape_before[:-1], jacobian_dx.shape[-2], jacobian_dx.shape[-1]))  # Shape (..., channels, 3)
+        if jacobian_dintrinsic is not None:
+            jacobian_dintrinsic = jacobian_dintrinsic.reshape((*shape_before[:-1], jacobian_dintrinsic.shape[-2], jacobian_dintrinsic.shape[-1]))  # Shape (..., channels, Nintrinsic)
+        if jacobian_ddistortion is not None:
+            jacobian_ddistortion = jacobian_ddistortion.reshape((*shape_before[:-1], jacobian_ddistortion.shape[-2], jacobian_ddistortion.shape[-1]))  # Shape (..., channels, Ndistortion)
+        if jacobian_dextrinsic is not None:
+            jacobian_dextrinsic = jacobian_dextrinsic.reshape((*shape_before[:-1], jacobian_dextrinsic.shape[-2], jacobian_dextrinsic.shape[-1]))  # Shape (..., channels, Nextrinsic)
 
         # Create the ImageProjectionResult instance
         image_projection_result = ImageProjectionResult(

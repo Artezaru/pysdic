@@ -18,7 +18,7 @@ Image class
 Instantiate an Image object
 -------------------------------------------
 
-To instantiate an Image object, you need to provide the pixel data as a 2D numpy array or the file path to an image.
+To instantiate an :class:`Image` object, you need to provide the pixel data as a 2D numpy array or the file path to an image.
 
 .. autosummary::
    :toctree: ../generated/
@@ -42,7 +42,7 @@ You can export the image data to a file or a numpy array.
 Accessing Image attributes
 -------------------------------------------
 
-You can access the image attributes through the Image object using the following properties.
+You can access the image attributes through the :class:`Image` object using the following properties.
 
 .. autosummary::
    :toctree: ../generated/

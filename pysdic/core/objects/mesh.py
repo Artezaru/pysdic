@@ -65,7 +65,7 @@ class Mesh(ABC):
 
         - :doc:`./shape_functions` for more information on shape functions.
 
-    If :obj:`element_type` is provided, the mesh will enforce that all elements are of the specified type. 
+    If :obj:`elements_type` is provided, the mesh will enforce that all elements are of the specified type. 
     This allow to use the predefined shape functions and properties associated with that element type.
     The implemented types are:
 
@@ -101,7 +101,7 @@ class Mesh(ABC):
     elements_properties : Optional[:class:`dict`], optional
         A dictionary to store properties of the elements, each property should be a numpy ndarray of shape (:math:`N_e`, :math`B`) where :math:`N_e` is the number of elements and :math:`B` is the number of attributes for that property, by default None.
 
-    element_type : Optional[:class:`str`], optional
+    elements_type : Optional[:class:`str`], optional
         The expected type of elements in the mesh, by default None.
 
     internal_bypass : :class:`bool`, optional
@@ -109,7 +109,7 @@ class Mesh(ABC):
     
     """
 
-    _mapping_element_type_to_properties = {
+    _mapping_elements_type_to_properties = {
         "segment_2": {
             "expected_N_vpe": 2,
             "expected_K": 1,
@@ -156,7 +156,7 @@ class Mesh(ABC):
 
     __slots__ = [
         '_internal_bypass',
-        '_element_type',
+        '_elements_type',
         '_vertices', 
         '_connectivity',
         '_vertices_properties',
@@ -170,7 +170,7 @@ class Mesh(ABC):
         connectivity: numpy.ndarray, 
         vertices_properties: Optional[Dict] = None, 
         elements_properties: Optional[Dict] = None, 
-        element_type: Optional[str] = None,
+        elements_type: Optional[str] = None,
         internal_bypass: bool = False
     ) -> None:
         # Define expected properties informations
@@ -178,7 +178,7 @@ class Mesh(ABC):
             self._vertices_predefined_metadata = {}
         if not hasattr(self, "_elements_predefined_metadata"):
             self._elements_predefined_metadata = {}
-        self._element_type = None
+        self._elements_type = None
 
         self._elements_predefined_metadata.update({
             "uvmap": {"check_method": self._internal_check_uvmap},
@@ -194,7 +194,7 @@ class Mesh(ABC):
             raise ValueError(f"Connectivity must be a 2D array, got {connectivity.ndim}D array.")
 
         # Element type handling
-        self.set_element_type(element_type)
+        self.set_elements_type(elements_type)
         
         # Initialize attributes
         self._internal_bypass = True
@@ -259,8 +259,8 @@ class Mesh(ABC):
         Optional[:class:`int`]
             The expected number of vertices per element, or None if not set.
         """
-        if self._element_type is not None:
-            return self._mapping_element_type_to_properties[self._element_type]["expected_N_vpe"]
+        if self._elements_type is not None:
+            return self._mapping_elements_type_to_properties[self._elements_type]["expected_N_vpe"]
         return None
         
     def _get_expected_K(self) -> Optional[int]:
@@ -272,8 +272,8 @@ class Mesh(ABC):
         Optional[:class:`int`]
             The expected number of natural coordinates (topological dimensions), or None if not set.
         """
-        if self._element_type is not None:
-            return self._mapping_element_type_to_properties[self._element_type]["expected_K"]
+        if self._elements_type is not None:
+            return self._mapping_elements_type_to_properties[self._elements_type]["expected_K"]
         return None
         
     def _get_meshio_cell_type(self) -> Optional[str]:
@@ -285,8 +285,8 @@ class Mesh(ABC):
         Optional[:class:`str`]
             The expected meshio cell type, or None if not set.
         """
-        if self._element_type is not None:
-            return self._mapping_element_type_to_properties[self._element_type]["meshio_cell_type"]
+        if self._elements_type is not None:
+            return self._mapping_elements_type_to_properties[self._elements_type]["meshio_cell_type"]
         return None
     
     def _get_vtk_cell_type(self) -> Optional[int]:
@@ -298,8 +298,8 @@ class Mesh(ABC):
         Optional[:class:`int`]
             The expected VTK cell type, or None if not set.
         """
-        if self._element_type is not None:
-            return self._mapping_element_type_to_properties[self._element_type]["vtk_cell_type"]
+        if self._elements_type is not None:
+            return self._mapping_elements_type_to_properties[self._elements_type]["vtk_cell_type"]
         return None
     
     def _get_shape_functions_method(self) -> Optional[Callable]:
@@ -311,8 +311,8 @@ class Mesh(ABC):
         Optional[:class:`Callable`]
             The shape functions method, or None if not set.
         """
-        if self._element_type is not None:
-            return self._mapping_element_type_to_properties[self._element_type]["shape_functions_method"]
+        if self._elements_type is not None:
+            return self._mapping_elements_type_to_properties[self._elements_type]["shape_functions_method"]
         return None
 
     def _internal_check_vertices(self) -> None:
@@ -549,13 +549,33 @@ class Mesh(ABC):
         
         return default        
 
-    def set_element_type(self, element_type: Optional[str]) -> None:
+    def set_elements_type(self, elements_type: Optional[str]) -> None:
         r"""
         Internal method to set the expected element type for the mesh.
 
+        If :obj:`elements_type` is provided, the mesh will enforce that all elements are of the specified type. 
+        This allow to use the predefined shape functions and properties associated with that element type.
+        The implemented types are:
+
+        +---------------------+-------------------------------------------------------------------+
+        | Element Type        | Description                                                       |
+        +=====================+===================================================================+
+        | "segment_2"         | 2-node line element                                               |
+        +---------------------+-------------------------------------------------------------------+
+        | "segment_3"         | 3-node line element                                               |
+        +---------------------+-------------------------------------------------------------------+
+        | "triangle_3"        | 3-node triangular element                                         |
+        +---------------------+-------------------------------------------------------------------+
+        | "triangle_6"        | 6-node triangular element                                         |
+        +---------------------+-------------------------------------------------------------------+
+        | "quadrangle_4"      | 4-node quadrilateral element                                      |
+        +---------------------+-------------------------------------------------------------------+
+        | "quadrangle_8"      | 8-node quadrilateral element                                      |
+        +---------------------+-------------------------------------------------------------------+
+
         Parameters
         ----------
-        element_type : :class:`str`
+        elements_type : :class:`str`
             The expected element type.
 
         Raises
@@ -565,19 +585,19 @@ class Mesh(ABC):
         ValueError
             If the input is not a valid element type.
         """
-        if element_type is not None:
-            if not isinstance(element_type, str):
-                raise TypeError(f"Element type must be a string, got {type(element_type)}.")
-            if element_type not in self._mapping_element_type_to_properties:
-                raise ValueError(f"Invalid element type '{element_type}'. Supported types are: {list(self._mapping_element_type_to_properties.keys())}.")
-        self._element_type = element_type
+        if elements_type is not None:
+            if not isinstance(elements_type, str):
+                raise TypeError(f"Element type must be a string, got {type(elements_type)}.")
+            if elements_type not in self._mapping_elements_type_to_properties:
+                raise ValueError(f"Invalid element type '{elements_type}'. Supported types are: {list(self._mapping_elements_type_to_properties.keys())}.")
+        self._elements_type = elements_type
     
 
     # =======================
     # I/O Methods
     # =======================
     @classmethod
-    def from_meshio(cls, mesh: meshio.Mesh, element_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
+    def from_meshio(cls, mesh: meshio.Mesh, elements_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
         r"""
         Create a Mesh instance from a :class:`meshio.Mesh` object.
 
@@ -599,7 +619,7 @@ class Mesh(ABC):
         mesh : :class:`meshio.Mesh`
             A meshio Mesh object to extract the first cell block and create the Mesh instance.
 
-        element_type : Optional[:class:`str`], optional
+        elements_type : Optional[:class:`str`], optional
             The expected type of elements in the mesh, by default None.
 
         load_properties : :class:`bool`, optional
@@ -640,7 +660,7 @@ class Mesh(ABC):
 
         .. code-block:: python
 
-            mesh3d = Mesh.from_meshio(mesh, element_type="triangle_3")
+            mesh3d = Mesh.from_meshio(mesh, elements_type="triangle_3")
             print(mesh3d.vertices)
             # Output: PointCloud with 4 points [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
 
@@ -650,14 +670,14 @@ class Mesh(ABC):
         expected_K = None
         meshio_cell_type = None
 
-        if element_type is not None:
-            if not isinstance(element_type, str):
-                raise TypeError(f"Element type must be a string, got {type(element_type)}.")
-            if element_type not in cls._mapping_element_type_to_properties:
-                raise ValueError(f"Invalid element type '{element_type}'. Supported types are: {list(cls._mapping_element_type_to_properties.keys())}.")
-            expected_N_vpe = cls._mapping_element_type_to_properties[element_type]["expected_N_vpe"]
-            expected_K = cls._mapping_element_type_to_properties[element_type]["expected_K"]
-            meshio_cell_type = cls._mapping_element_type_to_properties[element_type]["meshio_cell_type"]
+        if elements_type is not None:
+            if not isinstance(elements_type, str):
+                raise TypeError(f"Element type must be a string, got {type(elements_type)}.")
+            if elements_type not in cls._mapping_elements_type_to_properties:
+                raise ValueError(f"Invalid element type '{elements_type}'. Supported types are: {list(cls._mapping_elements_type_to_properties.keys())}.")
+            expected_N_vpe = cls._mapping_elements_type_to_properties[elements_type]["expected_N_vpe"]
+            expected_K = cls._mapping_elements_type_to_properties[elements_type]["expected_K"]
+            meshio_cell_type = cls._mapping_elements_type_to_properties[elements_type]["meshio_cell_type"]
 
         # Validate the mesh structure
         if not isinstance(mesh, meshio.Mesh):
@@ -695,13 +715,18 @@ class Mesh(ABC):
                 elements_properties[key] = numpy.asarray(value[0]).reshape(-1, 1) if value[0].ndim == 1 else numpy.asarray(value[0])
 
         # Create Mesh instance
-        return cls(vertices, connectivity, vertices_properties=vertices_properties, elements_properties=elements_properties, element_type=element_type, internal_bypass=internal_bypass)
+        return cls(vertices, connectivity, vertices_properties=vertices_properties, elements_properties=elements_properties, elements_type=elements_type, internal_bypass=internal_bypass)
 
 
     def to_meshio(self, save_properties: bool = True) -> meshio.Mesh:
         r"""
-        Convert the :class:`Mesh` instance to a :class:`meshio.Mesh` object.
+        Convert the :class:`Mesh` instance to a :class:`meshio.Mesh` object (:obj:`elements_type` must be defined).
         The mesh must not be empty. 
+
+        .. warning::
+
+            If the mesh does not have a defined element type, this method will raise a ValueError.
+            See :meth:`set_elements_type` to define the element type before conversion.
 
         The following fields are created:
 
@@ -763,7 +788,7 @@ class Mesh(ABC):
         
         meshio_cell_type = self._get_meshio_cell_type()
         if meshio_cell_type is None:
-            raise ValueError("Cannot convert to meshio Mesh object without a defined element type. See method 'set_element_type' to define it.")
+            raise ValueError("Cannot convert to meshio Mesh object without a defined element type. See method 'set_elements_type' to define it.")
         
         cells = [meshio.CellBlock(meshio_cell_type, data=self.connectivity)]
         
@@ -778,9 +803,9 @@ class Mesh(ABC):
     
 
     @classmethod
-    def from_npz(cls, filename: str, element_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
+    def from_npz(cls, filename: str, elements_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
         r"""
-        Create a Mesh instance from a NPZ file. (Only for 3D embedding dimension meshes)
+        Create a Mesh instance from a NPZ file.
 
         This method uses numpy to read the NPZ file and then converts it to a :class:`Mesh` instance.
 
@@ -795,7 +820,7 @@ class Mesh(ABC):
         filename : :class:`str`
             The path to the NPZ file.
 
-        element_type : Optional[:class:`str`], optional
+        elements_type : Optional[:class:`str`], optional
             The expected type of elements in the mesh, by default None.
 
         load_properties : :class:`bool`, optional
@@ -828,7 +853,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             cells = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh = Mesh(vertices=points, connectivity=cells, element_type="triangle_3")
+            mesh = Mesh(vertices=points, connectivity=cells, elements_type="triangle_3")
             mesh.save_npz("simple_mesh.npz")
 
         Create a :class:`Mesh` instance from the NPZ file.
@@ -861,14 +886,14 @@ class Mesh(ABC):
             connectivity=connectivity, 
             vertices_properties=vertices_properties,
             elements_properties=elements_properties,
-            element_type=element_type,
+            elements_type=elements_type,
             internal_bypass=internal_bypass
         )
     
 
     def to_npz(self, filename: str, save_properties: bool = True) -> None:
         r"""
-        Write the :class:`Mesh` instance to a NPZ file. (Only for 3D embedding dimension meshes)
+        Write the :class:`Mesh` instance to a NPZ file.
         
         The mesh must not be empty.
 
@@ -936,9 +961,9 @@ class Mesh(ABC):
     
 
     @classmethod
-    def from_vtk(cls, filename: str, element_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
+    def from_vtk(cls, filename: str, elements_type: Optional[str] = None, load_properties: bool = True, internal_bypass: bool = False) -> Mesh:
         r"""
-        Create a Mesh instance from a VTK file. (Only for 3D embedding dimension meshes)
+        Create a Mesh instance from a VTK file (Only for 3D embedding dimension meshes :math:`E=3`).
 
         This method uses meshio to read the VTK file and then converts it to a :class:`Mesh` instance.
 
@@ -958,7 +983,7 @@ class Mesh(ABC):
         filename : :class:`str`
             The path to the VTK file.
 
-        element_type : Optional[:class:`str`], optional
+        elements_type : Optional[:class:`str`], optional
             The expected type of elements in the mesh, by default None.
 
         load_properties : :class:`bool`, optional
@@ -1015,12 +1040,12 @@ class Mesh(ABC):
             raise FileNotFoundError(f"File '{filename}' does not exist.")
         
         mesh = meshio.read(filename, file_format="vtk")
-        return cls.from_meshio(mesh, element_type=element_type, load_properties=load_properties, internal_bypass=internal_bypass)
+        return cls.from_meshio(mesh, elements_type=elements_type, load_properties=load_properties, internal_bypass=internal_bypass)
 
 
     def to_vtk(self, filename: str, save_properties: bool = True) -> None:
         r"""
-        Write the :class:`Mesh` instance to a VTK file. (Only for 3D embedding dimension meshes)
+        Write the :class:`Mesh` instance to a VTK file (Only for 3D embedding dimension meshes :math:`E=3`).
         
         The mesh must not be empty.
 
@@ -1071,6 +1096,8 @@ class Mesh(ABC):
             raise ValueError("Cannot write an empty mesh to file.")
         if not isinstance(save_properties, bool):
             raise TypeError(f"save_properties must be a boolean, got {type(save_properties)}.")
+        if not self.n_dimensions == 3:
+            raise ValueError("VTK file format is only supported for meshes with embedding dimension of 3.")
         
         path = os.path.abspath(os.path.expanduser(filename))
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -1440,13 +1467,13 @@ class Mesh(ABC):
     
 
     @property
-    def element_type(self) -> Optional[str]:
+    def elements_type(self) -> Optional[str]:
         r"""
-        [Get] The element type of the mesh.
+        [Get or Set] The element type of the mesh.
 
         .. seealso::
 
-            - :meth:`set_element_type` to set the element type of the mesh.
+            - :meth:`set_elements_type` to set the element type of the mesh.
 
         Returns
         -------
@@ -1466,17 +1493,58 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Get the element type of the mesh.
 
         .. code-block:: python
 
-            print(mesh3d.element_type)
+            print(mesh3d.elements_type)
             # Output: triangle_3
 
         """
-        return self._element_type
+        return self._elements_type
+    
+    @elements_type.setter
+    def elements_type(self, value: Optional[str]) -> None:
+        self.set_elements_type(value)
+    
+
+    @property
+    def elements_properties(self) -> Dict[str, numpy.ndarray]:
+        r"""
+        [Get] The properties associated with the elements of the mesh (see :meth:`set_elements_property` and :meth:`get_elements_property`).
+
+        Returns
+        -------
+        :class:`Dict[str, numpy.ndarray]`
+            A dictionary containing the properties of the elements, where keys are property names and values are numpy arrays.
+
+        
+        Examples
+        --------
+
+        Create a simple :class:`Mesh` instance with element properties.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic import Mesh, PointCloud
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            elements_properties = {"material_id": np.array([1, 1, 2, 2])}
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_properties=elements_properties)
+
+        Get the properties of the elements in the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.elements_properties)
+            # Output: {'material_id': array([1, 1, 2, 2])}
+
+        """
+        return self._elements_properties
     
 
     @property
@@ -1486,7 +1554,7 @@ class Mesh(ABC):
 
         .. seealso::
 
-            - :meth:`set_element_type` to set the element type of the mesh and update the expected number of vertices per element accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the expected number of vertices per element accordingly.
 
         Returns
         -------
@@ -1506,7 +1574,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Get the expected number of vertices per element for the mesh.
 
@@ -1526,7 +1594,7 @@ class Mesh(ABC):
 
         .. seealso::
 
-            - :meth:`set_element_type` to set the element type of the mesh and update the expected topological dimension accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the expected topological dimension accordingly.
 
         Returns
         -------
@@ -1546,7 +1614,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Get the expected topological dimension for the mesh.
 
@@ -1565,7 +1633,7 @@ class Mesh(ABC):
 
         .. seealso::
 
-            - :meth:`set_element_type` to set the element type of the mesh and update the meshio cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the meshio cell type accordingly.
 
         Returns
         -------
@@ -1585,7 +1653,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Get the meshio cell type for the mesh.
 
@@ -1597,6 +1665,46 @@ class Mesh(ABC):
         """
         return self._get_meshio_cell_type()
     
+
+
+    @property
+    def vertices_properties(self) -> Dict[str, numpy.ndarray]:
+        r"""
+        [Get] The properties associated with the vertices of the mesh (see :meth:`set_vertices_property` and :meth:`get_vertices_property`).
+
+        Returns
+        -------
+        :class:`Dict[str, numpy.ndarray]`
+            A dictionary containing the properties of the vertices, where keys are property names and values are numpy arrays.
+
+        
+        Examples
+        --------
+
+        Create a simple :class:`Mesh` instance with vertex properties.
+
+        .. code-block:: python
+
+            import numpy as np
+            from pysdic import Mesh, PointCloud
+
+            points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
+            vertices_properties = {"temperature": np.array([100, 150, 200, 250])}
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, vertices_properties=vertices_properties)
+
+        Get the properties of the vertices in the mesh.
+
+        .. code-block:: python
+
+            print(mesh3d.vertices_properties)
+            # Output: {'temperature': array([100, 150, 200, 250])}
+
+        """
+        return self._vertices_properties
+    
+
+    
     @property
     def vtk_cell_type(self) -> Optional[int]:
         r"""
@@ -1604,7 +1712,7 @@ class Mesh(ABC):
 
         .. seealso::
 
-            - :meth:`set_element_type` to set the element type of the mesh and update the VTK cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the VTK cell type accordingly.
 
         Returns
         -------
@@ -1624,7 +1732,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Get the VTK cell type for the mesh.
 
@@ -1672,7 +1780,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
             vertex_property = np.array([0.0, 1.0, 2.0, 3.0]).reshape(-1, 1) # Shape (4, 1)
             mesh3d.set_vertices_property("my_property", vertex_property)
@@ -1720,7 +1828,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
             element_property = np.array([10.0, 20.0, 30.0, 40.0]).reshape(-1, 1) # Shape (4, 1)
             mesh3d.set_elements_property("my_element_property", element_property)
@@ -1781,7 +1889,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Set a vertex property.
 
@@ -2037,7 +2145,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
             connectivity = np.array([[0, 1, 2]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Add some properties to the elements.
 
@@ -2121,7 +2229,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
             connectivity = np.array([[0, 1, 2]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Add new vertices to the mesh.
 
@@ -2193,7 +2301,7 @@ class Mesh(ABC):
 
             points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 1]])
             connectivity = np.array([[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]])
-            mesh3d = Mesh(PointCloud.from_array(points), connectivity, element_type="triangle_3")
+            mesh3d = Mesh(PointCloud.from_array(points), connectivity, elements_type="triangle_3")
 
         Check if vertices 2, 4, and 0 are used in the connectivity.
 
@@ -2606,7 +2714,7 @@ class Mesh(ABC):
         
         new_vertices_properties = {key: numpy.copy(value) for key, value in self._vertices_properties.items()}
         new_elements_properties = {key: numpy.copy(value) for key, value in self._elements_properties.items()}
-        return self.__class__(vertices, connectivity, new_vertices_properties, new_elements_properties, element_type=self.element_type, internal_bypass=self.internal_bypass)
+        return self.__class__(vertices, connectivity, new_vertices_properties, new_elements_properties, elements_type=self.elements_type, internal_bypass=self.internal_bypass)
     
 
 
@@ -2754,7 +2862,7 @@ class Mesh(ABC):
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
             - :meth:`visualize_integration_points` to visualize integration points on the mesh.
-            - :meth:`set_element_type` to set the element type of the mesh and update the VTK cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the VTK cell type accordingly.
 
         Parameters
         ----------
@@ -2853,7 +2961,7 @@ class Mesh(ABC):
         vtk_cell_type = mesh._get_vtk_cell_type()
         if vtk_cell_type is None:
             raise NotImplementedError(
-                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_element_type` to define it."
+                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_elements_type` to define it."
             )
         
         # Check input data
@@ -2978,7 +3086,7 @@ class Mesh(ABC):
             - :meth:`visualize` to visualize the mesh without coloring by a property.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
             - :meth:`visualize_integration_points` to visualize integration points on the mesh.
-            - :meth:`set_element_type` to set the element type of the mesh and update the VTK cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the VTK cell type accordingly.
 
         Parameters
         ----------
@@ -3104,7 +3212,7 @@ class Mesh(ABC):
         vtk_cell_type = mesh._get_vtk_cell_type()
         if vtk_cell_type is None:
             raise NotImplementedError(
-                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_element_type` to define it."
+                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_elements_type` to define it."
             )
         
         
@@ -3284,7 +3392,7 @@ class Mesh(ABC):
             - :meth:`visualize` to visualize the mesh without coloring by a property.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
             - :meth:`visualize_integration_points` to visualize integration points on the mesh.
-            - :meth:`set_element_type` to set the element type of the mesh and update the VTK cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the VTK cell type accordingly.
 
         Parameters
         ----------
@@ -3414,7 +3522,7 @@ class Mesh(ABC):
         vtk_cell_type = mesh._get_vtk_cell_type()
         if vtk_cell_type is None:
             raise NotImplementedError(
-                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_element_type` to define it."
+                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_elements_type` to define it."
             )
         
         # Case of an empty mesh
@@ -3593,7 +3701,7 @@ class Mesh(ABC):
             - :meth:`visualize` to visualize the mesh without texture.
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_integration_points` to visualize integration points on the mesh.
-            - :meth:`set_element_type` to set the element type of the mesh and update the VTK cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the VTK cell type accordingly.
 
         Parameters
         ----------
@@ -3700,7 +3808,7 @@ class Mesh(ABC):
         vtk_cell_type = mesh._get_vtk_cell_type()
         if vtk_cell_type is None:
             raise NotImplementedError(
-                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_element_type` to define it."
+                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_elements_type` to define it."
             )
 
         # Check input data
@@ -3866,7 +3974,7 @@ class Mesh(ABC):
             - :meth:`visualize` to visualize the mesh without integration points.
             - :meth:`visualize_vertices_property` to visualize a vertex property on the mesh.
             - :meth:`visualize_texture` to visualize the texture of the mesh.
-            - :meth:`set_element_type` to set the element type of the mesh and update the VTK cell type accordingly.
+            - :meth:`set_elements_type` to set the element type of the mesh and update the VTK cell type accordingly.
 
             
         Parameters
@@ -3988,7 +4096,7 @@ class Mesh(ABC):
         vtk_cell_type = self._get_vtk_cell_type()
         if vtk_cell_type is None:
             raise NotImplementedError(
-                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_element_type` to define it."
+                f"Visualization is not supported as vtk_cell_type is not defined for mesh elements. See method `set_elements_type` to define it."
             )
         
         natural_coordinates = numpy.asarray(natural_coordinates, dtype=numpy.float64)

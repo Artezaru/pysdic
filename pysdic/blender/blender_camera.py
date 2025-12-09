@@ -1,12 +1,16 @@
 from __future__ import annotations
+
+
 from py3dframe import Frame, Rotation
+
 from typing import Union, Sequence, Dict, Tuple, Optional
 from numbers import Number, Integral
+
 import json
 import os
 import numpy
 
-class Camera(object):
+class BlenderCamera(object):
     r"""
     Represents a camera in 3D space with intrinsic parameters, orientation, and position.
 
@@ -19,7 +23,7 @@ class Camera(object):
     - y-axis: The up direction of the camera (up to down).
     - z-axis: The optical axis of the camera (from the camera to the scene).
 
-    .. figure:: ../../../pyblenderSDIC/resources/doc/opencv_camera_frame.png
+    .. figure:: /_static/blender/opencv_camera_frame.png
         :width: 500
         :align: center
         
@@ -118,7 +122,7 @@ class Camera(object):
         - y-axis: The up direction of the camera (up to down).
         - z-axis: The optical axis of the camera (from the camera to the scene).
 
-        .. figure:: ../../../pyblenderSDIC/resources/doc/opencv_camera_frame.png
+        .. figure:: /_static/blender/opencv_camera_frame.png
             :width: 500
             :align: center
             
@@ -161,7 +165,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.focal_length_y` or ``fy`` to set the focal length in pixels in y direction.
+            - :meth:`focal_length_y` or ``fy`` to set the focal length in pixels in y direction.
 
         Returns
         -------
@@ -207,7 +211,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.focal_length_x` or ``fx`` to set the focal length in pixels in x direction.
+            - :meth:`focal_length_x` or ``fx`` to set the focal length in pixels in x direction.
 
         Returns
         -------
@@ -286,7 +290,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.principal_point_y` or ``cy`` to set the principal point in pixels in y direction.
+            - :meth:`principal_point_y` or ``cy`` to set the principal point in pixels in y direction.
 
         Returns
         -------
@@ -331,7 +335,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.principal_point_x` or ``cx`` to set the principal point in pixels in x direction.
+            - :meth:`principal_point_x` or ``cx`` to set the principal point in pixels in x direction.
 
         Returns
         -------
@@ -406,7 +410,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.pixel_size_y` or ``py`` to set the pixel size in millimeters in y direction.
+            - :meth:`pixel_size_y` or ``py`` to set the pixel size in millimeters in y direction.
 
         Returns
         -------
@@ -449,7 +453,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.pixel_size_x` or ``px`` to set the pixel size in millimeters in x direction.
+            - :meth:`pixel_size_x` or ``px`` to set the pixel size in millimeters in x direction.
 
         Returns
         -------
@@ -523,7 +527,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.resolution_y` or ``ry`` to set the resolution in number of pixels in y direction.
+            - :meth:`resolution_y` or ``ry`` to set the resolution in number of pixels in y direction.
 
         Returns
         -------
@@ -566,7 +570,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.resolution_x` or ``rx`` to set the resolution in number of pixels in x direction.
+            - :meth:`resolution_x` or ``rx`` to set the resolution in number of pixels in x direction.
 
         Returns
         -------
@@ -642,7 +646,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.clip_distance_far` or ``clfar`` to set the far clipping plane in millimeters.
+            - :meth:`clip_distance_far` or ``clfar`` to set the far clipping plane in millimeters.
 
         Returns
         -------
@@ -686,7 +690,7 @@ class Camera(object):
 
         .. seealso::
 
-            - :meth:`pyblenderSDIC.Camera.clip_distance_near` or ``clnear`` to set the near clipping plane in millimeters.
+            - :meth:`clip_distance_near` or ``clnear`` to set the near clipping plane in millimeters.
 
         Returns
         -------
@@ -1130,7 +1134,7 @@ class Camera(object):
         r"""
         Get the rotation and translation of the camera in the OpenCV format.
 
-        The axis of the camera frame for OpenCV are the same as the Camera frame.
+        The axis of the camera frame for OpenCV are the same as the BlenderCamera frame.
         Furthermore, the convention for OpenCV is :math:`X_{cam} = R X_{world} + T`, convention=4 for py3dframe.
 
         Returns
@@ -1149,7 +1153,7 @@ class Camera(object):
         r"""
         Set the rotation and translation of the camera in the OpenCV format.
 
-        The axis of the camera frame for OpenCV are the same as the Camera frame.
+        The axis of the camera frame for OpenCV are the same as the BlenderCamera frame.
         Furthermore, the convention for OpenCV is :math:`X_{cam} = R X_{world} + T`, convention=4 for py3dframe.
 
         Parameters
@@ -1168,7 +1172,7 @@ class Camera(object):
         r"""
         Get or set the translation vector of the camera in the OpenCV format.
 
-        The axis of the camera frame for OpenCV are the same as the Camera frame.
+        The axis of the camera frame for OpenCV are the same as the BlenderCamera frame.
         Furthermore, the convention for OpenCV is :math:`X_{cam} = R X_{world} + T`, convention=4 for py3dframe.
 
         Returns
@@ -1187,7 +1191,7 @@ class Camera(object):
         r"""
         Get or set the rotation vector of the camera in the OpenCV format.
 
-        The axis of the camera frame for OpenCV are the same as the Camera frame.
+        The axis of the camera frame for OpenCV are the same as the BlenderCamera frame.
         Furthermore, the convention for OpenCV is :math:`X_{cam} = R X_{world} + T`, convention=4 for py3dframe.
 
         Returns
@@ -1206,10 +1210,10 @@ class Camera(object):
         r"""
         Get the rotation and translation of the camera in the OpenGL format.
 
-        The axis of the camera frame for OpenGL are different from the Camera frame:
-        - x-axis: The same as the Camera frame : right direction of the camera (left to right).
-        - y-axis: The opposite of the Camera frame : up direction of the camera (down to up).
-        - z-axis: The opposite of the Camera frame : (from the scene to the camera).
+        The axis of the camera frame for OpenGL are different from the BlenderCamera frame:
+        - x-axis: The same as the BlenderCamera frame : right direction of the camera (left to right).
+        - y-axis: The opposite of the BlenderCamera frame : up direction of the camera (down to up).
+        - z-axis: The opposite of the BlenderCamera frame : (from the scene to the camera).
 
         Furthermore, the convention for OpenGL is :math:`X_{world} = R X_{cam} + T`, convention=0 for py3dframe.
 
@@ -1233,10 +1237,10 @@ class Camera(object):
         r"""
         Set the rotation and translation of the camera in the OpenGL format.
 
-        The axis of the camera frame for OpenGL are different from the Camera frame:
-        - x-axis: The same as the Camera frame : right direction of the camera (left to right).
-        - y-axis: The opposite of the Camera frame : up direction of the camera (down to up).
-        - z-axis: The opposite of the Camera frame : (from the scene to the camera).
+        The axis of the camera frame for OpenGL are different from the BlenderCamera frame:
+        - x-axis: The same as the BlenderCamera frame : right direction of the camera (left to right).
+        - y-axis: The opposite of the BlenderCamera frame : up direction of the camera (down to up).
+        - z-axis: The opposite of the BlenderCamera frame : (from the scene to the camera).
 
         Furthermore, the convention for OpenGL is :math:`X_{world} = R X_{cam} + T`, convention=0 for py3dframe.
 
@@ -1261,14 +1265,14 @@ class Camera(object):
     # =============================================
     def to_dict(self, description: Optional[str] = None) -> Dict:
         r"""
-        Export the Camera's data to a dictionary.
+        Export the BlenderCamera's data to a dictionary.
 
         The structure of the dictionary is as follows:
 
         .. code-block:: python
 
             {
-                "type": "Camera [pyblenderSDIC]",
+                "type": "BlenderCamera",
                 "description": "Description of the camera",
                 "frame": {
                     "translation": [float, float, float],
@@ -1307,7 +1311,7 @@ class Camera(object):
         """        
         # Create the dictionary
         data = {
-            "type": "Camera [pyblenderSDIC]",
+            "type": "BlenderCamera",
             "frame": self.frame.save_to_dict(),
             "fx": self.fx,
             "fy": self.fy,
@@ -1330,11 +1334,11 @@ class Camera(object):
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict) -> Camera:
+    def from_dict(cls, data: Dict) -> BlenderCamera:
         r"""
-        Create a Camera instance from a dictionary.
+        Create a BlenderCamera instance from a dictionary.
 
-        The structure of the dictionary should be as provided by the :meth:`pysdic.Camera.save_to_dict` method.
+        The structure of the dictionary should be as provided by the :meth:`to_dict` method.
 
         If focal_length, resolution, pixel_size, or principal_point are not provided, the default values are used.
 
@@ -1347,8 +1351,8 @@ class Camera(object):
         
         Returns
         -------
-        Camera
-            The Camera instance.
+        BlenderCamera
+            The BlenderCamera instance.
 
         Raises
         ------
@@ -1359,7 +1363,7 @@ class Camera(object):
         if not isinstance(data, dict):
             raise ValueError("data must be a dictionary.")
         
-        # Create the Camera instance
+        # Create the BlenderCamera instance
         frame = Frame.load_from_dict(data["frame"])
         camera = cls(frame=frame)
 
@@ -1380,9 +1384,9 @@ class Camera(object):
 
     def to_json(self, filename: str, description: Optional[str] = None) -> None:
         r"""
-        Export the Camera's data to a JSON file.
+        Export the BlenderCamera's data to a JSON file.
 
-        The structure of the JSON file follows the :meth:`pysdic.camera.Camera.to_dict` method.
+        The structure of the JSON file follows the :meth:`to_dict` method.
 
         Parameters
         ----------
@@ -1406,11 +1410,11 @@ class Camera(object):
             json.dump(data, file, indent=4)
 
     @classmethod
-    def from_json(cls, filename: str) -> Camera:
+    def from_json(cls, filename: str) -> BlenderCamera:
         r"""
-        Create a Camera instance from a JSON file.
+        Create a BlenderCamera instance from a JSON file.
 
-        The structure of the JSON file follows the :meth:`pysdic.camera.Camera.to_dict` method.
+        The structure of the JSON file follows the :meth:`to_dict` method.
 
         Parameters
         ----------
@@ -1419,8 +1423,8 @@ class Camera(object):
         
         Returns
         -------
-        Camera
-            A Camera instance.
+        BlenderCamera
+            A BlenderCamera instance.
         
         Raises
         ------

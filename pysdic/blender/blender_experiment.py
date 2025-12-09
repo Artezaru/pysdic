@@ -12,20 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 try : 
     import bpy
     import bmesh
     from bpy_types import Object
 except ImportError :
-    raise ImportError("This module can only be used within Blender's Python environment.")
+    print("[WARNING] This module can only be used within Blender's Python environment.")
+    print("[WARNING] Some functionalities can raise errors if Blender is not properly initialized.")
 
-from typing import Tuple, Optional, List
+from typing import Tuple, Optional, List, Union
 from numbers import Integral
 
 from .blender_camera import BlenderCamera
-from .material_bsdf import MaterialBSDF
-from .spotlight import SpotLight
-
+from .blender_material_bsdf import BlenderMaterialBSDF
+from .blender_spotlight import BlenderSpotLight
+from .blender_mesh import BlenderMesh
 from ..core.objects.mesh import Mesh
 
 import os
@@ -44,7 +47,7 @@ class BlenderExperiment:
 
     .. code-block:: python
         
-        from pyblenderSDIC import BlenderExperiment
+        from pysdic.blender import BlenderExperiment
 
         # Example instantiation
         experiment = BlenderExperiment(Nb_frames=10)
@@ -176,13 +179,13 @@ class BlenderExperiment:
         .. note::
 
             The name of the camera must be unique in the experiment and in Blender data.
-            Furthemore, because Blender limits the name of the objects to 63 characters and ``pyblenderSDIC`` add prefixe for sub-dependant object of the camera,
+            Furthemore, because Blender limits the name of the objects to 63 characters and ``pysdic`` add prefixe for sub-dependant object of the camera,
             the name of the camera must be less than 50 characters.
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.BlenderCamera` for more information on how to define a camera.
-            - :meth:`pyblenderSDIC.BlenderExperiment.update_camera` to update the camera properties in the Blender scene.
+            - :class:`BlenderCamera` for more information on how to define a camera.
+            - :meth:`update_camera` to update the camera properties in the Blender scene.
         
         Parameters
         ----------
@@ -568,9 +571,9 @@ class BlenderExperiment:
     # =======================================================
     # Blender Scene Management (MESH)
     # =======================================================
-    def add_mesh(self, name: str, mesh: Mesh, frames: Optional[List[bool]] = None) -> None:
+    def add_mesh(self, name: str, mesh: Union[Mesh, BlenderMesh], frames: Optional[List[bool]] = None) -> None:
         r"""
-        Add a mesh to the experiment.
+        Add a mesh to the experiment. (Must be a 3D triangular mesh)
 
         The mesh must be an instance of Mesh.
 
@@ -581,7 +584,7 @@ class BlenderExperiment:
         .. note::
 
             The name of the mesh must be unique in the experiment and in Blender data.
-            Furthemore, because Blender limits the name of the objects to 63 characters and ``pyblenderSDIC`` add prefixe for sub-dependant object of the mesh,
+            Furthemore, because Blender limits the name of the objects to 63 characters and ``pysdic`` add prefixe for sub-dependant object of the mesh,
             the name of the mesh must be less than 50 characters.
 
         .. code-block:: python
@@ -595,18 +598,18 @@ class BlenderExperiment:
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.meshes.Mesh` for more information on how to define a mesh.
-            - :meth:`pyblenderSDIC.BlenderExperiment.update_mesh` to update the mesh properties in the Blender scene.
-            - :meth:`pyblenderSDIC.BlenderExperiment.add_mesh_material` to set the material of the mesh.
-            - :meth:`pyblenderSDIC.BlenderExperiment.add_mesh_pattern` to set the pattern image of the mesh.
+            - :class:`pysdic.Mesh` for more information on how to define a mesh.
+            - :meth:`update_mesh` to update the mesh properties in the Blender scene.
+            - :meth:`add_mesh_material` to set the material of the mesh.
+            - :meth:`add_mesh_pattern` to set the pattern image of the mesh.
 
         Parameters
         ----------
         name : str
             The name of the mesh with less than 50 characters.
         
-        mesh : Mesh
-            The mesh object to be added. It must be an instance of Mesh.
+        mesh : Union[Mesh, BlenderMesh]
+            The mesh object to be added. It must be an instance of Mesh or BlenderMesh. Must be a 3D triangular mesh.
 
         frames : List[bool], optional
             A list of booleans indicating which frames the mesh will be active.
@@ -626,12 +629,12 @@ class BlenderExperiment:
         The mesh is created in the Blender scene and linked to the experiment scene.
         The mesh name is set to the provided name.
 
-        A material is created for the mesh with the name ``[pbSDIC]_{name}_mat``.
+        A material is created for the mesh with the name ``[pysdic]_{name}_mat``.
         The material uses a Principled BSDF shader and is set to ``use_nodes = True``.
         The material is located at the first index of the mesh data materials.
 
         A MixRGB node is created at the input of the Principled BSDF ``Base Color`` node.
-        The MixRGB node name is set to ``[pbSDIC]_{name}_mbp`` for "Mix BaseColor Pattern".
+        The MixRGB node name is set to ``[pysdic]_{name}_mbp`` for "Mix BaseColor Pattern".
 
         The first input of the MixRGB node is the default base color of the material (white).
         It can be setted to any color using the ``add_mesh_material`` method.
@@ -649,9 +652,9 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} already exists.")
         if name in bpy.data.objects:
             raise ValueError(f"Object with name {name} already exists in Blender data.")
-        if not isinstance(mesh, Mesh):
-            raise TypeError("mesh must be an instance of Mesh")
-        if not mesh.element_type == 'triangle_3' or not mesh.n_dimensions == 3:
+        if not isinstance(mesh, (Mesh, BlenderMesh)):
+            raise TypeError("mesh must be an instance of Mesh or BlenderMesh")
+        if not mesh.elements_type == 'triangle_3' or not mesh.n_dimensions == 3:
             raise ValueError("Only 3D triangular meshes are supported.")
         
         # Ensure the experiment scene is active
@@ -682,10 +685,10 @@ class BlenderExperiment:
         # =======================
 
         # Creating the material
-        if f'[pbSDIC]_{name}_mat' in bpy.data.materials:
-            raise ValueError(f"Material with name [pbSDIC]_{name}_mat already exists.")
+        if f'[pysdic]_{name}_mat' in bpy.data.materials:
+            raise ValueError(f"Material with name [pysdic]_{name}_mat already exists.")
 
-        blender_material = bpy.data.materials.new(name=f'[pbSDIC]_{name}_mat')
+        blender_material = bpy.data.materials.new(name=f'[pysdic]_{name}_mat')
         blender_material.use_nodes = True
 
         # Assign the material to the object
@@ -711,11 +714,11 @@ class BlenderExperiment:
         links = blender_material.node_tree.links  # Access node tree links
 
         # Create a MixRGB node (type 'MIX') to combine base color and pattern
-        if f'[pbSDIC]_{name}_mbp' in nodes:
-            raise ValueError(f"MixRGB node with name [pbSDIC]_{name}_mbp already exists.")
+        if f'[pysdic]_{name}_mbp' in nodes:
+            raise ValueError(f"MixRGB node with name [pysdic]_{name}_mbp already exists.")
 
         mix_node = nodes.new(type='ShaderNodeMixRGB')
-        mix_node.name = f'[pbSDIC]_{name}_mbp'
+        mix_node.name = f'[pysdic]_{name}_mbp'
         mix_node.blend_type = 'MULTIPLY'
         mix_node.inputs['Fac'].default_value = 1.0  # Full multiplication
 
@@ -781,7 +784,7 @@ class BlenderExperiment:
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.meshes.Mesh` for more information on how to define a mesh.
+            - :class:`pysdic.Mesh` for more information on how to define a mesh.
 
         Parameters
         ----------
@@ -803,10 +806,10 @@ class BlenderExperiment:
         Blender Details
         ---------------
         A ``uv_layer`` is created for the mesh and the UVMAP is set to the texture coordinates defined in the mesh.
-        The uv_layer is named ``[pbSDIC]_{name}_uvm``.
+        The uv_layer is named ``[pysdic]_{name}_uvm``.
 
         A node is created in the material node tree to load the image texture.
-        The node is named ``[pbSDIC]_{name}_imt``.
+        The node is named ``[pysdic]_{name}_imt``.
         This node is in `CLIP` mode to avoid stretching the image.
 
         The color output of the image texture node is connected to the second input of the MixRGB node.
@@ -839,10 +842,10 @@ class BlenderExperiment:
         uvmap = mesh.elements_uvmap # Get the UVMap from the mesh (shape: (M, 6))
 
         # Setting the UVMap
-        if f"[pbSDIC]_{name}_uvm" in blender_mesh.data.uv_layers:
-            raise ValueError(f"UVMap with name [pbSDIC]_{name}_uvm already exists.")
+        if f"[pysdic]_{name}_uvm" in blender_mesh.data.uv_layers:
+            raise ValueError(f"UVMap with name [pysdic]_{name}_uvm already exists.")
         
-        uv_layer = blender_mesh.data.uv_layers.new(name=f"[pbSDIC]_{name}_uvm")
+        uv_layer = blender_mesh.data.uv_layers.new(name=f"[pysdic]_{name}_uvm")
         for poly_index, polygon in enumerate(blender_mesh.data.polygons): # poly_index is the index of the polygon in the mesh (ie triangle)
             for index, loop_index in enumerate(polygon.loop_indices): # index is the index of the vertex in the polygon
                 loop = blender_mesh.data.loops[loop_index] # The loop associated to the current vertex in the polygon
@@ -860,19 +863,19 @@ class BlenderExperiment:
         links = material.node_tree.links  # Access node tree links
 
         # Add an image texture node
-        if f'[pbSDIC]_{name}_imt' in nodes:
-            raise ValueError(f"Image texture node with name [pbSDIC]_{name}_imt already exists.")
+        if f'[pysdic]_{name}_imt' in nodes:
+            raise ValueError(f"Image texture node with name [pysdic]_{name}_imt already exists.")
         
         tex_image_node = nodes.new(type="ShaderNodeTexImage")
-        tex_image_node.name = f'[pbSDIC]_{name}_imt'
+        tex_image_node.name = f'[pysdic]_{name}_imt'
         tex_image_node.image = bpy.data.images.load(pattern_path)
         tex_image_node.extension = 'CLIP'  
 
         # Get the MixRGB node and connect the image texture node to it
-        if not f'[pbSDIC]_{name}_mbp' in nodes:
-            raise ValueError(f"MixRGB node with name [pbSDIC]_{name}_mbp does not exist.")
+        if not f'[pysdic]_{name}_mbp' in nodes:
+            raise ValueError(f"MixRGB node with name [pysdic]_{name}_mbp does not exist.")
         
-        mix_node = nodes.get(f'[pbSDIC]_{name}_mbp')
+        mix_node = nodes.get(f'[pysdic]_{name}_mbp')
         links.new(tex_image_node.outputs['Color'], mix_node.inputs['Color2'])
 
         # Update the mesh
@@ -882,11 +885,11 @@ class BlenderExperiment:
             print(f"[INFO] Pattern '{pattern_path}' added to mesh '{name}' in the experiment.")
 
 
-    def add_mesh_material(self, name: str, material: MaterialBSDF) -> None:
+    def add_mesh_material(self, name: str, material: BlenderMaterialBSDF) -> None:
         r"""
         Add a material to the mesh.
 
-        The material must be an instance of MaterialBSDF.
+        The material must be an instance of BlenderMaterialBSDF.
 
         .. code-block:: python
 
@@ -896,14 +899,14 @@ class BlenderExperiment:
             # ...
             mesh = Mesh(points, cells_dict={"triangle": elements}, point_data={"uvmap": texture_coordinates})
             experiment.set_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
-            material = MaterialBSDF()
+            material = BlenderMaterialBSDF()
             # Define the material properties here
             # ...
             experiment.add_mesh_material(name="Mesh1", material=material)
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.materials.MaterialBSDF` for more information on how to define a material.
+            - :class:`BlenderMaterialBSDF` for more information on how to define a material.
 
         .. note::
 
@@ -915,20 +918,20 @@ class BlenderExperiment:
         name : str
             The name of the mesh.
         
-        material : MaterialBSDF
+        material : BlenderMaterialBSDF
             The material object to be added.
         
         Raises
         -------
         TypeError
-            If name is not a string or material is not an instance of MaterialBSDF.
+            If name is not a string or material is not an instance of BlenderMaterialBSDF.
         ValueError
             If a mesh with the same name does not exist in the experiment or in Blender data.
         """
         if not isinstance(name, str):
             raise TypeError("name must be a string")
-        if not isinstance(material, MaterialBSDF):
-            raise TypeError("material must be an instance of MaterialBSDF")
+        if not isinstance(material, BlenderMaterialBSDF):
+            raise TypeError("material must be an instance of BlenderMaterialBSDF")
         if name not in self._mesh_objects:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
@@ -958,7 +961,7 @@ class BlenderExperiment:
         principled = blender_material.node_tree.nodes.get('Principled BSDF')
         
         # Access the mix node
-        mix_node = blender_material.node_tree.nodes.get(f'[pbSDIC]_{name}_mbp')
+        mix_node = blender_material.node_tree.nodes.get(f'[pysdic]_{name}_mbp')
         if not mix_node:
             raise ValueError(f"No MixRGB node found for mesh '{name}'. Ensure the mesh has been added with a material.")
 
@@ -1279,10 +1282,10 @@ class BlenderExperiment:
         When removing a mesh, the following actions are performed:
 
         - The mesh ``{name}`` is removed from the Blender scene.
-        - The material ``[pbSDIC]_{name}_mat`` is removed from the Blender data.
-        - The MixRGB node ``[pbSDIC]_{name}_mbp`` is removed from the material node tree.
-        - The uv_layer ``[pbSDIC]_{name}_uvm`` is removed from the mesh data.
-        - The node texture ``[pbSDIC]_{name}_imt`` is removed from the material node tree.
+        - The material ``[pysdic]_{name}_mat`` is removed from the Blender data.
+        - The MixRGB node ``[pysdic]_{name}_mbp`` is removed from the material node tree.
+        - The uv_layer ``[pysdic]_{name}_uvm`` is removed from the mesh data.
+        - The node texture ``[pysdic]_{name}_imt`` is removed from the material node tree.
 
         """
         if not isinstance(name, str):
@@ -1310,8 +1313,8 @@ class BlenderExperiment:
         _ = material.node_tree.links  # Access node tree links
 
         # Remove the MixRGB node
-        if f'[pbSDIC]_{name}_mbp' in nodes:
-            mix_node = nodes[f'[pbSDIC]_{name}_mbp']
+        if f'[pysdic]_{name}_mbp' in nodes:
+            mix_node = nodes[f'[pysdic]_{name}_mbp']
             nodes.remove(mix_node)
 
         # Remove the material
@@ -1319,13 +1322,13 @@ class BlenderExperiment:
         bpy.data.materials.remove(material)
 
         # Remove the uv_layer
-        if f'[pbSDIC]_{name}_uvm' in blender_mesh.data.uv_layers:
-            uv_layer = blender_mesh.data.uv_layers[f'[pbSDIC]_{name}_uvm']
+        if f'[pysdic]_{name}_uvm' in blender_mesh.data.uv_layers:
+            uv_layer = blender_mesh.data.uv_layers[f'[pysdic]_{name}_uvm']
             blender_mesh.data.uv_layers.remove(uv_layer)
 
         # Remove the image texture node
-        if f'[pbSDIC]_{name}_imt' in nodes:
-            tex_image_node = nodes[f'[pbSDIC]_{name}_imt']
+        if f'[pysdic]_{name}_imt' in nodes:
+            tex_image_node = nodes[f'[pysdic]_{name}_imt']
             if tex_image_node.image is not None:
                 bpy.data.images.remove(tex_image_node.image)
             nodes.remove(tex_image_node)
@@ -1364,8 +1367,8 @@ class BlenderExperiment:
 
             Furthermore, this method does not update the material properties of the mesh and the pattern image: 
             
-            - To update the material properties, use the :meth:`pyblenderSDIC.BlenderExperiment.add_mesh_material` method again.
-            - To change the pattern image, use the :meth:`pyblenderSDIC.BlenderExperiment.change_mesh_pattern` method.
+            - To update the material properties, use the :meth:`add_mesh_material` method again.
+            - To change the pattern image, use the :meth:`change_mesh_pattern` method.
         
         Parameters
         ----------
@@ -1400,8 +1403,8 @@ class BlenderExperiment:
             poly.vertices = [int(vertex) for vertex in cells[i]]
 
         # Update the uvmap if it exists
-        if f'[pbSDIC]_{name}_uvm' in blender_mesh.data.uv_layers:
-            uv_layer = blender_mesh.data.uv_layers[f'[pbSDIC]_{name}_uvm']
+        if f'[pysdic]_{name}_uvm' in blender_mesh.data.uv_layers:
+            uv_layer = blender_mesh.data.uv_layers[f'[pysdic]_{name}_uvm']
             if uvmap is not None:
                 for poly_index, polygon in enumerate(blender_mesh.data.polygons): # poly_index is the index of the polygon in the mesh (ie triangle)
                     for index, loop_index in enumerate(polygon.loop_indices): # index is the index of the vertex in the polygon
@@ -1437,7 +1440,7 @@ class BlenderExperiment:
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.BlenderExperiment.add_mesh_pattern` for more information on how to add a pattern.
+            - :class:`add_mesh_pattern` for more information on how to add a pattern.
 
         Parameters
         ----------
@@ -1487,10 +1490,10 @@ class BlenderExperiment:
         _ = material.node_tree.links  # Access node tree links
 
         # Add an image texture node
-        if not f'[pbSDIC]_{name}_imt' in nodes:
-            raise ValueError(f"Image texture node with name [pbSDIC]_{name}_imt does not exist.")
+        if not f'[pysdic]_{name}_imt' in nodes:
+            raise ValueError(f"Image texture node with name [pysdic]_{name}_imt does not exist.")
         
-        tex_image_node = nodes[f'[pbSDIC]_{name}_imt']
+        tex_image_node = nodes[f'[pysdic]_{name}_imt']
         if tex_image_node.image is not None:
             bpy.data.images.remove(tex_image_node.image)
         tex_image_node.image = bpy.data.images.load(pattern_path)
@@ -1508,37 +1511,37 @@ class BlenderExperiment:
     # =======================================================
     # Blender Scene Management (SPOTLIGHT)
     # =======================================================
-    def add_spotlight(self, name: str, spotlight: SpotLight, frames: Optional[List[bool]] = None) -> None:
+    def add_spotlight(self, name: str, spotlight: BlenderSpotLight, frames: Optional[List[bool]] = None) -> None:
         r"""
         Add a spotlight to the experiment.
 
-        The spotlight must be an instance of SpotLight.
+        The spotlight must be an instance of BlenderSpotLight.
 
         .. note::
 
             The name of the light must be unique in the experiment and in Blender data.
-            Furthemore, because Blender limits the name of the objects to 63 characters and ``pyblenderSDIC`` add prefixe for sub-dependant object of the light,
+            Furthemore, because Blender limits the name of the objects to 63 characters and ``pysdic`` add prefixe for sub-dependant object of the light,
             the name of the light must be less than 50 characters.
 
         .. code-block:: python
 
             # Example usage
             experiment = BlenderExperiment(Nb_frames=10)
-            spotlight = SpotLight()
-            # Define the SpotLight properties here
+            spotlight = BlenderSpotLight()
+            # Define the BlenderSpotLight properties here
             # ...
-            experiment.add_spotlight(name="Spotlight1", spotlight=SpotLight, frames=[True, False, True, False, True, False, True, False, True, False])
+            experiment.add_spotlight(name="Spotlight1", spotlight=BlenderSpotLight, frames=[True, False, True, False, True, False, True, False, True, False])
 
         .. seealso::
 
-            - :class:`pyblenderSDIC.SpotLight` for more information on how to define a spotlight.     
+            - :class:`BlenderSpotLight` for more information on how to define a spotlight.     
 
         Parameters
         ----------
         name : str
             The name of the spotlight with less than 50 characters.
         
-        spotlight : SpotLight
+        spotlight : BlenderSpotLight
             The spotlight object to be added.
         
         frames : List[bool], optional
@@ -1548,7 +1551,7 @@ class BlenderExperiment:
         Raises
         -------
         TypeError
-            If name is not a string or spotlight is not an instance of SpotLight.
+            If name is not a string or spotlight is not an instance of BlenderSpotLight.
         ValueError
             If a spotlight with the same name already exists in the experiment or in Blender data.
             If the length of frames is not equal to the number of frames in the experiment (end_frame).
@@ -1561,7 +1564,7 @@ class BlenderExperiment:
             raise ValueError(f"Spotlight with name {name} already exists.")
         if name in bpy.data.objects:
             raise ValueError(f"Object with name {name} already exists in Blender data.")
-        if not isinstance(spotlight, SpotLight):
+        if not isinstance(spotlight, BlenderSpotLight):
             raise TypeError("spotlight must be an instance of Spotlight")
 
         # Ensure the experiment scene is active
@@ -1681,7 +1684,7 @@ class BlenderExperiment:
         return self._spotlight_objects[name][1]
     
 
-    def get_spotlight(self, name: str) -> Tuple[SpotLight, Object]:
+    def get_spotlight(self, name: str) -> Tuple[BlenderSpotLight, Object]:
         r"""
         Get the spotlight object and its Blender object.
         
@@ -1692,8 +1695,8 @@ class BlenderExperiment:
         
         Returns
         -------
-        Tuple[SpotLight, Object]
-            A tuple containing the SpotLight object and its corresponding Blender object.
+        Tuple[BlenderSpotLight, Object]
+            A tuple containing the BlenderSpotLight object and its corresponding Blender object.
         """
         if not isinstance(name, str):
             raise TypeError("name must be a string")
@@ -1710,8 +1713,8 @@ class BlenderExperiment:
         blender_spotlight = bpy.data.objects[name]
 
         # Check the types of the objects
-        if not isinstance(spotlight, SpotLight):
-            raise TypeError("[ERROR] spotlight must be an instance of SpotLight")
+        if not isinstance(spotlight, BlenderSpotLight):
+            raise TypeError("[ERROR] spotlight must be an instance of BlenderSpotLight")
         if not isinstance(blender_spotlight, Object):
             raise TypeError("[ERROR] blender_spotlight must be an instance of Object")
         
@@ -1756,14 +1759,14 @@ class BlenderExperiment:
     def update_spotlight(self, name: str) -> None:
         r"""
         Update the spotlight properties in the Blender scene.
-        This method must be called after updating the spotlight properties in the SpotLight object.
+        This method must be called after updating the spotlight properties in the BlenderSpotLight object.
 
         .. code-block:: python
 
             # Example usage
             experiment = BlenderExperiment(Nb_frames=10)
-            spotlight = SpotLight()
-            # Define the SpotLight properties here
+            spotlight = BlenderSpotLight()
+            # Define the BlenderSpotLight properties here
             # ...
             experiment.add_spotlight(name="Spotlight1", spotlight=spotlight, frames=[True, False, True, False, True, False, True, False, True, False])
             # Update some nodes of the spotlight here
