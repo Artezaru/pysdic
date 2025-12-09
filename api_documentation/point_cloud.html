@@ -1,0 +1,1020 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PointCloud structures &#8212; pysdic 1.1.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6f037312"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_documentation/point_cloud';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="from_array" href="../generated/pysdic.PointCloud.from_array.html" />
+    <link rel="prev" title="remap_vertices_coordinates" href="../generated/pysdic.remap_vertices_coordinates.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 1.1.2 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Shape Functions and Integration Points</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="shape_functions.html">Shape Functions Collection (1D, 2D, 3D)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_2_shape_functions.html">segment_2_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_3_shape_functions.html">segment_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_shape_functions.html">triangle_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gauss_points.html">Gauss Quadrature Points Collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_2_gauss_points.html">segment_2_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_3_gauss_points.html">segment_3_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_gauss_points.html">triangle_3_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_shape_function_matrix.html">assemble_shape_function_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.construct_jacobian.html">construct_jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.derivate_property.html">derivate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.interpolate_property.html">interpolate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.project_property_to_vertices.html">project_property_to_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.remap_vertices_coordinates.html">remap_vertices_coordinates</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects to store PointClouds, Meshes and Integration Points</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">PointCloud structures</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_array.html">from_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_meshio.html">from_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_npz.html">from_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_obj.html">from_obj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_ply.html">from_ply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_vtk.html">from_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_xyz.html">from_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_array.html">to_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_meshio.html">to_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_npz.html">to_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_obj.html">to_obj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_ply.html">to_ply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_vtk.html">to_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_xyz.html">to_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.coordinates.html">coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.points.html">points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.n_dimensions.html">n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.n_points.html">n_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.all_close.html">all_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.all_finite.html">all_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.concatenate.html">concatenate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.frame_transform.html">frame_transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.is_finite.html">is_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.is_nan.html">is_nan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.keep_points.html">keep_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.keep_points_at.html">keep_points_at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.merge.html">merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.remove_not_finite.html">remove_not_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.remove_points.html">remove_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.remove_points_at.html">remove_points_at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.unique.html">unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.extend_as_hyperplane.html">extend_as_hyperplane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.extend_n_dimensions.html">extend_n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.reduce_to_hyperplane.html">reduce_to_hyperplane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.__add__.html">__add__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.__iadd__.html">__iadd__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.__len__.html">__len__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.bounding_box.html">bounding_box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.bounding_sphere.html">bounding_sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.visualize.html">visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mesh.html">Mesh structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.from_meshio.html">from_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.from_npz.html">from_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.from_vtk.html">from_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.to_meshio.html">to_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.to_npz.html">to_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.to_vtk.html">to_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.connectivity.html">connectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements.html">elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements_type.html">elements_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements_properties.html">elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_vertices.html">n_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.N_v.html">N_v</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_elements.html">n_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.N_e.html">N_e</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_vertices_per_element.html">n_vertices_per_element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.N_vpe.html">N_vpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_dimensions.html">n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.E.html">E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_topological_dimensions.html">n_topological_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.K.html">K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.meshio_cell_type.html">meshio_cell_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.set_elements_type.html">set_elements_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.vertices.html">vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.vtk_cell_type.html">vtk_cell_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.clear_elements_properties.html">clear_elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.clear_vertices_properties.html">clear_vertices_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.clear_properties.html">clear_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.get_elements_property.html">get_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.get_vertices_property.html">get_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_elements_property.html">remove_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_vertices_property.html">remove_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.set_elements_property.html">set_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.set_vertices_property.html">set_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.list_elements_properties.html">list_elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.list_vertices_properties.html">list_vertices_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements_uvmap.html">elements_uvmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.add_elements.html">add_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.add_vertices.html">add_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.are_used_vertices.html">are_used_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.is_empty.html">is_empty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.keep_elements.html">keep_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_elements.html">remove_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_unused_vertices.html">remove_unused_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_vertices.html">remove_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.shape_functions.html">shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.validate.html">validate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize.html">visualize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_elements_property.html">visualize_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_integration_points.html">visualize_integration_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_texture.html">visualize_texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_vertices_property.html">visualize_vertices_property</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="integration_points.html">pysdic.IntegrationPoints</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.from_npz.html">from_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.to_npz.html">to_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.element_indices.html">element_indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.n_points.html">n_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.n_topological_dimensions.html">n_topological_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.n_valids.html">n_valids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.natural_coordinates.html">natural_coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.weights.html">weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.add_points.html">add_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.concatenate.html">concatenate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.disable_points.html">disable_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.remove_invalids.html">remove_invalids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.remove_points.html">remove_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.validate.html">validate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="create_3D_surface_meshes.html">Create surface meshes into 3D embedded space</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.create_triangle_3_heightmap.html">create_triangle_3_heightmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.create_triangle_3_axisymmetric.html">create_triangle_3_axisymmetric</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Operate on Specific Meshes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="triangle_3_meshes_operations.html">Manage and Operate on Triangle 3 Meshes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_mesh_from_open3d.html">triangle_3_mesh_from_open3d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_mesh_to_open3d.html">triangle_3_mesh_to_open3d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_build_vertices_adjacency_matrix.html">triangle_3_build_vertices_adjacency_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_build_elements_adjacency_matrix.html">triangle_3_build_elements_adjacency_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_cast_rays.html">triangle_3_cast_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_compute_elements_areas.html">triangle_3_compute_elements_areas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_compute_elements_normals.html">triangle_3_compute_elements_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_compute_vertices_normals.html">triangle_3_compute_vertices_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_extract_unique_edges.html">triangle_3_extract_unique_edges</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects and Functions to Handle Images, Cameras and Views</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="image.html">pysdic.Image</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.from_array.html">from_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.from_file.html">from_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.to_array.html">to_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.to_file.html">to_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.dtype.html">dtype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.is_color.html">is_color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.is_grayscale.html">is_grayscale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.image.html">image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.height.html">height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.n_channels.html">n_channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.ndim.html">ndim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.width.html">width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.image_update.html">image_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.construct_interpolation_functions.html">construct_interpolation_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_at_image_points.html">evaluate_image_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_at_pixel_points.html">evaluate_image_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dx_at_pixel_points.html">evaluate_image_jacobian_dx_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dy_at_pixel_points.html">evaluate_image_jacobian_dy_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_du_at_pixel_points.html">evaluate_image_jacobian_du_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dv_at_pixel_points.html">evaluate_image_jacobian_dv_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dx_at_image_points.html">evaluate_image_jacobian_dx_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dy_at_image_points.html">evaluate_image_jacobian_dy_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_du_at_image_points.html">evaluate_image_jacobian_du_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dv_at_image_points.html">evaluate_image_jacobian_dv_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.get_image_pixel_points.html">get_image_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.get_image_image_points.html">get_image_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.get_interpolation_function.html">get_interpolation_function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.image_points_to_pixel_points.html">image_points_to_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.pixel_points_to_image_points.html">pixel_points_to_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.visualize.html">visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="camera.html">pysdic.Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.sensor_height.html">sensor_height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.sensor_width.html">sensor_width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.distortion.html">distortion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.extrinsic.html">extrinsic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.intrinsic.html">intrinsic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.update.html">update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.intrinsic_update.html">intrinsic_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.distortion_update.html">distortion_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.extrinsic_update.html">extrinsic_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.size_update.html">size_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.image_points_to_pixel_points.html">image_points_to_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.get_camera_normalized_points.html">get_camera_normalized_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.get_camera_pixel_points.html">get_camera_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.get_camera_rays.html">get_camera_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.pixel_points_to_image_points.html">pixel_points_to_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.project.html">project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.project_points.html">project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.visualize_projected_point_cloud.html">visualize_projected_point_cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.visualize_projected_mesh.html">visualize_projected_mesh</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="view.html">pysdic.View</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.camera.html">camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image.html">image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image_shape.html">image_shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.camera_size.html">camera_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.project.html">project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.project_points.html">project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image_project.html">image_project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image_project_points.html">image_project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.visualize_projected_point_cloud.html">visualize_projected_point_cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.visualize_projected_mesh.html">visualize_projected_mesh</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="projection_result.html">pysdic.ProjectionResult</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_projection_result.html">pysdic.ImageProjectionResult</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Temporal Derivation Operators</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="temporal_derivation.html">Build derivation operators to regularize temporal derivatives</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_central_finite_difference_coefficients.html">compute_central_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_forward_finite_difference_coefficients.html">compute_forward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_backward_finite_difference_coefficients.html">compute_backward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.apply_central_finite_difference.html">apply_central_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.apply_forward_finite_difference.html">apply_forward_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.apply_backward_finite_difference.html">apply_backward_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_central_finite_difference_matrix.html">assemble_central_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_forward_finite_difference_matrix.html">assemble_forward_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_backward_finite_difference_matrix.html">assemble_backward_finite_difference_matrix</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Building Operators for SDIC</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="build_displacement_operator.html">pysdic.sdic.build_displacement_operator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Blender Integration</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="blender_experiment.html">Blender Experiment Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_camera.html">Blender Camera Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_spotlight.html">Blender SpotLight Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_mesh.html">Blender Mesh Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_material_bsdf.html">Blender Material BSDF Class and default Materials</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">PointCloud structures</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pointcloud-structures">
+<h1>PointCloud structures<a class="headerlink" href="#pointcloud-structures" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pointcloud-class" id="id1">PointCloud class</a></p></li>
+<li><p><a class="reference internal" href="#instantiate-and-export-pointcloud-object" id="id2">Instantiate and export PointCloud object</a></p></li>
+<li><p><a class="reference internal" href="#accessing-pointcloud-attributes" id="id3">Accessing PointCloud attributes</a></p></li>
+<li><p><a class="reference internal" href="#add-remove-or-modify-points-in-pointcloud-objects" id="id4">Add, remove or modify points in PointCloud objects</a></p></li>
+<li><p><a class="reference internal" href="#change-the-dimension-of-pointcloud-objects" id="id5">Change the dimension of PointCloud objects</a></p></li>
+<li><p><a class="reference internal" href="#operations-on-pointcloud-objects" id="id6">Operations on PointCloud objects</a></p></li>
+<li><p><a class="reference internal" href="#pointcloud-object-geometric-computations" id="id7">PointCloud object geometric computations</a></p></li>
+<li><p><a class="reference internal" href="#visualize-pointcloud-object-1d-2d-3d-only" id="id8">Visualize PointCloud object (1D, 2D, 3D only)</a></p></li>
+<li><p><a class="reference internal" href="#example-of-a-simple-pointcloud-workflow" id="id9">Example of a simple PointCloud workflow</a></p></li>
+</ul>
+</nav>
+<section id="pointcloud-class">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">PointCloud class</a><a class="headerlink" href="#pointcloud-class" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysdic.PointCloud">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysdic.</span></span><span class="sig-name descname"><span class="pre">PointCloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/objects/point_cloud.html#PointCloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.PointCloud" title="Link to this definition">#</a></dt>
+<dd><p>A class representing a <span class="math notranslate nohighlight">\(E\)</span>-dimensional point cloud.</p>
+<p>This class is designed to handle <span class="math notranslate nohighlight">\(E\)</span>-dimensional point clouds, which are collections of points in a <span class="math notranslate nohighlight">\(E\)</span>-dimensional space.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The dimension <span class="math notranslate nohighlight">\(E\)</span> of the cloud is not designed to change directly after initialization.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – A NumPy array of shape (<span class="math notranslate nohighlight">\(N_{p}\)</span>, <span class="math notranslate nohighlight">\(E\)</span>) representing the coordinates of the points.</p></li>
+<li><p><strong>n_dimensions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, optional) – The dimension <span class="math notranslate nohighlight">\(E\)</span> of the point cloud. If not provided, it is inferred from the shape of the <cite>points</cite> array.
+If <a class="reference internal" href="../generated/pysdic.PointCloud.points.html#pysdic.PointCloud.points" title="pysdic.PointCloud.points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points</span></code></a> second dimension is less than <a class="reference internal" href="../generated/pysdic.PointCloud.n_dimensions.html#pysdic.PointCloud.n_dimensions" title="pysdic.PointCloud.n_dimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_dimensions</span></code></a>, the points will be reshaped accordingly and filled with zeros.
+If <a class="reference internal" href="../generated/pysdic.PointCloud.points.html#pysdic.PointCloud.points" title="pysdic.PointCloud.points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points</span></code></a> second dimension is greater than <a class="reference internal" href="../generated/pysdic.PointCloud.n_dimensions.html#pysdic.PointCloud.n_dimensions" title="pysdic.PointCloud.n_dimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_dimensions</span></code></a>, a ValueError will be raised.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the input array does not have the correct shape.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="instantiate-and-export-pointcloud-object">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Instantiate and export PointCloud object</a><a class="headerlink" href="#instantiate-and-export-pointcloud-object" title="Link to this heading">#</a></h2>
+<p>To Instantiate a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object, use one of the following class methods:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_array.html#pysdic.PointCloud.from_array" title="pysdic.PointCloud.from_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_array</span></code></a>(points)</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a NumPy array of shape (<span class="math notranslate nohighlight">\(N_p\)</span>, <span class="math notranslate nohighlight">\(E\)</span>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_meshio.html#pysdic.PointCloud.from_meshio" title="pysdic.PointCloud.from_meshio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_meshio</span></code></a>(mesh)</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a <code class="xref py py-class docutils literal notranslate"><span class="pre">meshio.Mesh</span></code> object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_npz.html#pysdic.PointCloud.from_npz" title="pysdic.PointCloud.from_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_npz</span></code></a>(filepath)</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a NPZ file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_obj.html#pysdic.PointCloud.from_obj" title="pysdic.PointCloud.from_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_obj</span></code></a>(filepath)</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a OBJ file (only for <span class="math notranslate nohighlight">\(E=3\)</span> point clouds).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_ply.html#pysdic.PointCloud.from_ply" title="pysdic.PointCloud.from_ply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_ply</span></code></a>(filepath)</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a PLY file (only for <span class="math notranslate nohighlight">\(E=3\)</span> point clouds).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_vtk.html#pysdic.PointCloud.from_vtk" title="pysdic.PointCloud.from_vtk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_vtk</span></code></a>(filepath)</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a VTK file (only for 3D point clouds).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.from_xyz.html#pysdic.PointCloud.from_xyz" title="pysdic.PointCloud.from_xyz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.from_xyz</span></code></a>(filepath[, delimiter])</p></td>
+<td><p>Create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a XYZ file.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> can then be exported to different formats using the following methods:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_array.html#pysdic.PointCloud.to_array" title="pysdic.PointCloud.to_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_array</span></code></a>()</p></td>
+<td><p>Convert the point cloud to a NumPy array of shape (<span class="math notranslate nohighlight">\(N_p\)</span>, <span class="math notranslate nohighlight">\(E\)</span>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_meshio.html#pysdic.PointCloud.to_meshio" title="pysdic.PointCloud.to_meshio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_meshio</span></code></a>()</p></td>
+<td><p>Convert the point cloud to a <code class="xref py py-class docutils literal notranslate"><span class="pre">meshio.Mesh</span></code> object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_npz.html#pysdic.PointCloud.to_npz" title="pysdic.PointCloud.to_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_npz</span></code></a>(filepath)</p></td>
+<td><p>Save the point cloud to a NPZ file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_obj.html#pysdic.PointCloud.to_obj" title="pysdic.PointCloud.to_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_obj</span></code></a>(filepath)</p></td>
+<td><p>Save the point cloud to a OBJ file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_ply.html#pysdic.PointCloud.to_ply" title="pysdic.PointCloud.to_ply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_ply</span></code></a>(filepath[, binary])</p></td>
+<td><p>Save the point cloud to a PLY file (only for <span class="math notranslate nohighlight">\(E=3\)</span> point clouds).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_vtk.html#pysdic.PointCloud.to_vtk" title="pysdic.PointCloud.to_vtk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_vtk</span></code></a>(filepath[, binary, ...])</p></td>
+<td><p>Save the point cloud to a VTK file (only for <span class="math notranslate nohighlight">\(E=3\)</span> point clouds).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.to_xyz.html#pysdic.PointCloud.to_xyz" title="pysdic.PointCloud.to_xyz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.to_xyz</span></code></a>(filepath[, delimiter])</p></td>
+<td><p>Save the point cloud to a XYZ file.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="accessing-pointcloud-attributes">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Accessing PointCloud attributes</a><a class="headerlink" href="#accessing-pointcloud-attributes" title="Link to this heading">#</a></h2>
+<p>The public attributes of a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object can be accessed using the following properties:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.coordinates.html#pysdic.PointCloud.coordinates" title="pysdic.PointCloud.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.coordinates</span></code></a></p></td>
+<td><p>[Get or Set] Alias for <code class="xref py py-meth docutils literal notranslate"><span class="pre">points()</span></code> property.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.points.html#pysdic.PointCloud.points" title="pysdic.PointCloud.points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.points</span></code></a></p></td>
+<td><p>[Get or Set] An numpy array of shape (<span class="math notranslate nohighlight">\(N_p\)</span>, <span class="math notranslate nohighlight">\(E\)</span>) representing the coordinates of the points in the cloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.n_dimensions.html#pysdic.PointCloud.n_dimensions" title="pysdic.PointCloud.n_dimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.n_dimensions</span></code></a></p></td>
+<td><p>[Get] The dimension <span class="math notranslate nohighlight">\(E\)</span> of the point cloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.n_points.html#pysdic.PointCloud.n_points" title="pysdic.PointCloud.n_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.n_points</span></code></a></p></td>
+<td><p>[Get] The number of points <span class="math notranslate nohighlight">\(N_p\)</span> in the point cloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.shape.html#pysdic.PointCloud.shape" title="pysdic.PointCloud.shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.shape</span></code></a></p></td>
+<td><p>[Get] The shape of the points array (<span class="math notranslate nohighlight">\(N_p\)</span>, <span class="math notranslate nohighlight">\(E\)</span>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="add-remove-or-modify-points-in-pointcloud-objects">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Add, remove or modify points in PointCloud objects</a><a class="headerlink" href="#add-remove-or-modify-points-in-pointcloud-objects" title="Link to this heading">#</a></h2>
+<p>The points of a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object can be manipulated using the following methods:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.all_close.html#pysdic.PointCloud.all_close" title="pysdic.PointCloud.all_close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.all_close</span></code></a>(other[, rtol, atol, ...])</p></td>
+<td><p>Check if all points in the current point cloud are approximately equal to the points in another <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance within a tolerance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.all_finite.html#pysdic.PointCloud.all_finite" title="pysdic.PointCloud.all_finite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.all_finite</span></code></a>()</p></td>
+<td><p>Check if all points in the point cloud are finite (i.e., not NaN or infinite).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.concatenate.html#pysdic.PointCloud.concatenate" title="pysdic.PointCloud.concatenate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.concatenate</span></code></a>(other[, inplace])</p></td>
+<td><p>Concatenate the current point cloud with another <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.copy.html#pysdic.PointCloud.copy" title="pysdic.PointCloud.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.copy</span></code></a>()</p></td>
+<td><p>Create a copy of the current <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.frame_transform.html#pysdic.PointCloud.frame_transform" title="pysdic.PointCloud.frame_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.frame_transform</span></code></a>([input_frame, ...])</p></td>
+<td><p>Transform the point cloud from an input frame of reference to an output frame of reference (only for 3D point clouds).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.is_finite.html#pysdic.PointCloud.is_finite" title="pysdic.PointCloud.is_finite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.is_finite</span></code></a>()</p></td>
+<td><p>Check which points in the point cloud are finite (not NaN or infinite).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.is_nan.html#pysdic.PointCloud.is_nan" title="pysdic.PointCloud.is_nan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.is_nan</span></code></a>()</p></td>
+<td><p>Check which points in the point cloud are NaN.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.keep_points.html#pysdic.PointCloud.keep_points" title="pysdic.PointCloud.keep_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.keep_points</span></code></a>(other[, inplace])</p></td>
+<td><p>Keep only the points in the current point cloud that are present in another <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.keep_points_at.html#pysdic.PointCloud.keep_points_at" title="pysdic.PointCloud.keep_points_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.keep_points_at</span></code></a>(indices[, inplace])</p></td>
+<td><p>Keep only the points at the specified indices in the point cloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.merge.html#pysdic.PointCloud.merge" title="pysdic.PointCloud.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.merge</span></code></a>(other[, inplace])</p></td>
+<td><p>Merge points from another <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance with the current point cloud, avoiding duplicates.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.remove_not_finite.html#pysdic.PointCloud.remove_not_finite" title="pysdic.PointCloud.remove_not_finite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.remove_not_finite</span></code></a>([inplace])</p></td>
+<td><p>Remove points from the point cloud that contain non-finite values (NaN or Inf).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.remove_points.html#pysdic.PointCloud.remove_points" title="pysdic.PointCloud.remove_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.remove_points</span></code></a>(other[, inplace])</p></td>
+<td><p>Remove points from the current point cloud that are present in another <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.remove_points_at.html#pysdic.PointCloud.remove_points_at" title="pysdic.PointCloud.remove_points_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.remove_points_at</span></code></a>(indices[, inplace])</p></td>
+<td><p>Remove points from the point cloud based on their indices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.unique.html#pysdic.PointCloud.unique" title="pysdic.PointCloud.unique"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.unique</span></code></a>([inplace])</p></td>
+<td><p>Remove duplicate points from the point cloud.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="change-the-dimension-of-pointcloud-objects">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Change the dimension of PointCloud objects</a><a class="headerlink" href="#change-the-dimension-of-pointcloud-objects" title="Link to this heading">#</a></h2>
+<p>The dimension of a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object can be changed using the following methods:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.extend_as_hyperplane.html#pysdic.PointCloud.extend_as_hyperplane" title="pysdic.PointCloud.extend_as_hyperplane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.extend_as_hyperplane</span></code></a>(axes)</p></td>
+<td><p>Extend the point cloud to a higher number of dimensions by embedding it in a hyperplane defined by specified axes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.extend_n_dimensions.html#pysdic.PointCloud.extend_n_dimensions" title="pysdic.PointCloud.extend_n_dimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.extend_n_dimensions</span></code></a>(n_dimensions)</p></td>
+<td><p>Extend the point cloud to a higher number of dimensions by adding zero coordinates.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.reduce_to_hyperplane.html#pysdic.PointCloud.reduce_to_hyperplane" title="pysdic.PointCloud.reduce_to_hyperplane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.reduce_to_hyperplane</span></code></a>(axes)</p></td>
+<td><p>Reduce the point cloud to a lower number of dimensions by projecting it onto a hyperplane defined by specified axes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="operations-on-pointcloud-objects">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Operations on PointCloud objects</a><a class="headerlink" href="#operations-on-pointcloud-objects" title="Link to this heading">#</a></h2>
+<p>The following methods can be used to operate on <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> objects:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">+</span></code> operator: Concatenate two <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">+=</span></code> operator: In-place concatenation of two <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">len()</span></code> function: Get the number of points in a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.__add__.html#pysdic.PointCloud.__add__" title="pysdic.PointCloud.__add__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.__add__</span></code></a>(other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.__iadd__.html#pysdic.PointCloud.__iadd__" title="pysdic.PointCloud.__iadd__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.__iadd__</span></code></a>(other)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.__len__.html#pysdic.PointCloud.__len__" title="pysdic.PointCloud.__len__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.__len__</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pointcloud-object-geometric-computations">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">PointCloud object geometric computations</a><a class="headerlink" href="#pointcloud-object-geometric-computations" title="Link to this heading">#</a></h2>
+<p>The following methods can be used to perform geometric computations on <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> objects:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.bounding_box.html#pysdic.PointCloud.bounding_box" title="pysdic.PointCloud.bounding_box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.bounding_box</span></code></a>()</p></td>
+<td><p>Compute the axis-aligned bounding box of the point cloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.bounding_sphere.html#pysdic.PointCloud.bounding_sphere" title="pysdic.PointCloud.bounding_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.bounding_sphere</span></code></a>()</p></td>
+<td><p>Compute the bounding sphere of the point cloud.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="visualize-pointcloud-object-1d-2d-3d-only">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Visualize PointCloud object (1D, 2D, 3D only)</a><a class="headerlink" href="#visualize-pointcloud-object-1d-2d-3d-only" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> class provides a method to visualize the point cloud in 1D, 2D, or 3D space using <code class="docutils literal notranslate"><span class="pre">pyvista</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.PointCloud.visualize.html#pysdic.PointCloud.visualize" title="pysdic.PointCloud.visualize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCloud.visualize</span></code></a>([color, point_size, ...])</p></td>
+<td><p>Visualize the point cloud using PyVista (only for <span class="math notranslate nohighlight">\(E \leq 3\)</span> point clouds).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="example-of-a-simple-pointcloud-workflow">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Example of a simple PointCloud workflow</a><a class="headerlink" href="#example-of-a-simple-pointcloud-workflow" title="Link to this heading">#</a></h2>
+<p>Here is an example of a simple workflow using the <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> class:</p>
+<p>First create a <a class="reference internal" href="#pysdic.PointCloud" title="pysdic.PointCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCloud</span></code></a> object from a NumPy array:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud</span>
+
+<span class="c1"># Create a random NumPy array of shape (100, 3)</span>
+<span class="n">points_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Instantiate a :class:`PointCloud` object from the NumPy array</span>
+<span class="n">point_cloud</span> <span class="o">=</span> <span class="n">PointCloud</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">points_array</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now lets change the frame of reference of the point cloud by applying a translation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">py3dframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frame</span>
+
+<span class="c1"># Define the actual frame of reference of the point cloud</span>
+<span class="n">actual_frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">canonical</span><span class="p">()</span>
+
+<span class="c1"># Define a new frame of reference by translating the actual frame</span>
+<span class="n">new_frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">from_axes</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">x_axis</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y_axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">z_axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="c1"># Translation by (1, 2, 3)</span>
+
+<span class="c1"># Transform the point cloud to the new frame of reference</span>
+<span class="n">point_cloud</span> <span class="o">=</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">frame_transform</span><span class="p">(</span><span class="n">actual_frame</span><span class="p">,</span> <span class="n">new_frame</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now visualize the point cloud:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">point_cloud</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../generated/pysdic.remap_vertices_coordinates.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">remap_vertices_coordinates</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../generated/pysdic.PointCloud.from_array.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">from_array</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pointcloud-class">PointCloud class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.PointCloud"><code class="docutils literal notranslate"><span class="pre">PointCloud</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instantiate-and-export-pointcloud-object">Instantiate and export PointCloud object</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-pointcloud-attributes">Accessing PointCloud attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-remove-or-modify-points-in-pointcloud-objects">Add, remove or modify points in PointCloud objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-the-dimension-of-pointcloud-objects">Change the dimension of PointCloud objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operations-on-pointcloud-objects">Operations on PointCloud objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pointcloud-object-geometric-computations">PointCloud object geometric computations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-pointcloud-object-1d-2d-3d-only">Visualize PointCloud object (1D, 2D, 3D only)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-a-simple-pointcloud-workflow">Example of a simple PointCloud workflow</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api_documentation/point_cloud.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2025, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1890 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.core.temporal_derivation &#8212; pysdic 1.1.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=6f037312"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/temporal_derivation';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 1.1.2 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.core.temporal_derivation</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.core.temporal_derivation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2025 Artezaru</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Integral</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">fractions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fraction</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_gaussian_elimination</span><span class="p">(</span><span class="n">V</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Fraction</span><span class="p">]],</span> <span class="n">b</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Fraction</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Fraction</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the linear system V c = b using Gaussian elimination with partial pivoting.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        This is a private function and should not be used directly. Use the public functions that require solving linear systems instead.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    V : :class:`list[list[Fraction]]`</span>
+<span class="sd">        The coefficient matrix of the linear system.</span>
+
+<span class="sd">    b : :class:`list[Fraction]`</span>
+<span class="sd">        The right-hand side vector of the linear system.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`list[Fraction]`</span>
+<span class="sd">        The solution vector c of the linear system.</span>
+<span class="sd">   </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="c1"># Gaussian elimination with Fractions</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[:]</span> <span class="o">+</span> <span class="p">[</span><span class="n">b_i</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">b_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">b</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+        <span class="c1"># Pivoting</span>
+        <span class="n">pivot_row</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">M</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">pivot_row</span> <span class="o">=</span> <span class="n">r</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">pivot_row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Matrix is singular, cannot compute coefficients.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pivot_row</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
+            <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="n">pivot_row</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">pivot_row</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Normalize pivot row</span>
+        <span class="n">pivot</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="o">/</span> <span class="n">pivot</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+        <span class="c1"># Eliminate below</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">factor</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">M</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">rv</span> <span class="o">-</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">iv</span> <span class="k">for</span> <span class="n">rv</span><span class="p">,</span> <span class="n">iv</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="n">r</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
+
+    <span class="c1"># Back substitution</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="p">[</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">coeffs</span>
+
+
+
+
+<div class="viewcode-block" id="compute_forward_finite_difference_coefficients">
+<a class="viewcode-back" href="../../../generated/pysdic.compute_forward_finite_difference_coefficients.html#pysdic.compute_forward_finite_difference_coefficients">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_forward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the coefficients for the forward finite difference approximation of a derivative.</span>
+
+<span class="sd">    The function returns the Stencil coefficients :math:`c_j` used to approximate the n-th order derivative of a function using forward finite differences.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{d^n f}{dt^n} \approx \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t + j h)</span>
+
+<span class="sd">    where :math:`h` is the time step size, and :math:`m` is the accuracy order and :math:`N` is the number of stencil points required to achieve the desired accuracy (:math:`N = n + m - 1`), such that the approximation error is of order :math:`O(h^m)`.</span>
+
+<span class="sd">    .. math ::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t + j h) = \frac{d^n f}{dt^n} + O(h^m)</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_backward_finite_difference_coefficients` to compute the backward finite difference coefficients.</span>
+<span class="sd">        - :func:`compute_central_finite_difference_coefficients` to compute the central finite difference coefficients.</span>
+<span class="sd">        - :func:`assemble_forward_finite_difference_matrix` to assemble the forward finite difference operator matrix.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The coefficients are computed using Gauss elimination on the Vandermonde matrix constructed from the Taylor series expansion.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------   </span>
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size :math:`h`. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Default is :obj:`1`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        The coefficients for the forward finite difference approximation of the derivative in the form of a 1D array :obj:`[c_{th}, c_{(t+1)h}, ..., c_{(t+N)h}]`.</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Examples     </span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_forward_finite_difference_coefficients(1, 1.0, 1)</span>
+<span class="sd">    array([-1.,  1.])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_forward_finite_difference_coefficients(2, 0.1, 1)</span>
+<span class="sd">    array([ 100., -200.,  100.])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_forward_finite_difference_coefficients(1, 1.0, 2)</span>
+<span class="sd">    array([-1.5,  2., -0.5])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_forward_finite_difference_coefficients(2, 0.1, 2)</span>
+<span class="sd">    array([ 200, -500, 400, -100])</span>
+
+
+<span class="sd">    Mathematical Background</span>
+<span class="sd">    -----------------------</span>
+
+<span class="sd">    By developing the function :math:`f(t + k h)` in Taylor series around :math:`t`, we have:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(t + j h) = \sum_{k=0}^{\infty} \frac{(j h)^k}{k!} \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    We can add the contributions of the stencil points weighted by the coefficients :math:`c_k`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t + j h) = \frac{1}{h^n} \sum_{j=0}^{N} c_j \sum_{k=0}^{\infty} \frac{(j h)^k}{k!} \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t + j h) = \sum_{k=0}^{\infty} \frac{h^{k-n}}{k!} \left(\sum_{j=0}^{N} c_j j^k\right) \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    Thus :math:`\forall k \in [0, N]`, we want to enforce the conditions:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \sum_{j=0}^{N} c_j j^k = n! \delta_{k,n}</span>
+
+<span class="sd">    where :math:`\delta_{k,n}` is the Kronecker delta.</span>
+
+<span class="sd">    So we have a linear system of equations to solve for the coefficients :math:`c_j`. We can demonstrate that the matrix of the system is a Vandermonde matrix, which is invertible as long as the stencil points are distinct.</span>
+<span class="sd">    And the output coefficients are divided by :math:`h^n` to account for the time step size. The result is a finite difference approximation of the n-th order derivative with an error of order :math:`O(h^m)`.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Order must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a numeric type.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a positive number.&quot;</span><span class="p">)</span>
+    
+    <span class="n">N</span> <span class="o">=</span> <span class="n">order</span> <span class="o">+</span> <span class="n">accuracy</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Number of stencil points</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># Construct the Vandermonde matrix</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Fraction</span><span class="p">(</span><span class="n">j</span> <span class="o">**</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">Fraction</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">order</span><span class="p">))</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">order</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+
+    <span class="c1"># Gaussian elimination with Fractions</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">_gaussian_elimination</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">spacing</span><span class="o">**</span><span class="n">order</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="compute_backward_finite_difference_coefficients">
+<a class="viewcode-back" href="../../../generated/pysdic.compute_backward_finite_difference_coefficients.html#pysdic.compute_backward_finite_difference_coefficients">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_backward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the coefficients for the backward finite difference approximation of a derivative.</span>
+
+<span class="sd">    The function returns the Stencil coefficients :math:`c_j` used to approximate the n-th order derivative of a function using backward finite differences.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{d^n f}{dt^n} \approx \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t - j h)</span>
+
+<span class="sd">    where :math:`h` is the time step size, and :math:`m` is the accuracy order and :math:`N` is the number of stencil points required to achieve the desired accuracy (:math:`N = n + m - 1`), such that the approximation error is of order :math:`O(h^m)`.</span>
+
+<span class="sd">    .. math ::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t - j h) = \frac{d^n f}{dt^n} + O(h^m)</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_forward_finite_difference_coefficients` to compute the forward finite difference coefficients.</span>
+<span class="sd">        - :func:`compute_central_finite_difference_coefficients` to compute the central finite difference coefficients.</span>
+<span class="sd">        - :func:`assemble_backward_finite_difference_matrix` to assemble the backward finite difference operator matrix.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The coefficients are computed using Gauss elimination on the Vandermonde matrix constructed from the Taylor series expansion.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------   </span>
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size :math:`h`. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Default is :obj:`1`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        The coefficients for the backward finite difference approximation of the derivative in the form of a 1D array :obj:`[c_{th}, c_{(t-1)h}, ..., c_{(t-N)h}]`.</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Examples     </span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_backward_finite_difference_coefficients(1, 1.0, 1)</span>
+<span class="sd">    array([ 1., -1.])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_backward_finite_difference_coefficients(2, 1.0, 1)</span>
+<span class="sd">    array([ 1., -2.,  1.])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_backward_finite_difference_coefficients(1, 1.0, 2)</span>
+<span class="sd">    array([ 1.5, -2.,  0.5])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_backward_finite_difference_coefficients(2, 0.1, 2)</span>
+<span class="sd">    array([ 200, -500, 400, -100])</span>
+
+
+<span class="sd">    Mathematical Background</span>
+<span class="sd">    -----------------------</span>
+
+<span class="sd">    By developing the function :math:`f(t - k h)` in Taylor series around :math:`t`, we have:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(t - j h) = \sum_{k=0}^{\infty} \frac{(-j h)^k}{k!} \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    We can add the contributions of the stencil points weighted by the coefficients :math:`c_k`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t - j h) = \frac{1}{h^n} \sum_{j=0}^{N} c_j \sum_{k=0}^{\infty} \frac{(-j h)^k}{k!} \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=0}^{N} c_j f(t - j h) = \sum_{k=0}^{\infty} \frac{h^{k-n}}{k!} \left(\sum_{j=0}^{N} c_j (-j)^k\right) \frac{d^k f}{dt^k}</span>
+
+
+<span class="sd">    Thus :math:`\forall k \in [0, N]`, we want to enforce the conditions:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \sum_{j=0}^{N} c_j (-j)^k = n! \delta_{k,n}</span>
+
+<span class="sd">    where :math:`\delta_{k,n}` is the Kronecker delta.</span>
+
+<span class="sd">    So we have a linear system of equations to solve for the coefficients :math:`c_j`. We can demonstrate that the matrix of the system is a Vandermonde matrix, which is invertible as long as the stencil points are distinct.</span>
+<span class="sd">    And the output coefficients are divided by :math:`h^n` to account for the time step size. The result is a finite difference approximation of the n-th order derivative with an error of order :math:`O(h^m)`.</span>
+
+<span class="sd">    The computation is similar to the one for the forward finite difference coefficients but foro odd orders, the sign of the coefficients is also inverted.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">order</span> <span class="o">%</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">compute_forward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="compute_central_finite_difference_coefficients">
+<a class="viewcode-back" href="../../../generated/pysdic.compute_central_finite_difference_coefficients.html#pysdic.compute_central_finite_difference_coefficients">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_central_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the coefficients for the central finite difference approximation of a derivative.</span>
+
+<span class="sd">    The function returns the Stencil coefficients :math:`c_j` used to approximate the n-th order derivative of a function using central finite differences.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{d^n f}{dt^n} \approx \frac{1}{h^n} \sum_{j=-M}^{M} c_j f(t + j h)</span>
+
+<span class="sd">    where :math:`h` is the time step size, and :math:`m` is the accuracy order and :math:`N` is the number of stencil points required to achieve the desired accuracy (:math:`N = n + m - 1`), such that the approximation error is of order :math:`O(h^m)`.</span>
+<span class="sd">    Here, :math:`M = \frac{N}{2}` if :math:`N` is even, and :math:`M = \frac{N-1}{2}` if :math:`N` is odd.</span>
+
+<span class="sd">    .. math ::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=-M}^{M} c_j f(t + j h) = \frac{d^n f}{dt^n} + O(h^m)</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_forward_finite_difference_coefficients` to compute the forward finite difference coefficients.</span>
+<span class="sd">        - :func:`compute_backward_finite_difference_coefficients` to compute the backward finite difference coefficients.</span>
+<span class="sd">        - :func:`assemble_central_finite_difference_matrix` to assemble the central finite difference operator matrix.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The coefficients are computed using Gauss elimination on the Vandermonde matrix constructed from the Taylor series expansion.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------   </span>
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size :math:`h`. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Must be a even integer. Default is :obj:`2`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        The coefficients for the central finite difference approximation of the derivative in the form of a 1D array :obj:`[c_{-Mh}, ..., c_{-h}, c_{0}, c_{h}, ..., c_{Mh}]`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the accuracy is not an even integer.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_central_finite_difference_coefficients(1, 1.0, 2)</span>
+<span class="sd">    array([-0.5,  0. ,  0.5])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_central_finite_difference_coefficients(2, 1.0, 2)</span>
+<span class="sd">    array([ 1., -2.,  1.])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_central_finite_difference_coefficients(1, 1.0, 4)</span>
+<span class="sd">    array([ 1/12, -2/3, 0, 2/3, -1/12])</span>
+
+<span class="sd">    &gt;&gt;&gt; compute_central_finite_difference_coefficients(2, 0.1, 4)</span>
+<span class="sd">    array([  -100/12, 400/3, -500/2, 400/3,   -100/12])</span>
+
+
+<span class="sd">    Mathematical Background</span>
+<span class="sd">    -----------------------</span>
+
+<span class="sd">    By developing the function :math:`f(t + k h)` in Taylor series around :math:`t`, we have:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(t + j h) = \sum_{k=0}^{\infty} \frac{(j h)^k}{k!} \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    We can add the contributions of the stencil points weighted by the coefficients :math:`c_k`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=-M}^{M} c_j f(t + j h) = \frac{1}{h^n} \sum_{j=-M}^{M} c_j \sum_{k=0}^{\infty} \frac{(j h)^k}{k!} \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \frac{1}{h^n} \sum_{j=-M}^{M} c_j f(t + j h) = \sum_{k=0}^{\infty} \frac{h^{k-n}}{k!} \left(\sum_{j=-M}^{M} c_j j^k\right) \frac{d^k f}{dt^k}</span>
+
+<span class="sd">    Thus :math:`\forall k \in [0, N]`, we want to enforce the conditions:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \sum_{j=-M}^{M} c_j j^k = n! \delta_{k,n}</span>
+
+<span class="sd">    where :math:`\delta_{k,n}` is the Kronecker delta.</span>
+
+<span class="sd">    So we have a linear system of equations to solve for the coefficients :math:`c_j`. We can demonstrate that the matrix of the system is a Vandermonde matrix, which is invertible as long as the stencil points are distinct if we consider symmetry/antisymmetry of the coefficients depending on the order.</span>
+<span class="sd">    And the output coefficients are divided by :math:`h^n` to account for the time step size. The result is a finite difference approximation of the n-th order derivative with an error of order :math:`O(h^m)`.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Order must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a numeric type.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an even integer for central finite differences.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a positive number.&quot;</span><span class="p">)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">order</span> <span class="o">+</span> <span class="n">accuracy</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Number of stencil points</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">N</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="n">even</span> <span class="o">=</span> <span class="p">(</span><span class="n">order</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">even</span><span class="p">:</span>   
+        <span class="c1"># EVEN derivative → symmetric → include j=0</span>
+        <span class="c1"># k = 0,2,4,... ; j = 0..M</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Fraction</span><span class="p">((</span><span class="mi">1</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span><span class="o">**</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">order</span><span class="o">+</span><span class="n">accuracy</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">Fraction</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">order</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">order</span><span class="o">+</span><span class="n">accuracy</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+
+    <span class="k">else</span><span class="p">:</span>      
+        <span class="c1"># ODD derivative → antisymmetric → j = 1..M only</span>
+        <span class="c1"># k = 1,3,5,... ; j = 1..M</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Fraction</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span><span class="o">**</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">+</span><span class="n">accuracy</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">Fraction</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">order</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">+</span><span class="n">accuracy</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+
+    <span class="c1"># Gaussian elimination with Fractions</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">_gaussian_elimination</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">even</span><span class="p">:</span>
+        <span class="c1"># coeffs = [c0, c1, c2, ..., cM] → build full stencil</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[:</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">coeffs</span>  <span class="c1"># [cM, ..., c2, c1, c0, c1, c2, ..., cM]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># coeffs = [c1, c2, ..., cM] → build full stencil</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coeffs</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">coeffs</span>  <span class="c1"># [ -cM, ..., -c2, -c1, 0, c1, c2, ..., cM]</span>
+
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">spacing</span><span class="o">**</span><span class="n">order</span><span class="p">)</span></div>
+
+
+
+
+
+
+
+
+<div class="viewcode-block" id="apply_forward_finite_difference">
+<a class="viewcode-back" href="../../../generated/pysdic.apply_forward_finite_difference.html#pysdic.apply_forward_finite_difference">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_forward_finite_difference</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;reflect&#39;</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply the forward finite difference operator to a time series data array along a specified axis.</span>
+
+<span class="sd">    A convolution operation is performed between the input data and the forward finite difference kernel</span>
+<span class="sd">    to approximate the temporal derivative of the specified order.</span>
+
+<span class="sd">    The available modes for handling borders are: &#39;reflect&#39;, &#39;constant&#39;, &#39;nearest&#39;, &#39;mirror&#39;, &#39;wrap&#39;.</span>
+
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | Mode            | Description                                                    |</span>
+<span class="sd">    +=================+================================================================+</span>
+<span class="sd">    | &#39;reflect&#39;       | :math:`(d c b a | a b c d | d c b a)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;constant&#39;      | :math:`(k k k k | a b c d | k k k k)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;nearest&#39;       | :math:`(a a a a | a b c d | d d d d)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;mirror&#39;        | :math:`(d c b | a b c d | c b a)`                              |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;wrap&#39;          | :math:`(a b c d | a b c d | a b c d)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_forward_finite_difference_coefficients` to compute the forward finite difference coefficients.</span>
+<span class="sd">        - :func:`apply_backward_finite_difference` to apply the backward finite difference operator.</span>
+<span class="sd">        - :func:`apply_central_finite_difference` to apply the central finite difference operator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : :class:`numpy.ndarray`</span>
+<span class="sd">        The input time series data array.</span>
+
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    axis : :class:`int`, optional</span>
+<span class="sd">        The axis along which to apply the finite difference operator. Default is :obj:`-1`.</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size :math:`h`. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Default is :obj:`1`.</span>
+
+<span class="sd">    mode : :class:`str`, optional</span>
+<span class="sd">        The mode parameter determines how the input array is extended when the filter overlaps a border.</span>
+<span class="sd">        Default is :obj:`&#39;reflect&#39;`.</span>
+
+<span class="sd">    value : :class:`Number`, optional</span>
+<span class="sd">        The value to use for padding when :obj:`mode` is set to :obj:`&#39;constant&#39;`. Default is :obj:`0.0`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        The resulting array after applying the forward finite difference operator with the same shape as the input data.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+<span class="sd">        If the mode is not a valid string option for :func:`scipy.ndimage.correlate1d`.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])</span>
+<span class="sd">    &gt;&gt;&gt; apply_forward_finite_difference(data, order=1, spacing=1.0, accuracy=1)</span>
+<span class="sd">    array([1., 3., 5., 7., 0.])</span>
+
+<span class="sd">    &gt;&gt;&gt; data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])</span>
+<span class="sd">    &gt;&gt;&gt; apply_forward_finite_difference(data, order=2, spacing=1.0, accuracy=1)</span>
+<span class="sd">    array([2., 2., 2., -7, -7])</span>
+<span class="sd">    </span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Axis must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">or</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Axis is out of bounds for the input data array.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Mode must be a string.&quot;</span><span class="p">)</span>
+    <span class="n">valid_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reflect&#39;</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="s1">&#39;mirror&#39;</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_modes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mode must be one of </span><span class="si">{</span><span class="n">valid_modes</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Value must be a numeric type.&quot;</span><span class="p">)</span>
+    
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compute_forward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+    <span class="c1"># Shift coefficients for convolution</span>
+    <span class="c1"># For forward difference, the first coefficient corresponds to the current point</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">correlate1d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="apply_backward_finite_difference">
+<a class="viewcode-back" href="../../../generated/pysdic.apply_backward_finite_difference.html#pysdic.apply_backward_finite_difference">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_backward_finite_difference</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;reflect&#39;</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply the backward finite difference operator to a time series data array along a specified axis.</span>
+
+<span class="sd">    A convolution operation is performed between the input data and the backward finite difference kernel</span>
+<span class="sd">    to approximate the temporal derivative of the specified order.</span>
+
+<span class="sd">    The available modes for handling borders are: &#39;reflect&#39;, &#39;constant&#39;, &#39;nearest&#39;, &#39;mirror&#39;, &#39;wrap&#39;.</span>
+
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | Mode            | Description                                                    |</span>
+<span class="sd">    +=================+================================================================+</span>
+<span class="sd">    | &#39;reflect&#39;       | :math:`(d c b a | a b c d | d c b a)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;constant&#39;      | :math:`(k k k k | a b c d | k k k k)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;nearest&#39;       | :math:`(a a a a | a b c d | d d d d)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;mirror&#39;        | :math:`(d c b | a b c d | c b a)`                              |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;wrap&#39;          | :math:`(a b c d | a b c d | a b c d)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_backward_finite_difference_coefficients` to compute the backward finite difference coefficients.</span>
+<span class="sd">        - :func:`apply_forward_finite_difference` to apply the forward finite difference operator.</span>
+<span class="sd">        - :func:`apply_central_finite_difference` to apply the central finite difference operator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : :class:`numpy.ndarray`</span>
+<span class="sd">        The input time series data array.</span>
+
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    axis : :class:`int`, optional</span>
+<span class="sd">        The axis along which to apply the finite difference operator. Default is :obj:`-1`.</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size :math:`h`. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Default is :obj:`1`.</span>
+
+<span class="sd">    mode : :class:`str`, optional</span>
+<span class="sd">        The mode parameter determines how the input array is extended when the filter overlaps a border.</span>
+<span class="sd">        Default is :obj:`&#39;reflect&#39;`.</span>
+
+<span class="sd">    value : :class:`Number`, optional</span>
+<span class="sd">        The value to use for padding when :obj:`mode` is set to :obj:`&#39;constant&#39;`. Default is :obj:`0.0`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        The resulting array after applying the backward finite difference operator with the same shape as the input data.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+<span class="sd">        If the mode is not a valid string option for :func:`scipy.ndimage.correlate1d`.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])</span>
+<span class="sd">    &gt;&gt;&gt; apply_backward_finite_difference(data, order=1, spacing=1.0, accuracy=1)</span>
+<span class="sd">    array([ 0.,  1.,  3.,  5.,  7.])</span>
+
+<span class="sd">    &gt;&gt;&gt; data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])</span>
+<span class="sd">    &gt;&gt;&gt; apply_backward_finite_difference(data, order=2, spacing=1.0, accuracy=1)</span>
+<span class="sd">    array([ 1.,  1.,  2.,  2., 2])</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Axis must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">or</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Axis is out of bounds for the input data array.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Mode must be a string.&quot;</span><span class="p">)</span>
+    <span class="n">valid_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reflect&#39;</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="s1">&#39;mirror&#39;</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_modes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mode must be one of </span><span class="si">{</span><span class="n">valid_modes</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Value must be a numeric type.&quot;</span><span class="p">)</span>
+
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compute_backward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+    <span class="c1"># Inverse the order of coefficients for backward difference</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Shift coefficients for convolution</span>
+    <span class="c1"># For backward difference, the last coefficient corresponds to the current point</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">correlate1d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="apply_central_finite_difference">
+<a class="viewcode-back" href="../../../generated/pysdic.apply_central_finite_difference.html#pysdic.apply_central_finite_difference">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_central_finite_difference</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;reflect&#39;</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply the central finite difference operator to a time series data array along a specified axis.</span>
+
+<span class="sd">    A convolution operation is performed between the input data and the central finite difference kernel</span>
+<span class="sd">    to approximate the temporal derivative of the specified order.</span>
+
+<span class="sd">    The available modes for handling borders are: &#39;reflect&#39;, &#39;constant&#39;, &#39;nearest&#39;, &#39;mirror&#39;, &#39;wrap&#39;.</span>
+
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | Mode            | Description                                                    |</span>
+<span class="sd">    +=================+================================================================+</span>
+<span class="sd">    | &#39;reflect&#39;       | :math:`(d c b a | a b c d | d c b a)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;constant&#39;      | :math:`(k k k k | a b c d | k k k k)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;nearest&#39;       | :math:`(a a a a | a b c d | d d d d)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;mirror&#39;        | :math:`(d c b | a b c d | c b a)`                              |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+<span class="sd">    | &#39;wrap&#39;          | :math:`(a b c d | a b c d | a b c d)`                          |</span>
+<span class="sd">    +-----------------+----------------------------------------------------------------+</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_central_finite_difference_coefficients` to compute the central finite difference coefficients.</span>
+<span class="sd">        - :func:`apply_forward_finite_difference` to apply the forward finite difference operator.</span>
+<span class="sd">        - :func:`apply_backward_finite_difference` to apply the backward finite difference operator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : :class:`numpy.ndarray`</span>
+<span class="sd">        The input time series data array.</span>
+
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    axis : :class:`int`, optional</span>
+<span class="sd">        The axis along which to apply the finite difference operator. Default is :obj:`-1`.</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size :math:`h`. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Must be a even integer. Default is :obj:`2`.</span>
+
+<span class="sd">    mode : :class:`str`, optional</span>
+<span class="sd">        The mode parameter determines how the input array is extended when the filter overlaps a border.</span>
+<span class="sd">        Default is :obj:`&#39;reflect&#39;`.</span>
+
+<span class="sd">    value : :class:`Number`, optional</span>
+<span class="sd">        The value to use for padding when :obj:`mode` is set to :obj:`&#39;constant&#39;`. Default is :obj:`0.0`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        The resulting array after applying the central finite difference operator with the same shape as the input data.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the accuracy is not an even integer.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+<span class="sd">        If the mode is not a valid string option for :func:`scipy.ndimage.correlate1d`.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; data = numpy.array([0.0, 1.0, 4.0, 9.0, 16.0])</span>
+<span class="sd">    &gt;&gt;&gt; apply_central_finite_difference(data, order=1, spacing=1.0, accuracy=2)</span>
+<span class="sd">    array([0.5, 2., 4., 6., 3.5])</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Axis must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">or</span> <span class="n">axis</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Axis is out of bounds for the input data array.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Mode must be a string.&quot;</span><span class="p">)</span>
+    <span class="n">valid_modes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reflect&#39;</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="s1">&#39;mirror&#39;</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_modes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mode must be one of </span><span class="si">{</span><span class="n">valid_modes</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Value must be a numeric type.&quot;</span><span class="p">)</span>
+
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compute_central_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">correlate1d</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">value</span><span class="p">)</span></div>
+
+
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_assemble_toeplitz_matrix</span><span class="p">(</span>
+    <span class="n">semi_row</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">semi_col</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">n_times</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_dim</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assemble the Toeplitz matrix given the semi-row and semi-column vectors.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        This is a private function and should not be used directly. Use the specific finite difference assembly functions instead.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    semi_row : :class:`numpy.ndarray`</span>
+<span class="sd">        The non-zero first row vector of the Toeplitz matrix.</span>
+<span class="sd">    </span>
+<span class="sd">    semi_col : :class:`numpy.ndarray`</span>
+<span class="sd">        The non-zero first column vector of the Toeplitz matrix.</span>
+
+<span class="sd">    n_times : :class:`int`</span>
+<span class="sd">        The number of time steps in the time series.</span>
+
+<span class="sd">    n_dim : :class:`int`</span>
+<span class="sd">        The number of spatial dimensions of the data at each time step.</span>
+
+<span class="sd">    sparse : :class:`bool`</span>
+<span class="sd">        Whether to return a sparse matrix.</span>
+
+<span class="sd">    weights : :class:`numpy.ndarray`, optional</span>
+<span class="sd">        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`</span>
+<span class="sd">        The assembled Toeplitz matrix with shape :obj:`(n_times * n_dim, n_times * n_dim)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_dim</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_dim</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">weights</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_dim</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights array must have shape (n_dim,) for diagonal weighting.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">weights</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights array must have shape (n_dim, n_dim) for full weighting.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights array must be either 1D or 2D.&quot;</span><span class="p">)</span>
+
+    <span class="n">length_col</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">semi_col</span><span class="p">),</span> <span class="n">n_times</span><span class="p">)</span>
+    <span class="n">length_row</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">semi_row</span><span class="p">),</span> <span class="n">n_times</span><span class="p">)</span>
+
+    <span class="c1"># Sparse version</span>
+    <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="n">diagonals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Upper diagonals (including main diagonal)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length_row</span><span class="p">):</span>
+            <span class="n">diagonals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_times</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">semi_row</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="c1"># Lower diagonals</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">length_col</span><span class="p">):</span>
+            <span class="n">diagonals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_times</span> <span class="o">-</span> <span class="n">k</span><span class="p">,</span> <span class="n">semi_col</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="c1"># Create the sparse Toeplitz matrix</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">diagonals</span><span class="p">,</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_times</span><span class="p">,</span> <span class="n">n_times</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Kronecker product with identity matrix for spatial dimensions</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Dense version</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Create the rows and columns of the Toeplitz matrix</span>
+        <span class="n">first_row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_times</span><span class="p">)</span>
+        <span class="n">first_row</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="n">length_row</span><span class="p">]</span> <span class="o">=</span> <span class="n">semi_row</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="n">length_row</span><span class="p">]</span>
+        <span class="n">first_col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_times</span><span class="p">)</span>
+        <span class="n">first_col</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="n">length_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">semi_col</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="n">length_col</span><span class="p">]</span>
+
+        <span class="c1"># Create the Toeplitz matrix</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">first_col</span><span class="p">,</span> <span class="n">first_row</span><span class="p">)</span>
+
+        <span class="c1"># Kronecker product with identity matrix for spatial dimensions</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">D</span>
+
+
+
+
+
+
+<div class="viewcode-block" id="assemble_forward_finite_difference_matrix">
+<a class="viewcode-back" href="../../../generated/pysdic.assemble_forward_finite_difference_matrix.html#pysdic.assemble_forward_finite_difference_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_forward_finite_difference_matrix</span><span class="p">(</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_times</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assemble the temporal derivation operator matrix for finite difference approximation with forward scheme.</span>
+
+<span class="sd">    The operator matrix is used to approximate the temporal derivative of a time-dependent function</span>
+<span class="sd">    using forward finite differences.</span>
+
+<span class="sd">    For a time series with :math:`N_t` time steps, the operator matrix :math:`D` for the :math:`n`-th order derivative is given by the toeplitz matrix:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        D = \begin{bmatrix}</span>
+<span class="sd">        a_t &amp; a_{t+1} &amp; a_{t+2} &amp; \cdots &amp; a_{t+N} \\</span>
+<span class="sd">        0 &amp; a_t &amp; a_{t+1} &amp; \cdots &amp; a_{t+N-1} \\</span>
+<span class="sd">        0 &amp; 0 &amp; a_t &amp; \cdots &amp; a_{t+N-2} \\</span>
+<span class="sd">        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\</span>
+<span class="sd">        0 &amp; 0 &amp; 0 &amp; \cdots &amp; a_{t} \\</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    where :math:`a_k` are the Stencil coefficients from the forward finite difference kernel at the given order, spacing and accuracy.</span>
+
+<span class="sd">    The dimension :obj:`n_dim` allows to apply the operator to multi-dimensional data at each time step :math:`f = [f_1(t), f_2(t), \ldots, f_{n_{dim}}(t)]^T`.</span>
+
+<span class="sd">    Thus the kronecker product with the identity matrix is performed to account for the spatial dimensions.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        D = T \otimes I_{n_{dim}} = \begin{bmatrix}</span>
+<span class="sd">        a_t I_{n_{dim}} &amp; a_{t+1} I_{n_{dim}} &amp; a_{t+2} I_{n_{dim}} &amp; \cdots &amp; a_{t+N} I_{n_{dim}} \\</span>
+<span class="sd">        0 &amp; a_t I_{n_{dim}} &amp; a_{t+1} I_{n_{dim}} &amp; \cdots &amp; a_{t+N-1} I_{n_{dim}} \\</span>
+<span class="sd">        0 &amp; 0 &amp; a_t I_{n_{dim}} &amp; \cdots &amp; a_{t+N-2} I_{n_{dim}} \\</span>
+<span class="sd">        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\</span>
+<span class="sd">        0 &amp; 0 &amp; 0 &amp; \cdots &amp; a_{t} I_{n_{dim}} \\</span>
+<span class="sd">        \end{bmatrix}</span>
+
+
+<span class="sd">    The operator matrix is then constructed such as :math:`\frac{\partial^n f}{\partial t^n} \approx  D @ F`, where :math:`F` is the flattened time series data :math:`F = [f_1(t_1), f_2(t_1), \ldots, f_{n_{dim}}(t_1), f_1(t_2), f_2(t_2), \ldots, f_{n_{dim}}(t_2), \ldots, f_{n_{dim}}(t_{N_t})]^T`.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_forward_finite_difference_coefficients` to compute the forward finite difference coefficients for given order, spacing and accuracy.</span>
+<span class="sd">        - :func:`assemble_backward_finite_difference_matrix` to assemble the backward finite difference operator matrix.</span>
+<span class="sd">        - :func:`assemble_central_finite_difference_matrix` to assemble the central finite difference operator matrix.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        If the time series has less time steps than the number of stencil points required for the given order and accuracy, the operator matrix will be truncated accordingly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the temporal derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    n_times : :class:`int`</span>
+<span class="sd">        The number of time steps in the time series.</span>
+
+<span class="sd">    n_dim : :class:`int`, optional</span>
+<span class="sd">        The number of spatial dimensions of the data at each time step. Default is :obj:`1`.</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Default is :obj:`1`.</span>
+
+<span class="sd">    sparse : :class:`bool`, optional</span>
+<span class="sd">        Whether to return a sparse matrix. Default is :obj:`False`.</span>
+
+<span class="sd">    weights : :class:`numpy.ndarray`, optional</span>
+<span class="sd">        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`</span>
+<span class="sd">        The temporal derivation operator matrix with shape :obj:`(n_times * n_dim, n_times * n_dim)`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; assemble_forward_finite_difference_matrix(2, 5, spacing=1.0, accuracy=1)</span>
+<span class="sd">    array([[ 1., -2.,  1.,  0.,  0.],</span>
+<span class="sd">           [ 0.,  1., -2.,  1.,  0.],</span>
+<span class="sd">           [ 0.,  0.,  1., -2.,  1.],</span>
+<span class="sd">           [ 0.,  0.,  0.,  1., -2.],</span>
+<span class="sd">           [ 0.,  0.,  0.,  0.,  1.]])</span>
+
+<span class="sd">    &gt;&gt;&gt; assemble_forward_finite_difference_matrix(1, 4, n_dim=2, spacing=0.1, accuracy=2)</span>
+<span class="sd">    array([[-15.,  0.,  20.,  0., -5.,  0.,  0.,  0.],</span>
+<span class="sd">           [  0.,-15.,   0., 20.,  0., -5.,  0.,  0.],</span>
+<span class="sd">           [  0.,  0., -15.,  0., 20.,  0., -5.,  0.],</span>
+<span class="sd">           [  0.,  0.,   0.,-15.,  0., 20.,  0., -5.],</span>
+<span class="sd">           [  0.,  0.,   0.,  0.,-15.,  0., 20.,  0.],</span>
+<span class="sd">           [  0.,  0.,   0.,  0.,  0.,-15.,  0., 20.],</span>
+<span class="sd">           [  0.,  0.,   0.,  0.,  0.,  0.,-15.,  0.],</span>
+<span class="sd">           [  0.,  0.,   0.,  0.,  0.,  0.,  0.,-15.]])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_times</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Number of time steps must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_times</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of time steps must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_dim</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Order must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a numeric type.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Sparse flag must be a boolean.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a positive number.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Forward FD coefficients</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compute_forward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+    <span class="c1"># Create the non-zero first columns of the Toeplitz matrix</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+    <span class="c1"># Create the non-zero first rows of the Toeplitz matrix</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">coeffs</span>
+
+    <span class="k">return</span> <span class="n">_assemble_toeplitz_matrix</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">n_times</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="n">sparse</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="assemble_backward_finite_difference_matrix">
+<a class="viewcode-back" href="../../../generated/pysdic.assemble_backward_finite_difference_matrix.html#pysdic.assemble_backward_finite_difference_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_backward_finite_difference_matrix</span><span class="p">(</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_times</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assemble the temporal derivation operator matrix for finite difference approximation with backward scheme.</span>
+
+<span class="sd">    The operator matrix is used to approximate the temporal derivative of a time-dependent function</span>
+<span class="sd">    using backward finite differences.</span>
+
+<span class="sd">    For a time series with :math:`N_t` time steps, the operator matrix :math:`D` for the :math:`n`-th order derivative is given by the toeplitz matrix:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        D = \begin{bmatrix}</span>
+<span class="sd">        a_t &amp; 0 &amp; 0 &amp; \cdots &amp; 0 \\</span>
+<span class="sd">        a_{t-1} &amp; a_t &amp; 0 &amp; \cdots &amp; 0 \\</span>
+<span class="sd">        0 &amp; a_{t-1} &amp; a_t &amp; \cdots &amp; 0 \\</span>
+<span class="sd">        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\</span>
+<span class="sd">        0 &amp; 0 &amp; 0 &amp; \cdots &amp; a_{t} \\</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    where :math:`a_k` are the Stencil coefficients from the backward finite difference kernel at the given order, spacing and accuracy.</span>
+
+<span class="sd">    The dimension :obj:`n_dim` allows to apply the operator to multi-dimensional data at each time step :math:`f = [f_1(t), f_2(t), \ldots, f_{n_{dim}}(t)]^T`.</span>
+
+<span class="sd">    Thus the kronecker product with the identity matrix is performed to account for the spatial dimensions.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        D = T \otimes I_{n_{dim}} = \begin{bmatrix}</span>
+<span class="sd">        a_t I_{n_{dim}} &amp; 0 &amp; 0 &amp; \cdots &amp; 0 \\</span>
+<span class="sd">        a_{t-1} I_{n_{dim}} &amp; a_t I_{n_{dim}} &amp; 0 &amp; \cdots &amp; 0 \\</span>
+<span class="sd">        0 &amp; a_{t-1} I_{n_{dim}} &amp; a_t I_{n_{dim}} &amp; \cdots &amp; 0 \\</span>
+<span class="sd">        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\</span>
+<span class="sd">        0 &amp; 0 &amp; 0 &amp; \cdots &amp; a_{t} I_{n_{dim}} \\</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    The operator matrix is then constructed such as :math:`\frac{\partial^n f}{\partial t^n} \approx  D @ F`, where :math:`F` is the flattened time series data :math:`F = [f_1(t_1), f_2(t_1), \ldots, f_{n_{dim}}(t_1), f_1(t_2), f_2(t_2), \ldots, f_{n_{dim}}(t_2), \ldots, f_{n_{dim}}(t_{N_t})]^T`.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_backward_finite_difference_coefficients` to compute the backward finite difference coefficients for given order, spacing and accuracy.</span>
+<span class="sd">        - :func:`assemble_forward_finite_difference_matrix` to assemble the forward finite difference operator matrix.</span>
+<span class="sd">        - :func:`assemble_central_finite_difference_matrix` to assemble the central finite difference operator matrix.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        If the time series has less time steps than the number of stencil points required for the given order and accuracy, the operator matrix will be truncated accordingly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the temporal derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    n_times : :class:`int`</span>
+<span class="sd">        The number of time steps in the time series.</span>
+
+<span class="sd">    n_dim : :class:`int`, optional</span>
+<span class="sd">        The number of spatial dimensions of the data at each time step. Default is :obj:`1`.</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Default is :obj:`1`.</span>
+
+<span class="sd">    sparse : :class:`bool`, optional</span>
+<span class="sd">        Whether to return a sparse matrix. Default is :obj:`False`.</span>
+<span class="sd">    </span>
+<span class="sd">    weights : :class:`numpy.ndarray`, optional</span>
+<span class="sd">        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`</span>
+<span class="sd">        The temporal derivation operator matrix with shape :obj:`(n_times * n_dim, n_times * n_dim)`.</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; assemble_backward_finite_difference_matrix(2, 5, spacing=1.0, accuracy=1)</span>
+<span class="sd">    array([[ 1.,  0.,  0.,  0.,  0.],</span>
+<span class="sd">           [-2.,  1.,  0.,  0.,  0.],</span>
+<span class="sd">           [ 1., -2.,  1.,  0.,  0.],</span>
+<span class="sd">           [ 0.,  1., -2.,  1.,  0.],</span>
+<span class="sd">           [ 0.,  0.,  1., -2.,  1.]])</span>
+
+<span class="sd">    &gt;&gt;&gt; assemble_backward_finite_difference_matrix(1, 4, n_dim=2, spacing=0.1, accuracy=2)</span>
+<span class="sd">    array([[ 15.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="sd">           [  0., 15.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="sd">           [-20.,  0., 15.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="sd">           [  0., -20.,  0., 15.,  0.,  0.,  0.,  0.],</span>
+<span class="sd">           [  5.,  0., -20.,  0., 15.,  0.,  0.,  0.],</span>
+<span class="sd">           [  0.,  5.,   0., -20.,  0.,15.,  0.,  0.],</span>
+<span class="sd">           [  0.,  0.,   5.,   0., -20., 0.,15.,  0.],</span>
+<span class="sd">           [  0.,  0.,   0.,   5.,   0.,-20., 0.,15.]])</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_times</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Number of time steps must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_times</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of time steps must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_dim</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Order must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a numeric type.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Sparse flag must be a boolean.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a positive number.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Backward FD coefficients</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compute_backward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+    <span class="c1"># Create the non-zero first columns of the Toeplitz matrix</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">coeffs</span>
+
+    <span class="c1"># Create the non-zero first rows of the Toeplitz matrix</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+    <span class="k">return</span> <span class="n">_assemble_toeplitz_matrix</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">n_times</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="n">sparse</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="assemble_central_finite_difference_matrix">
+<a class="viewcode-back" href="../../../generated/pysdic.assemble_central_finite_difference_matrix.html#pysdic.assemble_central_finite_difference_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_central_finite_difference_matrix</span><span class="p">(</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_times</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="n">n_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="n">Number</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assemble the temporal derivation operator matrix for finite difference approximation with central scheme.</span>
+
+<span class="sd">    The operator matrix is used to approximate the temporal derivative of a time-dependent function</span>
+<span class="sd">    using central finite differences.</span>
+
+<span class="sd">    For a time series with :math:`N_t` time steps, the operator matrix :math:`D` for the :math:`n`-th order derivative is given by the toeplitz matrix:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        D = \begin{bmatrix}</span>
+<span class="sd">        a_{t} &amp; a_{t+1} &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\</span>
+<span class="sd">        a_{t-1} &amp; a_{t} &amp; a_{t+1} &amp; \cdots &amp; 0 &amp; 0 \\</span>
+<span class="sd">        0 &amp; a_{t-1} &amp; a_{t} &amp; \cdots &amp; 0 &amp; 0 \\</span>
+<span class="sd">        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\</span>
+<span class="sd">        0 &amp; 0 &amp; 0 &amp; \cdots &amp; a_{t-1} &amp; a_{t} \\</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    where :math:`a_k` are the Stencil coefficients from the central finite difference kernel at the given order, spacing and accuracy.</span>
+
+<span class="sd">    The dimension :obj:`n_dim` allows to apply the operator to multi-dimensional data at each time step :math:`f = [f_1(t), f_2(t), \ldots, f_{n_{dim}}(t)]^T`.</span>
+
+<span class="sd">    Thus the kronecker product with the identity matrix is performed to account for the spatial dimensions.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        D = T \otimes I_{n_{dim}} = \begin{bmatrix}</span>
+<span class="sd">        a_{t} I_{n_{dim}} &amp; a_{t+1} I_{n_{dim}} &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\</span>
+<span class="sd">        a_{t-1} I_{n_{dim}} &amp; a_{t} I_{n_{dim}} &amp; a_{t+1} I_{n_{dim}} &amp; \cdots &amp; 0 &amp; 0 \\</span>
+<span class="sd">        0 &amp; a_{t-1} I_{n_{dim}} &amp; a_{t} I_{n_{dim}} &amp; \cdots &amp; 0 &amp; 0 \\</span>
+<span class="sd">        \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\</span>
+<span class="sd">        0 &amp; 0 &amp; 0 &amp; \cdots &amp; a_{t-1} I_{n_{dim}} &amp; a_{t} I_{n_{dim}} \\</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    The operator matrix is then constructed such as :math:`\frac{\partial^n f}{\partial t^n} \approx  D @ F`, where :math:`F` is the flattened time series data :math:`F = [f_1(t_1), f_2(t_1), \ldots, f_{n_{dim}}(t_1), f_1(t_2), f_2(t_2), \ldots, f_{n_{dim}}(t_2), \ldots, f_{n_{dim}}(t_{N_t})]^T`.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`compute_central_finite_difference_coefficients` to compute the central finite difference coefficients for given order, spacing and accuracy.</span>
+<span class="sd">        - :func:`assemble_forward_finite_difference_matrix` to assemble the forward finite difference operator matrix.</span>
+<span class="sd">        - :func:`assemble_backward_finite_difference_matrix` to assemble the backward finite difference operator matrix.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        If the time series has less time steps than the number of stencil points required for the given order and accuracy, the operator matrix will be truncated accordingly.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    order : :class:`int`</span>
+<span class="sd">        The order of the temporal derivative to approximate (e.g., 1 for first derivative, 2 for second derivative).</span>
+
+<span class="sd">    n_times : :class:`int`</span>
+<span class="sd">        The number of time steps in the time series.</span>
+
+<span class="sd">    n_dim : :class:`int`, optional</span>
+<span class="sd">        The number of spatial dimensions of the data at each time step. Default is :obj:`1`.</span>
+
+<span class="sd">    spacing : :class:`Number`, optional</span>
+<span class="sd">        The time step size. Default is :obj:`1.0`.</span>
+
+<span class="sd">    accuracy : :class:`int`, optional</span>
+<span class="sd">        The desired accuracy order of the approximation. Must be an even integer. Default is :obj:`2`.</span>
+
+<span class="sd">    sparse : :class:`bool`, optional</span>
+<span class="sd">        Whether to return a sparse matrix. Default is :obj:`False`.</span>
+
+<span class="sd">    weights : :class:`numpy.ndarray`, optional</span>
+<span class="sd">        An optional array of weights to apply for the identity matrix in the kronecker product. If None, the identity matrix is used. If provided, it must have shape :obj:`(n_dim,)` to weight each spatial dimension accordingly (diagonal coefficients) or :obj:`(n_dim, n_dim)` to provide a full weighting matrix. Default is :obj:`None`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray` or :class:`scipy.sparse.csr_matrix`</span>
+<span class="sd">        The temporal derivation operator matrix with shape :obj:`(n_times * n_dim, n_times * n_dim)`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the order or accuracy are not positive integers.</span>
+<span class="sd">        If the accuracy is not an even integer.</span>
+<span class="sd">        If the spacing is not a strictly positive number.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; assemble_central_finite_difference_matrix(2, 5, spacing=1.0, accuracy=2)</span>
+<span class="sd">    array([[ -2.,  1.,  0.,  0.,  0.],</span>
+<span class="sd">           [  1., -2.,  1.,  0.,  0.],</span>
+<span class="sd">           [  0.,  1., -2.,  1.,  0.],</span>
+<span class="sd">           [  0.,  0.,  1., -2.,  1.],</span>
+<span class="sd">           [  0.,  0.,  0.,  1., -2.]])</span>
+
+<span class="sd">    &gt;&gt;&gt; assemble_central_finite_difference_matrix(1, 4, n_dim=2, spacing=0.1, accuracy=4)</span>
+<span class="sd">    array([[ -500/2,      0,   400/3,      0, -100/12,       0,       0,       0],</span>
+<span class="sd">           [      0, -500/2,       0,  400/3,       0, -100/12,       0,       0],</span>
+<span class="sd">           [  400/3,      0,  -500/2,      0,   400/3,       0, -100/12,       0],</span>
+<span class="sd">           [      0,  400/3,       0, -500/2,       0,   400/3,       0, -100/12],</span>
+<span class="sd">           [-100/12,      0,   400/3,      0,  -500/2,       0,   400/3,       0],</span>
+<span class="sd">           [      0,-100/12,       0,  400/3,       0,  -500/2,       0,   400/3],</span>
+<span class="sd">           [      0,      0, -100/12,      0,   400/3,       0,  -500/2,       0],</span>
+<span class="sd">           [      0,      0,       0,-100/12,      0,   400/3,       0,  -500/2]])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_times</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Number of time steps must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_times</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of time steps must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_dim</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Order must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a numeric type.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Sparse flag must be a boolean.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be a positive integer.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Accuracy must be an even integer for central finite differences.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Spacing must be a positive number.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Central FD coefficients</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">compute_central_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+    <span class="n">half_size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="c1"># Create the non-zero first columns of the Toeplitz matrix</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">half_size</span><span class="o">+</span><span class="mi">1</span><span class="p">)][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Create the non-zero first rows of the Toeplitz matrix</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[(</span><span class="n">half_size</span><span class="p">):]</span>
+
+    <span class="k">return</span> <span class="n">_assemble_toeplitz_matrix</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">n_times</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="n">sparse</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span></div>
+
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">forward_solution</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">11</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="p">[</span><span class="mi">35</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">26</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">19</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">14</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="o">/</span><span class="mi">12</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="p">[</span><span class="mi">15</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">77</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="mi">107</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">13</span><span class="p">,</span> <span class="mi">61</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="o">/</span><span class="mi">6</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">17</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="mi">71</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">59</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">49</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">41</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">49</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="o">-</span><span class="mi">461</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="o">-</span><span class="mi">307</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="o">/</span><span class="mi">8</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">forward_solution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">compute_forward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">expected</span><span class="p">)),</span> <span class="sa">f</span><span class="s2">&quot;Forward FD coefficients mismatch for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All forward finite difference coefficient tests passed.&quot;</span><span class="p">)</span>
+
+    <span class="n">backward_solution</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="p">[</span><span class="mi">11</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">14</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="o">-</span><span class="mi">24</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">backward_solution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">compute_backward_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">expected</span><span class="p">)),</span> <span class="sa">f</span><span class="s2">&quot;Backward FD coefficients mismatch for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All backward finite difference coefficient tests passed.&quot;</span><span class="p">)</span>
+
+    <span class="n">central_solution</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">60</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">49</span><span class="o">/</span><span class="mi">18</span><span class="p">,</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">90</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">13</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">central_solution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">compute_central_finite_difference_coefficients</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">expected</span><span class="p">)),</span> <span class="sa">f</span><span class="s2">&quot;Central FD coefficients mismatch for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All central finite difference coefficient tests passed.&quot;</span><span class="p">)</span>
+
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">])</span>
+
+    <span class="n">central_solution</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]),</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">central_solution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">apply_central_finite_difference</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed</span><span class="p">,</span> <span class="n">expected</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Central FD application mismatch for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">computed_multi</span> <span class="o">=</span> <span class="n">apply_central_finite_difference</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">expected_multi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed_multi</span><span class="p">,</span> <span class="n">expected_multi</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Central FD application mismatch for multi-dimensional data for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected_multi</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed_multi</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All central finite difference application tests passed.&quot;</span><span class="p">)</span>
+
+    <span class="n">forward_solution</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">7.</span><span class="p">,</span> <span class="o">-</span><span class="mf">7.</span><span class="p">]),</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">forward_solution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">apply_forward_finite_difference</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed</span><span class="p">,</span> <span class="n">expected</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Forward FD application mismatch for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">computed_multi</span> <span class="o">=</span> <span class="n">apply_forward_finite_difference</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">expected_multi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed_multi</span><span class="p">,</span> <span class="n">expected_multi</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Forward FD application mismatch for multi-dimensional data for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected_multi</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed_multi</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All forward finite difference application tests passed.&quot;</span><span class="p">)</span>
+
+    <span class="n">backward_solution</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">]),</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]),</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">backward_solution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">apply_backward_finite_difference</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed</span><span class="p">,</span> <span class="n">expected</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Backward FD application mismatch for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">computed_multi</span> <span class="o">=</span> <span class="n">apply_backward_finite_difference</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">expected_multi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">assert</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">computed_multi</span><span class="p">,</span> <span class="n">expected_multi</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Backward FD application mismatch for multi-dimensional data for order </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2"> and accuracy </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">: expected </span><span class="si">{</span><span class="n">expected_multi</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">computed_multi</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All backward finite difference application tests passed.&quot;</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2025, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1271 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Blender Material BSDF Class and default Materials &#8212; pysdic 1.1.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6f037312"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_documentation/blender_material_bsdf';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Usage" href="../usage.html" />
+    <link rel="prev" title="Blender Mesh Class" href="blender_mesh.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 1.1.2 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Shape Functions and Integration Points</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="shape_functions.html">Shape Functions Collection (1D, 2D, 3D)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_2_shape_functions.html">segment_2_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_3_shape_functions.html">segment_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_shape_functions.html">triangle_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gauss_points.html">Gauss Quadrature Points Collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_2_gauss_points.html">segment_2_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.segment_3_gauss_points.html">segment_3_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_gauss_points.html">triangle_3_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_shape_function_matrix.html">assemble_shape_function_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.construct_jacobian.html">construct_jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.derivate_property.html">derivate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.interpolate_property.html">interpolate_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.project_property_to_vertices.html">project_property_to_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.remap_vertices_coordinates.html">remap_vertices_coordinates</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects to store PointClouds, Meshes and Integration Points</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="point_cloud.html">PointCloud structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_array.html">from_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_meshio.html">from_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_npz.html">from_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_obj.html">from_obj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_ply.html">from_ply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_vtk.html">from_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.from_xyz.html">from_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_array.html">to_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_meshio.html">to_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_npz.html">to_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_obj.html">to_obj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_ply.html">to_ply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_vtk.html">to_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.to_xyz.html">to_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.coordinates.html">coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.points.html">points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.n_dimensions.html">n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.n_points.html">n_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.all_close.html">all_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.all_finite.html">all_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.concatenate.html">concatenate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.frame_transform.html">frame_transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.is_finite.html">is_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.is_nan.html">is_nan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.keep_points.html">keep_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.keep_points_at.html">keep_points_at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.merge.html">merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.remove_not_finite.html">remove_not_finite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.remove_points.html">remove_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.remove_points_at.html">remove_points_at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.unique.html">unique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.extend_as_hyperplane.html">extend_as_hyperplane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.extend_n_dimensions.html">extend_n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.reduce_to_hyperplane.html">reduce_to_hyperplane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.__add__.html">__add__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.__iadd__.html">__iadd__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.__len__.html">__len__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.bounding_box.html">bounding_box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.bounding_sphere.html">bounding_sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.PointCloud.visualize.html">visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mesh.html">Mesh structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.from_meshio.html">from_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.from_npz.html">from_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.from_vtk.html">from_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.to_meshio.html">to_meshio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.to_npz.html">to_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.to_vtk.html">to_vtk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.connectivity.html">connectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements.html">elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements_type.html">elements_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements_properties.html">elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_vertices.html">n_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.N_v.html">N_v</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_elements.html">n_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.N_e.html">N_e</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_vertices_per_element.html">n_vertices_per_element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.N_vpe.html">N_vpe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_dimensions.html">n_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.E.html">E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.n_topological_dimensions.html">n_topological_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.K.html">K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.meshio_cell_type.html">meshio_cell_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.set_elements_type.html">set_elements_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.vertices.html">vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.vtk_cell_type.html">vtk_cell_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.clear_elements_properties.html">clear_elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.clear_vertices_properties.html">clear_vertices_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.clear_properties.html">clear_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.get_elements_property.html">get_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.get_vertices_property.html">get_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_elements_property.html">remove_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_vertices_property.html">remove_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.set_elements_property.html">set_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.set_vertices_property.html">set_vertices_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.list_elements_properties.html">list_elements_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.list_vertices_properties.html">list_vertices_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.elements_uvmap.html">elements_uvmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.add_elements.html">add_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.add_vertices.html">add_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.are_used_vertices.html">are_used_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.is_empty.html">is_empty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.keep_elements.html">keep_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_elements.html">remove_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_unused_vertices.html">remove_unused_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.remove_vertices.html">remove_vertices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.shape_functions.html">shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.validate.html">validate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize.html">visualize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_elements_property.html">visualize_elements_property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_integration_points.html">visualize_integration_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_texture.html">visualize_texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Mesh.visualize_vertices_property.html">visualize_vertices_property</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="integration_points.html">pysdic.IntegrationPoints</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.from_npz.html">from_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.to_npz.html">to_npz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.element_indices.html">element_indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.n_points.html">n_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.n_topological_dimensions.html">n_topological_dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.n_valids.html">n_valids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.natural_coordinates.html">natural_coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.weights.html">weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.add_points.html">add_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.concatenate.html">concatenate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.disable_points.html">disable_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.remove_invalids.html">remove_invalids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.remove_points.html">remove_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.IntegrationPoints.validate.html">validate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="create_3D_surface_meshes.html">Create surface meshes into 3D embedded space</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.create_triangle_3_heightmap.html">create_triangle_3_heightmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.create_triangle_3_axisymmetric.html">create_triangle_3_axisymmetric</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Operate on Specific Meshes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="triangle_3_meshes_operations.html">Manage and Operate on Triangle 3 Meshes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_mesh_from_open3d.html">triangle_3_mesh_from_open3d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_mesh_to_open3d.html">triangle_3_mesh_to_open3d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_build_vertices_adjacency_matrix.html">triangle_3_build_vertices_adjacency_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_build_elements_adjacency_matrix.html">triangle_3_build_elements_adjacency_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_cast_rays.html">triangle_3_cast_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_compute_elements_areas.html">triangle_3_compute_elements_areas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_compute_elements_normals.html">triangle_3_compute_elements_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_compute_vertices_normals.html">triangle_3_compute_vertices_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_3_extract_unique_edges.html">triangle_3_extract_unique_edges</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects and Functions to Handle Images, Cameras and Views</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="image.html">pysdic.Image</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.from_array.html">from_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.from_file.html">from_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.to_array.html">to_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.to_file.html">to_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.dtype.html">dtype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.is_color.html">is_color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.is_grayscale.html">is_grayscale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.image.html">image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.height.html">height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.n_channels.html">n_channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.ndim.html">ndim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.shape.html">shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.width.html">width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.image_update.html">image_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.construct_interpolation_functions.html">construct_interpolation_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.copy.html">copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_at_image_points.html">evaluate_image_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_at_pixel_points.html">evaluate_image_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dx_at_pixel_points.html">evaluate_image_jacobian_dx_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dy_at_pixel_points.html">evaluate_image_jacobian_dy_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_du_at_pixel_points.html">evaluate_image_jacobian_du_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dv_at_pixel_points.html">evaluate_image_jacobian_dv_at_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dx_at_image_points.html">evaluate_image_jacobian_dx_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dy_at_image_points.html">evaluate_image_jacobian_dy_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_du_at_image_points.html">evaluate_image_jacobian_du_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.evaluate_image_jacobian_dv_at_image_points.html">evaluate_image_jacobian_dv_at_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.get_image_pixel_points.html">get_image_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.get_image_image_points.html">get_image_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.get_interpolation_function.html">get_interpolation_function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.image_points_to_pixel_points.html">image_points_to_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.pixel_points_to_image_points.html">pixel_points_to_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Image.visualize.html">visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="camera.html">pysdic.Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.sensor_height.html">sensor_height</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.sensor_width.html">sensor_width</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.distortion.html">distortion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.extrinsic.html">extrinsic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.intrinsic.html">intrinsic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.internal_bypass.html">internal_bypass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.update.html">update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.intrinsic_update.html">intrinsic_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.distortion_update.html">distortion_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.extrinsic_update.html">extrinsic_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.size_update.html">size_update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.image_points_to_pixel_points.html">image_points_to_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.get_camera_normalized_points.html">get_camera_normalized_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.get_camera_pixel_points.html">get_camera_pixel_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.get_camera_rays.html">get_camera_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.pixel_points_to_image_points.html">pixel_points_to_image_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.project.html">project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.project_points.html">project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.visualize_projected_point_cloud.html">visualize_projected_point_cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.Camera.visualize_projected_mesh.html">visualize_projected_mesh</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="view.html">pysdic.View</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.camera.html">camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image.html">image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image_shape.html">image_shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.camera_size.html">camera_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.project.html">project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.project_points.html">project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image_project.html">image_project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.image_project_points.html">image_project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.visualize_projected_point_cloud.html">visualize_projected_point_cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.View.visualize_projected_mesh.html">visualize_projected_mesh</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="projection_result.html">pysdic.ProjectionResult</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_projection_result.html">pysdic.ImageProjectionResult</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Temporal Derivation Operators</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="temporal_derivation.html">Build derivation operators to regularize temporal derivatives</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_central_finite_difference_coefficients.html">compute_central_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_forward_finite_difference_coefficients.html">compute_forward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_backward_finite_difference_coefficients.html">compute_backward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.apply_central_finite_difference.html">apply_central_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.apply_forward_finite_difference.html">apply_forward_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.apply_backward_finite_difference.html">apply_backward_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_central_finite_difference_matrix.html">assemble_central_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_forward_finite_difference_matrix.html">assemble_forward_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.assemble_backward_finite_difference_matrix.html">assemble_backward_finite_difference_matrix</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Building Operators for SDIC</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="build_displacement_operator.html">pysdic.sdic.build_displacement_operator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Blender Integration</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="blender_experiment.html">Blender Experiment Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_camera.html">Blender Camera Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_spotlight.html">Blender SpotLight Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blender_mesh.html">Blender Mesh Class</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Blender Material BSDF Class and default Materials</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Blender Material BSDF Class and default Materials</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="blender-material-bsdf-class-and-default-materials">
+<h1>Blender Material BSDF Class and default Materials<a class="headerlink" href="#blender-material-bsdf-class-and-default-materials" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#main-class" id="id1">Main Class</a></p></li>
+<li><p><a class="reference internal" href="#default-materials" id="id2">Default Materials</a></p></li>
+</ul>
+</nav>
+<section id="main-class">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Main Class</a><a class="headerlink" href="#main-class" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysdic.blender.</span></span><span class="sig-name descname"><span class="pre">BlenderMaterialBSDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metallic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roughness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IOR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsurface_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsurface_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsurface_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsurface_IOR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsurface_anisotropy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specular_IOR_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specular_tint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anisotropic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anisotropic_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmission_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat_roughness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat_IOR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat_tint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat_normal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheen_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheen_roughness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheen_tint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emission_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emission_strength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thin_film_thickness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thin_film_IOR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_material_bsdf.html#BlenderMaterialBSDF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a material with detailed physical and visual properties for Blender’s BSDF Principled shader.
+The class used the Blender’s Principled BSDF shader as a base for the material. The parameters are based on the Blender’s documentation.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html">https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a pattern will be used for the associated mesh, the base color can be ignored.
+The pattern will be used as the base color of the material.
+If the pattern and a base color are both set, the pattern will be multiplied by the given base color.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_color</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The base color of the material, with RGBA values. Default to None.</p></li>
+<li><p><strong>metallic</strong> (<em>float</em><em>, </em><em>optional</em>) – The metallic value of the material. Default to None.</p></li>
+<li><p><strong>roughness</strong> (<em>float</em><em>, </em><em>optional</em>) – The roughness value of the material. Default to None.</p></li>
+<li><p><strong>IOR</strong> (<em>float</em><em>, </em><em>optional</em>) – The index of refraction of the material. Default to None.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – The alpha value of the material. Default to None.</p></li>
+<li><p><strong>normal</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The normal of the material with XYZ values. Default to None.</p></li>
+<li><p><strong>weight</strong> (<em>float</em><em>, </em><em>optional</em>) – The weight of the material. Default to None.</p></li>
+<li><p><strong>subsurface_weight</strong> (<em>float</em><em>, </em><em>optional</em>) – The subsurface weight of the material. Default to None.</p></li>
+<li><p><strong>subsurface_radius</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The subsurface radius of the material. Default to None.</p></li>
+<li><p><strong>subsurface_scale</strong> (<em>float</em><em>, </em><em>optional</em>) – The subsurface scale of the material. Default to None.</p></li>
+<li><p><strong>subsurface_IOR</strong> (<em>float</em><em>, </em><em>optional</em>) – The subsurface index of refraction of the material. Default to None.</p></li>
+<li><p><strong>subsurface_anisotropy</strong> (<em>float</em><em>, </em><em>optional</em>) – The subsurface anisotropy of the material. Default to None.</p></li>
+<li><p><strong>specular_IOR_level</strong> (<em>float</em><em>, </em><em>optional</em>) – The specular index of refraction level of the material. Default to None.</p></li>
+<li><p><strong>specular_tint</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The specular tint of the material with RGBA values. Default to None.</p></li>
+<li><p><strong>anisotropic</strong> (<em>float</em><em>, </em><em>optional</em>) – The anisotropic value of the material. Default to None.</p></li>
+<li><p><strong>anisotropic_rotation</strong> (<em>float</em><em>, </em><em>optional</em>) – The anisotropic rotation of the material. Default to None.</p></li>
+<li><p><strong>tangent</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The tangent of the material with XYZ values. Default to None.</p></li>
+<li><p><strong>transmission_weight</strong> (<em>float</em><em>, </em><em>optional</em>) – The transmission weight of the material. Default to None.</p></li>
+<li><p><strong>coat_weight</strong> (<em>float</em><em>, </em><em>optional</em>) – The coat weight of the material. Default to None.</p></li>
+<li><p><strong>coat_roughness</strong> (<em>float</em><em>, </em><em>optional</em>) – The coat roughness of the material. Default to None.</p></li>
+<li><p><strong>coat_IOR</strong> (<em>float</em><em>, </em><em>optional</em>) – The coat index of refraction of the material. Default to None.</p></li>
+<li><p><strong>coat_tint</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The coat tint of the material with RGBA values. Default to None.</p></li>
+<li><p><strong>coat_normal</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The coat normal of the material with XYZ values. Default to None.</p></li>
+<li><p><strong>sheen_weight</strong> (<em>float</em><em>, </em><em>optional</em>) – The sheen weight of the material. Default to None.</p></li>
+<li><p><strong>sheen_roughness</strong> (<em>float</em><em>, </em><em>optional</em>) – The sheen roughness of the material. Default to None.</p></li>
+<li><p><strong>sheen_tint</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The sheen tint of the material with RGBA values. Default to None.</p></li>
+<li><p><strong>emission_color</strong> (<em>array_like</em><em>, </em><em>optional</em>) – The emission color of the material with RGBA values. Default to None.</p></li>
+<li><p><strong>emission_strength</strong> (<em>float</em><em>, </em><em>optional</em>) – The emission strength of the material. Default to None.</p></li>
+<li><p><strong>thin_film_thickness</strong> (<em>float</em><em>, </em><em>optional</em>) – The thin film thickness of the material. Default to None.</p></li>
+<li><p><strong>thin_film_IOR</strong> (<em>float</em><em>, </em><em>optional</em>) – The thin film index of refraction of the material. Default to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.IOR">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IOR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.IOR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.alpha">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.alpha" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.anisotropic">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">anisotropic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.anisotropic" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.anisotropic_rotation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">anisotropic_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.anisotropic_rotation" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.base_color">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">base_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.base_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.coat_IOR">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coat_IOR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.coat_IOR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.coat_normal">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coat_normal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.coat_normal" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.coat_roughness">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coat_roughness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.coat_roughness" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.coat_tint">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coat_tint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.coat_tint" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.coat_weight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coat_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.coat_weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.emission_color">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emission_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.emission_color" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.emission_strength">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emission_strength</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.emission_strength" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_material_bsdf.html#BlenderMaterialBSDF.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.from_dict" title="Link to this definition">#</a></dt>
+<dd><p>Create a BlenderMaterialBSDF instance from a dictionary.</p>
+<p>The structure of the dictionary should be as provided by the <a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF.to_dict" title="pysdic.blender.BlenderMaterialBSDF.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> method.
+The other fields of the dictionary are ignored.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic.blender</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlenderMaterialBSDF</span>
+
+<span class="n">mat_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;BlenderMaterialBSDF&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of the material&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Create a BlenderMaterialBSDF instance from the dictionary</span>
+<span class="n">material</span> <span class="o">=</span> <span class="n">BlenderMaterialBSDF</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">mat_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF.to_dict" title="pysdic.blender.BlenderMaterialBSDF.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> for saving the mesh to a dictionary.</p></li>
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF.from_json" title="pysdic.blender.BlenderMaterialBSDF.from_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_json()</span></code></a> for loading from a JSON file.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – A dictionary containing the material’s data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The BlenderMaterialBSDF instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the data is not a dictionary.</p></li>
+<li><p><strong>KeyError</strong> – If required keys are missing from the dictionary.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_material_bsdf.html#BlenderMaterialBSDF.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.from_json" title="Link to this definition">#</a></dt>
+<dd><p>Create a BlenderMaterialBSDF instance from a JSON file.</p>
+<p>The structure of the JSON file follows the <a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF.to_dict" title="pysdic.blender.BlenderMaterialBSDF.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic.blender</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlenderMaterialBSDF</span>
+
+<span class="c1"># Load the mesh from a JSON file</span>
+<span class="n">material</span> <span class="o">=</span> <span class="n">BlenderMaterialBSDF</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s2">&quot;path/to/mesh.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF.to_json" title="pysdic.blender.BlenderMaterialBSDF.to_json"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_json()</span></code></a> for saving the material to a JSON file.</p></li>
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF.from_dict" title="pysdic.blender.BlenderMaterialBSDF.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a> for loading from a dictionary.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – The path to the JSON file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A BlenderMaterialBSDF instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the filepath is not a valid path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.get_details">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_details</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_material_bsdf.html#BlenderMaterialBSDF.get_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.get_details" title="Link to this definition">#</a></dt>
+<dd><p>Get detailed descriptions of each parameter in the BlenderMaterialBSDF class.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: A detailed description of all parameters and their roles in Blender materials.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.metallic">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metallic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.metallic" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.normal">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.normal" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.roughness">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roughness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.roughness" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.sheen_roughness">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sheen_roughness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.sheen_roughness" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.sheen_tint">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sheen_tint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.sheen_tint" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.sheen_weight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sheen_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.sheen_weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.specular_IOR_level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specular_IOR_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.specular_IOR_level" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.specular_tint">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specular_tint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.specular_tint" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.subsurface_IOR">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subsurface_IOR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_IOR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.subsurface_anisotropy">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subsurface_anisotropy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_anisotropy" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.subsurface_radius">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subsurface_radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_radius" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.subsurface_scale">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subsurface_scale</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_scale" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.subsurface_weight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subsurface_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.tangent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tangent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.tangent" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.thin_film_IOR">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thin_film_IOR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.thin_film_IOR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.thin_film_thickness">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thin_film_thickness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.thin_film_thickness" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_material_bsdf.html#BlenderMaterialBSDF.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>Export the BlenderMaterialBSDF’s data to a dictionary.</p>
+<p>The structure of the dictionary is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;BlenderMaterialBSDF&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of the material&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s2">&quot;IOR&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+    <span class="s2">&quot;...&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – A description of the material, by default “”.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the BlenderMaterialBSDF’s data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the description is not a string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_material_bsdf.html#BlenderMaterialBSDF.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.to_json" title="Link to this definition">#</a></dt>
+<dd><p>Export the BlenderMaterialBSDF’s data to a JSON file.</p>
+<p>The structure of the JSON file follows the :meth:BlenderMaterialBSDF.to_dict` method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – The path to the JSON file.</p></li>
+<li><p><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – A description of the material, by default “”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the filepath is not a valid path.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.transmission_weight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transmission_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.transmission_weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderMaterialBSDF.weight">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysdic.blender.BlenderMaterialBSDF.weight" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="default-materials">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Default Materials</a><a class="headerlink" href="#default-materials" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysdic.blender.get_mirror_material">
+<span class="sig-prename descclassname"><span class="pre">pysdic.blender.</span></span><span class="sig-name descname"><span class="pre">get_mirror_material</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/default_materials.html#get_mirror_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.get_mirror_material" title="Link to this definition">#</a></dt>
+<dd><p>Returns a mirror material for use in Blender.</p>
+<p>This material is a perfect mirror with no roughness and a refractive index of 1.50.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="c1"># White color</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># No roughness</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully metallic</span>
+    <span class="s2">&quot;IOR&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="c1"># Refractive index between 1.45 and 1.55</span>
+    <span class="s2">&quot;transmission_weight&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># No transmission</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully opaque</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A BlenderMaterialBSDF object representing a mirror material.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysdic.blender.get_steel_material">
+<span class="sig-prename descclassname"><span class="pre">pysdic.blender.</span></span><span class="sig-name descname"><span class="pre">get_steel_material</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/default_materials.html#get_steel_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.get_steel_material" title="Link to this definition">#</a></dt>
+<dd><p>Returns a steel-like material.</p>
+<p>Polished steel is metallic, slightly rough, and has a neutral gray tint.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="c1"># Neutral gray</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="c1"># Slightly rough</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully metallic</span>
+    <span class="s2">&quot;IOR&quot;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="c1"># Approximate for steel</span>
+    <span class="s2">&quot;transmission_weight&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># No transmission</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully opaque</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A BlenderMaterialBSDF object representing polished steel.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysdic.blender.get_titanium_material">
+<span class="sig-prename descclassname"><span class="pre">pysdic.blender.</span></span><span class="sig-name descname"><span class="pre">get_titanium_material</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/default_materials.html#get_titanium_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.get_titanium_material" title="Link to this definition">#</a></dt>
+<dd><p>Returns a titanium-like material.</p>
+<p>Titanium has a slightly bluish-gray hue and is less reflective than polished steel.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="c1"># Slight bluish-gray</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="c1"># Slightly rough</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully metallic</span>
+    <span class="s2">&quot;IOR&quot;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="c1"># Close approximation</span>
+    <span class="s2">&quot;transmission_weight&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># No transmission</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully opaque</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A BlenderMaterialBSDF object representing titanium.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysdic.blender.get_iron_material">
+<span class="sig-prename descclassname"><span class="pre">pysdic.blender.</span></span><span class="sig-name descname"><span class="pre">get_iron_material</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/default_materials.html#get_iron_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.get_iron_material" title="Link to this definition">#</a></dt>
+<dd><p>Returns an iron-like material.</p>
+<p>Iron is dark gray and typically more rough than polished steel.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="c1"># Dark gray</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.35</span><span class="p">,</span> <span class="c1"># More rough than polished steel</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully metallic</span>
+    <span class="s2">&quot;IOR&quot;</span><span class="p">:</span> <span class="mf">2.9</span><span class="p">,</span> <span class="c1"># Iron has a higher refractive index</span>
+    <span class="s2">&quot;transmission_weight&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># No transmission</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully opaque</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A BlenderMaterialBSDF object representing iron.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysdic.blender.get_copper_material">
+<span class="sig-prename descclassname"><span class="pre">pysdic.blender.</span></span><span class="sig-name descname"><span class="pre">get_copper_material</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/default_materials.html#get_copper_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.get_copper_material" title="Link to this definition">#</a></dt>
+<dd><p>Returns a copper-like material.</p>
+<p>Copper has a distinctive reddish-orange color, is highly reflective, and fully metallic.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;base_color&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.955</span><span class="p">,</span> <span class="mf">0.637</span><span class="p">,</span> <span class="mf">0.538</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="c1"># Reddish-orange typical of copper</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="c1"># Slight surface roughness</span>
+    <span class="s2">&quot;metallic&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully metallic</span>
+    <span class="s2">&quot;IOR&quot;</span><span class="p">:</span> <span class="mf">2.7</span><span class="p">,</span> <span class="c1"># Approximate value for copper</span>
+    <span class="s2">&quot;transmission_weight&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1"># No transmission</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Fully opaque</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A BlenderMaterialBSDF object representing copper.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF">BlenderMaterialBSDF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="blender_mesh.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Blender Mesh Class</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../usage.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Usage</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-class">Main Class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.IOR"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.IOR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.alpha"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.alpha</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.anisotropic"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.anisotropic</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.anisotropic_rotation"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.anisotropic_rotation</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.base_color"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.base_color</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.coat_IOR"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.coat_IOR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.coat_normal"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.coat_normal</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.coat_roughness"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.coat_roughness</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.coat_tint"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.coat_tint</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.coat_weight"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.coat_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.emission_color"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.emission_color</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.emission_strength"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.emission_strength</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.from_dict"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.from_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.from_json"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.from_json()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.get_details"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.get_details()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.metallic"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.metallic</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.normal"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.normal</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.roughness"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.roughness</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.sheen_roughness"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.sheen_roughness</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.sheen_tint"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.sheen_tint</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.sheen_weight"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.sheen_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.specular_IOR_level"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.specular_IOR_level</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.specular_tint"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.specular_tint</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_IOR"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.subsurface_IOR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_anisotropy"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.subsurface_anisotropy</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_radius"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.subsurface_radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_scale"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.subsurface_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.subsurface_weight"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.subsurface_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.tangent"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.tangent</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.thin_film_IOR"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.thin_film_IOR</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.thin_film_thickness"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.thin_film_thickness</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.to_dict"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.to_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.to_json"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.to_json()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.transmission_weight"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.transmission_weight</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderMaterialBSDF.weight"><code class="docutils literal notranslate"><span class="pre">BlenderMaterialBSDF.weight</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-materials">Default Materials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.get_mirror_material"><code class="docutils literal notranslate"><span class="pre">get_mirror_material()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.get_steel_material"><code class="docutils literal notranslate"><span class="pre">get_steel_material()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.get_titanium_material"><code class="docutils literal notranslate"><span class="pre">get_titanium_material()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.get_iron_material"><code class="docutils literal notranslate"><span class="pre">get_iron_material()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.get_copper_material"><code class="docutils literal notranslate"><span class="pre">get_copper_material()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api_documentation/blender_material_bsdf.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2025, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
