@@ -2710,7 +2710,7 @@ class Mesh(ABC):
         connectivity = numpy.copy(self.connectivity)
 
         if not copy_properties:
-            return self.__class__(vertices, connectivity)
+            return self.__class__(vertices, connectivity, elements_type=self.elements_type, internal_bypass=self.internal_bypass)
         
         new_vertices_properties = {key: numpy.copy(value) for key, value in self._vertices_properties.items()}
         new_elements_properties = {key: numpy.copy(value) for key, value in self._elements_properties.items()}

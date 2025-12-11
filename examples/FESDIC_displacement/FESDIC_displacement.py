@@ -345,7 +345,7 @@ if not os.path.exists(os.path.join(work_dir, "Results FESDIC Displacement", "DIC
                 raise ValueError("At least one of the two projections must have a valid jacobian_dx for FESDIC displacement computation.")
             
             # Assembly the valid jacobian 
-            jacobian_nodal = pysdic.build.build_displacement_operator(
+            jacobian_nodal = pysdic.sdic.build_displacement_operator(
                 jacobian_dx,
                 shape_functions,
                 DIC_mesh.connectivity,
