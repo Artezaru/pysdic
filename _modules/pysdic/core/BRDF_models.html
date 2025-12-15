@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.core.BRDF_models &#8212; pysdic 1.1.3 documentation</title>
+    <title>pysdic.core.BRDF_models &#8212; pysdic 1.1.4 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=cb7bf70b"></script>
+    <script src="../../../_static/documentation_options.js?v=00f267c6"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/BRDF_models';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.3 documentation</p>
+    <p class="title logo__title">pysdic 1.1.4 documentation</p>
   
 </a></div>
     
@@ -341,6 +341,8 @@
     <span class="n">diffuse_coefficient</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">specular_coefficient</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">roughness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">return_parameter_derivatives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Bidirectional Reflectance Distribution Function (BRDF) using Ward&#39;s model.</span>
@@ -409,12 +411,19 @@
 <span class="sd">    roughness : :class:`float`, optional</span>
 <span class="sd">        The surface roughness parameter :math:`\sigma`. Default is 0.2.</span>
 
+<span class="sd">    return_parameter_derivatives : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, also return the derivative of the BRDF with respect to the parameters. Default is :obj:`False`.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Union[:class:`numpy.ndarray`, :class:`float`]</span>
+<span class="sd">    brdf : Union[:class:`numpy.ndarray`, :class:`float`]</span>
 <span class="sd">        Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`) containing the computed BRDF values for each combination of surface point, light source, and observer.</span>
 <span class="sd">        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.</span>
 
+<span class="sd">    brdf_dp : class:`numpy.ndarray`, optional</span>
+<span class="sd">        Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`, 3) containing the derivatives of the BRDF with respect to the parameters :math:`(\rho_d, \rho_s, \sigma)`.</span>
+<span class="sd">        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.</span>
+<span class="sd">        Only returned if :obj:`return_parameter_derivatives` is set to :obj:`True`.</span>
 <span class="sd">    </span>
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -547,6 +556,9 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roughness</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">roughness</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;roughness must be a positive number.&quot;</span><span class="p">)</span>
     
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_parameter_derivatives</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;return_parameter_derivatives must be a boolean value.&quot;</span><span class="p">)</span>
+    
     <span class="c1"># Compute the BRDF using Ward&#39;s model</span>
     <span class="n">N_p</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">N_l</span> <span class="o">=</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -579,6 +591,9 @@
 
     <span class="c1"># Initialize BRDF array</span>
     <span class="n">brdf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">brdf_dp</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># Derivatives w.r.t (rho_d, rho_s, sigma)</span>
 
     <span class="c1"># Reshape arrays for valid computations</span>
     <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">cos_theta_i</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span>
@@ -589,26 +604,50 @@
     <span class="n">tan_2_delta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cos_delta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">cos_delta</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># Compute the BRDF using Ward&#39;s model</span>
-    <span class="n">brdf</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffuse_coefficient</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> \
-           <span class="p">(</span><span class="n">specular_coefficient</span> <span class="o">/</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cos_theta_i</span> <span class="o">*</span> <span class="n">cos_theta_0</span><span class="p">),</span> <span class="mf">1e-10</span><span class="p">))</span> <span class="o">*</span> \
-           <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">tan_2_delta</span> <span class="o">/</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">roughness</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">))))</span>
+    <span class="n">diffuse_part</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">exponential_part</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">tan_2_delta</span> <span class="o">/</span> <span class="p">(</span><span class="n">roughness</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">specular_part</span> <span class="o">=</span> <span class="n">exponential_part</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cos_theta_i</span> <span class="o">*</span> <span class="n">cos_theta_0</span><span class="p">))</span>
+    
+    <span class="n">brdf</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_coefficient</span> <span class="o">*</span> <span class="n">diffuse_part</span> <span class="o">+</span> \
+                       <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="n">specular_part</span>
+    
+    <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
+        <span class="c1"># Derivative with respect to diffuse_coefficient</span>
+        <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_part</span>
+        <span class="c1"># Derivative with respect to specular_coefficient</span>
+        <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">specular_part</span>
+        <span class="c1"># Derivative with respect to roughness</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="p">(</span><span class="n">tan_2_delta</span> <span class="o">-</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">roughness</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">specular_part</span>
 
     <span class="c1"># Remove singleton dimensions if necessary</span>
     <span class="k">if</span> <span class="n">skip_light_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span> <span class="ow">and</span> <span class="n">skip_point_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Scalar</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_point_dim</span> <span class="ow">and</span> <span class="n">skip_light_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_o,)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_point_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_l,)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_light_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_p,)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_point_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_l, N_o)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_light_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_o)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_observer_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_p, N_l)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">brdf</span><span class="p">,</span> <span class="n">brdf_dp</span>
     <span class="k">return</span> <span class="n">brdf</span></div>
+
+
 
 
 
@@ -624,7 +663,9 @@
     <span class="n">diffuse_coefficient</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">specular_coefficient</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">rms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">return_parameter_derivatives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Bidirectional Reflectance Distribution Function (BRDF) using Beckmann&#39;s model.</span>
 
@@ -692,12 +733,20 @@
 <span class="sd">    rms : :class:`float`, optional</span>
 <span class="sd">        The root mean square (RMS) slope of the surface :math:`m`. Default is 0.2.</span>
 
+<span class="sd">    return_parameter_derivatives : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, also return the derivative of the BRDF with respect to the parameters. Default is :obj:`False`.</span>
+<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Union[:class:`numpy.ndarray`, :class:`float`]</span>
+<span class="sd">    brdf : Union[:class:`numpy.ndarray`, :class:`float`]</span>
 <span class="sd">        Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`) containing the computed BRDF values for each combination of surface point, light source, and observer.</span>
 <span class="sd">        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.</span>
 
+<span class="sd">    brdf_dp : class:`numpy.ndarray`, optional</span>
+<span class="sd">        Array of shape (:math:`N_p`, :math:`N_l`, :math:`, :math:`N_o`, 3) containing the derivatives of the BRDF with respect to the parameters :math:`(\rho_d, \rho_s, m)`.</span>
+<span class="sd">        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.</span>
+<span class="sd">        Only returned if :obj:`return_parameter_derivatives` is set to :obj:`True`.        </span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -830,6 +879,9 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rms</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rms</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;rms must be a positive number.&quot;</span><span class="p">)</span>
     
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_parameter_derivatives</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;return_parameter_derivatives must be a boolean value.&quot;</span><span class="p">)</span>
+    
     <span class="c1"># Compute the BRDF using Ward&#39;s model</span>
     <span class="n">N_p</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">N_l</span> <span class="o">=</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -862,6 +914,9 @@
 
     <span class="c1"># Initialize BRDF array</span>
     <span class="n">brdf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">brdf_dp</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># Derivatives w.r.t (rho_d, rho_s, sigma)</span>
 
     <span class="c1"># Reshape arrays for valid computations</span>
     <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">cos_theta_i</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span>
@@ -872,25 +927,44 @@
     <span class="n">tan_2_delta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cos_delta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">cos_delta</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">))</span>
 
     <span class="c1"># Compute the BRDF using Beckmann&#39;s model</span>
-    <span class="n">brdf</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffuse_coefficient</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> \
-           <span class="p">(</span><span class="n">specular_coefficient</span> <span class="o">/</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rms</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cos_delta</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">))</span> <span class="o">*</span> \
-           <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">tan_2_delta</span> <span class="o">/</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">rms</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">))))</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">diffuse_part</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">exponential_part</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">tan_2_delta</span> <span class="o">/</span> <span class="n">rms</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">specular_part</span> <span class="o">=</span> <span class="n">exponential_part</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rms</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cos_delta</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="n">brdf</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_coefficient</span> <span class="o">*</span> <span class="n">diffuse_part</span> <span class="o">+</span> \
+                       <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="n">specular_part</span>
+    
+    <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
+        <span class="c1"># Derivative with respect to diffuse_coefficient</span>
+        <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_part</span>
+        <span class="c1"># Derivative with respect to specular_coefficient</span>
+        <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">specular_part</span>
+        <span class="c1"># Derivative with respect to rms</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="p">(</span><span class="n">tan_2_delta</span> <span class="o">-</span> <span class="n">rms</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rms</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">specular_part</span>
     
     <span class="c1"># Remove singleton dimensions if necessary</span>
     <span class="k">if</span> <span class="n">skip_light_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span> <span class="ow">and</span> <span class="n">skip_point_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Scalar</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_point_dim</span> <span class="ow">and</span> <span class="n">skip_light_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_o,)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_point_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_l,)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_light_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_p,)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_point_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_l, N_o)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_light_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_o)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">skip_observer_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_p, N_l)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="n">brdf</span></div>
 
 
