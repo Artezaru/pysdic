@@ -27,6 +27,8 @@ def compute_BRDF_ward(
     diffuse_coefficient: Optional[float] = 0.5,
     specular_coefficient: Optional[float] = 0.5,
     roughness: Optional[float] = 0.2,
+    *,
+    return_parameter_derivatives: Optional[bool] = False,
 ) -> Union[float, numpy.ndarray]:
     r"""
     Compute the Bidirectional Reflectance Distribution Function (BRDF) using Ward's model.
@@ -95,12 +97,19 @@ def compute_BRDF_ward(
     roughness : :class:`float`, optional
         The surface roughness parameter :math:`\sigma`. Default is 0.2.
 
+    return_parameter_derivatives : :class:`bool`, optional
+        If :obj:`True`, also return the derivative of the BRDF with respect to the parameters. Default is :obj:`False`.
+
     Returns
     -------
-    Union[:class:`numpy.ndarray`, :class:`float`]
+    brdf : Union[:class:`numpy.ndarray`, :class:`float`]
         Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`) containing the computed BRDF values for each combination of surface point, light source, and observer.
         The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.
 
+    brdf_dp : class:`numpy.ndarray`, optional
+        Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`, 3) containing the derivatives of the BRDF with respect to the parameters :math:`(\rho_d, \rho_s, \sigma)`.
+        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.
+        Only returned if :obj:`return_parameter_derivatives` is set to :obj:`True`.
     
     Raises
     ------
@@ -233,6 +242,9 @@ def compute_BRDF_ward(
     if not isinstance(roughness, Number) or roughness <= 0:
         raise ValueError("roughness must be a positive number.")
     
+    if not isinstance(return_parameter_derivatives, bool):
+        raise ValueError("return_parameter_derivatives must be a boolean value.")
+    
     # Compute the BRDF using Ward's model
     N_p, E = surface_points.shape
     N_l = light_positions.shape[0]
@@ -265,6 +277,9 @@ def compute_BRDF_ward(
 
     # Initialize BRDF array
     brdf = numpy.zeros((N_p, N_l, N_o), dtype=numpy.float64)
+    brdf_dp = None
+    if return_parameter_derivatives:
+        brdf_dp = numpy.zeros((N_p, N_l, N_o, 3), dtype=numpy.float64)  # Derivatives w.r.t (rho_d, rho_s, sigma)
 
     # Reshape arrays for valid computations
     cos_theta_i = cos_theta_i[valid_mask]
@@ -275,26 +290,50 @@ def compute_BRDF_ward(
     tan_2_delta = (1 - cos_delta**2) / cos_delta**2
 
     # Compute the BRDF using Ward's model
-    brdf[valid_mask] = (diffuse_coefficient / numpy.pi) + \
-           (specular_coefficient / (numpy.maximum(4 * numpy.pi * roughness**2 * numpy.sqrt(cos_theta_i * cos_theta_0), 1e-10)) * \
-           numpy.exp(- tan_2_delta / (numpy.maximum(roughness**2, 1e-10))))
+    diffuse_part = 1 / numpy.pi
+    exponential_part = numpy.exp(- tan_2_delta / (roughness**2))
+    specular_part = exponential_part / (4 * numpy.pi * roughness**2 * numpy.sqrt(cos_theta_i * cos_theta_0))
+    
+    brdf[valid_mask] = diffuse_coefficient * diffuse_part + \
+                       specular_coefficient * specular_part
+    
+    if return_parameter_derivatives:
+        # Derivative with respect to diffuse_coefficient
+        brdf_dp[..., 0][valid_mask] = diffuse_part
+        # Derivative with respect to specular_coefficient
+        brdf_dp[..., 1][valid_mask] = specular_part
+        # Derivative with respect to roughness
+        factor = 2 * specular_coefficient * (tan_2_delta - roughness**2) / (roughness**3)
+        brdf_dp[..., 2][valid_mask] = factor * specular_part
 
     # Remove singleton dimensions if necessary
     if skip_light_dim and skip_observer_dim and skip_point_dim:
         brdf = brdf[0, 0, 0]  # Scalar
+        brdf_dp = brdf_dp[0, 0, 0, :] if return_parameter_derivatives else None
     elif skip_point_dim and skip_light_dim:
         brdf = brdf[0, 0, :]  # Shape: (N_o,)
+        brdf_dp = brdf_dp[0, 0, :, :] if return_parameter_derivatives else None
     elif skip_point_dim and skip_observer_dim:
         brdf = brdf[0, :, 0]  # Shape: (N_l,)
+        brdf_dp = brdf_dp[0, :, 0, :] if return_parameter_derivatives else None
     elif skip_light_dim and skip_observer_dim:
         brdf = brdf[:, 0, 0]  # Shape: (N_p,)
+        brdf_dp = brdf_dp[:, 0, 0, :] if return_parameter_derivatives else None
     elif skip_point_dim:
         brdf = brdf[0, :, :]  # Shape: (N_l, N_o)
+        brdf_dp = brdf_dp[0, :, :, :] if return_parameter_derivatives else None
     elif skip_light_dim:
         brdf = brdf[:, 0, :]  # Shape: (N_p, N_o)
+        brdf_dp = brdf_dp[:, 0, :, :] if return_parameter_derivatives else None
     elif skip_observer_dim:
         brdf = brdf[:, :, 0]  # Shape: (N_p, N_l)
+        brdf_dp = brdf_dp[:, :, 0, :] if return_parameter_derivatives else None
+
+    if return_parameter_derivatives:
+        return brdf, brdf_dp
     return brdf
+
+
 
 
 
@@ -307,7 +346,9 @@ def compute_BRDF_beckmann(
     diffuse_coefficient: Optional[float] = 0.5,
     specular_coefficient: Optional[float] = 0.5,
     rms: Optional[float] = 0.2,
-) -> numpy.ndarray:
+    *,
+    return_parameter_derivatives: Optional[bool] = False,
+) -> Union[float, numpy.ndarray]:
     r"""
     Compute the Bidirectional Reflectance Distribution Function (BRDF) using Beckmann's model.
 
@@ -375,12 +416,20 @@ def compute_BRDF_beckmann(
     rms : :class:`float`, optional
         The root mean square (RMS) slope of the surface :math:`m`. Default is 0.2.
 
+    return_parameter_derivatives : :class:`bool`, optional
+        If :obj:`True`, also return the derivative of the BRDF with respect to the parameters. Default is :obj:`False`.
+        
+
     Returns
     -------
-    Union[:class:`numpy.ndarray`, :class:`float`]
+    brdf : Union[:class:`numpy.ndarray`, :class:`float`]
         Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`) containing the computed BRDF values for each combination of surface point, light source, and observer.
         The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.
 
+    brdf_dp : class:`numpy.ndarray`, optional
+        Array of shape (:math:`N_p`, :math:`N_l`, :math:`, :math:`N_o`, 3) containing the derivatives of the BRDF with respect to the parameters :math:`(\rho_d, \rho_s, m)`.
+        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.
+        Only returned if :obj:`return_parameter_derivatives` is set to :obj:`True`.        
 
     Raises
     ------
@@ -513,6 +562,9 @@ def compute_BRDF_beckmann(
     if not isinstance(rms, Number) or rms <= 0:
         raise ValueError("rms must be a positive number.")
     
+    if not isinstance(return_parameter_derivatives, bool):
+        raise ValueError("return_parameter_derivatives must be a boolean value.")
+    
     # Compute the BRDF using Ward's model
     N_p, E = surface_points.shape
     N_l = light_positions.shape[0]
@@ -545,6 +597,9 @@ def compute_BRDF_beckmann(
 
     # Initialize BRDF array
     brdf = numpy.zeros((N_p, N_l, N_o), dtype=numpy.float64)
+    brdf_dp = None
+    if return_parameter_derivatives:
+        brdf_dp = numpy.zeros((N_p, N_l, N_o, 3), dtype=numpy.float64)  # Derivatives w.r.t (rho_d, rho_s, sigma)
 
     # Reshape arrays for valid computations
     cos_theta_i = cos_theta_i[valid_mask]
@@ -555,24 +610,43 @@ def compute_BRDF_beckmann(
     tan_2_delta = (1 - cos_delta**2) / (numpy.maximum(cos_delta**2, 1e-10))
 
     # Compute the BRDF using Beckmann's model
-    brdf[valid_mask] = (diffuse_coefficient / numpy.pi) + \
-           (specular_coefficient / (numpy.maximum(numpy.pi * rms**2 * cos_delta**4, 1e-10)) * \
-           numpy.exp(- tan_2_delta / (numpy.maximum(rms**2, 1e-10))))  # Shape: (N_p, N_l, N_o)
+    diffuse_part = 1 / numpy.pi
+    exponential_part = numpy.exp(- tan_2_delta / rms**2)
+    specular_part = exponential_part / (4 * numpy.pi * rms**2 * cos_delta**4)
+
+    brdf[valid_mask] = diffuse_coefficient * diffuse_part + \
+                       specular_coefficient * specular_part
+    
+    if return_parameter_derivatives:
+        # Derivative with respect to diffuse_coefficient
+        brdf_dp[..., 0][valid_mask] = diffuse_part
+        # Derivative with respect to specular_coefficient
+        brdf_dp[..., 1][valid_mask] = specular_part
+        # Derivative with respect to rms
+        factor = 2 * specular_coefficient * (tan_2_delta - rms**2) / (rms**3)
+        brdf_dp[..., 2][valid_mask] = factor * specular_part
     
     # Remove singleton dimensions if necessary
     if skip_light_dim and skip_observer_dim and skip_point_dim:
         brdf = brdf[0, 0, 0]  # Scalar
+        brdf_dp = brdf_dp[0, 0, 0, :] if return_parameter_derivatives else None
     elif skip_point_dim and skip_light_dim:
         brdf = brdf[0, 0, :]  # Shape: (N_o,)
+        brdf_dp = brdf_dp[0, 0, :, :] if return_parameter_derivatives else None
     elif skip_point_dim and skip_observer_dim:
         brdf = brdf[0, :, 0]  # Shape: (N_l,)
+        brdf_dp = brdf_dp[0, :, 0, :] if return_parameter_derivatives else None
     elif skip_light_dim and skip_observer_dim:
         brdf = brdf[:, 0, 0]  # Shape: (N_p,)
+        brdf_dp = brdf_dp[:, 0, 0, :] if return_parameter_derivatives else None
     elif skip_point_dim:
         brdf = brdf[0, :, :]  # Shape: (N_l, N_o)
+        brdf_dp = brdf_dp[0, :, :, :] if return_parameter_derivatives else None
     elif skip_light_dim:
         brdf = brdf[:, 0, :]  # Shape: (N_p, N_o)
+        brdf_dp = brdf_dp[:, 0, :, :] if return_parameter_derivatives else None
     elif skip_observer_dim:
         brdf = brdf[:, :, 0]  # Shape: (N_p, N_l)
+        brdf_dp = brdf_dp[:, :, 0, :] if return_parameter_derivatives else None
     return brdf
 
