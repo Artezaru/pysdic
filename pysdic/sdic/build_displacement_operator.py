@@ -51,7 +51,7 @@ def build_displacement_operator(
 
     .. note::
 
-        For (:math`P \neq 1`), the lines are groupes by property first (i.e., all integration points for property 1, followed by all integration points for property 2, etc.).
+        For (:math:`P \neq 1`), the lines are groupes by property first (i.e., all integration points for property 1, followed by all integration points for property 2, etc.).
         Thus the residual :math:`R` associated with the output must be constructed accordingly.
 
         .. math::
@@ -138,7 +138,7 @@ def build_displacement_operator(
 
     Returns
     -------
-    displacement_operator : Union[class:`numpy.ndarray`, class:`scipy.sparse.csr_matrix`] of shape (:math:`M \times P`, :math:`N_{v} \times E`)
+    displacement_operator : Union[:class:`numpy.ndarray`, :class:`scipy.sparse.csr_matrix`] of shape (:math:`M \times P`, :math:`N_{v} \times E`)
         The displacement operator mapping nodal displacements from property displacements at integration points.
 
     

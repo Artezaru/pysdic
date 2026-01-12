@@ -16,8 +16,6 @@ import pytest
 import numpy
 import meshio
 
-# test_linear_triangle_mesh_3d.py
-
 import numpy as np
 import pytest
 import os

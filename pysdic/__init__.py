@@ -63,6 +63,7 @@ __all__.extend([
 ])
 
 from .core.shape_functions import (
+    shape_functions,
     segment_2_shape_functions,
     segment_3_shape_functions,
     triangle_3_shape_functions,
@@ -71,6 +72,7 @@ from .core.shape_functions import (
     quadrangle_8_shape_functions,
 )
 __all__.extend([
+    "shape_functions",
     "segment_2_shape_functions",
     "segment_3_shape_functions",
     "triangle_3_shape_functions",
@@ -81,6 +83,7 @@ __all__.extend([
 
 
 from .core.gauss_points import (
+    gauss_points,
     segment_2_gauss_points,
     segment_3_gauss_points,
     triangle_3_gauss_points,
@@ -89,6 +92,7 @@ from .core.gauss_points import (
     quadrangle_8_gauss_points,
 )
 __all__.extend([
+    "gauss_points",
     "segment_2_gauss_points",
     "segment_3_gauss_points",
     "triangle_3_gauss_points",

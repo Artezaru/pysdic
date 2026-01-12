@@ -305,67 +305,79 @@ def create_triangle_3_heightmap(
         uv_mapping = [upper_right, lower_right, upper_left, lower_left]
     elif uv_layout == 7:
         uv_mapping = [upper_right, upper_left, lower_right, lower_left]
+        
+    # Create the grid of points in local coordinates
+    ix = numpy.arange(n_x) # (n_x,)
+    iy = numpy.arange(n_y) # (n_y,)
+    fx = (ix/(n_x-1)) # (n_x,)
+    fy = (iy/(n_y-1)) # (n_y,)
+    
+    # Compute the local coordinates of each vertex
+    X = x_min + (x_max - x_min)*fx # (n_x, )
+    Y = y_min + (y_max - y_min)*fy # (n_y, )
+    X = X[numpy.newaxis, :].repeat(n_y, axis=0) # (n_y, n_x)
+    Y = Y[:, numpy.newaxis].repeat(n_x, axis=1) # (n_y, n_x)
+    Z = height_function(X, Y) # (n_y, n_x)
+    
+    # Convert the local points to vertices coordinates using the frame transform
+    local_coordinates = numpy.stack((X, Y, Z), axis=0) # (3, n_y, n_x)
+    local_coordinates = local_coordinates.reshape((3, n_x*n_y)) # (3, n_y*n_x)
+    vertices = transform.transform(point=local_coordinates) # (3, n_x*n_y)
+    vertices = vertices.T # (n_x*n_y, 3)
+    
+    # Compute the UV mapping coordinates
+    uv_fx = fx[numpy.newaxis, :].repeat(n_y, axis=0) # (n_y, n_x)
+    uv_fy = fy[:, numpy.newaxis].repeat(n_x, axis=1) # (n_y, n_x)
+    
+    U = uv_mapping[0][0] + uv_fx*(uv_mapping[1][0] - uv_mapping[0][0]) + uv_fy*(uv_mapping[2][0] - uv_mapping[0][0]) # (n_y, n_x)
+    V = uv_mapping[0][1] + uv_fx*(uv_mapping[1][1] - uv_mapping[0][1]) + uv_fy*(uv_mapping[2][1] - uv_mapping[0][1]) # (n_y, n_x)
+    vertices_uvmap = numpy.stack((U, V), axis=-1).reshape((n_x*n_y, 2)) # (n_x*n_y, 2)
 
-    # Generate the vertices
-    vertices_uvmap = numpy.zeros((n_x*n_y, 2))
-    vertices = numpy.zeros((n_x*n_y, 3))
-
-    for iy in range(n_y):
-        for ix in range(n_x):
-            # Compute the coordinates of the vertex in the local frame.
-            y = y_min + (y_max - y_min)*iy/(n_y-1)
-            x = x_min + (x_max - x_min)*ix/(n_x-1)
-            z = height_function(x, y)
-
-            # Convert the local point to the global frame
-            local_point = numpy.array([x, y, z]).reshape((3,1))
-            vertices[index(ix, iy), :] = transform.transform(point=local_point).flatten()
-
-            # Compute the uvmap (UV Mapping for vertices)
-            vertices_uvmap[index(ix, iy), :] = uv_mapping[0] + ix/(n_x-1)*(uv_mapping[1] - uv_mapping[0]) + iy/(n_y-1)*(uv_mapping[2] - uv_mapping[0])
-
-
-    # Generate the mesh
+    # Initialize the triangles and uvmap arrays
     triangles = numpy.zeros((2 * (n_x - 1) * (n_y - 1), 3), dtype=numpy.int64)
     triangles_uvmap = numpy.zeros((2 * (n_x - 1) * (n_y - 1), 3, 2), dtype=numpy.float32)
+    
+    # Assemble the indexes in a vectorized way
+    idx = iy[:, None] * n_x + ix[None, :] # (n_y, n_x)
+    
+    # For iy in range(n_y - 1) and ix in range(n_x - 1): -> Build the triangles in the right order
+    top_left_idx = idx[:-1, :-1] # (n_y-1, n_x-1)
+    top_right_idx = idx[:-1, 1:] # (n_y-1, n_x-1)
+    bottom_left_idx = idx[1:, :-1] # (n_y-1, n_x-1)
+    bottom_right_idx = idx[1:, 1:] # (n_y-1, n_x-1)
+    
+    # Select the nodes index according the diagonal (n_y-1, n_x-1)
+    if first_diagonal:
+        n1, n2, n3 = top_left_idx, top_right_idx, bottom_right_idx
+        n4, n5, n6 = top_left_idx, bottom_right_idx, bottom_left_idx
+    else:
+        n1, n2, n3 = top_left_idx, top_right_idx, bottom_left_idx
+        n4, n5, n6 = bottom_left_idx, top_right_idx, bottom_right_idx
+        
+    # Build the triangles
+    triangle_a = numpy.stack([n1, n2, n3], axis=-1) # (n_y-1, n_x-1, 3)
+    triangle_b = numpy.stack([n4, n5, n6], axis=-1) # (n_y-1, n_x-1, 3)
+    triangle_uv_a = numpy.stack([vertices_uvmap[n1, :], vertices_uvmap[n2, :], vertices_uvmap[n3, :]], axis=-2) # (n_y-1, n_x-1, 3, 2)
+    triangle_uv_b = numpy.stack([vertices_uvmap[n4, :], vertices_uvmap[n5, :], vertices_uvmap[n6, :]], axis=-2) # (n_y-1, n_x-1, 3, 2)
+    
+    # Adjust orientation if needed
+    if not direct:
+        triangle_a = triangle_a[..., [0, 2, 1]]
+        triangle_b = triangle_b[..., [0, 2, 1]]
+        triangle_uv_a = triangle_uv_a[..., [0, 2, 1], :]
+        triangle_uv_b = triangle_uv_b[..., [0, 2, 1], :]
 
-    for iy in range(n_y-1):
-        for ix in range(n_x-1):
-            # Select the nodes of the two triangles            
-            if first_diagonal:
-                node_1 = index(ix, iy)
-                node_2 = index(ix+1, iy)
-                node_3 = index(ix+1, iy+1)
-                node_4 = index(ix, iy)
-                node_5 = index(ix+1, iy+1)
-                node_6 = index(ix, iy+1)
-            else:
-                node_1 = index(ix, iy)
-                node_2 = index(ix+1, iy)
-                node_3 = index(ix, iy+1)
-                node_4 = index(ix, iy+1)
-                node_5 = index(ix+1, iy)
-                node_6 = index(ix+1, iy+1)
-            
-            # Compute the triangle indices
-            triangle_1 = 2 * (node_1 - iy)
-            triangle_2 = 2 * (node_1 - iy) + 1
-
-            # Set the triangles and their UV map
-            if direct:
-                triangles[triangle_1, :] = [node_1, node_2, node_3]
-                triangles[triangle_2, :] = [node_4, node_5, node_6]
-                triangles_uvmap[triangle_1, :, :] = [vertices_uvmap[node_1, :], vertices_uvmap[node_2, :], vertices_uvmap[node_3, :]]
-                triangles_uvmap[triangle_2, :, :] = [vertices_uvmap[node_4, :], vertices_uvmap[node_5, :], vertices_uvmap[node_6, :]]
-            else:
-                triangles[triangle_1, :] = [node_1, node_3, node_2]
-                triangles[triangle_2, :] = [node_4, node_6, node_5]
-                triangles_uvmap[triangle_1, :, :] = [vertices_uvmap[node_1, :], vertices_uvmap[node_3, :], vertices_uvmap[node_2, :]]
-                triangles_uvmap[triangle_2, :, :] = [vertices_uvmap[node_4, :], vertices_uvmap[node_6, :], vertices_uvmap[node_5, :]]
-
+    # Organize the final triangles array
+    triangle_idx_a = 2 * (n1 - numpy.arange(n_y-1)[:, None]) # (n_y-1, n_x-1)
+    triangle_idx_b = 2 * (n1 - numpy.arange(n_y-1)[:, None]) + 1 # (n_y-1, n_x-1)
+    
+    triangles[triangle_idx_a, :] = triangle_a
+    triangles[triangle_idx_b, :] = triangle_b
+    triangles_uvmap[triangle_idx_a, :, :] = triangle_uv_a
+    triangles_uvmap[triangle_idx_b, :, :] = triangle_uv_b
     triangles_uvmap = triangles_uvmap.reshape((triangles_uvmap.shape[0], 6)) # (Ntriangles, 6) - (u1,v1,u2,v2,u3,v3)
-
-    # Prepare the mesh
+    
+    # Create the mesh
     mesh = Mesh(PointCloud.from_array(vertices), connectivity=triangles, elements_type="triangle_3")
     
     # Set the UV map
@@ -696,82 +708,97 @@ def create_triangle_3_axisymmetric(
         uv_mapping = [upper_right, lower_right, upper_left, lower_left]
     elif uv_layout == 7:
         uv_mapping = [upper_right, upper_left, lower_right, lower_left]
-
-    # Generate the vertices
-    vertices_uvmap = numpy.zeros((n_theta*n_height, 2))
-    vertices = numpy.zeros((n_theta*n_height, 3))
-
-    for ih in range(n_height):
-        for it in range(n_theta):
-            # Compute the coordinates of the vertex in the local frame.
-            height = height_min + (height_max - height_min)*ih/(n_height-1)
-            theta = theta_min + (theta_max - theta_min)*it/(n_theta-1)
-            radius = profile_curve(height)
-
-            # Convert from cylindrical to cartesian coordinates
-            x = radius * numpy.cos(theta)
-            y = radius * numpy.sin(theta)
-            z = height
-
-            # Convert the local point to the global frame
-            local_point = numpy.array([x, y, z]).reshape((3,1))
-            vertices[index(it, ih), :] = transform.transform(point=local_point).flatten()
-
-            # Compute the uvmap (UV Mapping for vertices)
-            if closed: 
-                # Shift 1 into UV mapping for closed meshes
-                vertices_uvmap[index(it, ih), :] = uv_mapping[0] + it/(n_theta)*(uv_mapping[1] - uv_mapping[0]) + ih/(n_height-1)*(uv_mapping[2] - uv_mapping[0])
-            else:
-                vertices_uvmap[index(it, ih), :] = uv_mapping[0] + it/(n_theta-1)*(uv_mapping[1] - uv_mapping[0]) + ih/(n_height-1)*(uv_mapping[2] - uv_mapping[0])
-
+        
+    # Create the grid of points in local coordinates
+    it = numpy.arange(n_theta) # (n_theta,)
+    ih = numpy.arange(n_height) # (n_height,)
+    ft = (it/(n_theta-1))
+    fh = (ih/(n_height-1))
+    
+    # Compute the local coordinates of each vertex
+    height = height_min + (height_max - height_min)*fh # (n_height, )
+    theta = theta_min + (theta_max - theta_min)*ft # (n_theta, )
+    height = height[:, numpy.newaxis].repeat(n_theta, axis=1) # (n_height, n_theta)
+    theta = theta[numpy.newaxis, :].repeat(n_height, axis=0) # (n_height, n_theta)
+    radius = profile_curve(height) # (n_height, n_theta)
+    
+    X = radius * numpy.cos(theta) # (n_height, n_theta)
+    Y = radius * numpy.sin(theta) # (n_height, n_theta)
+    Z = height # (n_height, n_theta)
+    
+    # Convert the local points to vertices coordinates using the frame transform
+    local_coordinates = numpy.stack((X, Y, Z), axis=0) # (3, n_height, n_theta)
+    local_coordinates = local_coordinates.reshape((3, n_theta*n_height)) # (3, n_height*n_theta)
+    vertices = transform.transform(point=local_coordinates) # (3, n_theta*n_height)
+    vertices = vertices.T # (n_theta*n_height, 3)
+    
+    # Compute the UV mapping coordinates
     if closed:
-        # Add fictive last vertex for UV mapping
-        fictive_vertices_uvmap = numpy.zeros((n_height, 2))
-        for ih in range(n_height):
-            fictive_vertices_uvmap[ih, :] = uv_mapping[0] + 1.0*(uv_mapping[1] - uv_mapping[0]) + ih/(n_height-1)*(uv_mapping[2] - uv_mapping[0])
-
-    # Generate the mesh
-    if not closed:
-        triangles = numpy.zeros((2 * (n_theta - 1) * (n_height - 1), 3), dtype=numpy.int64)
-        triangles_uvmap = numpy.zeros((2 * (n_theta - 1) * (n_height - 1), 3, 2), dtype=numpy.float32)
+        uv_ft = (it/(n_theta))[numpy.newaxis, :].repeat(n_height, axis=0) # (n_height, n_theta)
+        uv_fh = fh[:, numpy.newaxis].repeat(n_theta, axis=1) # (n_height, n_theta)
     else:
-        triangles = numpy.zeros((2 * n_theta * (n_height - 1), 3), dtype=numpy.int64)
-        triangles_uvmap = numpy.zeros((2 * n_theta * (n_height - 1), 3, 2), dtype=numpy.float32)
+        uv_ft = (it/(n_theta-1))[numpy.newaxis, :].repeat(n_height, axis=0) # (n_height, n_theta)
+        uv_fh = fh[:, numpy.newaxis].repeat(n_theta, axis=1) # (n_height, n_theta)
+        
+    U = uv_mapping[0][0] + uv_ft*(uv_mapping[1][0] - uv_mapping[0][0]) + uv_fh*(uv_mapping[2][0] - uv_mapping[0][0]) # (n_height, n_theta)
+    V = uv_mapping[0][1] + uv_ft*(uv_mapping[1][1] - uv_mapping[0][1]) + uv_fh*(uv_mapping[2][1] - uv_mapping[0][1]) # (n_height, n_theta)
 
-    for ih in range(n_height-1):
-        for it in range(n_theta-1):
-            # Select the nodes of the two triangles            
-            if first_diagonal:
-                node_1 = index(it, ih)
-                node_2 = index(it+1, ih)
-                node_3 = index(it+1, ih+1)
-                node_4 = index(it, ih)
-                node_5 = index(it+1, ih+1)
-                node_6 = index(it, ih+1)
-            else:
-                node_1 = index(it, ih)
-                node_2 = index(it+1, ih)
-                node_3 = index(it, ih+1)
-                node_4 = index(it, ih+1)
-                node_5 = index(it+1, ih)
-                node_6 = index(it+1, ih+1)
-            
-            # Compute the triangle indices
-            triangle_1 = 2 * (node_1 - ih)
-            triangle_2 = 2 * (node_1 - ih) + 1
+    vertices_uvmap = numpy.stack((U, V), axis=-1).reshape((n_theta*n_height, 2)) # (n_theta*n_height, 2)
+    
+    # Add a fictive last vertex for UV mapping if closed case
+    if closed:
+        fictive_vertices_uvmap = numpy.zeros((n_height, 2))
+        fictive_vertices_uvmap[ih, 0] = uv_mapping[0][0] + 1.0*(uv_mapping[1][0] - uv_mapping[0][0]) + fh*(uv_mapping[2][0] - uv_mapping[0][0])
+        fictive_vertices_uvmap[ih, 1] = uv_mapping[0][1] + 1.0*(uv_mapping[1][1] - uv_mapping[0][1]) + fh*(uv_mapping[2][1] - uv_mapping[0][1])
 
-            # Set the triangles and their UV map
-            if direct:
-                triangles[triangle_1, :] = [node_1, node_2, node_3]
-                triangles[triangle_2, :] = [node_4, node_5, node_6]
-                triangles_uvmap[triangle_1, :, :] = [vertices_uvmap[node_1, :], vertices_uvmap[node_2, :], vertices_uvmap[node_3, :]]
-                triangles_uvmap[triangle_2, :, :] = [vertices_uvmap[node_4, :], vertices_uvmap[node_5, :], vertices_uvmap[node_6, :]]
-            else:
-                triangles[triangle_1, :] = [node_1, node_3, node_2]
-                triangles[triangle_2, :] = [node_4, node_6, node_5]
-                triangles_uvmap[triangle_1, :, :] = [vertices_uvmap[node_1, :], vertices_uvmap[node_3, :], vertices_uvmap[node_2, :]]
-                triangles_uvmap[triangle_2, :, :] = [vertices_uvmap[node_4, :], vertices_uvmap[node_6, :], vertices_uvmap[node_5, :]]
+    # Initialize the triangles and uvmap arrays
+    if not closed:
+        n_triangles = 2 * (n_theta - 1) * (n_height - 1)
+    else:
+        n_triangles = 2 * n_theta * (n_height - 1)
+        
+    triangles = numpy.zeros((n_triangles, 3), dtype=numpy.int64)
+    triangles_uvmap = numpy.zeros((n_triangles, 3, 2), dtype=numpy.float32)
+    
+    # Assemble the indexes in a vectorized way
+    idx = ih[:, None] * n_theta + it[None, :] # (n_height, n_theta)
+    
+    # For ih in range(n_height - 1) and it in range(n_theta - 1): -> Build the triangles in the right order
+    top_left_idx = idx[:-1, :-1] # (n_height-1, n_theta-1)
+    top_right_idx = idx[:-1, 1:] # (n_height-1, n_theta-1)
+    bottom_left_idx = idx[1:, :-1] # (n_height-1, n_theta-1)
+    bottom_right_idx = idx[1:, 1:] # (n_height-1, n_theta-1)
+    
+    # Select the nodes index according the diagonal (n_height-1, n_theta-1)
+    if first_diagonal:
+        n1, n2, n3 = top_left_idx, top_right_idx, bottom_right_idx
+        n4, n5, n6 = top_left_idx, bottom_right_idx, bottom_left_idx
+    else:
+        n1, n2, n3 = top_left_idx, top_right_idx, bottom_left_idx
+        n4, n5, n6 = bottom_left_idx, top_right_idx, bottom_right_idx
 
+    # Build the triangles
+    triangle_a = numpy.stack([n1, n2, n3], axis=-1) # (n_y-1, n_x-1, 3)
+    triangle_b = numpy.stack([n4, n5, n6], axis=-1) # (n_y-1, n_x-1, 3)
+    triangle_uv_a = numpy.stack([vertices_uvmap[n1, :], vertices_uvmap[n2, :], vertices_uvmap[n3, :]], axis=-2) # (n_y-1, n_x-1, 3, 2)
+    triangle_uv_b = numpy.stack([vertices_uvmap[n4, :], vertices_uvmap[n5, :], vertices_uvmap[n6, :]], axis=-2) # (n_y-1, n_x-1, 3, 2)
+    
+    # Adjust orientation if needed
+    if not direct:
+        triangle_a = triangle_a[..., [0, 2, 1]]
+        triangle_b = triangle_b[..., [0, 2, 1]]
+        triangle_uv_a = triangle_uv_a[..., [0, 2, 1], :]
+        triangle_uv_b = triangle_uv_b[..., [0, 2, 1], :]
+
+    # Organize the final triangles array
+    triangle_idx_a = 2 * (n1 - numpy.arange(n_height-1)[:, None]) # (n_height-1, n_theta-1)
+    triangle_idx_b = 2 * (n1 - numpy.arange(n_height-1)[:, None]) + 1 # (n_height-1, n_theta-1)
+    
+    triangles[triangle_idx_a, :] = triangle_a
+    triangles[triangle_idx_b, :] = triangle_b
+    triangles_uvmap[triangle_idx_a, :, :] = triangle_uv_a
+    triangles_uvmap[triangle_idx_b, :, :] = triangle_uv_b
+    
     # Add the last column of triangles connecting the last and first theta positions if closed
     if closed:
         for ih in range(n_height-1):

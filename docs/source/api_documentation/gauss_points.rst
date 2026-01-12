@@ -6,7 +6,7 @@ Gauss Quadrature Points Collection
 .. contents:: Table of Contents
    :local:
    :depth: 2
-   :backlinks: top
+   :backlinks: none
    
 
 Description and mathematical background
@@ -26,27 +26,40 @@ The integral of a function :math:`f` over the element can be approximated as:
 
 where :math:`N_{gp}` is the number of Gauss points, :math:`(\xi_i, \eta_i, \zeta_i, ...)` are the coordinates of the Gauss points in the local coordinate system, and :math:`w_i` are the corresponding weights.
 
+.. seealso::
+
+    - :doc:`./integration_points_operations` for operations on integrated points using Gauss points.
+    - :doc:`./shape_functions` for shape functions used in conjunction with Gauss quadrature.
+
 
 Function signatures
 --------------------
 
 All of the gauss points methods follow a similar interface. 
 
+.. note::
+
+    The output arrays will be of type :class:`numpy.float64`.
+
 Parameters
 ~~~~~~~~~~
-- **return_weights** : :class:`bool`, optional
+**return_weights** : :class:`bool`, optional
     If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
 
 
 Returns
 ~~~~~~~
-- **gauss_points** : :class:`numpy.ndarray`
-    Natural coordinates of the Gauss points. The returned array has shape (:math:`N_{gp}`, :math:`K`) where :math:`N_{gp}` is the number of Gauss points and :math:`K` is the dimension of the element.
+**gauss_points** : :class:`numpy.ndarray`
+    Natural coordinates of the Gauss points. The returned array has shape :math:`(N_{gp}, K)` where :math:`N_{gp}` is the number of Gauss points and :math:`K` is the dimension of the element.
 
-- **weights** : :class:`numpy.ndarray`, optional
-    If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (:math:`N_{gp}`,) associated with each Gauss point.
+**weights** : :class:`numpy.ndarray`, optional
+    If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape :math:`(N_{gp},)` associated with each Gauss point.
 
 
+Raises
+~~~~~~
+**TypeError**
+    - If :obj:`return_weights` is not a :class:`bool`.
 
 
 
@@ -74,5 +87,56 @@ Implemented Gauss Points Methods
    quadrangle_4_gauss_points
    quadrangle_8_gauss_points
 
+Dispatcher function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autosummary::
+   :toctree: ../generated/
+
+   gauss_points
 
 
+
+Usage
+-----------------
+
+Lets illustrate the usage of one of the gauss points methods with an example for a 2-node line element.
+
+.. code-block:: python
+
+    import numpy as np
+    from pysdic import segment_2_gauss_points
+
+    # Get Gauss points and weights for 2-node segment element
+    gauss_points, weights = segment_2_gauss_points(return_weights=True)
+
+    print("Gauss Points:\n", gauss_points)
+    print("Weights:\n", weights)
+
+The output will be:
+
+.. code-block:: console
+    
+    Gauss Points:
+    [[0.0]]
+    Weights:
+    [2.0]
+
+If :obj:`return_weights` is set to :obj:`False`, only the Gauss points will be returned:
+
+.. code-block:: python
+
+    import numpy as np
+    from pysdic import segment_2_gauss_points
+
+    # Get Gauss points for 2-node segment element without weights
+    gauss_points = segment_2_gauss_points(return_weights=False)
+
+    print("Gauss Points:\n", gauss_points)
+
+The output will be:
+
+.. code-block:: console
+    
+    Gauss Points:
+    [[0.0]]

@@ -19,6 +19,7 @@ from numbers import Number
 
 import numpy
 
+
 def compute_BRDF_ward(
     surface_points: numpy.ndarray,
     surface_normals: numpy.ndarray,
@@ -110,13 +111,13 @@ def compute_BRDF_ward(
         Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`, 3) containing the derivatives of the BRDF with respect to the parameters :math:`(\rho_d, \rho_s, \sigma)`.
         The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.
         Only returned if :obj:`return_parameter_derivatives` is set to :obj:`True`.
-    
+
     Raises
     ------
     ValueError
         If input arrays do not have the correct dimensions or if coefficients are not valid numbers.
 
-    
+
     Examples
     --------
 
@@ -202,14 +203,16 @@ def compute_BRDF_ward(
     surface_points = numpy.asarray(surface_points)
     surface_normals = numpy.asarray(surface_normals)
     if surface_points.shape != surface_normals.shape:
-        raise ValueError("surface_points and surface_normals must have the same shape (N_p, E).")
-    
+        raise ValueError(
+            "surface_points and surface_normals must have the same shape (N_p, E).")
+
     if surface_points.ndim == 1:
         surface_points = surface_points[numpy.newaxis, :]  # Shape: (1, E)
         surface_normals = surface_normals[numpy.newaxis, :]  # Shape: (1, E)
         skip_point_dim = True
     if not surface_points.ndim == 2:
-        raise ValueError("surface_points must be a 2D array with shape (N_p, E).")
+        raise ValueError(
+            "surface_points must be a 2D array with shape (N_p, E).")
     if not numpy.issubdtype(surface_points.dtype, numpy.floating):
         surface_points = surface_points.astype(numpy.float64)
     if not numpy.issubdtype(surface_normals.dtype, numpy.floating):
@@ -220,66 +223,82 @@ def compute_BRDF_ward(
         light_positions = light_positions[numpy.newaxis, :]  # Shape: (1, E)
         skip_light_dim = True
     if not light_positions.ndim == 2 or light_positions.shape[1] != surface_points.shape[1]:
-        raise ValueError("light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).")
+        raise ValueError(
+            "light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).")
     if not numpy.issubdtype(light_positions.dtype, numpy.floating):
         light_positions = light_positions.astype(numpy.float64)
-    
+
     observer_positions = numpy.asarray(observer_positions)
     if observer_positions.ndim == 1:
-        observer_positions = observer_positions[numpy.newaxis, :]  # Shape: (1, E)
+        # Shape: (1, E)
+        observer_positions = observer_positions[numpy.newaxis, :]
         skip_observer_dim = True
     if not observer_positions.ndim == 2 or observer_positions.shape[1] != surface_points.shape[1]:
-        raise ValueError("observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).")
+        raise ValueError(
+            "observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).")
     if not numpy.issubdtype(observer_positions.dtype, numpy.floating):
         observer_positions = observer_positions.astype(numpy.float64)
 
     if not isinstance(diffuse_coefficient, Number) or diffuse_coefficient < 0:
         raise ValueError("diffuse_coefficient must be a non-negative number.")
-    
+
     if not isinstance(specular_coefficient, Number) or specular_coefficient < 0:
         raise ValueError("specular_coefficient must be a non-negative number.")
-    
+
     if not isinstance(roughness, Number) or roughness <= 0:
         raise ValueError("roughness must be a positive number.")
-    
+
     if not isinstance(return_parameter_derivatives, bool):
-        raise ValueError("return_parameter_derivatives must be a boolean value.")
-    
+        raise ValueError(
+            "return_parameter_derivatives must be a boolean value.")
+
     # Compute the BRDF using Ward's model
     N_p, E = surface_points.shape
     N_l = light_positions.shape[0]
     N_o = observer_positions.shape[0]
 
     # Compute the input and observer direction vectors
-    I = light_positions[numpy.newaxis, :, :] - surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_l, E)
-    I = I / numpy.linalg.norm(I, axis=2, keepdims=True) # Normalize (N_p, N_l, E)
-    I = numpy.broadcast_to(I[:,:,numpy.newaxis, :], (N_p, N_l, N_o, E))  # Shape: (N_p, N_l, N_o, E)
+    I = light_positions[numpy.newaxis, :, :] - \
+        surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_l, E)
+    # Normalize (N_p, N_l, E)
+    I = I / numpy.linalg.norm(I, axis=2, keepdims=True)
+    # Shape: (N_p, N_l, N_o, E)
+    I = numpy.broadcast_to(I[:, :, numpy.newaxis, :], (N_p, N_l, N_o, E))
 
-    O = observer_positions[numpy.newaxis, :, :] - surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_o, E)
-    O = O / numpy.linalg.norm(O, axis=2, keepdims=True) # Normalize (N_p, N_o, E)
-    O = numpy.broadcast_to(O[:, numpy.newaxis, :, :], (N_p, N_l, N_o, E))  # Shape: (N_p, N_l, N_o, E)
+    O = observer_positions[numpy.newaxis, :, :] - \
+        surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_o, E)
+    # Normalize (N_p, N_o, E)
+    O = O / numpy.linalg.norm(O, axis=2, keepdims=True)
+    # Shape: (N_p, N_l, N_o, E)
+    O = numpy.broadcast_to(O[:, numpy.newaxis, :, :], (N_p, N_l, N_o, E))
 
     # Compute the half-vector
     H = I + O  # Shape: (N_p, N_l, N_o, E)
-    H = H / numpy.linalg.norm(H, axis=3, keepdims=True) # Normalize (N_p, N_l, N_o, E)
+    # Normalize (N_p, N_l, N_o, E)
+    H = H / numpy.linalg.norm(H, axis=3, keepdims=True)
 
     # Compute the angles input and ouput angles
-    cos_theta_i = numpy.einsum('plne,pe->pln', I, surface_normals)  # Shape: (N_p, N_l, N_o)
+    # Shape: (N_p, N_l, N_o)
+    cos_theta_i = numpy.einsum('plne,pe->pln', I, surface_normals)
     cos_theta_i = numpy.maximum(0, cos_theta_i)  # Ensure non-negative
-    cos_theta_0 = numpy.einsum('plne,pe->pln', O, surface_normals)  # Shape: (N_p, N_l, N_o)
+    # Shape: (N_p, N_l, N_o)
+    cos_theta_0 = numpy.einsum('plne,pe->pln', O, surface_normals)
     cos_theta_0 = numpy.maximum(0, cos_theta_0)  # Ensure non-negative
-    cos_delta = numpy.einsum('plne,pe->pln', H, surface_normals)  # Shape: (N_p, N_l, N_o)
+    # Shape: (N_p, N_l, N_o)
+    cos_delta = numpy.einsum('plne,pe->pln', H, surface_normals)
     cos_delta = numpy.maximum(0, cos_delta)  # Ensure non-negative
 
     # Create the zero BRDF mask where either cos_theta_i or cos_theta_0 is zero
-    zero_brdf_mask = (cos_theta_i < 1e-10) | (cos_theta_0 < 1e-10) | (cos_delta < 1e-10)
+    zero_brdf_mask = (cos_theta_i < 1e-10) | (cos_theta_0 <
+                                              1e-10) | (cos_delta < 1e-10)
     valid_mask = ~zero_brdf_mask
 
     # Initialize BRDF array
     brdf = numpy.zeros((N_p, N_l, N_o), dtype=numpy.float64)
     brdf_dp = None
     if return_parameter_derivatives:
-        brdf_dp = numpy.zeros((N_p, N_l, N_o, 3), dtype=numpy.float64)  # Derivatives w.r.t (rho_d, rho_s, sigma)
+        # Derivatives w.r.t (rho_d, rho_s, sigma)
+        brdf_dp = numpy.zeros((N_p, N_l, N_o, 3), dtype=numpy.float64)
 
     # Reshape arrays for valid computations
     cos_theta_i = cos_theta_i[valid_mask]
@@ -292,18 +311,20 @@ def compute_BRDF_ward(
     # Compute the BRDF using Ward's model
     diffuse_part = 1 / numpy.pi
     exponential_part = numpy.exp(- tan_2_delta / (roughness**2))
-    specular_part = exponential_part / (4 * numpy.pi * roughness**2 * numpy.sqrt(cos_theta_i * cos_theta_0))
-    
+    specular_part = exponential_part / \
+        (4 * numpy.pi * roughness**2 * numpy.sqrt(cos_theta_i * cos_theta_0))
+
     brdf[valid_mask] = diffuse_coefficient * diffuse_part + \
-                       specular_coefficient * specular_part
-    
+        specular_coefficient * specular_part
+
     if return_parameter_derivatives:
         # Derivative with respect to diffuse_coefficient
         brdf_dp[..., 0][valid_mask] = diffuse_part
         # Derivative with respect to specular_coefficient
         brdf_dp[..., 1][valid_mask] = specular_part
         # Derivative with respect to roughness
-        factor = 2 * specular_coefficient * (tan_2_delta - roughness**2) / (roughness**3)
+        factor = 2 * specular_coefficient * \
+            (tan_2_delta - roughness**2) / (roughness**3)
         brdf_dp[..., 2][valid_mask] = factor * specular_part
 
     # Remove singleton dimensions if necessary
@@ -332,9 +353,6 @@ def compute_BRDF_ward(
     if return_parameter_derivatives:
         return brdf, brdf_dp
     return brdf
-
-
-
 
 
 
@@ -418,7 +436,7 @@ def compute_BRDF_beckmann(
 
     return_parameter_derivatives : :class:`bool`, optional
         If :obj:`True`, also return the derivative of the BRDF with respect to the parameters. Default is :obj:`False`.
-        
+
 
     Returns
     -------
@@ -436,10 +454,10 @@ def compute_BRDF_beckmann(
     ValueError
         If input arrays do not have the correct dimensions or if coefficients are not valid numbers.
 
-    
+
     Examples
     --------
-    
+
     >>> import numpy as np
     >>> from pysdic import compute_BRDF_beckmann
     >>> surface_point = np.array([0.0, 0.0, 0.0])
@@ -522,14 +540,16 @@ def compute_BRDF_beckmann(
     surface_points = numpy.asarray(surface_points)
     surface_normals = numpy.asarray(surface_normals)
     if surface_points.shape != surface_normals.shape:
-        raise ValueError("surface_points and surface_normals must have the same shape (N_p, E).")
-    
+        raise ValueError(
+            "surface_points and surface_normals must have the same shape (N_p, E).")
+
     if surface_points.ndim == 1:
         surface_points = surface_points[numpy.newaxis, :]  # Shape: (1, E)
         surface_normals = surface_normals[numpy.newaxis, :]  # Shape: (1, E)
         skip_point_dim = True
     if not surface_points.ndim == 2:
-        raise ValueError("surface_points must be a 2D array with shape (N_p, E).")
+        raise ValueError(
+            "surface_points must be a 2D array with shape (N_p, E).")
     if not numpy.issubdtype(surface_points.dtype, numpy.floating):
         surface_points = surface_points.astype(numpy.float64)
     if not numpy.issubdtype(surface_normals.dtype, numpy.floating):
@@ -540,55 +560,69 @@ def compute_BRDF_beckmann(
         light_positions = light_positions[numpy.newaxis, :]  # Shape: (1, E)
         skip_light_dim = True
     if not light_positions.ndim == 2 or light_positions.shape[1] != surface_points.shape[1]:
-        raise ValueError("light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).")
+        raise ValueError(
+            "light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).")
     if not numpy.issubdtype(light_positions.dtype, numpy.floating):
         light_positions = light_positions.astype(numpy.float64)
-    
+
     observer_positions = numpy.asarray(observer_positions)
     if observer_positions.ndim == 1:
-        observer_positions = observer_positions[numpy.newaxis, :]  # Shape: (1, E)
+        # Shape: (1, E)
+        observer_positions = observer_positions[numpy.newaxis, :]
         skip_observer_dim = True
     if not observer_positions.ndim == 2 or observer_positions.shape[1] != surface_points.shape[1]:
-        raise ValueError("observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).")
+        raise ValueError(
+            "observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).")
     if not numpy.issubdtype(observer_positions.dtype, numpy.floating):
         observer_positions = observer_positions.astype(numpy.float64)
 
     if not isinstance(diffuse_coefficient, Number) or diffuse_coefficient < 0:
         raise ValueError("diffuse_coefficient must be a non-negative number.")
-    
+
     if not isinstance(specular_coefficient, Number) or specular_coefficient < 0:
         raise ValueError("specular_coefficient must be a non-negative number.")
-    
+
     if not isinstance(rms, Number) or rms <= 0:
         raise ValueError("rms must be a positive number.")
-    
+
     if not isinstance(return_parameter_derivatives, bool):
-        raise ValueError("return_parameter_derivatives must be a boolean value.")
-    
+        raise ValueError(
+            "return_parameter_derivatives must be a boolean value.")
+
     # Compute the BRDF using Ward's model
     N_p, E = surface_points.shape
     N_l = light_positions.shape[0]
     N_o = observer_positions.shape[0]
 
     # Compute the input and observer direction vectors
-    I = light_positions[numpy.newaxis, :, :] - surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_l, E)
-    I = I / numpy.linalg.norm(I, axis=2, keepdims=True) # Normalize (N_p, N_l, E)
-    I = numpy.broadcast_to(I[:,:,numpy.newaxis, :], (N_p, N_l, N_o, E))  # Shape: (N_p, N_l, N_o, E)
+    I = light_positions[numpy.newaxis, :, :] - \
+        surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_l, E)
+    # Normalize (N_p, N_l, E)
+    I = I / numpy.linalg.norm(I, axis=2, keepdims=True)
+    # Shape: (N_p, N_l, N_o, E)
+    I = numpy.broadcast_to(I[:, :, numpy.newaxis, :], (N_p, N_l, N_o, E))
 
-    O = observer_positions[numpy.newaxis, :, :] - surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_o, E)
-    O = O / numpy.linalg.norm(O, axis=2, keepdims=True) # Normalize (N_p, N_o, E)
-    O = numpy.broadcast_to(O[:, numpy.newaxis, :, :], (N_p, N_l, N_o, E))  # Shape: (N_p, N_l, N_o, E)
+    O = observer_positions[numpy.newaxis, :, :] - \
+        surface_points[:, numpy.newaxis, :]  # Shape: (N_p, N_o, E)
+    # Normalize (N_p, N_o, E)
+    O = O / numpy.linalg.norm(O, axis=2, keepdims=True)
+    # Shape: (N_p, N_l, N_o, E)
+    O = numpy.broadcast_to(O[:, numpy.newaxis, :, :], (N_p, N_l, N_o, E))
 
     # Compute the half-vector
     H = I + O  # Shape: (N_p, N_l, N_o, E)
-    H = H / numpy.linalg.norm(H, axis=3, keepdims=True) # Normalize (N_p, N_l, N_o, E)
+    # Normalize (N_p, N_l, N_o, E)
+    H = H / numpy.linalg.norm(H, axis=3, keepdims=True)
 
     # Compute the angles input and ouput angles
-    cos_theta_i = numpy.einsum('plne,pe->pln', I, surface_normals)  # Shape: (N_p, N_l, N_o)
+    # Shape: (N_p, N_l, N_o)
+    cos_theta_i = numpy.einsum('plne,pe->pln', I, surface_normals)
     cos_theta_i = numpy.maximum(0, cos_theta_i)  # Ensure non-negative
-    cos_theta_0 = numpy.einsum('plne,pe->pln', O, surface_normals)  # Shape: (N_p, N_l, N_o)
+    # Shape: (N_p, N_l, N_o)
+    cos_theta_0 = numpy.einsum('plne,pe->pln', O, surface_normals)
     cos_theta_0 = numpy.maximum(0, cos_theta_0)  # Ensure non-negative
-    cos_delta = numpy.einsum('plne,pe->pln', H, surface_normals)  # Shape: (N_p, N_l, N_o)
+    # Shape: (N_p, N_l, N_o)
+    cos_delta = numpy.einsum('plne,pe->pln', H, surface_normals)
     cos_delta = numpy.maximum(0, cos_delta)  # Ensure non-negative
 
     # Create the zero BRDF mask where either cos_theta_i or cos_theta_0 is zero
@@ -599,7 +633,8 @@ def compute_BRDF_beckmann(
     brdf = numpy.zeros((N_p, N_l, N_o), dtype=numpy.float64)
     brdf_dp = None
     if return_parameter_derivatives:
-        brdf_dp = numpy.zeros((N_p, N_l, N_o, 3), dtype=numpy.float64)  # Derivatives w.r.t (rho_d, rho_s, sigma)
+        # Derivatives w.r.t (rho_d, rho_s, sigma)
+        brdf_dp = numpy.zeros((N_p, N_l, N_o, 3), dtype=numpy.float64)
 
     # Reshape arrays for valid computations
     cos_theta_i = cos_theta_i[valid_mask]
@@ -615,8 +650,8 @@ def compute_BRDF_beckmann(
     specular_part = exponential_part / (4 * numpy.pi * rms**2 * cos_delta**4)
 
     brdf[valid_mask] = diffuse_coefficient * diffuse_part + \
-                       specular_coefficient * specular_part
-    
+        specular_coefficient * specular_part
+
     if return_parameter_derivatives:
         # Derivative with respect to diffuse_coefficient
         brdf_dp[..., 0][valid_mask] = diffuse_part
@@ -625,7 +660,7 @@ def compute_BRDF_beckmann(
         # Derivative with respect to rms
         factor = 2 * specular_coefficient * (tan_2_delta - rms**2) / (rms**3)
         brdf_dp[..., 2][valid_mask] = factor * specular_part
-    
+
     # Remove singleton dimensions if necessary
     if skip_light_dim and skip_observer_dim and skip_point_dim:
         brdf = brdf[0, 0, 0]  # Scalar
@@ -649,4 +684,3 @@ def compute_BRDF_beckmann(
         brdf = brdf[:, :, 0]  # Shape: (N_p, N_l)
         brdf_dp = brdf_dp[:, :, 0, :] if return_parameter_derivatives else None
     return brdf
-

@@ -18,14 +18,44 @@ from typing import Tuple, Union
 import numpy
 
 
-def segment_2_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+def segment_2_gauss_points(
+    return_weights: bool = False
+) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
     r"""
     Get the natural coordinates :math:`\xi` and weights of Gauss quadrature points for a 2-node segment element.
 
+    .. note::
+
+        The output arrays will be of type :class:`numpy.float64`.
+
+
+    Parameters
+    ----------
+    return_weights: :class:`bool`, optional
+        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
+
+        
+    Returns
+    -------
+    gauss_points: :class:`numpy.ndarray`
+        Natural coordinates of the Gauss points. The returned array has shape (1, 1).
+
+    weights: :class:`numpy.ndarray`, optional
+        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (1,) associated with each Gauss point.
+
+        
+    Raises
+    ------
+    TypeError
+        - If the input :obj:`return_weights` is not a boolean.
+
+
+    Notes
+    -----
     A 2-node segment element uses the following Gauss points and weights for numerical integration:
 
     +------------+-----------------+-----------------+
-    | Point No.  | (:math:`\xi`)   | Weight :math:`w`|
+    | Point No.  | :math:`(\xi)`   | Weight :math:`w`|
     +============+=================+=================+
     | 1          | :math:`0`       | :math:`2`       |
     +------------+-----------------+-----------------+
@@ -35,31 +65,16 @@ def segment_2_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray,
         :align: center
         :width: 200px
 
-    .. seealso::
-
-        - :func:`pysdic.segment_2_shape_functions` : Shape functions for 2-node segment 1D-elements.
-
-    Parameters
-    ----------
-    return_weights: :class:`bool`, optional
-        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
-
-    Returns
-    -------
-    gauss_points: :class:`numpy.ndarray`
-        Natural coordinates of the Gauss points. The returned array has shape (1, 1).
-
-    weights: :class:`numpy.ndarray`, optional
-        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (1,) associated with each Gauss point.
-
-    Raises
-    ------
-    TypeError
-        If the input :obj:`return_weights` is not a boolean.
+    
+    See Also
+    --------
+    pysdic.segment_2_shape_functions:
+        Shape functions for 2-node segment 1D-elements.
 
     
     Examples
     --------
+    Get the Gauss points for a 2-node segment element:
 
     .. code-block:: python
 
@@ -78,7 +93,7 @@ def segment_2_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray,
     """
     # Input validation
     if not isinstance(return_weights, bool):
-        raise ValueError("Input 'return_weights' must be a boolean value.")
+        raise TypeError(f"Input 'return_weights' must be a boolean value. Got {type(return_weights)} instead.")
 
     # Gauss points and weights for Gauss quadrature
     gauss_points = numpy.array([[0.0]], dtype=numpy.float64)
@@ -90,38 +105,23 @@ def segment_2_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray,
 
 
 
-def segment_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+def segment_3_gauss_points(
+    return_weights: bool = False
+) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
     r"""
     Get the natural coordinates :math:`\xi` and weights of Gauss quadrature points for a 3-node segment element.
 
-    A 3-node segment element uses the following Gauss points and weights for numerical integration:
+    .. note::
 
-    +------------+-----------------------------+-----------------+
-    | Point No.  | (:math:`\xi`)               | Weight :math:`w`|
-    +============+=============================+=================+
-    | 1          | :math:`-\frac{1}{\sqrt{3}}` | :math:`1`       |
-    +------------+-----------------------------+-----------------+
-    | 2          | :math:`\frac{1}{\sqrt{3}}`  | :math:`1`       |
-    +------------+-----------------------------+-----------------+
+        The output arrays will be of type :class:`numpy.float64`.
 
-    
-    .. figure:: /_static/shape_functions/segment_3_gp.png
-        :alt: Gauss quadrature points for 3-node segment element
-        :align: center
-        :width: 200px
-
-
-    .. seealso::
-
-        - :func:`pysdic.segment_3_shape_functions` : Shape functions for 3-node segment 1D-elements.
-
-        
 
     Parameters
     ----------
     return_weights: :class:`bool`, optional
         If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
 
+        
     Returns
     -------
     gauss_points: :class:`numpy.ndarray`
@@ -130,14 +130,41 @@ def segment_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray,
     weights: :class:`numpy.ndarray`, optional
         If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (2,) associated with each Gauss point.
 
+        
     Raises
     ------
     TypeError
-        If the input :obj:`return_weights` is not a boolean.
+        - If the input :obj:`return_weights` is not a boolean.
+
+    
+    Notes
+    -----
+    A 3-node segment element uses the following Gauss points and weights for numerical integration:
+
+    +------------+-----------------------------+-----------------+
+    | Point No.  | :math:`(\xi)`               | Weight :math:`w`|
+    +============+=============================+=================+
+    | 1          | :math:`-\frac{1}{\sqrt{3}}` | :math:`1`       |
+    +------------+-----------------------------+-----------------+
+    | 2          | :math:`\frac{1}{\sqrt{3}}`  | :math:`1`       |
+    +------------+-----------------------------+-----------------+
+
+    .. figure:: /_static/shape_functions/segment_3_gp.png
+        :alt: Gauss quadrature points for 3-node segment element
+        :align: center
+        :width: 200px
+
+
+    See Also
+    --------
+    pysdic.segment_3_shape_functions:
+        Shape functions for 3-node segment 1D-elements.
 
     
     Examples
     --------
+    Get the Gauss points for a 3-node segment element:
+
     .. code-block:: python
 
         import numpy
@@ -156,7 +183,7 @@ def segment_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray,
     """
     # Input validation
     if not isinstance(return_weights, bool):
-        raise ValueError("Input 'return_weights' must be a boolean value.")
+        raise TypeError(f"Input 'return_weights' must be a boolean value. Got {type(return_weights)} instead.")
 
     # Gauss points and weights Gauss quadrature
     gauss_points = numpy.array([[-1.0 / numpy.sqrt(3)], [1.0 / numpy.sqrt(3)]], dtype=numpy.float64)
@@ -169,14 +196,44 @@ def segment_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray,
 
 
 
-def triangle_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+def triangle_3_gauss_points(
+    return_weights: bool = False
+) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
     r"""
     Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for a 3-node triangle element.
 
+    .. note::
+
+        The output arrays will be of type :class:`numpy.float64`.
+
+
+    Parameters
+    ----------
+    return_weights: :class:`bool`, optional
+        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
+
+        
+    Returns
+    -------
+    gauss_points: :class:`numpy.ndarray`
+        Natural coordinates of the Gauss points. The returned array has shape (3, 2).
+
+    weights: :class:`numpy.ndarray`, optional
+        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.
+
+        
+    Raises
+    ------
+    TypeError
+        - If the input :obj:`return_weights` is not a boolean.
+
+
+    Notes
+    -----
     A 3-node triangle element uses the following Gauss points and weights for numerical integration:
 
     +------------+-----------------------------------------+---------------------+
-    | Point No.  | (:math:`\xi`, :math:`\eta`)             | Weight :math:`w`    |
+    | Point No.  | :math:`(\xi, \eta)`                     | Weight :math:`w`    |
     +============+=========================================+=====================+
     | 1          | :math:`(\frac{1}{3}, \frac{1}{3})`      | :math:`\frac{1}{2}` |
     +------------+-----------------------------------------+---------------------+
@@ -186,31 +243,16 @@ def triangle_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray
         :align: center
         :width: 200px
 
-    .. seealso::
 
-        - :func:`pysdic.triangle_3_shape_functions` : Shape functions for 3-node triangle 2D-elements.
-
-    Parameters
-    ----------
-    return_weights: :class:`bool`, optional
-        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
-
-    Returns
-    -------
-    gauss_points: :class:`numpy.ndarray`
-        Natural coordinates of the Gauss points. The returned array has shape (3, 2).
-
-    weights: :class:`numpy.ndarray`, optional
-        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.
-
-    Raises
-    ------
-    TypeError
-        If the input :obj:`return_weights` is not a boolean.
+    See Also
+    --------
+    pysdic.triangle_3_shape_functions:
+        Shape functions for 3-node triangle 2D-elements.
 
     
     Examples
     --------
+    Get the Gauss points for a 3-node triangle element:
 
     .. code-block:: python
 
@@ -229,7 +271,7 @@ def triangle_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray
     """
     # Input validation
     if not isinstance(return_weights, bool):
-        raise ValueError("Input 'return_weights' must be a boolean value.")
+        raise TypeError(f"Input 'return_weights' must be a boolean value. Got {type(return_weights)} instead.")
 
     # Gauss points and weights for Gauss quadrature
     gauss_points = numpy.array([[1.0 / 3.0, 1.0 / 3.0]], dtype=numpy.float64)
@@ -241,14 +283,44 @@ def triangle_3_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray
     return gauss_points
 
 
-def triangle_6_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+def triangle_6_gauss_points(
+    return_weights: bool = False
+) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
     r"""
     Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for a 6-node triangle element.
 
+    .. note::
+
+        The output arrays will be of type :class:`numpy.float64`.
+    
+    
+    Parameters
+    ----------
+    return_weights: :class:`bool`, optional
+        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
+
+        
+    Returns
+    -------
+    gauss_points: :class:`numpy.ndarray`
+        Natural coordinates of the Gauss points. The returned array has shape (3, 2).
+
+    weights: :class:`numpy.ndarray`, optional
+        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.
+
+        
+    Raises
+    ------
+    TypeError
+        - If the input :obj:`return_weights` is not a boolean.
+
+
+    Notes
+    -----
     A 6-node triangle element uses the following Gauss points and weights for numerical integration:
 
     +------------+-----------------------------------------+---------------------+
-    | Point No.  | (:math:`\xi`, :math:`\eta`)             | Weight :math:`w`    |
+    | Point No.  | :math:`(\xi, \eta)`                     | Weight :math:`w`    |
     +============+=========================================+=====================+
     | 1          | :math:`(\frac{1}{6}, \frac{1}{6})`      | :math:`\frac{1}{6}` |
     +------------+-----------------------------------------+---------------------+
@@ -262,31 +334,16 @@ def triangle_6_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray
         :align: center
         :width: 200px
 
-    .. seealso::
 
-        - :func:`pysdic.triangle_6_shape_functions` : Shape functions for 6-node triangle 2D-elements.
-
-    Parameters
-    ----------
-    return_weights: :class:`bool`, optional
-        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
-
-    Returns
-    -------
-    gauss_points: :class:`numpy.ndarray`
-        Natural coordinates of the Gauss points. The returned array has shape (3, 2).
-
-    weights: :class:`numpy.ndarray`, optional
-        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.
-
-    Raises
-    ------
-    TypeError
-        If the input :obj:`return_weights` is not a boolean.
+    See Also
+    --------
+    pysdic.triangle_6_shape_functions:
+        Shape functions for 6-node triangle 2D-elements.
 
     
     Examples
     --------
+    Get the Gauss points for a 6-node triangle element:
 
     .. code-block:: python
 
@@ -307,7 +364,7 @@ def triangle_6_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray
     """
     # Input validation
     if not isinstance(return_weights, bool):
-        raise ValueError("Input 'return_weights' must be a boolean value.")
+        raise TypeError(f"Input 'return_weights' must be a boolean value. Got {type(return_weights)} instead.")
     
     # Gauss points and weights for Gauss quadrature
     gauss_points = numpy.array([
@@ -324,14 +381,44 @@ def triangle_6_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray
 
 
 
-def quadrangle_4_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+def quadrangle_4_gauss_points(
+    return_weights: bool = False
+) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
     r"""
     Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for a 4-node quadrangle element.
 
+    .. note::
+
+        The output arrays will be of type :class:`numpy.float64`.
+    
+        
+    Parameters
+    ----------
+    return_weights: :class:`bool`, optional
+        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
+
+        
+    Returns
+    -------
+    gauss_points: :class:`numpy.ndarray`
+        Natural coordinates of the Gauss points. The returned array has shape (4, 2).
+
+    weights: :class:`numpy.ndarray`, optional
+        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (4,) associated with each Gauss point.
+
+    
+    Raises
+    ------
+    TypeError
+        - If the input :obj:`return_weights` is not a boolean.
+
+    
+    Notes
+    -----
     A 4-node quadrangle element uses the following Gauss points and weights for numerical integration:
 
     +------------+----------------------------------------------------+---------------------+
-    | Point No.  | (:math:`\xi`, :math:`\eta`)                        | Weight :math:`w`    |
+    | Point No.  | :math:`(\xi, \eta)`                                | Weight :math:`w`    |
     +============+====================================================+=====================+
     | 1          | :math:`(-\frac{1}{\sqrt{3}}, -\frac{1}{\sqrt{3}})` | :math:`1`           |
     +------------+----------------------------------------------------+---------------------+
@@ -347,32 +434,16 @@ def quadrangle_4_gauss_points(return_weights: bool = False) -> Union[numpy.ndarr
         :align: center
         :width: 200px
 
-    .. seealso::
-
-        - :func:`pysdic.quadrangle_4_shape_functions` : Shape functions for 4-node quadrangle 2D-elements.
-
-    Parameters
-    ----------
-    return_weights: :class:`bool`, optional
-        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
-
-    Returns
-    -------
-    gauss_points: :class:`numpy.ndarray`
-        Natural coordinates of the Gauss points. The returned array has shape (4, 2).
-
-    weights: :class:`numpy.ndarray`, optional
-        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (4,) associated with each Gauss point.
-
     
-    Raises
-    ------
-    TypeError
-        If the input :obj:`return_weights` is not a boolean.
+    See Also
+    --------
+    pysdic.quadrangle_4_shape_functions:
+        Shape functions for 4-node quadrangle 2D-elements.
 
     
     Examples
     --------
+    Get the Gauss points for a 4-node quadrangle element:
 
     .. code-block:: python
 
@@ -394,7 +465,7 @@ def quadrangle_4_gauss_points(return_weights: bool = False) -> Union[numpy.ndarr
     """
     # Input validation
     if not isinstance(return_weights, bool):
-        raise ValueError("Input 'return_weights' must be a boolean value.")
+        raise TypeError(f"Input 'return_weights' must be a boolean value. Got {type(return_weights)} instead.")
     
     # Gauss points and weights for Gauss quadrature
     gp_coord = 1.0 / numpy.sqrt(3.0)
@@ -413,14 +484,44 @@ def quadrangle_4_gauss_points(return_weights: bool = False) -> Union[numpy.ndarr
 
 
 
-def quadrangle_8_gauss_points(return_weights: bool = False) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+def quadrangle_8_gauss_points(
+    return_weights: bool = False
+)-> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
     r"""
     Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for an 8-node quadrangle element.
 
+    .. note::
+
+        The output arrays will be of type :class:`numpy.float64`.
+
+
+    Parameters
+    ----------
+    return_weights: :class:`bool`, optional
+        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
+
+        
+    Returns
+    -------
+    gauss_points: :class:`numpy.ndarray`
+        Natural coordinates of the Gauss points. The returned array has shape (9, 2).
+
+    weights: :class:`numpy.ndarray`, optional
+        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (9,) associated with each Gauss point.
+
+
+    Raises
+    ------
+    TypeError
+        - If the input :obj:`return_weights` is not a boolean.
+
+
+    Notes
+    -----
     An 8-node quadrangle element uses the following Gauss points and weights for numerical integration:
 
     +------------+----------------------------------------------------+----------------------+
-    | Point No.  | (:math:`\xi`, :math:`\eta`)                        | Weight :math:`w`     |
+    | Point No.  | :math:`(\xi, \eta)`                                | Weight :math:`w`     |
     +============+====================================================+======================+
     | 1          | :math:`(0,0)`                                      | :math:`\frac{64}{81}`|
     +------------+----------------------------------------------------+----------------------+
@@ -446,32 +547,16 @@ def quadrangle_8_gauss_points(return_weights: bool = False) -> Union[numpy.ndarr
         :align: center
         :width: 200px
 
-    .. seealso::
 
-        - :func:`pysdic.quadrangle_8_shape_functions` : Shape functions for 8-node quadrangle 2D-elements.
-
-    Parameters
-    ----------
-    return_weights: :class:`bool`, optional
-        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
-
-    Returns
-    -------
-    gauss_points: :class:`numpy.ndarray`
-        Natural coordinates of the Gauss points. The returned array has shape (9, 2).
-
-    weights: :class:`numpy.ndarray`, optional
-        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (9,) associated with each Gauss point.
-
-
-    Raises
-    ------
-    TypeError
-        If the input :obj:`return_weights` is not a boolean.
+    See Also
+    --------
+    pysdic.quadrangle_8_shape_functions:
+        Shape functions for 8-node quadrangle 2D-elements.
 
     
     Examples
     --------
+    Get the Gauss points for an 8-node quadrangle element:
 
     .. code-block:: python
 
@@ -498,7 +583,7 @@ def quadrangle_8_gauss_points(return_weights: bool = False) -> Union[numpy.ndarr
     """
     # Input validation
     if not isinstance(return_weights, bool):
-        raise ValueError("Input 'return_weights' must be a boolean value.")
+        raise TypeError(f"Input 'return_weights' must be a boolean value. Got {type(return_weights)} instead.")
     
     # Gauss points and weights for Gauss quadrature
     gp_coord = numpy.sqrt(3.0 / 5.0)
@@ -529,3 +614,113 @@ def quadrangle_8_gauss_points(return_weights: bool = False) -> Union[numpy.ndarr
         return gauss_points, weights
     
     return gauss_points
+
+
+
+def gauss_points(
+    element_type: str,
+    return_weights: bool = False
+) -> Union[numpy.ndarray, Tuple[numpy.ndarray, numpy.ndarray]]:
+    r"""
+    Get the natural coordinates and weights of Gauss quadrature points for a specified element type.
+
+    .. note::
+
+        The output arrays will be of type :class:`numpy.float64`.
+
+        
+    Parameters
+    ----------
+    element_type: :class:`str`
+        The type of element for which to retrieve Gauss points. Supported types are:
+        
+        - "segment_2": 2-node segment element
+        - "segment_3": 3-node segment element
+        - "triangle_3": 3-node triangle element
+        - "triangle_6": 6-node triangle element
+        - "quadrangle_4": 4-node quadrangle element
+        - "quadrangle_8": 8-node quadrangle element
+
+    return_weights: :class:`bool`, optional
+        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.
+
+        
+    Returns
+    -------
+    gauss_points: :class:`numpy.ndarray`
+        Natural coordinates of the Gauss points. The shape of the returned array is :math:`(N_{gp}, K)`, where :math:`N_{gp}` is the number of Gauss points for the specified element type and :math:`K` is the topological dimension of the element.
+
+    weights: :class:`numpy.ndarray`, optional
+        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape :math:`(N_{gp},)` associated with each Gauss point.
+
+    
+    Raises
+    ------
+    TypeError
+        - If the input :obj:`return_weights` is not a boolean.
+        - If the input :obj:`element_type` is not a string.
+
+    ValueError
+        - If the specified :obj:`element_type` is not supported.
+
+
+    See Also
+    --------
+    pysdic.segment_2_gauss_points:
+        Gauss points for 2-node segment elements.
+
+    pysdic.segment_3_gauss_points:
+        Gauss points for 3-node segment elements.
+
+    pysdic.triangle_3_gauss_points:
+        Gauss points for 3-node triangle elements.
+
+    pysdic.triangle_6_gauss_points:
+        Gauss points for 6-node triangle elements.
+
+    pysdic.quadrangle_4_gauss_points:
+        Gauss points for 4-node quadrangle elements.
+
+    pysdic.quadrangle_8_gauss_points:
+        Gauss points for 8-node quadrangle elements.
+
+    
+    Examples
+    --------
+    Get the Gauss points for a 3-node triangle element:
+
+    .. code-block:: python
+
+        import numpy
+        from pysdic import gauss_points
+
+        gauss_points_array = gauss_points("triangle_3")
+        print("Gauss points for triangle_3:")
+        print(gauss_points_array)
+
+    .. code-block:: console
+
+        Gauss points for triangle_3:
+        [[0.33333333 0.33333333]]
+
+    """
+    # Dispatcher dictionary
+    GAUSS_POINTS_DISPATCHER = {
+        'segment_2': segment_2_gauss_points,
+        'segment_3': segment_3_gauss_points,
+        'triangle_3': triangle_3_gauss_points,
+        'triangle_6': triangle_6_gauss_points,
+        'quadrangle_4': quadrangle_4_gauss_points,
+        'quadrangle_8': quadrangle_8_gauss_points
+    }
+
+    # Validate element_type
+    if not isinstance(element_type, str):
+        raise TypeError("The 'element_type' parameter must be a string.")
+    element_type = element_type.lower()
+    if not element_type in GAUSS_POINTS_DISPATCHER:
+        raise ValueError(f"Unsupported element_type '{element_type}'. Supported types are: {list(GAUSS_POINTS_DISPATCHER.keys())}.")
+
+    # Call the appropriate shape function
+    gauss_points_func = GAUSS_POINTS_DISPATCHER[element_type]
+    return gauss_points_func(return_weights=return_weights)
