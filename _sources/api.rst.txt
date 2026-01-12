@@ -76,6 +76,7 @@ Implement Photometric considerations
    :caption: Photometric Quantities and Lighting Models
 
    ./api_documentation/photometric_quantities.rst
+   ./api_documentation/photometric_operations.rst
    ./api_documentation/BRDF_models.rst
 
 

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.core.BRDF_models &#8212; pysdic 1.1.4 documentation</title>
+    <title>pysdic.core.BRDF_models &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/BRDF_models';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -331,6 +331,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
+
 <div class="viewcode-block" id="compute_BRDF_ward">
 <a class="viewcode-back" href="../../../generated/pysdic.compute_BRDF_ward.html#pysdic.compute_BRDF_ward">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_BRDF_ward</span><span class="p">(</span>
@@ -424,13 +425,13 @@
 <span class="sd">        Array of shape (:math:`N_p`, :math:`N_l`, :math:`N_o`, 3) containing the derivatives of the BRDF with respect to the parameters :math:`(\rho_d, \rho_s, \sigma)`.</span>
 <span class="sd">        The shape of the output array is adjusted based on whether :obj:`surface_points`, :obj:`light_positions`, or :obj:`observer_positions` are provided as 1D arrays.</span>
 <span class="sd">        Only returned if :obj:`return_parameter_derivatives` is set to :obj:`True`.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If input arrays do not have the correct dimensions or if coefficients are not valid numbers.</span>
 
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 
@@ -516,14 +517,16 @@
     <span class="n">surface_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">surface_points</span><span class="p">)</span>
     <span class="n">surface_normals</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">surface_normals</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">surface_normals</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;surface_points and surface_normals must have the same shape (N_p, E).&quot;</span><span class="p">)</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;surface_points and surface_normals must have the same shape (N_p, E).&quot;</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">surface_points</span> <span class="o">=</span> <span class="n">surface_points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
         <span class="n">surface_normals</span> <span class="o">=</span> <span class="n">surface_normals</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
         <span class="n">skip_point_dim</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;surface_points must be a 2D array with shape (N_p, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;surface_points must be a 2D array with shape (N_p, E).&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">surface_points</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
         <span class="n">surface_points</span> <span class="o">=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">surface_normals</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
@@ -534,66 +537,82 @@
         <span class="n">light_positions</span> <span class="o">=</span> <span class="n">light_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
         <span class="n">skip_light_dim</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">light_positions</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
         <span class="n">light_positions</span> <span class="o">=</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    
+
     <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">observer_positions</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
+        <span class="c1"># Shape: (1, E)</span>
+        <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">skip_observer_dim</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">observer_positions</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
         <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diffuse_coefficient</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">diffuse_coefficient</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;diffuse_coefficient must be a non-negative number.&quot;</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">specular_coefficient</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">specular_coefficient</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;specular_coefficient must be a non-negative number.&quot;</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roughness</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">roughness</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;roughness must be a positive number.&quot;</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_parameter_derivatives</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;return_parameter_derivatives must be a boolean value.&quot;</span><span class="p">)</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;return_parameter_derivatives must be a boolean value.&quot;</span><span class="p">)</span>
+
     <span class="c1"># Compute the BRDF using Ward&#39;s model</span>
     <span class="n">N_p</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">N_l</span> <span class="o">=</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_o</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Compute the input and observer direction vectors</span>
-    <span class="n">I</span> <span class="o">=</span> <span class="n">light_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_l, E)</span>
-    <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Normalize (N_p, N_l, E)</span>
-    <span class="n">I</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">I</span><span class="p">[:,:,</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>  <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">light_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> \
+        <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_l, E)</span>
+    <span class="c1"># Normalize (N_p, N_l, E)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>
 
-    <span class="n">O</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_o, E)</span>
-    <span class="n">O</span> <span class="o">=</span> <span class="n">O</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">O</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Normalize (N_p, N_o, E)</span>
-    <span class="n">O</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">O</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>  <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> \
+        <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_o, E)</span>
+    <span class="c1"># Normalize (N_p, N_o, E)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">O</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">O</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">O</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>
 
     <span class="c1"># Compute the half-vector</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">O</span>  <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
-    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Normalize (N_p, N_l, N_o, E)</span>
+    <span class="c1"># Normalize (N_p, N_l, N_o, E)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Compute the angles input and ouput angles</span>
-    <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>
     <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cos_theta_i</span><span class="p">)</span>  <span class="c1"># Ensure non-negative</span>
-    <span class="n">cos_theta_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">cos_theta_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>
     <span class="n">cos_theta_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cos_theta_0</span><span class="p">)</span>  <span class="c1"># Ensure non-negative</span>
-    <span class="n">cos_delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">cos_delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>
     <span class="n">cos_delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cos_delta</span><span class="p">)</span>  <span class="c1"># Ensure non-negative</span>
 
     <span class="c1"># Create the zero BRDF mask where either cos_theta_i or cos_theta_0 is zero</span>
-    <span class="n">zero_brdf_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">cos_theta_i</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">cos_theta_0</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">cos_delta</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
+    <span class="n">zero_brdf_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">cos_theta_i</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">cos_theta_0</span> <span class="o">&lt;</span>
+                                              <span class="mf">1e-10</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">cos_delta</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
     <span class="n">valid_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">zero_brdf_mask</span>
 
     <span class="c1"># Initialize BRDF array</span>
     <span class="n">brdf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">brdf_dp</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
-        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># Derivatives w.r.t (rho_d, rho_s, sigma)</span>
+        <span class="c1"># Derivatives w.r.t (rho_d, rho_s, sigma)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="c1"># Reshape arrays for valid computations</span>
     <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">cos_theta_i</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span>
@@ -606,18 +625,20 @@
     <span class="c1"># Compute the BRDF using Ward&#39;s model</span>
     <span class="n">diffuse_part</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
     <span class="n">exponential_part</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">tan_2_delta</span> <span class="o">/</span> <span class="p">(</span><span class="n">roughness</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="n">specular_part</span> <span class="o">=</span> <span class="n">exponential_part</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cos_theta_i</span> <span class="o">*</span> <span class="n">cos_theta_0</span><span class="p">))</span>
-    
+    <span class="n">specular_part</span> <span class="o">=</span> <span class="n">exponential_part</span> <span class="o">/</span> \
+        <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cos_theta_i</span> <span class="o">*</span> <span class="n">cos_theta_0</span><span class="p">))</span>
+
     <span class="n">brdf</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_coefficient</span> <span class="o">*</span> <span class="n">diffuse_part</span> <span class="o">+</span> \
-                       <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="n">specular_part</span>
-    
+        <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="n">specular_part</span>
+
     <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
         <span class="c1"># Derivative with respect to diffuse_coefficient</span>
         <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_part</span>
         <span class="c1"># Derivative with respect to specular_coefficient</span>
         <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">specular_part</span>
         <span class="c1"># Derivative with respect to roughness</span>
-        <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="p">(</span><span class="n">tan_2_delta</span> <span class="o">-</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">roughness</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">specular_coefficient</span> <span class="o">*</span> \
+            <span class="p">(</span><span class="n">tan_2_delta</span> <span class="o">-</span> <span class="n">roughness</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">roughness</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
         <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">specular_part</span>
 
     <span class="c1"># Remove singleton dimensions if necessary</span>
@@ -646,9 +667,6 @@
     <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">brdf</span><span class="p">,</span> <span class="n">brdf_dp</span>
     <span class="k">return</span> <span class="n">brdf</span></div>
-
-
-
 
 
 
@@ -735,7 +753,7 @@
 
 <span class="sd">    return_parameter_derivatives : :class:`bool`, optional</span>
 <span class="sd">        If :obj:`True`, also return the derivative of the BRDF with respect to the parameters. Default is :obj:`False`.</span>
-<span class="sd">        </span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -753,10 +771,10 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        If input arrays do not have the correct dimensions or if coefficients are not valid numbers.</span>
 
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; from pysdic import compute_BRDF_beckmann</span>
 <span class="sd">    &gt;&gt;&gt; surface_point = np.array([0.0, 0.0, 0.0])</span>
@@ -839,14 +857,16 @@
     <span class="n">surface_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">surface_points</span><span class="p">)</span>
     <span class="n">surface_normals</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">surface_normals</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">surface_normals</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;surface_points and surface_normals must have the same shape (N_p, E).&quot;</span><span class="p">)</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;surface_points and surface_normals must have the same shape (N_p, E).&quot;</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">surface_points</span> <span class="o">=</span> <span class="n">surface_points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
         <span class="n">surface_normals</span> <span class="o">=</span> <span class="n">surface_normals</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
         <span class="n">skip_point_dim</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;surface_points must be a 2D array with shape (N_p, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;surface_points must be a 2D array with shape (N_p, E).&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">surface_points</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
         <span class="n">surface_points</span> <span class="o">=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">surface_normals</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
@@ -857,55 +877,69 @@
         <span class="n">light_positions</span> <span class="o">=</span> <span class="n">light_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
         <span class="n">skip_light_dim</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;light_positions must be a 1D array with shape (E,) or a 2D array with shape (N_l, E).&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">light_positions</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
         <span class="n">light_positions</span> <span class="o">=</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    
+
     <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">observer_positions</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (1, E)</span>
+        <span class="c1"># Shape: (1, E)</span>
+        <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">skip_observer_dim</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;observer_positions must be a 1D array with shape (E,) or a 2D array with shape (N_o, E).&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">observer_positions</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
         <span class="n">observer_positions</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diffuse_coefficient</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">diffuse_coefficient</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;diffuse_coefficient must be a non-negative number.&quot;</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">specular_coefficient</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">specular_coefficient</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;specular_coefficient must be a non-negative number.&quot;</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rms</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rms</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;rms must be a positive number.&quot;</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_parameter_derivatives</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;return_parameter_derivatives must be a boolean value.&quot;</span><span class="p">)</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;return_parameter_derivatives must be a boolean value.&quot;</span><span class="p">)</span>
+
     <span class="c1"># Compute the BRDF using Ward&#39;s model</span>
     <span class="n">N_p</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">surface_points</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">N_l</span> <span class="o">=</span> <span class="n">light_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_o</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Compute the input and observer direction vectors</span>
-    <span class="n">I</span> <span class="o">=</span> <span class="n">light_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_l, E)</span>
-    <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Normalize (N_p, N_l, E)</span>
-    <span class="n">I</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">I</span><span class="p">[:,:,</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>  <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">light_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> \
+        <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_l, E)</span>
+    <span class="c1"># Normalize (N_p, N_l, E)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>
 
-    <span class="n">O</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_o, E)</span>
-    <span class="n">O</span> <span class="o">=</span> <span class="n">O</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">O</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Normalize (N_p, N_o, E)</span>
-    <span class="n">O</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">O</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>  <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">observer_positions</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> \
+        <span class="n">surface_points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_o, E)</span>
+    <span class="c1"># Normalize (N_p, N_o, E)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">O</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">O</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">O</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="n">E</span><span class="p">))</span>
 
     <span class="c1"># Compute the half-vector</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">O</span>  <span class="c1"># Shape: (N_p, N_l, N_o, E)</span>
-    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Normalize (N_p, N_l, N_o, E)</span>
+    <span class="c1"># Normalize (N_p, N_l, N_o, E)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Compute the angles input and ouput angles</span>
-    <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>
     <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cos_theta_i</span><span class="p">)</span>  <span class="c1"># Ensure non-negative</span>
-    <span class="n">cos_theta_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">cos_theta_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>
     <span class="n">cos_theta_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cos_theta_0</span><span class="p">)</span>  <span class="c1"># Ensure non-negative</span>
-    <span class="n">cos_delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="c1"># Shape: (N_p, N_l, N_o)</span>
+    <span class="n">cos_delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;plne,pe-&gt;pln&#39;</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">)</span>
     <span class="n">cos_delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cos_delta</span><span class="p">)</span>  <span class="c1"># Ensure non-negative</span>
 
     <span class="c1"># Create the zero BRDF mask where either cos_theta_i or cos_theta_0 is zero</span>
@@ -916,7 +950,8 @@
     <span class="n">brdf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">brdf_dp</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
-        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># Derivatives w.r.t (rho_d, rho_s, sigma)</span>
+        <span class="c1"># Derivatives w.r.t (rho_d, rho_s, sigma)</span>
+        <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_l</span><span class="p">,</span> <span class="n">N_o</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="c1"># Reshape arrays for valid computations</span>
     <span class="n">cos_theta_i</span> <span class="o">=</span> <span class="n">cos_theta_i</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span>
@@ -932,8 +967,8 @@
     <span class="n">specular_part</span> <span class="o">=</span> <span class="n">exponential_part</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rms</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cos_delta</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
 
     <span class="n">brdf</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_coefficient</span> <span class="o">*</span> <span class="n">diffuse_part</span> <span class="o">+</span> \
-                       <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="n">specular_part</span>
-    
+        <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="n">specular_part</span>
+
     <span class="k">if</span> <span class="n">return_parameter_derivatives</span><span class="p">:</span>
         <span class="c1"># Derivative with respect to diffuse_coefficient</span>
         <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffuse_part</span>
@@ -942,7 +977,7 @@
         <span class="c1"># Derivative with respect to rms</span>
         <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">specular_coefficient</span> <span class="o">*</span> <span class="p">(</span><span class="n">tan_2_delta</span> <span class="o">-</span> <span class="n">rms</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rms</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
         <span class="n">brdf_dp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">][</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">specular_part</span>
-    
+
     <span class="c1"># Remove singleton dimensions if necessary</span>
     <span class="k">if</span> <span class="n">skip_light_dim</span> <span class="ow">and</span> <span class="n">skip_observer_dim</span> <span class="ow">and</span> <span class="n">skip_point_dim</span><span class="p">:</span>
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Scalar</span>
@@ -966,7 +1001,6 @@
         <span class="n">brdf</span> <span class="o">=</span> <span class="n">brdf</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: (N_p, N_l)</span>
         <span class="n">brdf_dp</span> <span class="o">=</span> <span class="n">brdf_dp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">return_parameter_derivatives</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="n">brdf</span></div>
-
 
 </pre></div>
 
@@ -1009,7 +1043,7 @@
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

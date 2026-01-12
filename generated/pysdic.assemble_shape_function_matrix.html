@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>assemble_shape_function_matrix &#8212; pysdic 1.1.4 documentation</title>
+    <title>assemble_shape_function_matrix &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -274,6 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.shape_functions.html">shape_functions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/gauss_points.html">Gauss Quadrature Points Collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -283,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.gauss_points.html">gauss_points</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../api_documentation/integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -533,6 +535,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_operations.html">Photometric Operations</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
@@ -618,15 +621,11 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.assemble_shape_function_matrix">
 <span class="sig-prename descclassname"><span class="pre">pysdic.</span></span><span class="sig-name descname"><span class="pre">assemble_shape_function_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape_functions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_connectivity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_m1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/integration_points_operations.html#assemble_shape_function_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.assemble_shape_function_matrix" title="Link to this definition">#</a></dt>
-<dd><p>Construct the matrix of shape functions at given integration points within elements, from (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>) to (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{v}\)</span>) with zero-filling for non-associated nodes/vertices.</p>
-<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes,
-The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
-<p>For a given set of <span class="math notranslate nohighlight">\(M\)</span> integration points located within elements, the shape function matrix has shape <span class="math notranslate nohighlight">\((M, N_{v})\)</span>
-where each entry corresponds to the shape function value associated with the node at the integration point’s element.</p>
+<dd><p>Construct the matrix of shape functions at given integration points within elements, from <span class="math notranslate nohighlight">\((N_{p}, N_{vpe})\)</span> to <span class="math notranslate nohighlight">\((N_{p}, N_{v})\)</span> with zero-filling for non-associated nodes/vertices.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If the inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_functions</span></code> is not a numpy floating type, it will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code>.
-If the inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> are not of integer type, they will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code>.</p>
+<p>The input <a class="reference internal" href="pysdic.shape_functions.html#pysdic.shape_functions" title="pysdic.shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_functions</span></code></a> will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code> for computation.
+The inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code> for computation.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -635,9 +634,9 @@ If the inputs <code class="xref py py-obj docutils literal notranslate"><span cl
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shape_functions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>)) – An array containing the shape function values evaluated at <span class="math notranslate nohighlight">\(M\)</span> points for the <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes of the element.</p></li>
-<li><p><strong>element_connectivity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(N_{e}\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>)) – Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
-<li><p><strong>element_indices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(M\)</span>,)) – An array containing the indices of each element corresponding to the <span class="math notranslate nohighlight">\(M\)</span> integration points.</p></li>
+<li><p><strong>shape_functions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe})\)</span> containing the shape function values evaluated at <span class="math notranslate nohighlight">\(N_{p}\)</span> points for the <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes of the element.</p></li>
+<li><p><strong>element_connectivity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – An array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span> defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
+<li><p><strong>element_indices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the indices of each element corresponding to the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points.</p></li>
 <li><p><strong>n_vertices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, optional) – The total number of vertices <span class="math notranslate nohighlight">\(N_{v}\)</span> in the mesh.
 If not provided, it will be inferred as the maximum node index in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> plus one.</p></li>
 <li><p><strong>sparse</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function will use <code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse</span></code> to create a sparse matrix representation of the shape function matrix.
@@ -649,17 +648,49 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>shape_function_matrix</strong> – An array or sparse matrix containing the shape function values at each of the <span class="math notranslate nohighlight">\(M\)</span> integration points for all <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes in the mesh.</p>
+<dd class="field-even"><p><strong>shape_function_matrix</strong> – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{v})\)</span> or sparse matrix containing the shape function values at each of the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points for all <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes in the mesh.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{v}\)</span>) or <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.csr_matrix</span></code> of shape (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{v}\)</span>)</p>
+<dd class="field-odd"><p>Union[numpy.ndarray, scipy.sparse.csr_matrix]</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the dimensions of the input arrays do not conform to the expected shapes.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – <ul>
+<li><p>If <a class="reference internal" href="pysdic.shape_functions.html#pysdic.shape_functions" title="pysdic.shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_functions</span></code></a> cannot be converted to a <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of floating type.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> cannot be converted to a <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of integer type.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">n_vertices</span></code> is provided and is not an integer.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">sparse</span></code> is not a boolean.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is not a boolean.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code> is not a real number.</p></li>
+</ul>
+</p></li>
+<li><p><strong>ValueError</strong> – <ul>
+<li><p>If <a class="reference internal" href="pysdic.shape_functions.html#pysdic.shape_functions" title="pysdic.shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_functions</span></code></a> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe})\)</span>.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span>.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> is not a 1D array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span>.</p></li>
+</ul>
+</p></li>
+</ul>
 </dd>
 </dl>
-<section id="exemples">
-<h2>Exemples<a class="headerlink" href="#exemples" title="Link to this heading">#</a></h2>
+<p class="rubric">Notes</p>
+<p>The computation of the shape function values are returned in a matrix with dimensions <span class="math notranslate nohighlight">\((N_{p}, N_{vpe})\)</span>.
+This method constructs a larger matrix of dimensions <span class="math notranslate nohighlight">\((N_{p}, N_{v})\)</span> where each row corresponds to an integration point and each column to a node in the mesh.
+The values from the input <a class="reference internal" href="pysdic.shape_functions.html#pysdic.shape_functions" title="pysdic.shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_functions</span></code></a> are placed in the appropriate columns based on the <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">point_index</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Index of the integration point</span>
+<span class="n">element_index</span> <span class="o">=</span> <span class="n">element_indices</span><span class="p">[</span><span class="n">point_index</span><span class="p">]</span>  <span class="c1"># Element index for the integration point</span>
+<span class="n">vertices_indices</span> <span class="o">=</span> <span class="n">element_connectivity</span><span class="p">[</span><span class="n">element_index</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Node indices for the element of the integration point</span>
+<span class="n">shape_function_matrix</span><span class="p">[</span><span class="n">point_index</span><span class="p">,</span> <span class="n">vertices_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">point_index</span><span class="p">,</span> <span class="p">:]</span> <span class="c1"># Assigning shape function values</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="pysdic.shape_functions.html#pysdic.shape_functions" title="pysdic.shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysdic.shape_functions</span></code></a></dt><dd><p>To compute the shape functions at given natural coordinates within elements with shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe})\)</span>.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
 <p>Lets construct a simple 2D mesh and build the shape function matrix at given integration points for triangular elements.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">assemble_shape_function_matrix</span>
@@ -683,7 +714,6 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
                                                    <span class="n">element_connectivity</span><span class="p">,</span>
                                                    <span class="n">element_indices</span><span class="p">)</span>
 
-
 <span class="nb">print</span><span class="p">(</span><span class="n">shape_func_matrix</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -692,7 +722,6 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
 <span class="go"> [0.2 0.  0.6 0.2]]</span>
 </pre></div>
 </div>
-</section>
 </dd></dl>
 
 </section>
@@ -782,7 +811,7 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.core.integration_points_operations &#8212; pysdic 1.1.4 documentation</title>
+    <title>pysdic.core.integration_points_operations &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/integration_points_operations';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -346,63 +346,89 @@
     <span class="n">default</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Construct the matrix of shape functions at given integration points within elements, from (:math:`M`, :math:`N_{vpe}`) to (:math:`M`, :math:`N_{v}`) with zero-filling for non-associated nodes/vertices.</span>
-
-<span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
-<span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
-
-<span class="sd">    For a given set of :math:`M` integration points located within elements, the shape function matrix has shape :math:`(M, N_{v})`</span>
-<span class="sd">    where each entry corresponds to the shape function value associated with the node at the integration point&#39;s element.</span>
+<span class="sd">    Construct the matrix of shape functions at given integration points within elements, from :math:`(N_{p}, N_{vpe})` to :math:`(N_{p}, N_{v})` with zero-filling for non-associated nodes/vertices.</span>
 
 <span class="sd">    .. note::</span>
 
-<span class="sd">        If the inputs :obj:`shape_functions` is not a numpy floating type, it will be converted to :obj:`numpy.float64`.</span>
-<span class="sd">        If the inputs :obj:`element_connectivity` or :obj:`element_indices` are not of integer type, they will be converted to :obj:`numpy.int64`.</span>
+<span class="sd">        The input :obj:`shape_functions` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The inputs :obj:`element_connectivity`, and :obj:`element_indices` will be converted to :obj:`numpy.int64` for computation.</span>
 
 <span class="sd">    .. warning::</span>
 
 <span class="sd">        When using :obj:`-1` in :obj:`element_indices` for invalid elements, ensure to set :obj:`skip_m1` to :obj:`True` to avoid indexing errors as :obj:`-1` is equivalent to the last element in Python indexing.</span>
 
+<span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    shape_functions : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`)</span>
-<span class="sd">        An array containing the shape function values evaluated at :math:`M` points for the :math:`N_{vpe}` nodes of the element.</span>
+<span class="sd">    shape_functions: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe})` containing the shape function values evaluated at :math:`N_{p}` points for the :math:`N_{vpe}` nodes of the element.</span>
 
-<span class="sd">    element_connectivity : :class:`numpy.ndarray` of shape (:math:`N_{e}`, :math:`N_{vpe}`)</span>
-<span class="sd">        Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">    element_connectivity: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
 
-<span class="sd">    element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)</span>
-<span class="sd">        An array containing the indices of each element corresponding to the :math:`M` integration points.</span>
+<span class="sd">    element_indices: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of each element corresponding to the :math:`N_{p}` integration points.</span>
 
-<span class="sd">    n_vertices : :class:`int`, optional</span>
+<span class="sd">    n_vertices: :class:`int`, optional</span>
 <span class="sd">        The total number of vertices :math:`N_{v}` in the mesh.</span>
 <span class="sd">        If not provided, it will be inferred as the maximum node index in :obj:`element_connectivity` plus one. </span>
 
-<span class="sd">    sparse : :class:`bool`, optional</span>
+<span class="sd">    sparse: :class:`bool`, optional</span>
 <span class="sd">        If set to :obj:`True`, the function will use :obj:`scipy.sparse` to create a sparse matrix representation of the shape function matrix.</span>
 <span class="sd">        Default is :obj:`False`.</span>
 
-<span class="sd">    skip_m1 : :class:`bool`, optional</span>
+<span class="sd">    skip_m1: :class:`bool`, optional</span>
 <span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding shape function values being set to :obj:`default`.</span>
 <span class="sd">        Default is :obj:`True`.</span>
 
-<span class="sd">    default : :class:`Real`, optional</span>
+<span class="sd">    default: :class:`Real`, optional</span>
 <span class="sd">        The default value to assign to shape function values for integration points associated with an element index of -1 when :obj:`skip_m1` is :obj:`True`.</span>
 <span class="sd">        Default is :obj:`0.0`. Only used for non-sparse matrix construction. For sparse matrices, zero-filling is used.</span>
 
+<span class="sd">        </span>
 <span class="sd">    Returns </span>
 <span class="sd">    -------</span>
-<span class="sd">    shape_function_matrix : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{v}`) or :class:`scipy.sparse.csr_matrix` of shape (:math:`M`, :math:`N_{v}`)</span>
-<span class="sd">        An array or sparse matrix containing the shape function values at each of the :math:`M` integration points for all :math:`N_{v}` nodes in the mesh.</span>
+<span class="sd">    shape_function_matrix: Union[numpy.ndarray, scipy.sparse.csr_matrix]</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{v})` or sparse matrix containing the shape function values at each of the :math:`N_{p}` integration points for all :math:`N_{v}` nodes in the mesh.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If :obj:`shape_functions` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+<span class="sd">        - If :obj:`element_connectivity` or :obj:`element_indices` cannot be converted to a :obj:`numpy.ndarray` of integer type.</span>
+<span class="sd">        - If :obj:`n_vertices` is provided and is not an integer.</span>
+<span class="sd">        - If :obj:`sparse` is not a boolean.</span>
+<span class="sd">        - If :obj:`skip_m1` is not a boolean.</span>
+<span class="sd">        - If :obj:`default` is not a real number.</span>
+
 <span class="sd">    ValueError</span>
-<span class="sd">        If the dimensions of the input arrays do not conform to the expected shapes.</span>
+<span class="sd">        - If :obj:`shape_functions` is not a 2D array of shape :math:`(N_{p}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_connectivity` is not a 2D array of shape :math:`(N_{e}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_indices` is not a 1D array of shape :math:`(N_{p},)`.</span>
 
 
-<span class="sd">    Exemples</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The computation of the shape function values are returned in a matrix with dimensions :math:`(N_{p}, N_{vpe})`.</span>
+<span class="sd">    This method constructs a larger matrix of dimensions :math:`(N_{p}, N_{v})` where each row corresponds to an integration point and each column to a node in the mesh.</span>
+<span class="sd">    The values from the input :obj:`shape_functions` are placed in the appropriate columns based on the :obj:`element_connectivity` and :obj:`element_indices`.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        point_index = 0  # Index of the integration point</span>
+<span class="sd">        element_index = element_indices[point_index]  # Element index for the integration point</span>
+<span class="sd">        vertices_indices = element_connectivity[element_index, :]  # Node indices for the element of the integration point</span>
+<span class="sd">        shape_function_matrix[point_index, vertices_indices] = shape_functions[point_index, :] # Assigning shape function values</span>
+
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.shape_functions:</span>
+<span class="sd">        To compute the shape functions at given natural coordinates within elements with shape :math:`(N_{p}, N_{vpe})`.</span>
+
+
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    Lets construct a simple 2D mesh and build the shape function matrix at given integration points for triangular elements.</span>
 
@@ -447,31 +473,31 @@
     <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shape_functions must be a 2D array of shape (M, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;shape_functions&#39; must be a 2D array of shape (N_p, N_npe). Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_connectivity must be a 2D array of shape (N_e, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_connectivity&#39; must be a 2D array of shape (N_e, N_npe). Got </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_indices must be a 1D array of shape (M,).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_indices&#39; must be a 1D array of shape (N_p,). Got </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The first dimension (M) of shape_functions and element_indices must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The first dimension (N_p) of &#39;shape_functions&#39; and &#39;element_indices&#39; must match. Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> 
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The second dimension (N_npe) of shape_functions and element_connectivity must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The second dimension (N_npe) of &#39;shape_functions&#39; and &#39;element_connectivity&#39; must match. Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;sparse must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;sparse&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">sparse</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;skip_m1 must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;skip_m1&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;default must be a real number.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;default&#39; must be a real number. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Extract number of vertices</span>
     <span class="k">if</span> <span class="n">n_vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">element_connectivity</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_vertices</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_vertices must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_vertices must be a positive integer. Got </span><span class="si">{</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Extract dimensions</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_npe</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">N_v</span> <span class="o">=</span> <span class="n">n_vertices</span>
 
@@ -481,17 +507,17 @@
         <span class="n">numpy</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">m1_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">m1_mask</span><span class="p">)</span>
         <span class="n">valid_indices</span> <span class="o">=</span> <span class="n">element_indices</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">m1_mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">m1_mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
         <span class="n">valid_indices</span> <span class="o">=</span> <span class="n">element_indices</span>
 
     <span class="c1"># Extract the vertices indices for each point</span>
-    <span class="n">vertex_indices</span> <span class="o">=</span> <span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># (M_valid, N_npe)</span>
+    <span class="n">vertex_indices</span> <span class="o">=</span> <span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># (N_valid, N_npe)</span>
 
     <span class="c1"># Build the numpy arrays</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="p">:</span>
-        <span class="n">shape_functions_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N_v</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">shape_functions_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_v</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="c1"># Indexation vectorisée</span>
-        <span class="n">shape_functions_matrix</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="p">)[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">vertex_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_functions</span>
+        <span class="n">shape_functions_matrix</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_p</span><span class="p">)[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">vertex_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_functions</span>
 
         <span class="c1"># Handle skip_m1 option</span>
         <span class="k">if</span> <span class="n">skip_m1</span><span class="p">:</span>
@@ -499,10 +525,10 @@
 
     <span class="c1"># Build the scipy sparse matrices</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">row_idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="p">),</span> <span class="n">N_npe</span><span class="p">)</span>
+        <span class="n">row_idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_p</span><span class="p">),</span> <span class="n">N_npe</span><span class="p">)</span>
         <span class="n">col_idx</span> <span class="o">=</span> <span class="n">vertex_indices</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-        <span class="n">shape_functions_matrix</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N_v</span><span class="p">))</span>
+        <span class="n">shape_functions_matrix</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_v</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">shape_functions_matrix</span></div>
 
@@ -519,6 +545,40 @@
 <span class="sd">    Construct the Jacobian matrix :math:`J` of the transformation from natural coordinates :math:`(\xi, \eta, \zeta, ...)` to</span>
 <span class="sd">    global coordinates :math:`(x, y, z, ...)`.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The inputs :obj:`shape_function_derivatives` and :obj:`remapped_coordinates` will be converted to :obj:`numpy.float64` for computation.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    shape_function_derivatives: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe}, K)` containing the derivatives of the shape functions with respect to the local coordinates,</span>
+<span class="sd">        evaluated at :math:`N_{p}` points for the :math:`N_{vpe}` nodes of the element.</span>
+
+<span class="sd">    remapped_coordinates : :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe}, E)` containing the remapped global coordinates of the vertices for each integration point within the elements</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    jacobians: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, E, K)` containing the Jacobian matrices for each of the :math:`N_{p}` points. Each Jacobian matrix has dimensions :math:`(E \times K)`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If :obj:`shape_function_derivatives` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+<span class="sd">        - If :obj:`remapped_coordinates` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        - If :obj:`shape_function_derivatives` is not a 3D array of shape :math:`(N_{p}, N_{vpe}, K)`.</span>
+<span class="sd">        - If :obj:`remapped_coordinates` is not a 3D array of shape :math:`(N_{p}, N_{vpe}, E)`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
 <span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
 <span class="sd">     </span>
@@ -541,35 +601,18 @@
 
 <span class="sd">    Here, :math:`N_a` are the shape functions associated with each node, and :math:`x_{i,a}` are the global coordinates of the nodes.</span>
 
-<span class="sd">    .. seealso::</span>
 
-<span class="sd">        - :func:`pysdic.remap_vertices_coordinates` for remapping the global coordinates of the vertices to integration points within elements.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    shape_function_derivatives : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`, :math:`K`)</span>
-<span class="sd">        An array containing the derivatives of the shape functions with respect to the local coordinates,</span>
-<span class="sd">        evaluated at :math:`M` points for the :math:`N_{vpe}` nodes of the element.</span>
-
-<span class="sd">    remapped_coordinates : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`, :math:`E`)</span>
-<span class="sd">        An array containing the remapped global coordinates of the vertices for each integration point within the elements</span>
-
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    jacobians : :class:`numpy.ndarray` of shape (:math:`M`, :math:`E`, :math:`K`)</span>
-<span class="sd">        An array containing the Jacobian matrices for each of the :math:`M` points. Each Jacobian matrix has dimensions :math:`(E \times K)`.</span>
-
-<span class="sd">    </span>
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If the dimensions of the input arrays do not conform to the expected shapes.</span>
-
-
-<span class="sd">    Exemples</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
+<span class="sd">    pysdic.shape_functions:</span>
+<span class="sd">        To compute the shape functions and their derivatives at given natural coordinates within elements.</span>
+<span class="sd">    </span>
+<span class="sd">    pysdic.remap_vertices_coordinates:</span>
+<span class="sd">        To remap the vertices coordinates for each element at given integration points.</span>
 
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    Lets construct a simple 2D mesh and compute the Jacobian at given integration points for triangular elements.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -615,16 +658,16 @@
     <span class="n">remapped_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">remapped_coordinates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shape_function_derivatives must be a 3D array of shape (M, N_npe, K).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;shape_function_derivatives&#39; must be a 3D array of shape (N_p, N_npe, K). Got </span><span class="si">{</span><span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;remapped_coordinates must be a 3D array of shape (M, N_npe, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;remapped_coordinates&#39; must be a 3D array of shape (N_p, N_npe, E). Got </span><span class="si">{</span><span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The first dimension (M) of shape_function_derivatives and remapped_coordinates must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The first dimension (N_p) of &#39;shape_function_derivatives&#39; and &#39;remapped_coordinates&#39; must match. Got </span><span class="si">{</span><span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The second dimension (N_npe) of shape_function_derivatives and remapped_coordinates must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The second dimension (N_npe) of &#39;shape_function_derivatives&#39; and &#39;remapped_coordinates&#39; must match. Got </span><span class="si">{</span><span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Extract dimensions</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_npe</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">K</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">E</span> <span class="o">=</span> <span class="n">remapped_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -651,10 +694,66 @@
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Derivate a property defined at the nodes of a mesh to given integration points within elements with respect to global coordinates :math:`(x,y,z,...)` using shape function derivatives.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The inputs :obj:`property_array`, :obj:`vertices_coordinates`, and :obj:`shape_function_derivatives` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The inputs :obj:`element_connectivity`, and :obj:`element_indices` will be converted to :obj:`numpy.int64` for computation.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    property_array: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{v}, P)` containing the property values defined at the nodes of the mesh. If 1D-array is provided, it will be treated as a single-component property of shape :math:`(N_{v}, 1)`.</span>
+
+<span class="sd">    vertices_coordinates: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{v}, E)` containing the global coordinates :math:`(x, y, z, ...)` of the vertices in the mesh.</span>
+
+<span class="sd">    shape_function_derivatives: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe}, K)` containing the derivatives of the shape functions evaluated at :math:`N_{p}` points for the :math:`N_{vpe}` nodes of the element.</span>
+
+<span class="sd">    element_connectivity: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+
+<span class="sd">    element_indices: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of each element corresponding to the :math:`N_{p}` integration points.</span>
+
+<span class="sd">    skip_m1: :class:`bool`, optional</span>
+<span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding derivated property being set to :obj:`default`.</span>
+<span class="sd">        Default is :obj:`True`.</span>
+
+<span class="sd">    default: :class:`Real`, optional</span>
+<span class="sd">        The default value to assign to derivated properties for integration points associated with an element index of -1 when :obj:`skip_m1` is :obj:`True`.</span>
+<span class="sd">        Default is :obj:`numpy.nan`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    derivated_properties: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, P, E)` containing the derivated property values at each of the :math:`N_{p}` integration points with respect to the global coordinates :math:`(x, y, z, ...)`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If :obj:`property_array`, :obj:`vertices_coordinates`, or :obj:`shape_function_derivatives` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+<span class="sd">        - If :obj:`element_connectivity` or :obj:`element_indices` cannot be converted to a :obj:`numpy.ndarray` of integer type.</span>
+<span class="sd">        - If :obj:`skip_m1` is not a boolean.</span>
+<span class="sd">        - If :obj:`default` is not a real number.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        - If :obj:`property_array` is not a 1D or 2D array of shape :math:`(N_{v},)` or :math:`(N_{v}, P)`.</span>
+<span class="sd">        - If :obj:`vertices_coordinates` is not a 2D array of shape :math:`(N_{v}, E)`.</span>
+<span class="sd">        - If :obj:`shape_function_derivatives` is not a 3D array of shape :math:`(N_{p}, N_{vpe}, K)`.</span>
+<span class="sd">        - If :obj:`element_connectivity` is not a 2D array of shape :math:`(N_{e}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_indices` is not a 1D array of shape :math:`(N_{p},)`.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
 <span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
 
-<span class="sd">    For a given set of :math:`M` integration points located within elements, the derivated property array has shape :math:`(M, P, K)`</span>
+<span class="sd">    For a given set of :math:`N_p` integration points located within elements, the derivated property array has shape :math:`(N_p, P, K)`</span>
 <span class="sd">    where :math:`P` is the number of property components (e.g., 1 for scalar properties, 3 for vector properties), and :math:`K` is the number of local coordinates.</span>
 
 <span class="sd">    The derivative of the property at each integration point is computed as:</span>
@@ -670,53 +769,6 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">        \nabla_X P(\xi, \eta, \zeta, ...) = J^{-1} \cdot \sum_{i=1}^{N_{vpe}} \nabla_{\xi} N_i(\xi, \eta, \zeta, ...) P_i</span>
-
-<span class="sd">    .. note::</span>
-
-<span class="sd">        If the inputs :obj:`property_array` or :obj:`shape_function_derivatives` are not a numpy floating type, it will be converted to :obj:`numpy.float64`.</span>
-<span class="sd">        If the inputs :obj:`element_connectivity`, or :obj:`element_indices` are not of integer type, they will be converted to :obj:`numpy.int64`.</span>
-
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.construct_jacobian` for constructing the Jacobian matrix using remapped coordinates.</span>
-<span class="sd">        - :func:`pysdic.interpolate_property` for interpolating properties at integration points.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    property_array : :class:`numpy.ndarray` of shape (:math:`N_{v}`, :math:`P`)</span>
-<span class="sd">        Array containing the property values defined at the nodes of the mesh. If 1D-array is provided, it will be treated as a single-component property of shape (:math:`N_{v}`, 1).</span>
-
-<span class="sd">    vertices_coordinates : :class:`numpy.ndarray` of shape (:math:`N_{v}`, :math:`E`)</span>
-<span class="sd">        Array containing the global coordinates of the vertices in the mesh.</span>
-
-<span class="sd">    shape_function_derivatives : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`, :math:`K`)</span>
-<span class="sd">        An array containing the derivatives of the shape functions evaluated at :math:`M` points for the :math:`N_{vpe}` nodes of the element.</span>
-
-<span class="sd">    element_connectivity : :class:`numpy.ndarray` of shape (:math:`N_{e}`, :math:`N_{vpe}`)</span>
-<span class="sd">        Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
-
-<span class="sd">    element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)</span>
-<span class="sd">        An array containing the indices of each element corresponding to the :math:`M` integration points.</span>
-
-<span class="sd">    skip_m1 : :class:`bool`, optional</span>
-<span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding derivated property being set to :obj:`default`.</span>
-<span class="sd">        Default is :obj:`True`.</span>
-
-<span class="sd">    default : :class:`Real`, optional</span>
-<span class="sd">        The default value to assign to derivated properties for integration points associated with an element index of -1 when :obj:`skip_m1` is :obj:`True`.</span>
-<span class="sd">        Default is :obj:`numpy.nan`.</span>
-
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    derivated_properties : :class:`numpy.ndarray` of shape (:math:`M`, :math:`P`, :math:`E`)</span>
-<span class="sd">        An array containing the derivated property values at each of the :math:`M` integration points with respect to the global coordinates.</span>
-
-<span class="sd">        </span>
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If the dimensions of the input arrays do not conform to the expected shapes.</span>
 
 
 <span class="sd">    Demonstration</span>
@@ -758,11 +810,21 @@
 
 <span class="sd">        \nabla_X P(\xi, \eta, \zeta, ...) = J \cdot (J^T J)^{-1} \cdot \sum_{i=1}^{N_{vpe}} \frac{\partial N_i}{\partial \xi} P_i</span>
 
-
-<span class="sd">    </span>
-<span class="sd">    Exemples</span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
+<span class="sd">    pysdic.shape_functions:</span>
+<span class="sd">        To compute the shape functions and their derivatives at given natural coordinates within elements.</span>
 
+<span class="sd">    pysdic.construct_jacobian:</span>
+<span class="sd">        To construct the Jacobian matrix using remapped coordinates.</span>
+
+<span class="sd">    pysdic.interpolate_property:</span>
+<span class="sd">        To interpolate properties at integration points.</span>
+<span class="sd">    </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    Lets construct a simple 2D mesh and derivate a scalar property at given integration points for triangular elements.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -819,28 +881,28 @@
     <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;property_array must be a 2D array of shape (N_v, P).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;property_array&#39; must be a 2D array of shape (N_v, P). Got </span><span class="si">{</span><span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;vertices_coordinates must be a 2D array of shape (N_v, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;vertices_coordinates&#39; must be a 2D array of shape (N_v, E). Got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shape_function_derivatives must be a 3D array of shape (M, N_npe, K).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;shape_function_derivatives&#39; must be a 3D array of shape (N_p, N_npe, K). Got </span><span class="si">{</span><span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_connectivity must be a 2D array of shape (N_e, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_connectivity&#39; must be a 2D array of shape (N_e, N_npe). Got </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_indices must be a 1D array of shape (M,).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_indices&#39; must be a 1D array of shape (N_p,). Got </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The first dimension (M) of shape_function_derivatives and element_indices must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The first dimension (N_p) of &#39;shape_function_derivatives&#39; and &#39;element_indices&#39; must match. Got </span><span class="si">{</span><span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The second dimension (N_npe) of shape_function_derivatives and element_connectivity must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The second dimension (N_npe) of &#39;shape_function_derivatives&#39; and &#39;element_connectivity&#39; must match. Got </span><span class="si">{</span><span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The first dimension (N_v) of vertices_coordinates and property_array must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The first dimension (N_v) of &#39;vertices_coordinates&#39; and &#39;property_array&#39; must match. Got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;skip_m1 must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;skip_m1&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;default must be a real number.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;default&#39; must be a real number. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Extract dimensions</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_npe</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">K</span> <span class="o">=</span> <span class="n">shape_function_derivatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -860,32 +922,33 @@
         <span class="n">vertices_coordinates</span><span class="o">=</span><span class="n">vertices_coordinates</span><span class="p">,</span>
         <span class="n">element_connectivity</span><span class="o">=</span><span class="n">element_connectivity</span><span class="p">,</span>
         <span class="n">element_indices</span><span class="o">=</span><span class="n">valid_indices</span><span class="p">,</span>
-    <span class="p">)</span>  <span class="c1"># Shape: (M_valid, N_npe, E)</span>
+    <span class="p">)</span>  <span class="c1"># Shape: (N_valid, N_npe, E)</span>
 
     <span class="n">jacobians</span> <span class="o">=</span> <span class="n">construct_jacobian</span><span class="p">(</span>
         <span class="n">shape_function_derivatives</span><span class="o">=</span><span class="n">shape_function_derivatives</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
         <span class="n">remapped_coordinates</span><span class="o">=</span><span class="n">remapped_coordinates</span><span class="p">,</span>
-    <span class="p">)</span>  <span class="c1"># Shape: (M_valid, E, K)</span>
+    <span class="p">)</span>  <span class="c1"># Shape: (N_valid, E, K)</span>
  
     <span class="c1"># Invert jacobians</span>
     <span class="k">if</span> <span class="n">E</span> <span class="o">==</span> <span class="n">K</span><span class="p">:</span>
-        <span class="n">jacobians_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">jacobians</span><span class="p">)</span>  <span class="c1"># Shape: (M, K, E)</span>
+        <span class="n">jacobians_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">jacobians</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, K, E)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">jacobians_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mij,mjk-&gt;mik&#39;</span><span class="p">,</span> <span class="n">jacobians</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mji,mjk-&gt;mik&#39;</span><span class="p">,</span> <span class="n">jacobians</span><span class="p">,</span> <span class="n">jacobians</span><span class="p">)))</span> <span class="c1"># Shape: (M, K, E)</span>
+        <span class="n">jacobians_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mij,mjk-&gt;mik&#39;</span><span class="p">,</span> <span class="n">jacobians</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mji,mjk-&gt;mik&#39;</span><span class="p">,</span> <span class="n">jacobians</span><span class="p">,</span> <span class="n">jacobians</span><span class="p">)))</span> <span class="c1"># Shape: (N_p, K, E)</span>
 
     <span class="c1"># Derivate properties</span>
-    <span class="n">vertices_properties</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[</span><span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="p">:]</span>  <span class="c1"># Shape: (M, N_npe, P)</span>
-    <span class="n">derivative_sum</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mjp,mjk-&gt;mpk&#39;</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="p">,</span> <span class="n">shape_function_derivatives</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_function_derivatives</span><span class="p">)</span>  <span class="c1"># Shape: (M, P, K)</span>
-    <span class="n">derivated_properties_valid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mke,mpk-&gt;mpe&#39;</span><span class="p">,</span> <span class="n">jacobians_inv</span><span class="p">,</span> <span class="n">derivative_sum</span><span class="p">)</span>  <span class="c1"># Shape: (M, P, E)</span>
+    <span class="n">vertices_properties</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[</span><span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_npe, P)</span>
+    <span class="n">derivative_sum</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mjp,mjk-&gt;mpk&#39;</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="p">,</span> <span class="n">shape_function_derivatives</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_function_derivatives</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, P, K)</span>
+    <span class="n">derivated_properties_valid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mke,mpk-&gt;mpe&#39;</span><span class="p">,</span> <span class="n">jacobians_inv</span><span class="p">,</span> <span class="n">derivative_sum</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, P, E)</span>
 
     <span class="c1"># Handle -1 entries if skip_m1 is True</span>
     <span class="k">if</span> <span class="n">skip_m1</span><span class="p">:</span>
-        <span class="n">derivated_properties</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">default</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">derivated_properties_valid</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">derivated_properties</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">default</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">derivated_properties_valid</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">derivated_properties</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">derivated_properties_valid</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">derivated_properties</span> <span class="o">=</span> <span class="n">derivated_properties_valid</span>
 
     <span class="k">return</span> <span class="n">derivated_properties</span></div>
+
 
 
 
@@ -903,10 +966,66 @@
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interpolate a property defined at the nodes of a mesh to given integration points within elements using shape functions.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The inputs :obj:`property_array` and :obj:`shape_functions` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The inputs :obj:`element_connectivity`, and :obj:`element_indices` will be converted to :obj:`numpy.int64` for computation.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        When using :obj:`-1` in :obj:`element_indices` for invalid elements, ensure to set :obj:`skip_m1` to :obj:`True` to avoid indexing errors as :obj:`-1` is equivalent to the last element in Python indexing.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    property_array: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{v}, P)` containing the property values defined at the nodes of the mesh. If 1D-array is provided, it will be treated as a single-component property of shape :math:`(N_{v}, 1)`.</span>
+
+<span class="sd">    shape_functions: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe})` containing the shape function values evaluated at :math:`N_{p}` points for the :math:`N_{vpe}` nodes of the element.</span>
+
+<span class="sd">    element_connectivity: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+
+<span class="sd">    element_indices: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of each element corresponding to the :math:`N_{p}` integration points.</span>
+
+<span class="sd">    skip_m1: :class:`bool`, optional</span>
+<span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding interpolated property being set to :obj:`default`.</span>
+<span class="sd">        Default is :obj:`True`.</span>
+
+<span class="sd">    default: :class:`Real` or :class:`numpy.ndarray`, optional</span>
+<span class="sd">        The default value to assign to interpolated properties for integration points associated with an element index of -1 when :obj:`skip_m1` is :obj:`True`.</span>
+<span class="sd">        Default is :obj:`numpy.nan`. The input can also be a :class:`numpy.ndarray` of shape (P,) to assign different default values for each property component.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    interpolated_properties: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, P)` containing the interpolated property values at each of the :math:`N_{p}` integration points.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If :obj:`property_array` or :obj:`shape_functions` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+<span class="sd">        - If :obj:`element_connectivity` or :obj:`element_indices` cannot be converted to a :obj:`numpy.ndarray` of integer type.</span>
+<span class="sd">        - If :obj:`skip_m1` is not a boolean.</span>
+<span class="sd">        - If :obj:`default` is neither a real number nor a :obj:`numpy.ndarray` of shape (P,).</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        - If :obj:`property_array` is not a 1D or 2D array of shape :math:`(N_{v},)` or :math:`(N_{v}, P)`.</span>
+<span class="sd">        - If :obj:`shape_functions` is not a 2D array of shape :math:`(N_{p}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_connectivity` is not a 2D array of shape :math:`(N_{e}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_indices` is not a 1D array of shape :math:`(N_{p},)`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
 <span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
 
-<span class="sd">    For a given set of :math:`M` integration points located within elements, the interpolated property array has shape :math:`(M, P)`</span>
+<span class="sd">    For a given set of :math:`N_{p}` integration points located within elements, the interpolated property array has shape :math:`(N_{p}, P)`</span>
 <span class="sd">    where :math:`P` is the number of property components (e.g., 1 for scalar properties, 3 for vector properties).</span>
 
 <span class="sd">    The property at each integration point is computed as:</span>
@@ -917,58 +1036,18 @@
 
 <span class="sd">    where :math:`N_i` are the shape functions associated with each node, and :math:`P_i` are the property values at the nodes of the element.</span>
 
-<span class="sd">    .. note::</span>
 
-<span class="sd">        If the inputs :obj:`property_array` or :obj:`shape_functions` are not a numpy floating type, it will be converted to :obj:`numpy.float64`.</span>
-<span class="sd">        If the inputs :obj:`element_connectivity`, or :obj:`element_indices` are not of integer type, they will be converted to :obj:`numpy.int64`.</span>
-
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.derivate_property` for derivating properties at integration points.</span>
-<span class="sd">        - :func:`pysdic.project_property_to_vertices` for projecting properties from integration points back to mesh nodes.</span>
-
-<span class="sd">    .. warning::</span>
-
-<span class="sd">        When using :obj:`-1` in :obj:`element_indices` for invalid elements, ensure to set :obj:`skip_m1` to :obj:`True` to avoid indexing errors as :obj:`-1` is equivalent to the last element in Python indexing.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    property_array : :class:`numpy.ndarray` of shape (:math:`N_{v}`, P)</span>
-<span class="sd">        Array containing the property values defined at the nodes of the mesh. If 1D-array is provided, it will be treated as a single-component property of shape (:math:`N_{v}`, 1).</span>
-
-<span class="sd">    shape_functions : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`)</span>
-<span class="sd">        An array containing the shape function values evaluated at :math:`M` points for the :math:`N_{vpe}` nodes of the element.</span>
-
-<span class="sd">    element_connectivity : :class:`numpy.ndarray` of shape (:math:`N_{e}`, :math:`N_{vpe}`)</span>
-<span class="sd">        Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
-
-<span class="sd">    element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)</span>
-<span class="sd">        An array containing the indices of each element corresponding to the :math:`M` integration points.</span>
-
-<span class="sd">    skip_m1 : :class:`bool`, optional</span>
-<span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding interpolated property being set to :obj:`default`.</span>
-<span class="sd">        Default is :obj:`True`.</span>
-
-<span class="sd">    default : :class:`Real` or :class:`numpy.ndarray`, optional</span>
-<span class="sd">        The default value to assign to interpolated properties for integration points associated with an element index of -1 when :obj:`skip_m1` is :obj:`True`.</span>
-<span class="sd">        Default is :obj:`numpy.nan`. The input can also be a :class:`numpy.ndarray` of shape (P,) to assign different default values for each property component.</span>
-
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    interpolated_properties : :class:`numpy.ndarray` of shape (:math:`M`, :math:`P`)</span>
-<span class="sd">        An array containing the interpolated property values at each of the :math:`M` integration points.</span>
-
-<span class="sd">    </span>
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If the dimensions of the input arrays do not conform to the expected shapes.</span>
-
-<span class="sd">    </span>
-<span class="sd">    Exemples</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
+<span class="sd">    pysdic.shape_functions:</span>
+<span class="sd">        To compute the shape functions at given natural coordinates within elements.</span>
 
+<span class="sd">    pysdic.project_property_to_vertices:</span>
+<span class="sd">        To project properties defined at integration points back to the nodes of the mesh.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    Lets construct a simple 2D mesh and interpolate a scalar property at given integration points for triangular elements.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -1020,27 +1099,27 @@
     <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;property_array must be a 2D array of shape (N_v, P).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;property_array&#39; must be a 2D array of shape (N_v, P). Got </span><span class="si">{</span><span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shape_functions must be a 2D array of shape (M, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;shape_functions&#39; must be a 2D array of shape (N_p, N_npe). Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_connectivity must be a 2D array of shape (N_e, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_connectivity&#39; must be a 2D array of shape (N_e, N_npe). Got </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_indices must be a 1D array of shape (M,).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_indices&#39; must be a 1D array of shape (N_p,). Got </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The first dimension (M) of shape_functions and element_indices must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The first dimension (N_p) of &#39;shape_functions&#39; and &#39;element_indices&#39; must match. Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The second dimension (N_npe) of shape_functions and element_connectivity must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The second dimension (N_npe) of &#39;shape_functions&#39; and &#39;element_connectivity&#39; must match. Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;skip_m1 must be a boolean value.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">default</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],))):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;default must be a real number or a numpy.ndarray of shape (P,).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;skip_m1&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
         <span class="n">default</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],),</span> <span class="n">default</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="c1"># Convert to array of shape (P,)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Real</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">default</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],))):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;default&#39; must be a real number or a numpy.ndarray of shape (P,). Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="si">}</span><span class="s2"> with shape </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">default</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;shape&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Extract dimensions</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_npe</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -1053,12 +1132,12 @@
         <span class="n">valid_indices</span> <span class="o">=</span> <span class="n">element_indices</span>
 
     <span class="c1"># Interpolate properties</span>
-    <span class="n">vertices_properties</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[</span><span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="p">:]</span>  <span class="c1"># Shape: (M, N_npe, P)</span>
-    <span class="n">interpolated_properties_valid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mi,mip-&gt;mp&#39;</span><span class="p">,</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">]</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_functions</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="p">)</span>  <span class="c1"># Shape: (M, P)</span>
+    <span class="n">vertices_properties</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[</span><span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_p, N_npe, P)</span>
+    <span class="n">interpolated_properties_valid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;mi,mip-&gt;mp&#39;</span><span class="p">,</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">]</span> <span class="k">if</span> <span class="n">skip_m1</span> <span class="k">else</span> <span class="n">shape_functions</span><span class="p">,</span> <span class="n">vertices_properties</span><span class="p">)</span>  <span class="c1"># Shape: (N_p, P)</span>
 
     <span class="c1"># Handle -1 entries if skip_m1 is True</span>
     <span class="k">if</span> <span class="n">skip_m1</span><span class="p">:</span>
-        <span class="n">interpolated_properties</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">interpolated_properties</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">interpolated_properties</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">interpolated_properties_valid</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">interpolated_properties</span> <span class="o">=</span> <span class="n">interpolated_properties_valid</span>
@@ -1085,16 +1164,89 @@
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Project a property defined at integration points within elements back to the nodes of a mesh using shape functions.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The inputs :obj:`property_array`, :obj:`shape_functions`, and :obj:`points_weights` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The inputs :obj:`element_connectivity`, and :obj:`element_indices` will be converted to :obj:`numpy.int64` for computation.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        By default, nodes that are not affected by any integration point will have their projected property value set to zero. To change this behavior, you can set :obj:`return_unaffected` to :obj:`True` to return the mask with shape :math:`(N_{v},)` indicating which nodes were unaffected (i.e., not influenced by any integration point).</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    property_array: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, P)` containing the property values defined at the :math:`N_{p}` integration points. If 1D-array is provided, it will be treated as a single-component property of shape :math:`(N_{p}, 1)`.</span>
+
+<span class="sd">    shape_functions: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe})` containing the shape function values evaluated at :math:`N_{p}` points for the :math:`N_{vpe}` nodes of the element.</span>
+
+<span class="sd">    element_connectivity: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+
+<span class="sd">    element_indices: :class:`numpy.ndarray` </span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of each element corresponding to the :math:`N_{p}` integration points.</span>
+
+<span class="sd">    n_vertices: :class:`int`, optional</span>
+<span class="sd">        The total number of vertices :math:`N_{v}` in the mesh. If not provided, it will be inferred as the maximum index in :obj:`element_connectivity` plus one.</span>
+
+<span class="sd">    points_weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the weights associated with each integration point. If not provided, all weights will be assumed to be equal to one.</span>
+
+<span class="sd">    sparse: :class:`bool`, optional</span>
+<span class="sd">        If set to :obj:`True`, the shape functions matrix will be constructed as a sparse matrix to optimize memory usage for large meshes.</span>
+<span class="sd">        Default is :obj:`False`.</span>
+
+<span class="sd">    skip_m1: :class:`bool`, optional</span>
+<span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding integration point being ignored during the projection.</span>
+<span class="sd">        Default is :obj:`True`. </span>
+
+<span class="sd">    return_unaffected: :class:`bool`, optional</span>
+<span class="sd">        If set to :obj:`True`, the function will return a tuple containing the projected properties and a boolean mask indicating which nodes were unaffected by any integration point.</span>
+<span class="sd">        Default is :obj:`False`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    projected_properties: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{v}, P)` containing the projected property values at the nodes of the mesh.</span>
+
+<span class="sd">    unaffected_mask: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        A boolean array of shape :math:`(N_{v},)` indicating which nodes were unaffected by any integration point. This is only returned if :obj:`return_unaffected` is set to :obj:`True`.</span>
+<span class="sd">        :obj:`True` indicates the node was unaffected, while :obj:`False` indicates it was affected. So using :obj:`projected_properties[unaffected_mask, :] = default` will set the unaffected nodes to :obj:`default`.</span>
+<span class="sd">        </span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If :obj:`property_array`, :obj:`shape_functions`, or :obj:`points_weights` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+<span class="sd">        - If :obj:`element_connectivity` or :obj:`element_indices` cannot be converted to a :obj:`numpy.ndarray` of integer type.</span>
+<span class="sd">        - If :obj:`sparse` is not a boolean.</span>
+<span class="sd">        - If :obj:`skip_m1` is not a boolean.</span>
+<span class="sd">        - If :obj:`return_unaffected` is not a boolean.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        - If :obj:`property_array` is not a 1D or 2D array of shape :math:`(N_{p},)` or :math:`(N_{p}, P)`.</span>
+<span class="sd">        - If :obj:`shape_functions` is not a 2D array of shape :math:`(N_{p}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_connectivity` is not a 2D array of shape :math:`(N_{e}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_indices` is not a 1D array of shape :math:`(N_{p},)`.</span>
+<span class="sd">        - If :obj:`points_weights` is not a 1D array of shape :math:`(N_{p},)`.</span>
+<span class="sd">        - If :obj:`n_vertices` is provided and is not a positive integer or is less than the maximum index in :obj:`element_connectivity` plus one.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
 <span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
 
-<span class="sd">    The evaluation of a property at the given integration points is represented by an array of shape :math:`(M, P)` and is performed as:</span>
+<span class="sd">    The evaluation of a property at the given integration points is represented by an array of shape :math:`(N_{p}, P)` and is performed as:</span>
 
 <span class="sd">    .. math::</span>
 
 <span class="sd">        P_{points} = N_f \cdot P_{nodes} \Leftrightarrow P(\xi, \eta, \zeta, ...) = \sum_{i=1}^{N_{vpe}} N_i(\xi, \eta, \zeta, ...) P_i</span>
 
-<span class="sd">    where :math:`N_f` is the shape functions matrix assembled for all :math:`M` integration points, :math:`P_{points}` is the property array at the integration points, and :math:`P_{nodes}` is the property array at the mesh nodes.</span>
+<span class="sd">    where :math:`N_f` is the shape functions matrix assembled for all :math:`N_{p}` integration points, :math:`P_{points}` is the property array at the integration points, and :math:`P_{nodes}` is the property array at the mesh nodes.</span>
 
 <span class="sd">    To project back to the nodes, we solve the following system using the pseudo-inverse of the shape functions matrix:</span>
 
@@ -1104,69 +1256,6 @@
 
 <span class="sd">    where :math:`W` is a diagonal matrix of weights associated with each integration point.</span>
 
-<span class="sd">    .. note::</span>
-
-<span class="sd">        If the input :obj:`property_array` is not a numpy floating type, it will be converted to :obj:`numpy.float64`.</span>
-<span class="sd">        If the inputs :obj:`element_connectivity` or :obj:`element_indices` are not of integer type, they will be converted to :obj:`numpy.int64`.</span>
-
-<span class="sd">    .. note::</span>
-
-<span class="sd">        By default, nodes that are not affected by any integration point will have their projected property value set to zero. To change this behavior, you can set :obj:`return_unaffected` to :obj:`True` to return the mask with shape :math:`(N_{v},)` indicating which nodes were unaffected (i.e., not influenced by any integration point).</span>
-
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.interpolate_property` for interpolating properties at integration points.</span>
-<span class="sd">        - :func:`pysdic.assemble_shape_function_matrix` for assembling the shape functions matrix.</span>
-
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    property_array : :class:`numpy.ndarray` of shape (:math:`M`, :math:`P`)</span>
-<span class="sd">        An array containing the property values defined at the :math:`M` integration points. If 1D-array is provided, it will be treated as a single-component property of shape (:math:`M`, 1).</span>
-
-<span class="sd">    shape_functions : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`)</span>
-<span class="sd">        An array containing the shape function values evaluated at :math:`M` points for the :math:`N_{vpe}` nodes of the element.</span>
-
-<span class="sd">    element_connectivity : :class:`numpy.ndarray` of shape (:math:`N_{e}`, :math:`N_{vpe}`)</span>
-<span class="sd">        Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
-
-<span class="sd">    element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)</span>
-<span class="sd">        An array containing the indices of each element corresponding to the :math:`M` integration points.</span>
-
-<span class="sd">    n_vertices : :class:`int`, optional</span>
-<span class="sd">        The total number of vertices :math:`N_{v}` in the mesh. If not provided, it will be inferred as the maximum index in :obj:`element_connectivity` plus one.</span>
-
-<span class="sd">    points_weights : :class:`numpy.ndarray` of shape (:math:`M`,), optional</span>
-<span class="sd">        An array containing the weights associated with each integration point. If not provided, equal weights will be assumed.</span>
-
-<span class="sd">    sparse : :class:`bool`, optional</span>
-<span class="sd">        If set to :obj:`True`, the shape functions matrix will be constructed as a sparse matrix to optimize memory usage for large meshes.</span>
-<span class="sd">        Default is :obj:`False`.</span>
-
-<span class="sd">    skip_m1 : :class:`bool`, optional</span>
-<span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding integration point being ignored during the projection.</span>
-<span class="sd">        Default is :obj:`True`. </span>
-
-<span class="sd">    return_unaffected : :class:`bool`, optional</span>
-<span class="sd">        If set to :obj:`True`, the function will return a tuple containing the projected properties and a boolean mask indicating which nodes were unaffected by any integration point.</span>
-<span class="sd">        Default is :obj:`False`.</span>
-
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    projected_properties : :class:`numpy.ndarray` of shape (:math:`N_{v}`, :math:`P`)</span>
-<span class="sd">        An array containing the projected property values at the nodes of the mesh.</span>
-
-<span class="sd">    unaffected_mask : :class:`numpy.ndarray` of shape (:math:`N_{v}`,), optional</span>
-<span class="sd">        A boolean array indicating which nodes were unaffected by any integration point. This is only returned if :obj:`return_unaffected` is set to :obj:`True`.</span>
-<span class="sd">        :obj:`True` indicates the node was unaffected, while :obj:`False` indicates it was affected. So using :obj:`projected_properties[unaffected_mask, :] = default` will set the unaffected nodes to :obj:`default`.</span>
-<span class="sd">        </span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If the dimensions of the input arrays do not conform to the expected shapes.</span>
-
 
 <span class="sd">    Demonstration</span>
 <span class="sd">    --------------</span>
@@ -1174,12 +1263,12 @@
 <span class="sd">    Lets consider the following notations:</span>
 
 <span class="sd">    - :math:`N_v` the number of nodes in the mesh.</span>
-<span class="sd">    - :math:`M` the number of integration points.</span>
+<span class="sd">    - :math:`N_{p}` the number of integration points.</span>
 <span class="sd">    - :math:`P` the number of property components (e.g., 1 for scalar properties, 3 for vector properties).</span>
-<span class="sd">    - :math:`P_{points}` the property array at the integration points with shape :math:`(M, P)`.</span>
+<span class="sd">    - :math:`P_{points}` the property array at the integration points with shape :math:`(N_{p}, P)`.</span>
 <span class="sd">    - :math:`P_{nodes}` the property array at the mesh nodes with shape :math:`(N_v, P)`.</span>
-<span class="sd">    - :math:`N_f` the shape functions matrix with shape :math:`(M, N_v)`.</span>
-<span class="sd">    - :math:`W` the diagonal matrix of weights with shape :math:`(M, M)`.</span>
+<span class="sd">    - :math:`N_f` the shape functions matrix with shape :math:`(N_{p}, N_v)`.</span>
+<span class="sd">    - :math:`W` the diagonal matrix of weights with shape :math:`(N_{p}, N_{p})`.</span>
 
 <span class="sd">    We know that:</span>
 
@@ -1191,7 +1280,7 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        \hat{P_{nodes}} = \min_{P_{nodes}} ( \frac{1}{2}\sum_{i=1}^{M} w_i \| P_{points,i} - N_{f,i} \cdot P_{nodes} \|^2 ) </span>
+<span class="sd">        \hat{P_{nodes}} = \min_{P_{nodes}} ( \frac{1}{2}\sum_{i=1}^{N_p} w_i \| P_{points,i} - N_{f,i} \cdot P_{nodes} \|^2 ) </span>
 <span class="sd">        </span>
 <span class="sd">    .. math::</span>
 
@@ -1216,9 +1305,20 @@
 <span class="sd">        \hat{P_{nodes}} = A^{-1} N_f^T W P_{points}</span>
 
 <span class="sd">    </span>
-<span class="sd">    Exemples</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
+<span class="sd">    pysdic.shape_functions:</span>
+<span class="sd">        To compute the shape functions at given natural coordinates within elements.</span>
 
+<span class="sd">    pysdic.interpolate_property:</span>
+<span class="sd">        To interpolate properties at integration points.</span>
+
+<span class="sd">    pysdic.assemble_shape_function_matrix:</span>
+<span class="sd">        To assemble the shape functions matrix for the projection operation.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    Lets interpolate a scalar property at given integration points for triangular elements and project it back to the mesh nodes.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -1282,7 +1382,7 @@
     <span class="c1"># Validate input dimensions</span>
     <span class="n">property_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">property_array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">property_array</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="c1"># Convert to 2D array with shape (M, 1)</span>
+        <span class="n">property_array</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="c1"># Convert to 2D array with shape (N_p, 1)</span>
 
     <span class="n">shape_functions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shape_functions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">element_connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element_connectivity</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
@@ -1290,28 +1390,28 @@
 
 
     <span class="k">if</span> <span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;property_array must be a 2D array of shape (M, P).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;property_array&#39; must be a 2D array of shape (N_p, P). Got </span><span class="si">{</span><span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shape_functions must be a 2D array of shape (M, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;shape_functions&#39; must be a 2D array of shape (N_p, N_npe). Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_connectivity must be a 2D array of shape (N_e, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_connectivity&#39; must be a 2D array of shape (N_e, N_npe). Got </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_indices must be a 1D array of shape (M,).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_indices&#39; must be a 1D array of shape (N_p,). Got </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The first dimension (M) of shape_functions and element_indices must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The first dimension (N_p) of &#39;shape_functions&#39; and &#39;element_indices&#39; must match. Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The second dimension (N_npe) of shape_functions and element_connectivity must match.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The second dimension (N_npe) of &#39;shape_functions&#39; and &#39;element_connectivity&#39; must match. Got </span><span class="si">{</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> respectively.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;sparse must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;sparse&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">sparse</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;skip_m1 must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;skip_m1&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Extract number of vertices</span>
     <span class="k">if</span> <span class="n">n_vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">element_connectivity</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_vertices</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_vertices must be a positive integer.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;n_vertices&#39; must be a positive integer. Got </span><span class="si">{</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Extract weights</span>
     <span class="k">if</span> <span class="n">points_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1319,7 +1419,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">points_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">points_weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">points_weights</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">points_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;points_weights must be a 1D array of shape (M,).&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;points_weights&#39; must be a 1D array of shape (N_p,). Got array with shape </span><span class="si">{</span><span class="n">points_weights</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
         
     <span class="c1"># Assemble shape functions matrix</span>
     <span class="n">shape_functions_matrix</span> <span class="o">=</span> <span class="n">assemble_shape_function_matrix</span><span class="p">(</span>
@@ -1330,14 +1430,14 @@
         <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
         <span class="n">skip_m1</span><span class="o">=</span><span class="n">skip_m1</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-    <span class="p">)</span>  <span class="c1"># Shape: (M, N_v)</span>
+    <span class="p">)</span>  <span class="c1"># Shape: (N_p, N_v)</span>
 
     <span class="c1"># Initialize projected property</span>
     <span class="n">projected_property</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="c1"># Construct weights matrix</span>
     <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">points_weights</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>  <span class="c1"># (M, M)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">points_weights</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>  <span class="c1"># (N_p, N_p)</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">shape_functions_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">shape_functions_matrix</span>  <span class="c1"># (N_v, N_v)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">shape_functions_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">property_array</span>  <span class="c1"># (N_v, P)</span>
 
@@ -1354,7 +1454,7 @@
         <span class="n">projected_property</span><span class="p">[</span><span class="n">valid_rows</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">reduced_projected_property</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">points_weights</span><span class="p">)</span>  <span class="c1"># (M, M)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">points_weights</span><span class="p">)</span>  <span class="c1"># (N_p, N_p)</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">shape_functions_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">shape_functions_matrix</span>  <span class="c1"># (N_v, N_v)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">shape_functions_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">W</span> <span class="o">@</span> <span class="n">property_array</span>  <span class="c1"># (N_v, P)</span>
 
@@ -1392,62 +1492,75 @@
     <span class="n">default</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Remap the global coordinates of the vertices to given integration points within elements.</span>
-
-<span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
-<span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
-
-<span class="sd">    For a given set of :math:`M` integration points located within elements, the remapped coordinates array has shape :math:`(M, N_{vpe}, E)`</span>
-<span class="sd">    where each entry corresponds to the global coordinates of the nodes associated with the element containing the integration point.</span>
+<span class="sd">    Remap the global coordinates of the vertices to given integration points within elements based on the element connectivity.</span>
 
 <span class="sd">    .. note::</span>
 
 <span class="sd">        If the input :obj:`vertices_coordinates` is not a numpy floating type, it will be converted to :obj:`numpy.float64`.</span>
 <span class="sd">        If the inputs :obj:`element_connectivity` or :obj:`element_indices` are not of integer type, they will be converted to :obj:`numpy.int64`.</span>
 
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.construct_jacobian` for constructing the Jacobian matrix using remapped coordinates.</span>
-
 <span class="sd">    .. warning::</span>
 
 <span class="sd">        When using :obj:`-1` in :obj:`element_indices` for invalid elements, ensure to set :obj:`skip_m1` to :obj:`True` to avoid indexing errors as :obj:`-1` is equivalent to the last element in Python indexing.</span>
 
+<span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    vertices_coordinates : :class:`numpy.ndarray` of shape (:math:`N_{v}`, :math:`E`)</span>
-<span class="sd">        Array containing the global coordinates of the vertices in the mesh.</span>
+<span class="sd">    vertices_coordinates: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{v}, E)` containing the global coordinates of the vertices in the mesh.</span>
 
-<span class="sd">    element_connectivity : :class:`numpy.ndarray` of shape (:math:`N_{e}`, :math:`N_{vpe}`)</span>
-<span class="sd">        Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">    element_connectivity: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
 
-<span class="sd">    element_indices : :class:`numpy.ndarray` of shape (:math:`M`,)</span>
-<span class="sd">        An array containing the indices of each element corresponding to the :math:`M` integration points. </span>
+<span class="sd">    element_indices: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of each element corresponding to the :math:`N_{p}` integration points. </span>
 
-<span class="sd">    skip_m1 : :class:`bool`, optional</span>
+<span class="sd">    skip_m1: :class:`bool`, optional</span>
 <span class="sd">        If set to :obj:`True`, any element index of -1 in :obj:`element_indices` will result in the corresponding remapped coordinates being set to :obj:`default`.</span>
 <span class="sd">        Default is :obj:`True`.</span>
 
-<span class="sd">    default : :class:`Real`, optional</span>
+<span class="sd">    default: :class:`Real`, optional</span>
 <span class="sd">        The default value to assign to remapped coordinates for integration points associated with an element index of -1 when :obj:`skip_m1` is :obj:`True`.</span>
 <span class="sd">        Default is :obj:`numpy.nan`.</span>
 
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    remapped_coordinates : :class:`numpy.ndarray` of shape (:math:`M`, :math:`N_{vpe}`, :math:`E`)</span>
-<span class="sd">        An array containing the remapped global coordinates of the vertices for each integration point within the elements.</span>
+<span class="sd">    remapped_coordinates: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_{p}, N_{vpe}, E)` containing the remapped global coordinates of the vertices for each integration point within the elements.</span>
 
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If :obj:`vertices_coordinates` cannot be converted to a :obj:`numpy.ndarray` of floating type.</span>
+<span class="sd">        - If :obj:`element_connectivity` or :obj:`element_indices` cannot be converted to a :obj:`numpy.ndarray` of integer type.</span>
+<span class="sd">        - If :obj:`skip_m1` is not a boolean.</span>
+<span class="sd">        - If :obj:`default` is not a real number.</span>
+<span class="sd">    </span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If the dimensions of the input arrays do not conform to the expected shapes.</span>
+<span class="sd">        - If :obj:`vertices_coordinates` is not a 2D array of shape :math:`(N_{v}, E)`.</span>
+<span class="sd">        - If :obj:`element_connectivity` is not a 2D array of shape :math:`(N_{e}, N_{vpe})`.</span>
+<span class="sd">        - If :obj:`element_indices` is not a 1D array of shape :math:`(N_{p},)`.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes,</span>
+<span class="sd">    The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.</span>
+
+<span class="sd">    For a given set of :math:`N_{p}` integration points located within elements, the remapped coordinates array has shape :math:`(N_{p}, N_{vpe}, E)`</span>
+<span class="sd">    where each entry corresponds to the global coordinates of the nodes associated with the element containing the integration point.</span>
 
 
-<span class="sd">    Exemples</span>
+<span class="sd">    See Also</span>
 <span class="sd">    --------</span>
+<span class="sd">    pysdic.construct_jacobian:</span>
+<span class="sd">        To compute the Jacobian matrices for the transformation between natural and global coordinates.</span>
 
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    Lets construct a simple 2D mesh</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -1494,18 +1607,18 @@
 
     
     <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;vertices_coordinates must be a 2D array of shape (N_v, E).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;vertices_coordinates&#39; must be a 2D array of shape (N_v, E). Got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_connectivity must be a 2D array of shape (N_e, N_npe).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_connectivity&#39; must be a 2D array of shape (N_e, N_npe). Got </span><span class="si">{</span><span class="n">element_connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;element_indices must be a 1D array of shape (M,).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;element_indices&#39; must be a 1D array of shape (N_p,). Got </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;skip_m1 must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;skip_m1&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;default must be a real number.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;default&#39; must be a real number. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># remap coordinates initialization</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">N_npe</span> <span class="o">=</span> <span class="n">element_connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">E</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     
@@ -1519,13 +1632,13 @@
         <span class="n">valid_indices</span> <span class="o">=</span> <span class="n">element_indices</span>
 
     <span class="c1"># Remap coordinates</span>
-    <span class="n">M_valid</span> <span class="o">=</span> <span class="n">valid_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">connectivity_per_point</span> <span class="o">=</span> <span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (M_valid, N_npe)</span>
-    <span class="n">remapped_coordinates_valid</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="p">[</span><span class="n">connectivity_per_point</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (M_valid, N_npe, E)</span>
+    <span class="n">N_valid</span> <span class="o">=</span> <span class="n">valid_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">connectivity_per_point</span> <span class="o">=</span> <span class="n">element_connectivity</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_valid, N_npe)</span>
+    <span class="n">remapped_coordinates_valid</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="p">[</span><span class="n">connectivity_per_point</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Shape: (N_valid, N_npe, E)</span>
 
     <span class="c1"># Handle -1 entries if skip_m1 is True</span>
     <span class="k">if</span> <span class="n">skip_m1</span><span class="p">:</span>
-        <span class="n">remapped_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">N_npe</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">default</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">remapped_coordinates_valid</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">remapped_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="n">N_npe</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">default</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">remapped_coordinates_valid</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">remapped_coordinates</span><span class="p">[</span><span class="n">m1_mask</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">remapped_coordinates_valid</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">remapped_coordinates</span> <span class="o">=</span> <span class="n">remapped_coordinates_valid</span>
@@ -1576,7 +1689,7 @@
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

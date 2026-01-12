@@ -14,10 +14,6 @@ Description
 
 The package ``pysdic`` provides functions to perform operations for various types of elements used in finite element analysis. 
 
-.. seealso::
-
-    - :doc:`./shape_functions` for shape functions definitions and details.
-
 In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements and :math:`N_{v}` nodes/vertices.
 The mesh is composed of :math:`K`-dimensional elements (with :math:`K \leq E`) defined by :math:`N_{vpe}` nodes for each element.
 
@@ -30,6 +26,10 @@ If we consider a property :math:`P` defined at the vertices of the elements, we 
     P(\xi, \eta, \zeta, ...) = \sum_{i=1}^{N_{vpe}} N_i(\xi, \eta, \zeta, ...) P_i
 
 where :math:`P` is the interpolated value at the point, :math:`N_i` are the shape functions, and :math:`P_i` are the nodal values.
+
+.. seealso::
+
+    - :doc:`./shape_functions` for shape functions definitions and details.
 
 
 Implemented Functions

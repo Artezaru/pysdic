@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>segment_2_gauss_points &#8212; pysdic 1.1.4 documentation</title>
+    <title>segment_2_gauss_points &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -274,6 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.shape_functions.html">shape_functions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../api_documentation/gauss_points.html">Gauss Quadrature Points Collection</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -283,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.gauss_points.html">gauss_points</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -533,6 +535,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_operations.html">Photometric Operations</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
@@ -619,11 +622,37 @@
 <dt class="sig sig-object py" id="pysdic.segment_2_gauss_points">
 <span class="sig-prename descclassname"><span class="pre">pysdic.</span></span><span class="sig-name descname"><span class="pre">segment_2_gauss_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/gauss_points.html#segment_2_gauss_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.segment_2_gauss_points" title="Link to this definition">#</a></dt>
 <dd><p>Get the natural coordinates <span class="math notranslate nohighlight">\(\xi\)</span> and weights of Gauss quadrature points for a 2-node segment element.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The output arrays will be of type <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.float64</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>return_weights</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function will also return the weights associated with each Gauss point. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>gauss_points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Natural coordinates of the Gauss points. The returned array has shape (1, 1).</p></li>
+<li><p><strong>weights</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an array of weights with shape (1,) associated with each Gauss point.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – <ul class="simple">
+<li><p>If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is not a boolean.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <em>Tuple</em>[<em>ndarray</em>, <em>ndarray</em>]</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
 <p>A 2-node segment element uses the following Gauss points and weights for numerical integration:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Point No.</p></th>
-<th class="head"><p>(<span class="math notranslate nohighlight">\(\xi\)</span>)</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\((\xi)\)</span></p></th>
 <th class="head"><p>Weight <span class="math notranslate nohighlight">\(w\)</span></p></th>
 </tr>
 </thead>
@@ -641,29 +670,13 @@
 </figure>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="pysdic.segment_2_shape_functions.html#pysdic.segment_2_shape_functions" title="pysdic.segment_2_shape_functions"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.segment_2_shape_functions()</span></code></a> : Shape functions for 2-node segment 1D-elements.</p></li>
-</ul>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>return_weights</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function will also return the weights associated with each Gauss point. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>gauss_points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Natural coordinates of the Gauss points. The returned array has shape (1, 1).</p></li>
-<li><p><strong>weights</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an array of weights with shape (1,) associated with each Gauss point.</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>TypeError</strong> – If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is not a boolean.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>ndarray</em> | <em>Tuple</em>[<em>ndarray</em>, <em>ndarray</em>]</p>
+<dl class="simple">
+<dt><a class="reference internal" href="pysdic.segment_2_shape_functions.html#pysdic.segment_2_shape_functions" title="pysdic.segment_2_shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysdic.segment_2_shape_functions</span></code></a></dt><dd><p>Shape functions for 2-node segment 1D-elements.</p>
 </dd>
 </dl>
+</div>
 <p class="rubric">Examples</p>
+<p>Get the Gauss points for a 2-node segment element:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">segment_2_gauss_points</span>
 
@@ -765,7 +778,7 @@
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

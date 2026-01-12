@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>remap_vertices_coordinates &#8212; pysdic 1.1.4 documentation</title>
+    <title>remap_vertices_coordinates &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -274,6 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.shape_functions.html">shape_functions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/gauss_points.html">Gauss Quadrature Points Collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -283,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.gauss_points.html">gauss_points</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../api_documentation/integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -533,6 +535,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_operations.html">Photometric Operations</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
@@ -618,21 +621,11 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.remap_vertices_coordinates">
 <span class="sig-prename descclassname"><span class="pre">pysdic.</span></span><span class="sig-name descname"><span class="pre">remap_vertices_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices_coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_connectivity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_indices</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_m1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/integration_points_operations.html#remap_vertices_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.remap_vertices_coordinates" title="Link to this definition">#</a></dt>
-<dd><p>Remap the global coordinates of the vertices to given integration points within elements.</p>
-<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes,
-The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
-<p>For a given set of <span class="math notranslate nohighlight">\(M\)</span> integration points located within elements, the remapped coordinates array has shape <span class="math notranslate nohighlight">\((M, N_{vpe}, E)\)</span>
-where each entry corresponds to the global coordinates of the nodes associated with the element containing the integration point.</p>
+<dd><p>Remap the global coordinates of the vertices to given integration points within elements based on the element connectivity.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> is not a numpy floating type, it will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code>.
 If the inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> are not of integer type, they will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code>.</p>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="pysdic.construct_jacobian.html#pysdic.construct_jacobian" title="pysdic.construct_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.construct_jacobian()</span></code></a> for constructing the Jacobian matrix using remapped coordinates.</p></li>
-</ul>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -641,9 +634,9 @@ If the inputs <code class="xref py py-obj docutils literal notranslate"><span cl
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices_coordinates</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(N_{v}\)</span>, <span class="math notranslate nohighlight">\(E\)</span>)) – Array containing the global coordinates of the vertices in the mesh.</p></li>
-<li><p><strong>element_connectivity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(N_{e}\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>)) – Array defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
-<li><p><strong>element_indices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(M\)</span>,)) – An array containing the indices of each element corresponding to the <span class="math notranslate nohighlight">\(M\)</span> integration points.</p></li>
+<li><p><strong>vertices_coordinates</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – An array of shape <span class="math notranslate nohighlight">\((N_{v}, E)\)</span> containing the global coordinates of the vertices in the mesh.</p></li>
+<li><p><strong>element_connectivity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – An array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span> defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
+<li><p><strong>element_indices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the indices of each element corresponding to the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points.</p></li>
 <li><p><strong>skip_m1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, any element index of -1 in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will result in the corresponding remapped coordinates being set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>.
 Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>default</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Real</span></code>, optional) – The default value to assign to remapped coordinates for integration points associated with an element index of -1 when <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>.
@@ -651,17 +644,42 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>remapped_coordinates</strong> – An array containing the remapped global coordinates of the vertices for each integration point within the elements.</p>
+<dd class="field-even"><p><strong>remapped_coordinates</strong> – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, E)\)</span> containing the remapped global coordinates of the vertices for each integration point within the elements.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of shape (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>, <span class="math notranslate nohighlight">\(E\)</span>)</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the dimensions of the input arrays do not conform to the expected shapes.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – <ul>
+<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> cannot be converted to a <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of floating type.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> cannot be converted to a <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of integer type.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is not a boolean.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code> is not a real number.</p></li>
+</ul>
+</p></li>
+<li><p><strong>ValueError</strong> – <ul>
+<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{v}, E)\)</span>.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_connectivity</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span>.
+    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> is not a 1D array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span>.</p></li>
+</ul>
+</p></li>
+</ul>
 </dd>
 </dl>
-<section id="exemples">
-<h2>Exemples<a class="headerlink" href="#exemples" title="Link to this heading">#</a></h2>
+<p class="rubric">Notes</p>
+<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes,
+The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
+<p>For a given set of <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points located within elements, the remapped coordinates array has shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, E)\)</span>
+where each entry corresponds to the global coordinates of the nodes associated with the element containing the integration point.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="pysdic.construct_jacobian.html#pysdic.construct_jacobian" title="pysdic.construct_jacobian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysdic.construct_jacobian</span></code></a></dt><dd><p>To compute the Jacobian matrices for the transformation between natural and global coordinates.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
 <p>Lets construct a simple 2D mesh</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">remap_vertices_coordinates</span>
@@ -696,7 +714,6 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
 <span class="go">  [1. 1.]]]</span>
 </pre></div>
 </div>
-</section>
 </dd></dl>
 
 </section>
@@ -786,7 +803,7 @@ Default is <code class="xref py py-obj docutils literal notranslate"><span class
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

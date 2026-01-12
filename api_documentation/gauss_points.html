@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Gauss Quadrature Points Collection &#8212; pysdic 1.1.4 documentation</title>
+    <title>Gauss Quadrature Points Collection &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -46,7 +46,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="segment_2_gauss_points" href="../generated/pysdic.segment_2_gauss_points.html" />
-    <link rel="prev" title="quadrangle_8_shape_functions" href="../generated/pysdic.quadrangle_8_shape_functions.html" />
+    <link rel="prev" title="shape_functions" href="../generated/pysdic.shape_functions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -274,6 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.shape_functions.html">shape_functions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Gauss Quadrature Points Collection</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -283,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.gauss_points.html">gauss_points</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -533,6 +535,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="photometric_operations.html">Photometric Operations</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
@@ -620,18 +623,21 @@
 <ul>
 <li><p><a class="reference internal" href="#parameters" id="id4">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#returns" id="id5">Returns</a></p></li>
+<li><p><a class="reference internal" href="#raises" id="id6">Raises</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#implemented-gauss-points-methods" id="id6">Implemented Gauss Points Methods</a></p>
+<li><p><a class="reference internal" href="#implemented-gauss-points-methods" id="id7">Implemented Gauss Points Methods</a></p>
 <ul>
-<li><p><a class="reference internal" href="#dimensional-elements" id="id7">1-Dimensional Elements</a></p></li>
-<li><p><a class="reference internal" href="#id1" id="id8">2-Dimensional Elements</a></p></li>
+<li><p><a class="reference internal" href="#dimensional-elements" id="id8">1-Dimensional Elements</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id9">2-Dimensional Elements</a></p></li>
+<li><p><a class="reference internal" href="#dispatcher-function" id="id10">Dispatcher function</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#usage" id="id11">Usage</a></p></li>
 </ul>
 </nav>
 <section id="description-and-mathematical-background">
-<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Description and mathematical background</a><a class="headerlink" href="#description-and-mathematical-background" title="Link to this heading">#</a></h2>
+<h2>Description and mathematical background<a class="headerlink" href="#description-and-mathematical-background" title="Link to this heading">#</a></h2>
 <p>The package <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> provides shape functions for various types of elements used in finite element analysis.
 To facilitate numerical integration over these elements, Gauss quadrature points and weights are provided.</p>
 <p>A Gauss quadrature rule approximates the integral of a function over an element by evaluating the function at specific points (the Gauss points) and weighting these evaluations appropriately.
@@ -640,40 +646,51 @@ In a space of dimension <span class="math notranslate nohighlight">\(E\)</span>,
 <div class="math notranslate nohighlight">
 \[\int_{Element} f(\xi, \eta, \zeta, ...) dV \approx \sum_{i=1}^{N_{gp}} w_i f(\xi_i, \eta_i, \zeta_i, ...)\]</div>
 <p>where <span class="math notranslate nohighlight">\(N_{gp}\)</span> is the number of Gauss points, <span class="math notranslate nohighlight">\((\xi_i, \eta_i, \zeta_i, ...)\)</span> are the coordinates of the Gauss points in the local coordinate system, and <span class="math notranslate nohighlight">\(w_i\)</span> are the corresponding weights.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="integration_points_operations.html"><span class="doc">Operations on Integration Points (interpolation, projection, etc.)</span></a> for operations on integrated points using Gauss points.</p></li>
+<li><p><a class="reference internal" href="shape_functions.html"><span class="doc">Shape Functions Collection (1D, 2D, 3D)</span></a> for shape functions used in conjunction with Gauss quadrature.</p></li>
+</ul>
+</div>
 </section>
 <section id="function-signatures">
-<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Function signatures</a><a class="headerlink" href="#function-signatures" title="Link to this heading">#</a></h2>
+<h2>Function signatures<a class="headerlink" href="#function-signatures" title="Link to this heading">#</a></h2>
 <p>All of the gauss points methods follow a similar interface.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The output arrays will be of type <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.float64</span></code>.</p>
+</div>
 <section id="parameters">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<ul>
-<li><dl>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl>
 <dt><strong>return_weights</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional</span></dt><dd><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function will also return the weights associated with each Gauss point. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
-</li>
-</ul>
 </section>
 <section id="returns">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Returns</a><a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
-<ul>
-<li><dl>
-<dt><strong>gauss_points</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></span></dt><dd><p>Natural coordinates of the Gauss points. The returned array has shape (<span class="math notranslate nohighlight">\(N_{gp}\)</span>, <span class="math notranslate nohighlight">\(K\)</span>) where <span class="math notranslate nohighlight">\(N_{gp}\)</span> is the number of Gauss points and <span class="math notranslate nohighlight">\(K\)</span> is the dimension of the element.</p>
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<dl>
+<dt><strong>gauss_points</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></span></dt><dd><p>Natural coordinates of the Gauss points. The returned array has shape <span class="math notranslate nohighlight">\((N_{gp}, K)\)</span> where <span class="math notranslate nohighlight">\(N_{gp}\)</span> is the number of Gauss points and <span class="math notranslate nohighlight">\(K\)</span> is the dimension of the element.</p>
+</dd>
+<dt><strong>weights</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, optional</span></dt><dd><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an array of weights with shape <span class="math notranslate nohighlight">\((N_{gp},)\)</span> associated with each Gauss point.</p>
 </dd>
 </dl>
-</li>
-<li><dl>
-<dt><strong>weights</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, optional</span></dt><dd><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an array of weights with shape (<span class="math notranslate nohighlight">\(N_{gp}\)</span>,) associated with each Gauss point.</p>
-</dd>
-</dl>
-</li>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt><strong>TypeError</strong></dt><dd><ul class="simple">
+<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is not a <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>.</p></li>
 </ul>
+</dd>
+</dl>
 </section>
 </section>
 <section id="implemented-gauss-points-methods">
-<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Implemented Gauss Points Methods</a><a class="headerlink" href="#implemented-gauss-points-methods" title="Link to this heading">#</a></h2>
+<h2>Implemented Gauss Points Methods<a class="headerlink" href="#implemented-gauss-points-methods" title="Link to this heading">#</a></h2>
 <section id="dimensional-elements">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">1-Dimensional Elements</a><a class="headerlink" href="#dimensional-elements" title="Link to this heading">#</a></h3>
+<h3>1-Dimensional Elements<a class="headerlink" href="#dimensional-elements" title="Link to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.segment_2_gauss_points.html#pysdic.segment_2_gauss_points" title="pysdic.segment_2_gauss_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segment_2_gauss_points</span></code></a>([return_weights])</p></td>
@@ -687,7 +704,7 @@ In a space of dimension <span class="math notranslate nohighlight">\(E\)</span>,
 </div>
 </section>
 <section id="id1">
-<h3><a class="toc-backref" href="#table-of-contents" role="doc-backlink">2-Dimensional Elements</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h3>2-Dimensional Elements<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.triangle_3_gauss_points.html#pysdic.triangle_3_gauss_points" title="pysdic.triangle_3_gauss_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">triangle_3_gauss_points</span></code></a>([return_weights])</p></td>
@@ -706,6 +723,53 @@ In a space of dimension <span class="math notranslate nohighlight">\(E\)</span>,
 </table>
 </div>
 </section>
+<section id="dispatcher-function">
+<h3>Dispatcher function<a class="headerlink" href="#dispatcher-function" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.gauss_points.html#pysdic.gauss_points" title="pysdic.gauss_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gauss_points</span></code></a>(element_type[, return_weights])</p></td>
+<td><p>Get the natural coordinates and weights of Gauss quadrature points for a specified element type.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<p>Lets illustrate the usage of one of the gauss points methods with an example for a 2-node line element.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">segment_2_gauss_points</span>
+
+<span class="c1"># Get Gauss points and weights for 2-node segment element</span>
+<span class="n">gauss_points</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">segment_2_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gauss Points:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gauss_points</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Weights:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Gauss Points:</span>
+<span class="go">[[0.0]]</span>
+<span class="go">Weights:</span>
+<span class="go">[2.0]</span>
+</pre></div>
+</div>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_weights</span></code> is set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>, only the Gauss points will be returned:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">segment_2_gauss_points</span>
+
+<span class="c1"># Get Gauss points for 2-node segment element without weights</span>
+<span class="n">gauss_points</span> <span class="o">=</span> <span class="n">segment_2_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gauss Points:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gauss_points</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Gauss Points:</span>
+<span class="go">[[0.0]]</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -720,12 +784,12 @@ In a space of dimension <span class="math notranslate nohighlight">\(E\)</span>,
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../generated/pysdic.quadrangle_8_shape_functions.html"
+       href="../generated/pysdic.shape_functions.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">quadrangle_8_shape_functions</p>
+        <p class="prev-next-title">shape_functions</p>
       </div>
     </a>
     <a class="right-next"
@@ -760,13 +824,16 @@ In a space of dimension <span class="math notranslate nohighlight">\(E\)</span>,
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#function-signatures">Function signatures</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#returns">Returns</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#raises">Raises</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implemented-gauss-points-methods">Implemented Gauss Points Methods</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-elements">1-Dimensional Elements</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2-Dimensional Elements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dispatcher-function">Dispatcher function</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 </ul>
   </nav></div>
 
@@ -804,7 +871,7 @@ In a space of dimension <span class="math notranslate nohighlight">\(E\)</span>,
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

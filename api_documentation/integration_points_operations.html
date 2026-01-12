@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Operations on Integration Points (interpolation, projection, etc.) &#8212; pysdic 1.1.4 documentation</title>
+    <title>Operations on Integration Points (interpolation, projection, etc.) &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -46,7 +46,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="assemble_shape_function_matrix" href="../generated/pysdic.assemble_shape_function_matrix.html" />
-    <link rel="prev" title="quadrangle_8_gauss_points" href="../generated/pysdic.quadrangle_8_gauss_points.html" />
+    <link rel="prev" title="gauss_points" href="../generated/pysdic.gauss_points.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -274,6 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.shape_functions.html">shape_functions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="gauss_points.html">Gauss Quadrature Points Collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -283,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.gauss_points.html">gauss_points</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Operations on Integration Points (interpolation, projection, etc.)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -533,6 +535,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="photometric_operations.html">Photometric Operations</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../generated/pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
@@ -622,12 +625,6 @@
 <section id="description">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
 <p>The package <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> provides functions to perform operations for various types of elements used in finite element analysis.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="shape_functions.html"><span class="doc">Shape Functions Collection (1D, 2D, 3D)</span></a> for shape functions definitions and details.</p></li>
-</ul>
-</div>
 <p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes/vertices.
 The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
 <p>The objective of these operations is to interpolate or project values defined at integration points to nodes or other points in space, and vice versa.</p>
@@ -635,6 +632,12 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <div class="math notranslate nohighlight">
 \[P(\xi, \eta, \zeta, ...) = \sum_{i=1}^{N_{vpe}} N_i(\xi, \eta, \zeta, ...) P_i\]</div>
 <p>where <span class="math notranslate nohighlight">\(P\)</span> is the interpolated value at the point, <span class="math notranslate nohighlight">\(N_i\)</span> are the shape functions, and <span class="math notranslate nohighlight">\(P_i\)</span> are the nodal values.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="shape_functions.html"><span class="doc">Shape Functions Collection (1D, 2D, 3D)</span></a> for shape functions definitions and details.</p></li>
+</ul>
+</div>
 </section>
 <section id="implemented-functions">
 <h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Implemented Functions</a><a class="headerlink" href="#implemented-functions" title="Link to this heading">#</a></h2>
@@ -642,7 +645,7 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../generated/pysdic.assemble_shape_function_matrix.html#pysdic.assemble_shape_function_matrix" title="pysdic.assemble_shape_function_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assemble_shape_function_matrix</span></code></a>(...[, ...])</p></td>
-<td><p>Construct the matrix of shape functions at given integration points within elements, from (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{vpe}\)</span>) to (<span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N_{v}\)</span>) with zero-filling for non-associated nodes/vertices.</p></td>
+<td><p>Construct the matrix of shape functions at given integration points within elements, from <span class="math notranslate nohighlight">\((N_{p}, N_{vpe})\)</span> to <span class="math notranslate nohighlight">\((N_{p}, N_{v})\)</span> with zero-filling for non-associated nodes/vertices.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.construct_jacobian.html#pysdic.construct_jacobian" title="pysdic.construct_jacobian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_jacobian</span></code></a>(...)</p></td>
 <td><p>Construct the Jacobian matrix <span class="math notranslate nohighlight">\(J\)</span> of the transformation from natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta, \zeta, ...)\)</span> to global coordinates <span class="math notranslate nohighlight">\((x, y, z, ...)\)</span>.</p></td>
@@ -657,7 +660,7 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <td><p>Project a property defined at integration points within elements back to the nodes of a mesh using shape functions.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../generated/pysdic.remap_vertices_coordinates.html#pysdic.remap_vertices_coordinates" title="pysdic.remap_vertices_coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remap_vertices_coordinates</span></code></a>(...[, skip_m1, ...])</p></td>
-<td><p>Remap the global coordinates of the vertices to given integration points within elements.</p></td>
+<td><p>Remap the global coordinates of the vertices to given integration points within elements based on the element connectivity.</p></td>
 </tr>
 </tbody>
 </table>
@@ -676,12 +679,12 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../generated/pysdic.quadrangle_8_gauss_points.html"
+       href="../generated/pysdic.gauss_points.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">quadrangle_8_gauss_points</p>
+        <p class="prev-next-title">gauss_points</p>
       </div>
     </a>
     <a class="right-next"
@@ -751,7 +754,7 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

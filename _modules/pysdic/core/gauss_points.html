@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.core.gauss_points &#8212; pysdic 1.1.4 documentation</title>
+    <title>pysdic.core.gauss_points &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/gauss_points';</script>
@@ -107,7 +107,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -332,14 +332,44 @@
 
 <div class="viewcode-block" id="segment_2_gauss_points">
 <a class="viewcode-back" href="../../../generated/pysdic.segment_2_gauss_points.html#pysdic.segment_2_gauss_points">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">segment_2_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">segment_2_gauss_points</span><span class="p">(</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the natural coordinates :math:`\xi` and weights of Gauss quadrature points for a 2-node segment element.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    return_weights: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
+<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (1, 1).</span>
+
+<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (1,) associated with each Gauss point.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    A 2-node segment element uses the following Gauss points and weights for numerical integration:</span>
 
 <span class="sd">    +------------+-----------------+-----------------+</span>
-<span class="sd">    | Point No.  | (:math:`\xi`)   | Weight :math:`w`|</span>
+<span class="sd">    | Point No.  | :math:`(\xi)`   | Weight :math:`w`|</span>
 <span class="sd">    +============+=================+=================+</span>
 <span class="sd">    | 1          | :math:`0`       | :math:`2`       |</span>
 <span class="sd">    +------------+-----------------+-----------------+</span>
@@ -349,31 +379,16 @@
 <span class="sd">        :align: center</span>
 <span class="sd">        :width: 200px</span>
 
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.segment_2_shape_functions` : Shape functions for 2-node segment 1D-elements.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    return_weights: :class:`bool`, optional</span>
-<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
-<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (1, 1).</span>
-
-<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
-<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (1,) associated with each Gauss point.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">    </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.segment_2_shape_functions:</span>
+<span class="sd">        Shape functions for 2-node segment 1D-elements.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for a 2-node segment element:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -392,7 +407,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_weights</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">return_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Gauss points and weights for Gauss quadrature</span>
     <span class="n">gauss_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -407,38 +422,23 @@
 
 <div class="viewcode-block" id="segment_3_gauss_points">
 <a class="viewcode-back" href="../../../generated/pysdic.segment_3_gauss_points.html#pysdic.segment_3_gauss_points">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">segment_3_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">segment_3_gauss_points</span><span class="p">(</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the natural coordinates :math:`\xi` and weights of Gauss quadrature points for a 3-node segment element.</span>
 
-<span class="sd">    A 3-node segment element uses the following Gauss points and weights for numerical integration:</span>
+<span class="sd">    .. note::</span>
 
-<span class="sd">    +------------+-----------------------------+-----------------+</span>
-<span class="sd">    | Point No.  | (:math:`\xi`)               | Weight :math:`w`|</span>
-<span class="sd">    +============+=============================+=================+</span>
-<span class="sd">    | 1          | :math:`-\frac{1}{\sqrt{3}}` | :math:`1`       |</span>
-<span class="sd">    +------------+-----------------------------+-----------------+</span>
-<span class="sd">    | 2          | :math:`\frac{1}{\sqrt{3}}`  | :math:`1`       |</span>
-<span class="sd">    +------------+-----------------------------+-----------------+</span>
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
 
-<span class="sd">    </span>
-<span class="sd">    .. figure:: /_static/shape_functions/segment_3_gp.png</span>
-<span class="sd">        :alt: Gauss quadrature points for 3-node segment element</span>
-<span class="sd">        :align: center</span>
-<span class="sd">        :width: 200px</span>
-
-
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.segment_3_shape_functions` : Shape functions for 3-node segment 1D-elements.</span>
-
-<span class="sd">        </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    return_weights: :class:`bool`, optional</span>
 <span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
 
+<span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
@@ -447,14 +447,41 @@
 <span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
 <span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (2,) associated with each Gauss point.</span>
 
+<span class="sd">        </span>
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    TypeError</span>
-<span class="sd">        If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    A 3-node segment element uses the following Gauss points and weights for numerical integration:</span>
+
+<span class="sd">    +------------+-----------------------------+-----------------+</span>
+<span class="sd">    | Point No.  | :math:`(\xi)`               | Weight :math:`w`|</span>
+<span class="sd">    +============+=============================+=================+</span>
+<span class="sd">    | 1          | :math:`-\frac{1}{\sqrt{3}}` | :math:`1`       |</span>
+<span class="sd">    +------------+-----------------------------+-----------------+</span>
+<span class="sd">    | 2          | :math:`\frac{1}{\sqrt{3}}`  | :math:`1`       |</span>
+<span class="sd">    +------------+-----------------------------+-----------------+</span>
+
+<span class="sd">    .. figure:: /_static/shape_functions/segment_3_gp.png</span>
+<span class="sd">        :alt: Gauss quadrature points for 3-node segment element</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 200px</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.segment_3_shape_functions:</span>
+<span class="sd">        Shape functions for 3-node segment 1D-elements.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for a 3-node segment element:</span>
+
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        import numpy</span>
@@ -473,7 +500,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_weights</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">return_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Gauss points and weights Gauss quadrature</span>
     <span class="n">gauss_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -489,14 +516,44 @@
 
 <div class="viewcode-block" id="triangle_3_gauss_points">
 <a class="viewcode-back" href="../../../generated/pysdic.triangle_3_gauss_points.html#pysdic.triangle_3_gauss_points">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_gauss_points</span><span class="p">(</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for a 3-node triangle element.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    return_weights: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
+<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (3, 2).</span>
+
+<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    A 3-node triangle element uses the following Gauss points and weights for numerical integration:</span>
 
 <span class="sd">    +------------+-----------------------------------------+---------------------+</span>
-<span class="sd">    | Point No.  | (:math:`\xi`, :math:`\eta`)             | Weight :math:`w`    |</span>
+<span class="sd">    | Point No.  | :math:`(\xi, \eta)`                     | Weight :math:`w`    |</span>
 <span class="sd">    +============+=========================================+=====================+</span>
 <span class="sd">    | 1          | :math:`(\frac{1}{3}, \frac{1}{3})`      | :math:`\frac{1}{2}` |</span>
 <span class="sd">    +------------+-----------------------------------------+---------------------+</span>
@@ -506,31 +563,16 @@
 <span class="sd">        :align: center</span>
 <span class="sd">        :width: 200px</span>
 
-<span class="sd">    .. seealso::</span>
 
-<span class="sd">        - :func:`pysdic.triangle_3_shape_functions` : Shape functions for 3-node triangle 2D-elements.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    return_weights: :class:`bool`, optional</span>
-<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
-<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (3, 2).</span>
-
-<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
-<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_shape_functions:</span>
+<span class="sd">        Shape functions for 3-node triangle 2D-elements.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for a 3-node triangle element:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -549,7 +591,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_weights</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">return_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Gauss points and weights for Gauss quadrature</span>
     <span class="n">gauss_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -564,14 +606,44 @@
 
 <div class="viewcode-block" id="triangle_6_gauss_points">
 <a class="viewcode-back" href="../../../generated/pysdic.triangle_6_gauss_points.html#pysdic.triangle_6_gauss_points">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">triangle_6_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">triangle_6_gauss_points</span><span class="p">(</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for a 6-node triangle element.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    return_weights: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
+<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (3, 2).</span>
+
+<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    A 6-node triangle element uses the following Gauss points and weights for numerical integration:</span>
 
 <span class="sd">    +------------+-----------------------------------------+---------------------+</span>
-<span class="sd">    | Point No.  | (:math:`\xi`, :math:`\eta`)             | Weight :math:`w`    |</span>
+<span class="sd">    | Point No.  | :math:`(\xi, \eta)`                     | Weight :math:`w`    |</span>
 <span class="sd">    +============+=========================================+=====================+</span>
 <span class="sd">    | 1          | :math:`(\frac{1}{6}, \frac{1}{6})`      | :math:`\frac{1}{6}` |</span>
 <span class="sd">    +------------+-----------------------------------------+---------------------+</span>
@@ -585,31 +657,16 @@
 <span class="sd">        :align: center</span>
 <span class="sd">        :width: 200px</span>
 
-<span class="sd">    .. seealso::</span>
 
-<span class="sd">        - :func:`pysdic.triangle_6_shape_functions` : Shape functions for 6-node triangle 2D-elements.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    return_weights: :class:`bool`, optional</span>
-<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
-<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (3, 2).</span>
-
-<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
-<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (3,) associated with each Gauss point.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_6_shape_functions:</span>
+<span class="sd">        Shape functions for 6-node triangle 2D-elements.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for a 6-node triangle element:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -630,7 +687,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_weights</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">return_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Gauss points and weights for Gauss quadrature</span>
     <span class="n">gauss_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
@@ -650,14 +707,44 @@
 
 <div class="viewcode-block" id="quadrangle_4_gauss_points">
 <a class="viewcode-back" href="../../../generated/pysdic.quadrangle_4_gauss_points.html#pysdic.quadrangle_4_gauss_points">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">quadrangle_4_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quadrangle_4_gauss_points</span><span class="p">(</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for a 4-node quadrangle element.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
+<span class="sd">    </span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    return_weights: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
+<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (4, 2).</span>
+
+<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (4,) associated with each Gauss point.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    A 4-node quadrangle element uses the following Gauss points and weights for numerical integration:</span>
 
 <span class="sd">    +------------+----------------------------------------------------+---------------------+</span>
-<span class="sd">    | Point No.  | (:math:`\xi`, :math:`\eta`)                        | Weight :math:`w`    |</span>
+<span class="sd">    | Point No.  | :math:`(\xi, \eta)`                                | Weight :math:`w`    |</span>
 <span class="sd">    +============+====================================================+=====================+</span>
 <span class="sd">    | 1          | :math:`(-\frac{1}{\sqrt{3}}, -\frac{1}{\sqrt{3}})` | :math:`1`           |</span>
 <span class="sd">    +------------+----------------------------------------------------+---------------------+</span>
@@ -673,32 +760,16 @@
 <span class="sd">        :align: center</span>
 <span class="sd">        :width: 200px</span>
 
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`pysdic.quadrangle_4_shape_functions` : Shape functions for 4-node quadrangle 2D-elements.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    return_weights: :class:`bool`, optional</span>
-<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
-<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (4, 2).</span>
-
-<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
-<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (4,) associated with each Gauss point.</span>
-
 <span class="sd">    </span>
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.quadrangle_4_shape_functions:</span>
+<span class="sd">        Shape functions for 4-node quadrangle 2D-elements.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for a 4-node quadrangle element:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -720,7 +791,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_weights</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">return_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Gauss points and weights for Gauss quadrature</span>
     <span class="n">gp_coord</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
@@ -742,14 +813,44 @@
 
 <div class="viewcode-block" id="quadrangle_8_gauss_points">
 <a class="viewcode-back" href="../../../generated/pysdic.quadrangle_8_gauss_points.html#pysdic.quadrangle_8_gauss_points">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">quadrangle_8_gauss_points</span><span class="p">(</span><span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quadrangle_8_gauss_points</span><span class="p">(</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span><span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the natural coordinates :math:`(\xi, \eta)` and weights of Gauss quadrature points for an 8-node quadrangle element.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    return_weights: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
+<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (9, 2).</span>
+
+<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (9,) associated with each Gauss point.</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
 <span class="sd">    An 8-node quadrangle element uses the following Gauss points and weights for numerical integration:</span>
 
 <span class="sd">    +------------+----------------------------------------------------+----------------------+</span>
-<span class="sd">    | Point No.  | (:math:`\xi`, :math:`\eta`)                        | Weight :math:`w`     |</span>
+<span class="sd">    | Point No.  | :math:`(\xi, \eta)`                                | Weight :math:`w`     |</span>
 <span class="sd">    +============+====================================================+======================+</span>
 <span class="sd">    | 1          | :math:`(0,0)`                                      | :math:`\frac{64}{81}`|</span>
 <span class="sd">    +------------+----------------------------------------------------+----------------------+</span>
@@ -775,32 +876,16 @@
 <span class="sd">        :align: center</span>
 <span class="sd">        :width: 200px</span>
 
-<span class="sd">    .. seealso::</span>
 
-<span class="sd">        - :func:`pysdic.quadrangle_8_shape_functions` : Shape functions for 8-node quadrangle 2D-elements.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    return_weights: :class:`bool`, optional</span>
-<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
-<span class="sd">        Natural coordinates of the Gauss points. The returned array has shape (9, 2).</span>
-
-<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
-<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape (9,) associated with each Gauss point.</span>
-
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.quadrangle_8_shape_functions:</span>
+<span class="sd">        Shape functions for 8-node quadrangle 2D-elements.</span>
 
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for an 8-node quadrangle element:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -827,7 +912,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input validation</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_weights</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input &#39;return_weights&#39; must be a boolean value. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">return_weights</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
     
     <span class="c1"># Gauss points and weights for Gauss quadrature</span>
     <span class="n">gp_coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">)</span>
@@ -858,6 +943,119 @@
         <span class="k">return</span> <span class="n">gauss_points</span><span class="p">,</span> <span class="n">weights</span>
     
     <span class="k">return</span> <span class="n">gauss_points</span></div>
+
+
+
+
+<div class="viewcode-block" id="gauss_points">
+<a class="viewcode-back" href="../../../generated/pysdic.gauss_points.html#pysdic.gauss_points">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">gauss_points</span><span class="p">(</span>
+    <span class="n">element_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">return_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the natural coordinates and weights of Gauss quadrature points for a specified element type.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The output arrays will be of type :class:`numpy.float64`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    element_type: :class:`str`</span>
+<span class="sd">        The type of element for which to retrieve Gauss points. Supported types are:</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;segment_2&quot;: 2-node segment element</span>
+<span class="sd">        - &quot;segment_3&quot;: 3-node segment element</span>
+<span class="sd">        - &quot;triangle_3&quot;: 3-node triangle element</span>
+<span class="sd">        - &quot;triangle_6&quot;: 6-node triangle element</span>
+<span class="sd">        - &quot;quadrangle_4&quot;: 4-node quadrangle element</span>
+<span class="sd">        - &quot;quadrangle_8&quot;: 8-node quadrangle element</span>
+
+<span class="sd">    return_weights: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the function will also return the weights associated with each Gauss point. Default is :obj:`False`.</span>
+
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gauss_points: :class:`numpy.ndarray`</span>
+<span class="sd">        Natural coordinates of the Gauss points. The shape of the returned array is :math:`(N_{gp}, K)`, where :math:`N_{gp}` is the number of Gauss points for the specified element type and :math:`K` is the topological dimension of the element.</span>
+
+<span class="sd">    weights: :class:`numpy.ndarray`, optional</span>
+<span class="sd">        If :obj:`return_weights` is :obj:`True`, the function also returns an array of weights with shape :math:`(N_{gp},)` associated with each Gauss point.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        - If the input :obj:`return_weights` is not a boolean.</span>
+<span class="sd">        - If the input :obj:`element_type` is not a string.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        - If the specified :obj:`element_type` is not supported.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.segment_2_gauss_points:</span>
+<span class="sd">        Gauss points for 2-node segment elements.</span>
+
+<span class="sd">    pysdic.segment_3_gauss_points:</span>
+<span class="sd">        Gauss points for 3-node segment elements.</span>
+
+<span class="sd">    pysdic.triangle_3_gauss_points:</span>
+<span class="sd">        Gauss points for 3-node triangle elements.</span>
+
+<span class="sd">    pysdic.triangle_6_gauss_points:</span>
+<span class="sd">        Gauss points for 6-node triangle elements.</span>
+
+<span class="sd">    pysdic.quadrangle_4_gauss_points:</span>
+<span class="sd">        Gauss points for 4-node quadrangle elements.</span>
+
+<span class="sd">    pysdic.quadrangle_8_gauss_points:</span>
+<span class="sd">        Gauss points for 8-node quadrangle elements.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Get the Gauss points for a 3-node triangle element:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic import gauss_points</span>
+
+<span class="sd">        gauss_points_array = gauss_points(&quot;triangle_3&quot;)</span>
+<span class="sd">        print(&quot;Gauss points for triangle_3:&quot;)</span>
+<span class="sd">        print(gauss_points_array)</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        Gauss points for triangle_3:</span>
+<span class="sd">        [[0.33333333 0.33333333]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Dispatcher dictionary</span>
+    <span class="n">GAUSS_POINTS_DISPATCHER</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;segment_2&#39;</span><span class="p">:</span> <span class="n">segment_2_gauss_points</span><span class="p">,</span>
+        <span class="s1">&#39;segment_3&#39;</span><span class="p">:</span> <span class="n">segment_3_gauss_points</span><span class="p">,</span>
+        <span class="s1">&#39;triangle_3&#39;</span><span class="p">:</span> <span class="n">triangle_3_gauss_points</span><span class="p">,</span>
+        <span class="s1">&#39;triangle_6&#39;</span><span class="p">:</span> <span class="n">triangle_6_gauss_points</span><span class="p">,</span>
+        <span class="s1">&#39;quadrangle_4&#39;</span><span class="p">:</span> <span class="n">quadrangle_4_gauss_points</span><span class="p">,</span>
+        <span class="s1">&#39;quadrangle_8&#39;</span><span class="p">:</span> <span class="n">quadrangle_8_gauss_points</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Validate element_type</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The &#39;element_type&#39; parameter must be a string.&quot;</span><span class="p">)</span>
+    <span class="n">element_type</span> <span class="o">=</span> <span class="n">element_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">element_type</span> <span class="ow">in</span> <span class="n">GAUSS_POINTS_DISPATCHER</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported element_type &#39;</span><span class="si">{</span><span class="n">element_type</span><span class="si">}</span><span class="s2">&#39;. Supported types are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">GAUSS_POINTS_DISPATCHER</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Call the appropriate shape function</span>
+    <span class="n">gauss_points_func</span> <span class="o">=</span> <span class="n">GAUSS_POINTS_DISPATCHER</span><span class="p">[</span><span class="n">element_type</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">gauss_points_func</span><span class="p">(</span><span class="n">return_weights</span><span class="o">=</span><span class="n">return_weights</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -900,7 +1098,7 @@
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

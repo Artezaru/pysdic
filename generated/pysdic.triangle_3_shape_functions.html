@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>triangle_3_shape_functions &#8212; pysdic 1.1.4 documentation</title>
+    <title>triangle_3_shape_functions &#8212; pysdic 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=00f267c6"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.1.4 documentation</p>
+    <p class="title logo__title">pysdic 1.2.0 documentation</p>
   
 </a></div>
     
@@ -274,6 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_shape_functions.html">triangle_6_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_shape_functions.html">quadrangle_4_shape_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_shape_functions.html">quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.shape_functions.html">shape_functions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/gauss_points.html">Gauss Quadrature Points Collection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -283,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pysdic.triangle_6_gauss_points.html">triangle_6_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_4_gauss_points.html">quadrangle_4_gauss_points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.quadrangle_8_gauss_points.html">quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pysdic.gauss_points.html">gauss_points</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -533,6 +535,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Photometric Quantities and Lighting Models</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_quantities.html">Photometric Quantities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_documentation/photometric_operations.html">Photometric Operations</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/BRDF_models.html">Bidirectional Reflectance Distribution Function (BRDF) Lighting Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_ward.html">compute_BRDF_ward</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pysdic.compute_BRDF_beckmann.html">compute_BRDF_beckmann</a></li>
@@ -618,29 +621,73 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.triangle_3_shape_functions">
 <span class="sig-prename descclassname"><span class="pre">pysdic.</span></span><span class="sig-name descname"><span class="pre">triangle_3_shape_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">natural_coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_derivatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/shape_functions.html#triangle_3_shape_functions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.triangle_3_shape_functions" title="Link to this definition">#</a></dt>
-<dd><p>Compute the shape functions for a 3-node triangle for given natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta)\)</span>.</p>
+<dd><p>Compute the shape functions for a 3-node triangle for given <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> <span class="math notranslate nohighlight">\((\xi, \eta)\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code> for computation.
+The output arrays will be <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code> as well.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>natural_coordinates</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Natural coordinates where to evaluate the shape functions. The array must have shape <span class="math notranslate nohighlight">\((N_{p}, 2)\)</span>,
+where <span class="math notranslate nohighlight">\(N_{p}\)</span> is the number of points to evaluate.</p></li>
+<li><p><strong>return_derivatives</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function will also return the first derivatives of the shape functions with respect to the natural coordinate.
+By default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>default</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Real</span></code>, optional) – Default value to assign to shape functions when the input natural coordinate is out of the valid range
+(i.e., not in <span class="math notranslate nohighlight">\(\xi, \eta \in [0, 1]\)</span> with <span class="math notranslate nohighlight">\(\xi + \eta \leq 1\)</span>). By default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>shape_functions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Shape functions evaluated at the given natural coordinates. The returned array has shape <span class="math notranslate nohighlight">\((N_{p}, 3)\)</span>,
+where each row corresponds to a point and each column to a node.</p></li>
+<li><p><strong>shape_function_derivatives</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_derivatives</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an array of the first derivatives of the shape functions
+with respect to the natural coordinate. The returned array has shape <span class="math notranslate nohighlight">\((N_{p}, 3, 2)\)</span>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – <ul>
+<li><p>If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> cannot be converted to a numpy array.
+    - If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_derivatives</span></code> is not a boolean.
+    - If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code> is not a real number.</p></li>
+</ul>
+</p></li>
+<li><p><strong>ValueError</strong> – <ul>
+<li><p>If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> does not have shape <span class="math notranslate nohighlight">\((N_{p}, 2)\)</span>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <em>Tuple</em>[<em>ndarray</em>, <em>ndarray</em>]</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
 <p>A 3-node triangle represented in the figure below has the following shape functions:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Node No.</p></th>
-<th class="head"><p>(<span class="math notranslate nohighlight">\(\xi, \eta\)</span>)</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\((\xi, \eta)\)</span></p></th>
 <th class="head"><p>Shape Function <span class="math notranslate nohighlight">\(N\)</span></p></th>
-<th class="head"><p>First Derivative (<span class="math notranslate nohighlight">\(\frac{dN}{d\xi}, \frac{dN}{d\eta}\)</span>)</p></th>
+<th class="head"><p>First Derivative <span class="math notranslate nohighlight">\((\frac{dN}{d\xi}, \frac{dN}{d\eta})\)</span></p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>1</p></td>
-<td><p>(0, 0)</p></td>
+<td><p><span class="math notranslate nohighlight">\((0, 0)\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(N_1(\xi, \eta) = 1 - \xi - \eta\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\((-1, -1)\)</span></p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p>(1, 0)</p></td>
+<td><p><span class="math notranslate nohighlight">\((1, 0)\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(N_2(\xi, \eta) = \xi\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\((1, 0)\)</span></p></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p>(0, 1)</p></td>
+<td><p><span class="math notranslate nohighlight">\((0, 1)\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(N_3(\xi, \eta) = \eta\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\((0, 1)\)</span></p></td>
 </tr>
@@ -651,52 +698,17 @@
 <a class="reference internal image-reference" href="../_images/triangle_3.png"><img alt="3-node triangle element" src="../_images/triangle_3.png" style="width: 200px;" />
 </a>
 </figure>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> are not numpy floating type, they will be converted to <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code>.</p>
-</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="pysdic.triangle_6_shape_functions.html#pysdic.triangle_6_shape_functions" title="pysdic.triangle_6_shape_functions"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.triangle_6_shape_functions()</span></code></a> : Shape functions for 6-node triangle 2D-elements.</p></li>
-<li><p><a class="reference internal" href="pysdic.quadrangle_4_shape_functions.html#pysdic.quadrangle_4_shape_functions" title="pysdic.quadrangle_4_shape_functions"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.quadrangle_4_shape_functions()</span></code></a> : Shape functions for 4-node quadrangle 2D-elements.</p></li>
-<li><p><a class="reference internal" href="pysdic.quadrangle_8_shape_functions.html#pysdic.quadrangle_8_shape_functions" title="pysdic.quadrangle_8_shape_functions"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.quadrangle_8_shape_functions()</span></code></a> : Shape functions for 8-node quadrangle 2D-elements.</p></li>
-<li><p><a class="reference internal" href="pysdic.triangle_3_gauss_points.html#pysdic.triangle_3_gauss_points" title="pysdic.triangle_3_gauss_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.triangle_3_gauss_points()</span></code></a> : Gauss integration points for 3-node triangle 2D-elements.</p></li>
-</ul>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>natural_coordinates</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Natural coordinates where to evaluate the shape functions. The array must have shape (n_points, 2),
-where n_points is the number of points to evaluate.</p></li>
-<li><p><strong>return_derivatives</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function will also return the first derivatives of the shape functions with respect to the natural coordinates.
-By default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>default</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numbers.Real</span></code>, optional) – Default value to assign to shape functions when the input natural coordinates are out of the valid range
-(i.e., not in the triangle defined by (0,0), (1,0), (0,1)). By default, <code class="xref py py-obj docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
-</ul>
+<dl class="simple">
+<dt><a class="reference internal" href="pysdic.triangle_6_shape_functions.html#pysdic.triangle_6_shape_functions" title="pysdic.triangle_6_shape_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysdic.triangle_6_shape_functions</span></code></a></dt><dd><p>Shape functions for 6-node triangle 2D-elements.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>shape_functions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Shape functions evaluated at the given natural coordinates. The returned array has shape (n_points, 3),
-where each row corresponds to a point and each column to a node.</p></li>
-<li><p><strong>shape_function_derivatives</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, optional) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_derivatives</span></code> is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an array of the first derivatives of the shape functions
-with respect to the natural coordinates. The returned array has shape (n_points, 3, 2).</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>TypeError</strong> – If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> cannot be converted to a numpy array.
-    If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_derivatives</span></code> is not a boolean.
-    If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code> is not a real number.</p></li>
-<li><p><strong>ValueError</strong> – If the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> does not have shape (n_points, 2).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>ndarray</em> | <em>Tuple</em>[<em>ndarray</em>, <em>ndarray</em>]</p>
+<dt><a class="reference internal" href="pysdic.triangle_3_gauss_points.html#pysdic.triangle_3_gauss_points" title="pysdic.triangle_3_gauss_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pysdic.triangle_3_gauss_points</span></code></a></dt><dd><p>Gauss integration points for 3-node triangle 2D-elements.</p>
 </dd>
 </dl>
+</div>
 <p class="rubric">Examples</p>
+<p>Compute shape functions without derivatives for 3 valid points and 1 invalid point:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">triangle_3_shape_functions</span>
 
@@ -713,6 +725,7 @@ with respect to the natural coordinates. The returned array has shape (n_points,
 <span class="go"> [0.  0.  0. ]]</span>
 </pre></div>
 </div>
+<p>Compute shape functions with first derivatives for 3 valid points and 1 invalid point:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">triangle_3_shape_functions</span>
 
@@ -745,6 +758,23 @@ with respect to the natural coordinates. The returned array has shape (n_points,
 <span class="go"> [[ 0.   0. ]</span>
 <span class="go">  [ 0.   0. ]</span>
 <span class="go">  [ 0.   0. ]]]</span>
+</pre></div>
+</div>
+<p>Set a different default value for out-of-range coordinates:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">triangle_3_shape_functions</span>
+
+<span class="n">coords</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
+<span class="n">shape_functions</span> <span class="o">=</span> <span class="n">triangle_3_shape_functions</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape function values with custom default:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shape_functions</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Shape function values with custom default:</span>
+<span class="go">[[ 1.  0.  0.]</span>
+<span class="go"> [ 0.5 0.5 0.]</span>
+<span class="go"> [ 0.5 0.  0.5]</span>
+<span class="go"> [nan nan nan]]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -836,7 +866,7 @@ with respect to the natural coordinates. The returned array has shape (n_points,
 
   <p class="copyright">
     
-      © Copyright 2025-2025, Artezaru.
+      © Copyright 2025-2026, Artezaru.
       <br/>
     
   </p>

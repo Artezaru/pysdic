@@ -6,7 +6,7 @@ Shape Functions Collection (1D, 2D, 3D)
 .. contents:: Table of Contents
    :local:
    :depth: 2
-   :backlinks: top
+   :backlinks: none
 
 
 Description and mathematical background
@@ -37,25 +37,45 @@ Function signatures
 
 All of the shape function methods follow a similar interface. 
 
+.. note::
+
+    The input :obj:`natural_coordinates` will be converted to :obj:`numpy.float64` for computation.
+    The output arrays will be :obj:`numpy.float64` as well.
+
 Parameters
 ~~~~~~~~~~
-- **natural_coordinates** : :class:`numpy.ndarray` of shape (M, K)
-    An array of M points in the local coordinate system with K dimensions where the shape functions are to be evaluated.
+**natural_coordinates**: :class:`numpy.ndarray`
+    Natural coordinates where to evaluate the shape functions. The array must have shape :math:`(N_{p}, K)`,
+    where :math:`N_{p}` is the number of points to evaluate and :math:`K` is the dimension of the element.
 
-- **return_derivatives** : :class:`bool`, optional
-    If :obj:`True`, the method also returns the derivatives of the shape functions with respect to the local coordinates. Default is :obj:`False`.
+**return_derivatives**: :class:`bool`, optional
+    If :obj:`True`, the method also returns the derivatives of the shape functions with respect to the natural coordinates. Default is :obj:`False`.
 
-- **default** : :class:`numbers.Real`, optional
+**default**: :class:`numbers.Real`, optional
     The default value to assign to shape functions for points outside the valid range. Default is :obj:`0.0`.
 
 
 Returns
 ~~~~~~~
-- **shape_functions** : :class:`numpy.ndarray` of shape (M, :math:`N_{vpe}`)
-    An array containing the evaluated shape functions at the specified points for the :math:`N_{vpe}` nodes of the element.
+**shape_functions**: :class:`numpy.ndarray`
+    Shape functions evaluated at the given natural coordinates. The returned array has shape :math:`(N_{p}, N_{vpe})`,
+    where each row corresponds to a point and each column to a node.
 
-- **shape_function_derivatives** : :class:`numpy.ndarray` of shape (M, :math:`N_{vpe}`, K), optional
-    An array containing the derivatives of the shape functions with respect to the local coordinates, if :obj:`return_derivatives` is True.
+**shape_function_derivatives**: :class:`numpy.ndarray`, optional
+    If :obj:`return_derivatives` is :obj:`True`, the function also returns an array of the first derivatives of the shape functions
+    with respect to the natural coordinate. The returned array has shape :math:`(N_{p}, N_{vpe}, K)`, where each slice along the first dimension corresponds to a point,
+    each column to a node, and each slice along the last dimension to a natural coordinate direction.
+
+
+Raises
+~~~~~~
+**TypeError**
+    - If :obj:`natural_coordinates` can't be converted to a :class:`numpy.ndarray`.
+    - If :obj:`return_derivatives` is not a :class:`bool`.
+    - If :obj:`default` is not a :class:`numbers.Real`.
+
+**ValueError**
+    - If :obj:`natural_coordinates` does not have shape :math:`(N_{p}, K)` where :math:`K` is the dimension of the element.
 
 
 
@@ -86,6 +106,14 @@ Implemented Shape Functions
    quadrangle_4_shape_functions
    quadrangle_8_shape_functions
 
+
+Dispatcher function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autosummary::
+   :toctree: ../generated/
+
+   shape_functions
 
 
 
@@ -160,3 +188,30 @@ The output will be:
       [ 0.5]]]
 
 
+Set the :obj:`default` parameter to specify a default value for shape functions at points outside the valid range.
+
+.. code-block:: python
+
+    import numpy
+    from pysdic import segment_2_shape_functions
+
+    # Define local coordinates for points where shape functions are to be evaluated
+    coords = numpy.array([
+        [-1.5],  # Outside valid range
+        [0.0],
+        [1.5],   # Outside valid range
+    ])
+
+    # Evaluate shape functions with a default value for out-of-range points
+    shape_functions = segment_2_shape_functions(coords, default=numpy.nan)
+
+    print("Shape Functions with Default for Out-of-Range Points:\n", shape_functions)
+
+The output will be:
+
+.. code-block:: console
+
+   Shape Functions with Default for Out-of-Range Points:
+    [[ nan  nan]
+     [0.5  0.5 ]
+     [ nan  nan]]
