@@ -659,110 +659,86 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.compute_property_projection">
 <span class="sig-name descname"><span class="pre">compute_property_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">property_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectivity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_m1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_unaffected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/integration_points_operations.html#compute_property_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.compute_property_projection" title="Link to this definition">#</a></dt>
-<dd><p>Project a property defined at integration points within elements back to the nodes of a mesh using mesh and integration point information.</p>
-<p>This function combines the remapping of vertex coordinates, computation of shape functions, and assembly of the property projection for the entire mesh.</p>
+<dd><p>Project a property defined at integration points within elements back to the nodes
+of a mesh using mesh and integration point information.</p>
+<p>This function combines the remapping of vertex coordinates, computation of shape
+functions, and assembly of the property projection for the entire mesh.</p>
 <p><code class="docutils literal notranslate"><span class="pre">projected_properties[i]</span></code> contains the projected property at the node <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">property_array</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">weights</span></code> will be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> for computation.
-The inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> for computation.</p>
+<ul class="simple">
+<li><p>Inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">property_array</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> and</p></li>
+</ul>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_weights</span></code> will be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a>.
+- Inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will be
+converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the element indices are valid, …).
-Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</p>
+<p>No tests are performed to check if the inputs array are consistent
+(e.g., if the connectivity contains invalid vertex indices, …).
+Only shapes are validated.
+The behavior of the function is undefined in this case.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When using <code class="xref py py-obj docutils literal notranslate"><span class="pre">-1</span></code> in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> for invalid elements,
+ensure to set <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> to avoid indexing errors.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>property_array</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, P)\)</span> containing the property values defined at the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points. If 1D-array is provided, it will be treated as a single-component property of shape <span class="math notranslate nohighlight">\((N_{p}, 1)\)</span>.</p></li>
-<li><p><strong>connectivity</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span> defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
-<li><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – A string specifying the type of element (e.g., ‘segment_2’, ‘triangle_3’, etc.) to determine which shape function to use.</p></li>
-<li><p><strong>natural_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, K)\)</span> containing the natural coordinates of the integration points within elements where <span class="math notranslate nohighlight">\(K\)</span> is the topological dimension of the element (e.g., 1 for segments, 2 for triangles/quadrangles, etc.).</p></li>
-<li><p><strong>element_indices</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the indices of each element corresponding to the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points.</p></li>
-<li><p><strong>point_weights</strong> (<em>Optional</em><em>[</em><em>ArrayLike</em><em>]</em><em>, </em><em>optional</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the weights associated with each integration point. If not provided, all weights will be assumed to be equal to one.</p></li>
-<li><p><strong>n_vertices</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The total number of vertices <span class="math notranslate nohighlight">\(N_{v}\)</span> in the mesh. If not provided, it will be inferred as the maximum index in <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> plus one.</p></li>
-<li><p><strong>sparse</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the shape functions matrix will be constructed as a sparse matrix to optimize memory usage for large meshes.
+<li><p><strong>property_array</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, P)\)</span> containing the property values defined at
+the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points. If 1D-array is provided, it will be
+treated as a single-component property of shape <span class="math notranslate nohighlight">\((N_{p}, 1)\)</span>.</p></li>
+<li><p><strong>connectivity</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span> defining the connectivity of the
+elements in the mesh, where each row contains the indices of the nodes that
+form an element.</p></li>
+<li><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – A string specifying the type of element (e.g., ‘segment_2’, ‘triangle_3’, etc.)
+to determine which shape function to use.</p></li>
+<li><p><strong>natural_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, K)\)</span> containing the natural coordinates of the
+integration points within elements where <span class="math notranslate nohighlight">\(K\)</span> is the topological dimension
+of the element (e.g., 1 for segments, 2 for triangles/quadrangles, etc.).</p></li>
+<li><p><strong>element_indices</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the indices of each element
+corresponding to the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points.</p></li>
+<li><p><strong>point_weights</strong> (<em>Optional</em><em>[</em><em>ArrayLike</em><em>]</em><em>, </em><em>optional</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the weights associated with each
+integration point. If not provided, all weights will be assumed to be equal to
+one.</p></li>
+<li><p><strong>n_vertices</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The total number of vertices <span class="math notranslate nohighlight">\(N_{v}\)</span> in the mesh. If not provided, it
+will be inferred as the maximum index in <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> plus one.</p></li>
+<li><p><strong>sparse</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the shape functions matrix will be constructed as a
+sparse matrix to optimize memory usage for large meshes.
 Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
-<li><p><strong>skip_m1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, any element index of -1 in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will result in the corresponding integration point being ignored during the projection.
+<li><p><strong>skip_m1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, any element index of -1 in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will
+result in the corresponding integration point being ignored during the
+projection.
 Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.</p></li>
-<li><p><strong>return_unaffected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the function will return a tuple containing the projected properties and a boolean mask indicating which nodes were unaffected by any integration point.
-Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">:False</span></code>.</p></li>
+<li><p><strong>return_unaffected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the function will return a tuple containing the projected
+properties and a boolean mask indicating which nodes were unaffected by any
+integration point.
+Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>projected_properties</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array of shape <span class="math notranslate nohighlight">\((N_{v}, P)\)</span> containing the projected property values at the nodes of the mesh.</p></li>
-<li><p><strong>unaffected_mask</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, optional) – A boolean array of shape <span class="math notranslate nohighlight">\((N_{v},)\)</span> indicating which nodes were unaffected by any integration point. This is only returned if <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_unaffected</span></code> is set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.
-<a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> indicates the node was unaffected, while <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> indicates it was affected. So using <code class="xref py py-obj docutils literal notranslate"><span class="pre">projected_properties[unaffected_mask,</span> <span class="pre">:]</span> <span class="pre">=</span> <span class="pre">default</span></code> will set the unaffected nodes to <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>.</p></li>
+<li><p><strong>projected_properties</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array of shape <span class="math notranslate nohighlight">\((N_{v}, P)\)</span> containing the projected property values at
+the nodes of the mesh.</p></li>
+<li><p><strong>unaffected_mask</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, optional) – A boolean array of shape <span class="math notranslate nohighlight">\((N_{v},)\)</span> indicating which nodes were unaffected
+by any integration point. This is only returned if <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_unaffected</span></code> is
+set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> indicates the node was unaffected, while <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a> indicates it
+was affected. So using <code class="xref py py-obj docutils literal notranslate"><span class="pre">projected_properties[unaffected_mask,</span> <span class="pre">:]</span> <span class="pre">=</span> <span class="pre">default</span></code>
+will set the unaffected nodes to <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>.</p></li>
 </ul>
 </p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – <ul>
-<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">property_array</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code>, or <code class="xref py py-obj docutils literal notranslate"><span class="pre">weights</span></code> cannot be converted to a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of floating type.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> cannot be converted to a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of integer type.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_type</span></code> is not a string.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">sparse</span></code> is not a boolean.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is not a boolean.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">return_unaffected</span></code> is not a boolean.</p></li>
-</ul>
-</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – <ul>
-<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">property_array</span></code> is not a 1D or 2D array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> or <span class="math notranslate nohighlight">\((N_{p}, P)\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{p}, K)\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> is not a 1D array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_type</span></code> is not a recognized element type.</p></li>
-</ul>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><em>Tuple</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>]</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><em>Tuple</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><em>ndarray</em></a>]</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes,
-The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
-<p>The evaluation of a property at the given integration points is represented by an array of shape <span class="math notranslate nohighlight">\((N_{p}, P)\)</span> and is performed as:</p>
-<div class="math notranslate nohighlight">
-\[P_{points} = N_f \cdot P_{nodes} \Leftrightarrow P(\xi, \eta, \zeta, ...) = \sum_{i=1}^{N_{vpe}} N_i(\xi, \eta, \zeta, ...) P_i\]</div>
-<p>where <span class="math notranslate nohighlight">\(N_f\)</span> is the shape functions matrix assembled for all <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points, <span class="math notranslate nohighlight">\(P_{points}\)</span> is the property array at the integration points, and <span class="math notranslate nohighlight">\(P_{nodes}\)</span> is the property array at the mesh nodes.</p>
-<p>To project back to the nodes, we solve the following system using the pseudo-inverse of the shape functions matrix:</p>
-<div class="math notranslate nohighlight">
-\[P_{nodes} = (N_f^T W N_f)^{-1} N_f^T W P_{points}\]</div>
-<p>where <span class="math notranslate nohighlight">\(W\)</span> is a diagonal matrix of weights associated with each integration point.</p>
-<section id="demonstration">
-<h2>Demonstration<a class="headerlink" href="#demonstration" title="Link to this heading">#</a></h2>
-<p>Lets consider the following notations:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(N_v\)</span> the number of nodes in the mesh.</p></li>
-<li><p><span class="math notranslate nohighlight">\(N_{p}\)</span> the number of integration points.</p></li>
-<li><p><span class="math notranslate nohighlight">\(P\)</span> the number of property components (e.g., 1 for scalar properties, 3 for vector properties).</p></li>
-<li><p><span class="math notranslate nohighlight">\(P_{points}\)</span> the property array at the integration points with shape <span class="math notranslate nohighlight">\((N_{p}, P)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(P_{nodes}\)</span> the property array at the mesh nodes with shape <span class="math notranslate nohighlight">\((N_v, P)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(N_f\)</span> the shape functions matrix with shape <span class="math notranslate nohighlight">\((N_{p}, N_v)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(W\)</span> the diagonal matrix of weights with shape <span class="math notranslate nohighlight">\((N_{p}, N_{p})\)</span>.</p></li>
-</ul>
-<p>We know that:</p>
-<div class="math notranslate nohighlight">
-\[P_{points} = N_f \cdot P_{nodes}\]</div>
-<p>To project back to the vertices of the mesh, we want tot minimize the following weighted least squares problem:</p>
-<div class="math notranslate nohighlight">
-\[\hat{P_{nodes}} = \min_{P_{nodes}} ( \frac{1}{2}\sum_{i=1}^{N_p} w_i \| P_{points,i} - N_{f,i} \cdot P_{nodes} \|^2 )\]</div>
-<div class="math notranslate nohighlight">
-\[\hat{P_{nodes}} = \min_{P_{nodes}} ( \frac{1}{2} (P_{points} - N_f \cdot P_{nodes})^T W (P_{points} - N_f \cdot P_{nodes}) )\]</div>
-<p>The gradient of the objective function is:</p>
-<div class="math notranslate nohighlight">
-\[\nabla_{P_{nodes}} \hat{P_{nodes}} = - N_f^T W (P_{points} - N_f \cdot P_{nodes})\]</div>
-<p>To find the optimal solution, we set the gradient to zero and solve for <span class="math notranslate nohighlight">\(P_{nodes}\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\nabla_{P_{nodes}} \hat{P_{nodes}}  = 0 \Rightarrow N_f^T W P_{points} = N_f^T W N_f \cdot P_{nodes}\]</div>
-<p>So if we denote <span class="math notranslate nohighlight">\(A = N_f^T W N_f\)</span> invertible, we have:</p>
-<div class="math notranslate nohighlight">
-\[\hat{P_{nodes}} = A^{-1} N_f^T W P_{points}\]</div>
+<p>See the documentation of <a class="reference internal" href="pysdic.assemble_property_projection.html#pysdic.assemble_property_projection" title="pysdic.assemble_property_projection"><code class="xref py py-func docutils literal notranslate"><span class="pre">assemble_property_projection()</span></code></a> for the mathematical
+formulation and demonstration of the projection process.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -775,7 +751,8 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>Lets construct a simple 2D mesh and project a scalar property defined at given integration points back to the nodes for triangular elements.</p>
+<p>Lets construct a simple 2D mesh and project a scalar property defined at given
+integration points back to the nodes for triangular elements.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 <span class="linenos"> 3</span>    <span class="n">compute_property_projection</span><span class="p">,</span>
@@ -796,39 +773,40 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <span class="linenos">18</span>
 <span class="linenos">19</span><span class="n">N_e</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="linenos">20</span>
-<span class="linenos">21</span><span class="n">property_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span>  <span class="mf">40.0</span><span class="p">])</span>  <span class="c1"># Scalar property at each node</span>
+<span class="linenos">21</span><span class="n">property_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span>  <span class="mf">40.0</span><span class="p">])</span>  <span class="c1"># Scalar property</span>
 <span class="linenos">22</span>
-<span class="linenos">23</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-<span class="linenos">24</span>    <span class="p">[[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
-<span class="linenos">25</span>     <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
-<span class="linenos">26</span>     <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
-<span class="linenos">27</span>     <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]]</span>
-<span class="linenos">28</span><span class="p">)</span>
-<span class="linenos">29</span><span class="n">N_p</span> <span class="o">=</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="linenos">30</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">natural_coordinates</span><span class="p">]</span> <span class="o">*</span> <span class="n">N_e</span><span class="p">)</span> <span class="c1"># Repeat for each element</span>
-<span class="linenos">31</span><span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_e</span><span class="p">),</span> <span class="n">N_p</span><span class="p">)</span>
-<span class="linenos">32</span><span class="n">N_p</span> <span class="o">=</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="linenos">33</span>
-<span class="linenos">34</span><span class="n">interpolate_property</span> <span class="o">=</span> <span class="n">compute_property_interpolation</span><span class="p">(</span>
-<span class="linenos">35</span>    <span class="n">property_array</span><span class="o">=</span><span class="n">property_array</span><span class="p">,</span>
-<span class="linenos">36</span>    <span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span>
-<span class="linenos">37</span>    <span class="n">element_type</span><span class="o">=</span><span class="s1">&#39;triangle_3&#39;</span><span class="p">,</span>
-<span class="linenos">38</span>    <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">natural_coordinates</span><span class="p">,</span>
-<span class="linenos">39</span>    <span class="n">element_indices</span><span class="o">=</span><span class="n">element_indices</span>
-<span class="linenos">40</span><span class="p">)</span>
-<span class="linenos">41</span>
-<span class="linenos">42</span><span class="c1"># Now project back to the nodes</span>
-<span class="linenos">43</span><span class="n">projected_props</span> <span class="o">=</span> <span class="n">compute_property_projection</span><span class="p">(</span>
-<span class="linenos">44</span>    <span class="n">property_array</span><span class="o">=</span><span class="n">interpolate_property</span><span class="p">,</span>
-<span class="linenos">45</span>    <span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span>
-<span class="linenos">46</span>    <span class="n">element_type</span><span class="o">=</span><span class="s1">&#39;triangle_3&#39;</span><span class="p">,</span>
-<span class="linenos">47</span>    <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">natural_coordinates</span><span class="p">,</span>
-<span class="linenos">48</span>    <span class="n">element_indices</span><span class="o">=</span><span class="n">element_indices</span><span class="p">,</span>
-<span class="linenos">49</span>    <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span>
-<span class="linenos">50</span><span class="p">)</span>
-<span class="linenos">51</span>
-<span class="linenos">52</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;projected properties (shape=</span><span class="si">{</span><span class="n">projected_props</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
-<span class="linenos">53</span><span class="nb">print</span><span class="p">(</span><span class="n">projected_props</span><span class="p">)</span>
+<span class="linenos">23</span><span class="c1"># Define natural coordinates for interpolation (e.g., 4 points per element)</span>
+<span class="linenos">24</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+<span class="linenos">25</span>    <span class="p">[[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+<span class="linenos">26</span>     <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+<span class="linenos">27</span>     <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+<span class="linenos">28</span>     <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]]</span>
+<span class="linenos">29</span><span class="p">)</span>
+<span class="linenos">30</span><span class="n">N_p</span> <span class="o">=</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">31</span><span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">natural_coordinates</span><span class="p">]</span> <span class="o">*</span> <span class="n">N_e</span><span class="p">)</span>
+<span class="linenos">32</span><span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_e</span><span class="p">),</span> <span class="n">N_p</span><span class="p">)</span>
+<span class="linenos">33</span><span class="n">N_p</span> <span class="o">=</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span><span class="n">interpolate_property</span> <span class="o">=</span> <span class="n">compute_property_interpolation</span><span class="p">(</span>
+<span class="linenos">36</span>    <span class="n">property_array</span><span class="o">=</span><span class="n">property_array</span><span class="p">,</span>
+<span class="linenos">37</span>    <span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span>
+<span class="linenos">38</span>    <span class="n">element_type</span><span class="o">=</span><span class="s1">&#39;triangle_3&#39;</span><span class="p">,</span>
+<span class="linenos">39</span>    <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">natural_coordinates</span><span class="p">,</span>
+<span class="linenos">40</span>    <span class="n">element_indices</span><span class="o">=</span><span class="n">element_indices</span>
+<span class="linenos">41</span><span class="p">)</span>
+<span class="linenos">42</span>
+<span class="linenos">43</span><span class="c1"># Now project back to the nodes</span>
+<span class="linenos">44</span><span class="n">projected_props</span> <span class="o">=</span> <span class="n">compute_property_projection</span><span class="p">(</span>
+<span class="linenos">45</span>    <span class="n">property_array</span><span class="o">=</span><span class="n">interpolate_property</span><span class="p">,</span>
+<span class="linenos">46</span>    <span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span>
+<span class="linenos">47</span>    <span class="n">element_type</span><span class="o">=</span><span class="s1">&#39;triangle_3&#39;</span><span class="p">,</span>
+<span class="linenos">48</span>    <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">natural_coordinates</span><span class="p">,</span>
+<span class="linenos">49</span>    <span class="n">element_indices</span><span class="o">=</span><span class="n">element_indices</span><span class="p">,</span>
+<span class="linenos">50</span>    <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span>
+<span class="linenos">51</span><span class="p">)</span>
+<span class="linenos">52</span>
+<span class="linenos">53</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;projected properties (shape=</span><span class="si">{</span><span class="n">projected_props</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
+<span class="linenos">54</span><span class="nb">print</span><span class="p">(</span><span class="n">projected_props</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">projected properties (shape=(4, 1)):</span>
@@ -838,7 +816,6 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <span class="go"> [40.]]</span>
 </pre></div>
 </div>
-</section>
 </dd></dl>
 
 </section>

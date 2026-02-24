@@ -659,66 +659,71 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.compute_jacobian_matrix">
 <span class="sig-name descname"><span class="pre">compute_jacobian_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices_coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectivity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_indices</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_m1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/integration_points_operations.html#compute_jacobian_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.compute_jacobian_matrix" title="Link to this definition">#</a></dt>
-<dd><p>Compute the Jacobian (derivative) matrix <span class="math notranslate nohighlight">\(J\)</span> of the transformation from natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta, \zeta, ...)\)</span> to
-global coordinates <span class="math notranslate nohighlight">\((x, y, z, ...)\)</span> with shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> at given integration points within specified elements.</p>
+<dd><p>Compute and assemble the Jacobian (derivative) matrix <span class="math notranslate nohighlight">\(J\)</span> of the
+transformation from natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta, \zeta, ...)\)</span> to
+global coordinates <span class="math notranslate nohighlight">\((x, y, z, ...)\)</span> with shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> at
+given integration points within specified elements.</p>
 <p><code class="docutils literal notranslate"><span class="pre">jacobians[i]</span></code> contains the Jacobian matrix for the integration point <span class="math notranslate nohighlight">\(i\)</span>.</p>
-<p>This function combines the remapping of vertex coordinates, computation of shape function derivatives,
-and assembly of the Jacobian matrices for the entire mesh.</p>
+<p>This function combines the remapping of vertex coordinates, computation of shape
+function derivatives, and assembly of the Jacobian matrices for the entire mesh.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The input <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> will be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> for computation.
-The inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> for computation.</p>
+<ul class="simple">
+<li><p>Inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> will be</p></li>
+</ul>
+<p>converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a>.
+- Inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will be
+converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the element indices are valid, …).
-Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</p>
+<p>No tests are performed to check if the inputs array are consistent
+(e.g., if the connectivity contains invalid vertex indices, …).
+Only shapes are validated.
+The behavior of the function is undefined in this case.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When using <code class="xref py py-obj docutils literal notranslate"><span class="pre">-1</span></code> in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> for invalid elements,
+ensure to set <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> to avoid indexing errors.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{v}, E)\)</span> containing the global coordinates of the vertices in the mesh.</p></li>
-<li><p><strong>connectivity</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span> defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
-<li><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – A string specifying the type of element (e.g., ‘segment_2’, ‘triangle_3’, etc.) to determine which shape function to use.</p></li>
-<li><p><strong>natural_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, K)\)</span> containing the natural coordinates of the integration points within elements where <span class="math notranslate nohighlight">\(K\)</span> is the topological dimension of the element (e.g., 1 for segments, 2 for triangles/quadrangles, etc.).</p></li>
-<li><p><strong>element_indices</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the indices of each element corresponding to the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points.</p></li>
-<li><p><strong>skip_m1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, any element index of -1 in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will result in the corresponding Jacobian being set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>.
+<li><p><strong>vertices_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{v}, E)\)</span> containing the global coordinates of the
+vertices in the mesh.</p></li>
+<li><p><strong>connectivity</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span> defining the connectivity of the
+elements in the mesh, where each row contains the indices of the nodes that
+form an element.</p></li>
+<li><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – A string specifying the type of element (e.g., ‘segment_2’, ‘triangle_3’, etc.)
+to determine which shape function to use.</p></li>
+<li><p><strong>natural_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, K)\)</span> containing the natural coordinates of the
+integration points within elements where <span class="math notranslate nohighlight">\(K\)</span> is the topological dimension
+of the element (e.g., 1 for segments, 2 for triangles/quadrangles, etc.).</p></li>
+<li><p><strong>element_indices</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span> containing the indices of each element
+corresponding to the <span class="math notranslate nohighlight">\(N_{p}\)</span> integration points.</p></li>
+<li><p><strong>skip_m1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, any element index of -1 in <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> will
+result in the corresponding Jacobian being set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>.
 Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.</p></li>
-<li><p><strong>default</strong> (<em>Real</em><em>, </em><em>optional</em>) – The default value to assign to Jacobians for integration points associated with an element index of -1 when <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.
-The out-of-range natural coordinates will also result in Jacobians being set to this value.
-Default is <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>.</p></li>
+<li><p><strong>default</strong> (<em>Real</em><em>, </em><em>optional</em>) – The default value to assign to Jacobians for integration points associated
+with an element index of -1 when <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.
+The out-of-range natural coordinates will also result in Jacobians being set
+to this value. Default is <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>jacobians</strong> – An array of shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> containing the Jacobian matrices for each of the <span class="math notranslate nohighlight">\(N_{p}\)</span> points. Each Jacobian matrix has dimensions <span class="math notranslate nohighlight">\((E \times K)\)</span>.</p>
+<dd class="field-even"><p><strong>jacobians</strong> – An array of shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> containing the Jacobian matrices for
+each of the <span class="math notranslate nohighlight">\(N_{p}\)</span> points. Each Jacobian matrix has dimensions
+<span class="math notranslate nohighlight">\((E \times K)\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – <ul>
-<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> cannot be converted to a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of floating type.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> cannot be converted to a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of integer type.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_type</span></code> is not a string.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_m1</span></code> is not a boolean.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code> is not a real number.</p></li>
-</ul>
-</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – <ul>
-<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_type</span></code> is not a recognized element type.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">natural_coordinates</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{p}, K)\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">vertices_coordinates</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{v}, E)\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> is not a 2D array of shape <span class="math notranslate nohighlight">\((N_{e}, N_{vpe})\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">element_indices</span></code> is not a 1D array of shape <span class="math notranslate nohighlight">\((N_{p},)\)</span>.</p></li>
-</ul>
-</p></li>
-</ul>
-</dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes,
-The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
+<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements
+and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes, the mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements
+(with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
 <p>The Jacobian matrix has dimensions <span class="math notranslate nohighlight">\((E \times K)\)</span> and constructed as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}J = J_{X/\Xi} = \frac{dX}{d\Xi} = \begin{bmatrix}
@@ -730,10 +735,11 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <p>where each entry is computed as:</p>
 <div class="math notranslate nohighlight">
 \[\frac{\partial x_i}{\partial \xi_j} = \sum_{a=1}^{N_{vpe}} \frac{\partial N_a}{\partial \xi_j} x_{i,a}\]</div>
-<p>Here, <span class="math notranslate nohighlight">\(N_a\)</span> are the shape functions associated with each node, and <span class="math notranslate nohighlight">\(x_{i,a}\)</span> are the global coordinates of the nodes.</p>
-<div class="math notranslate nohighlight">
-\[\nabla_{\Xi} N = J^{T} \nabla_{X} N = J_{X/\Xi}^{T} \nabla_{X} N\]</div>
-<p>See also the notes in <a class="reference internal" href="pysdic.assemble_jacobian_matrix.html#pysdic.assemble_jacobian_matrix" title="pysdic.assemble_jacobian_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.assemble_jacobian_matrix()</span></code></a> for the transformation from global coordinates to natural coordinates.</p>
+<p>Here, <span class="math notranslate nohighlight">\(N_a\)</span> are the shape functions associated with each node, and
+<span class="math notranslate nohighlight">\(x_{i,a}\)</span> are the global coordinates of the nodes.</p>
+<p>See the notes in <a class="reference internal" href="pysdic.assemble_jacobian_matrix.html#pysdic.assemble_jacobian_matrix" title="pysdic.assemble_jacobian_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.assemble_jacobian_matrix()</span></code></a> for more details on the
+transformation between natural and global coordinates and the use of pseudo-inverse
+for non-square Jacobian matrices.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -746,7 +752,8 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>Lets construct a simple 2D mesh and compute the Jacobian at given integration points for triangular elements.</p>
+<p>Lets construct a simple 2D mesh and compute the Jacobian at given integration points
+for triangular elements.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_jacobian_matrix</span>
 <span class="linenos"> 3</span>

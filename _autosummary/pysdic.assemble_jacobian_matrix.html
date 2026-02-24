@@ -659,50 +659,48 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.assemble_jacobian_matrix">
 <span class="sig-name descname"><span class="pre">assemble_jacobian_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape_function_derivatives</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remapped_coordinates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/integration_points_operations.html#assemble_jacobian_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.assemble_jacobian_matrix" title="Link to this definition">#</a></dt>
-<dd><p>Assemble the Jacobian (derivative) matrix <span class="math notranslate nohighlight">\(J\)</span> of the transformation from natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta, \zeta, ...)\)</span> to
-global coordinates <span class="math notranslate nohighlight">\((x, y, z, ...)\)</span> with shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> from precomputed shape function derivatives and remapped vertex coordinates.</p>
+<dd><p>Assemble the Jacobian (derivative) matrix <span class="math notranslate nohighlight">\(J\)</span> of the transformation from
+natural coordinates <span class="math notranslate nohighlight">\((\xi, \eta, \zeta, ...)\)</span> to global coordinates
+<span class="math notranslate nohighlight">\((x, y, z, ...)\)</span> with shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> from precomputed shape
+function derivatives and remapped vertex coordinates.</p>
 <p><code class="docutils literal notranslate"><span class="pre">jacobians[i]</span></code> contains the Jacobian matrix for the integration point <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_function_derivatives</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">remapped_coordinates</span></code> will be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> for computation.</p>
+<ul class="simple">
+<li><p>Inputs <code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_function_derivatives</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">remapped_coordinates</span></code> will</p></li>
+</ul>
+<p>be converted to <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the element indices are valid, …).
-Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</p>
+<p>No tests are performed to check if the inputs array are consistent
+(e.g., if the connectivity contains invalid vertex indices, …).
+The behavior of the function is undefined in this case.
+Only shapes are validated.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shape_function_derivatives</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, K)\)</span> containing the derivatives of the shape functions with respect to the local coordinates,
+<li><p><strong>shape_function_derivatives</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, K)\)</span> containing the derivatives of
+the shape functions with respect to the local coordinates,
 evaluated at <span class="math notranslate nohighlight">\(N_{p}\)</span> points for the <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes of the element.</p></li>
-<li><p><strong>remapped_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, E)\)</span> containing the remapped global coordinates of the vertices for each integration point within the elements</p></li>
+<li><p><strong>remapped_coordinates</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, E)\)</span> containing the remapped global
+coordinates of the vertices for each integration point within the elements</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>jacobians</strong> – An array of shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> containing the Jacobian matrices for each of the <span class="math notranslate nohighlight">\(N_{p}\)</span> points. Each Jacobian matrix has dimensions <span class="math notranslate nohighlight">\((E \times K)\)</span>.</p>
+<dd class="field-even"><p><strong>jacobians</strong> – An array of shape <span class="math notranslate nohighlight">\((N_{p}, E, K)\)</span> containing the Jacobian matrices for
+each of the <span class="math notranslate nohighlight">\(N_{p}\)</span> points. Each Jacobian matrix has dimensions
+<span class="math notranslate nohighlight">\((E \times K)\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – <ul>
-<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_function_derivatives</span></code> cannot be converted to a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of floating type.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">remapped_coordinates</span></code> cannot be converted to a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of floating type.</p></li>
-</ul>
-</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – <ul>
-<li><p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">shape_function_derivatives</span></code> is not a 3D array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, K)\)</span>.
-    - If <code class="xref py py-obj docutils literal notranslate"><span class="pre">remapped_coordinates</span></code> is not a 3D array of shape <span class="math notranslate nohighlight">\((N_{p}, N_{vpe}, E)\)</span>.</p></li>
-</ul>
-</p></li>
-</ul>
-</dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes,
-The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements (with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
+<p>In a space of dimension <span class="math notranslate nohighlight">\(E\)</span> with a mesh constituted of <span class="math notranslate nohighlight">\(N_{e}\)</span> elements
+and <span class="math notranslate nohighlight">\(N_{v}\)</span> nodes, the mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-dimensional elements
+(with <span class="math notranslate nohighlight">\(K \leq E\)</span>) defined by <span class="math notranslate nohighlight">\(N_{vpe}\)</span> nodes for each element.</p>
 <p>The Jacobian matrix has dimensions <span class="math notranslate nohighlight">\((E \times K)\)</span> and constructed as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}J = J_{X/\Xi} = \frac{dX}{d\Xi} = \begin{bmatrix}
@@ -714,21 +712,28 @@ The mesh is composed of <span class="math notranslate nohighlight">\(K\)</span>-
 <p>where each entry is computed as:</p>
 <div class="math notranslate nohighlight">
 \[\frac{\partial x_i}{\partial \xi_j} = \sum_{a=1}^{N_{vpe}} \frac{\partial N_a}{\partial \xi_j} x_{i,a}\]</div>
-<p>Here, <span class="math notranslate nohighlight">\(N_a\)</span> are the shape functions associated with each node, and <span class="math notranslate nohighlight">\(x_{i,a}\)</span> are the global coordinates of the nodes.</p>
+<p>Here, <span class="math notranslate nohighlight">\(N_a\)</span> are the shape functions associated with each node, and
+<span class="math notranslate nohighlight">\(x_{i,a}\)</span> are the global coordinates of the nodes.</p>
 <div class="math notranslate nohighlight">
 \[\nabla_{\Xi} N = J^{T} \nabla_{X} N = J_{X/\Xi}^{T} \nabla_{X} N\]</div>
-<p>To obtain the jacobian matrix for the transformation from global coordinates to natural coordinates noted <span class="math notranslate nohighlight">\(J_{\Xi/X}\)</span> such as:</p>
+<p>To obtain the jacobian matrix for the transformation from global coordinates to
+natural coordinates noted <span class="math notranslate nohighlight">\(J_{\Xi/X}\)</span> such as:</p>
 <div class="math notranslate nohighlight">
 \[\nabla_{X} N = J_{\Xi/X}^{T} \nabla_{\Xi} N\]</div>
 <p>we get :</p>
 <div class="math notranslate nohighlight">
 \[\nabla_{X} N = (J^{T})^{-1} \nabla_{\Xi} N = (J^{-1})^{T} \nabla_{\Xi} N\]</div>
-<p>So the jacobian matrix for the transformation from global coordinates to natural coordinates is the inverse of the jacobian matrix for the transformation from natural coordinates to global coordinates.</p>
+<p>So the jacobian matrix for the transformation from global coordinates to natural
+coordinates is the inverse of the jacobian matrix for the transformation from
+natural coordinates to global coordinates.</p>
 <div class="math notranslate nohighlight">
 \[J_{\Xi/X} = J^{-1} = J_{X/\Xi}^{-1}\]</div>
 <p>For <span class="math notranslate nohighlight">\(K \le E\)</span>, the Jacobian matrix is not square and thus not invertible.
-In this case, the pseudo-inverse can be used to compute the transformation from global coordinates to natural coordinates.
-The Moore-Penrose pseudo-inverse of the Jacobian matrix <span class="math notranslate nohighlight">\(J \in \mathbb{R}^{E \times K}\)</span> is given by <span class="math notranslate nohighlight">\(J^{+} = (J^{T} J)^{-1} J^{T}\)</span> because <span class="math notranslate nohighlight">\(J\)</span> has full column rank (i.e., the columns of <span class="math notranslate nohighlight">\(J\)</span> are linearly independent).</p>
+In this case, the pseudo-inverse can be used to compute the transformation from
+global coordinates to natural coordinates. The Moore-Penrose pseudo-inverse of the
+Jacobian matrix <span class="math notranslate nohighlight">\(J \in \mathbb{R}^{E \times K}\)</span> is given by
+<span class="math notranslate nohighlight">\(J^{+} = (J^{T} J)^{-1} J^{T}\)</span> because <span class="math notranslate nohighlight">\(J\)</span> has full column rank
+(i.e., the columns of <span class="math notranslate nohighlight">\(J\)</span> are linearly independent).</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -741,7 +746,8 @@ The Moore-Penrose pseudo-inverse of the Jacobian matrix <span class="math notran
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>Lets construct a simple 2D mesh and compute the Jacobian at given integration points for triangular elements.</p>
+<p>Lets construct a simple 2D mesh and compute the Jacobian at given integration points
+for triangular elements.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 <span class="linenos"> 3</span>    <span class="n">remap_vertices_coordinates</span><span class="p">,</span>
