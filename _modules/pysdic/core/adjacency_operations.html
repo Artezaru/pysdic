@@ -1,0 +1,1784 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.core.adjacency_operations &#8212; pysdic 1.3.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/adjacency_operations';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 1.3.2 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_gallery/index.html">
+    Example Gallery
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../_gallery/index.html">
+    Example Gallery
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.core.adjacency_operations</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.core.adjacency_operations</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 Artezaru</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span><span class="p">,</span> <span class="n">defaultdict</span>
+
+
+<div class="viewcode-block" id="bfs_distance">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.bfs_distance.html#pysdic.bfs_distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bfs_distance</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span> 
+    <span class="n">start</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> 
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">_skip_type_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Integral</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a breadth-first search (BFS) to compute the shortest path distances from a starting vertex to all other vertices in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph contains self-loops, if the graph contains invalid vertex indices, ...). </span>
+<span class="sd">        The behavior of the function is undefined if the input graph is not valid.</span>
+
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph: Sequence[Iterable[Integral]]</span>
+<span class="sd">        A sequence of iterables representing the adjacency list of the graph, where each index corresponds to a vertex and the iterable at that index contains the adjacent vertex indices.</span>
+<span class="sd">        The length of the input sequence is equal to the number of vertices in the graph.</span>
+
+<span class="sd">    start: Integral</span>
+<span class="sd">        The starting vertex index for the BFS.</span>
+<span class="sd">    </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to search for in the BFS. If :obj:`None`, there is no maximum distance and all reachable vertices will be included in the distance computation. </span>
+<span class="sd">        If an integer is provided, the BFS will only consider vertices that are within this distance from the starting vertex, and any vertex that is not reachable within this distance will have a distance of -1. By default :obj:`None`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[:class:`int`]</span>
+<span class="sd">        A list of integers representing the shortest path distances from the starting vertex to all other vertices in the graph. </span>
+<span class="sd">        The length of the output list is equal to the number of vertices in the graph.</span>
+
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input graph is not a sequence of iterables.</span>
+<span class="sd">        If the start vertex index is not an integer.</span>
+<span class="sd">        If maximum distance is not an integer or None.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If the start vertex index is out of bounds.</span>
+<span class="sd">        If maximum distance is a negative integer.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Lets note :math:`A` the starting vertex of the graph and :math:`T` the target vertex of the graph. </span>
+<span class="sd">    The BFS algorithm explores the graph in layers, starting from vertex :math:`A` and visiting all its neighbors (vertices directly connected to :math:`A`) before moving on to the neighbors&#39; neighbors, and so on.</span>
+<span class="sd">    The distance from vertex :math:`A` to vertex :math:`T` is determined by the layer at which vertex :math:`T` is first encountered during the BFS traversal.</span>
+
+<span class="sd">    The distance from vertex :math:`A` to vertex :math:`T` is defined as follows:</span>
+<span class="sd">    </span>
+<span class="sd">    - :math:`\text{dist}(A, T) = 0` if vertex :math:`T` is the same as vertex :math:`A`, since the distance from a vertex to itself is zero.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = 1` if vertex :math:`T` is a neighbor of vertex :math:`A`, meaning that there is a direct edge connecting vertex :math:`A` to vertex :math:`T`.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = d \geq 1` if the shortest path from vertex :math:`A` to vertex :math:`T` has length :math:`d`.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = -1` if vertex :math:`T` is not reachable from vertex :math:`A`, meaning that there is no path connecting vertex :math:`A` to vertex :math:`T` in the graph.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = -1` if vertex :math:`T` is not reachable from vertex :math:`A` within the specified ``max_distance``.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`bfs_neighborhood`</span>
+<span class="sd">        Perform a breadth-first search (BFS) to compute the neighborhood of a starting vertex in the graph, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+
+
+<span class="sd">   </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 vertices and compute the shortest path distances from a starting vertex (0) to all other vertices in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+<span class="sd">       </span>
+<span class="sd">       Disconnected graph with 7 vertices for BFS example. Distance from vertex 0 to vertex 4 is 3 (0 -&gt; 2 -&gt; 3 -&gt; 4).</span>
+<span class="sd">       </span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        from pysdic import bfs_distance</span>
+<span class="sd">        </span>
+<span class="sd">        graph = [[1, 2], [0, 2], [0, 1, 3], [2, 4], [3], [6], [5]]</span>
+<span class="sd">        start_vertex = 0</span>
+<span class="sd">        max_distance = None</span>
+<span class="sd">        </span>
+<span class="sd">        distances = bfs_distance(graph, start_vertex, max_distance)</span>
+<span class="sd">        print(distances)</span>
+
+<span class="sd">    .. code-block:: console</span>
+<span class="sd">    </span>
+<span class="sd">        [0, 1, 1, 2, 3, -1, -1]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_skip_type_check</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">for</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2"> with elements of type </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">neighbors</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> 
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;start must be an integer. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;start must be an integer between 0 and n_vertices-1. Got </span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be an integer or None. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">max_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>    
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_distance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be a non-negative integer or None. Got </span><span class="si">{</span><span class="n">max_distance</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Breadth-first search (BFS) to find shortest paths from vertex i</span>
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_vertices</span>  <span class="c1"># -1 indicates unvisited vertices</span>
+    <span class="n">distances</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">start</span><span class="p">])</span>
+
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="n">current_distance</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">current_distance</span> <span class="o">&gt;=</span> <span class="n">max_distance</span><span class="p">:</span>
+            <span class="k">continue</span>
+        
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">distances</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> 
+                <span class="n">distances</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_distance</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">distances</span></div>
+
+
+
+
+<div class="viewcode-block" id="bfs_neighborhood">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.bfs_neighborhood.html#pysdic.bfs_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bfs_neighborhood</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span>  <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> 
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> 
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">_skip_type_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a breadth-first search (BFS) to compute the neighborhood of a starting vertex in the graph, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph contains self-loops, if the graph contains invalid vertex indices, ...). </span>
+<span class="sd">        The behavior of the function is undefined if the input graph is not valid.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Sequence[Iterable[Integral]]</span>
+<span class="sd">        A sequence of iterables representing the adjacency list of the graph, where each index corresponds to a vertex and the iterable at that index contains the adjacent vertex indices.</span>
+<span class="sd">        The length of the input sequence is equal to the number of vertices in the graph.</span>
+<span class="sd">        </span>
+<span class="sd">    start : Integral</span>
+<span class="sd">        The starting vertex index for the BFS.</span>
+<span class="sd">        </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to search for in the BFS. The neighborhood will include all vertices that are within this distance from the vertex in the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    self_neighborhood : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the neighborhood of the vertex will include the vertex itself (i.e., the vertex will be considered as part of its own neighborhood). If :obj:`False`, the neighborhood of the vertex will not include the vertex itself. By default :obj:`True`.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[:class:`int`]</span>
+<span class="sd">        A list of vertex indices representing the neighborhood of the starting vertex, where the neighborhood includes all vertices that are within the specified distance from the vertex in the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input graph is not a sequence of iterables.</span>
+<span class="sd">        If the start vertex index is not an integer.</span>
+<span class="sd">        If maximum distance is not an integer or None.</span>
+<span class="sd">        If self_neighborhood is not a boolean.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If the start vertex index is out of bounds.</span>
+<span class="sd">        If maximum distance is a negative integer.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Lets note :math:`A` the starting vertex of the graph and :math:`T` the target vertex of the graph.</span>
+<span class="sd">    The BFS algorithm explores the graph in layers, starting from vertex :math:`A` and visiting all its neighbors (vertices directly connected to :math:`A`) before moving on to the neighbors&#39; neighbors, and so on.</span>
+<span class="sd">    At the max_distance layer, the BFS will stop and the neighborhood of vertex :math:`A` will include all vertices that were visited during the BFS traversal up to and including the max_distance layer.</span>
+
+<span class="sd">    There is some particular cases for the neighborhood of vertex :math:`A` depending on the value of :obj:`max_distance`:</span>
+<span class="sd">    </span>
+<span class="sd">    - For max_distance = 0, the neighborhood of vertex :math:`A` will include only vertex :math:`A` itself (if self_neighborhood is True).</span>
+<span class="sd">    - For max_distance = 1, the neighborhood of vertex :math:`A` will include vertex :math:`A` itself (if self_neighborhood is True) and all its neighbors (directly extracted from the graph).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`bfs_distance`</span>
+<span class="sd">        Perform a breadth-first search (BFS) to compute the shortest path distances from a starting vertex to all other vertices in the graph, where the distance is defined as the number of edges in the shortest path between the vertices.</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 vertices and compute the shortest path distances from a starting vertex (0) to all other vertices in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+<span class="sd">       </span>
+<span class="sd">       Disconnected graph with 7 vertices for BFS example. Vertices 0, 1, 2 and 3 are the only vertices in the neighborhood of vertex 0 for max_distance = 2.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        from pysdic import bfs_neighborhood</span>
+<span class="sd">        </span>
+<span class="sd">        graph = [[1, 2], [0, 2], [0, 1, 3], [2, 4], [3], [6], [5]]</span>
+<span class="sd">        start_vertex = 0</span>
+<span class="sd">        max_distance = 2</span>
+<span class="sd">        </span>
+<span class="sd">        neighborhood = bfs_neighborhood(graph, start_vertex, max_distance, self_neighborhood=True)</span>
+<span class="sd">        print(neighborhood)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+<span class="sd">    </span>
+<span class="sd">        [0, 1, 2, 3]</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_skip_type_check</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">for</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2"> with elements of type </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">neighbors</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> 
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;start must be an integer. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;start must be an integer between 0 and n_vertices-1. Got </span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be an integer or None. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">max_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>    
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_distance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be a non-negative integer or None. Got </span><span class="si">{</span><span class="n">max_distance</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_neighborhood</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self_neighborhood must be a boolean. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">self_neighborhood</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Breadth-first search (BFS) to find the neighborhood of vertex i</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="p">{</span><span class="n">start</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># key: vertex index, value: distance from start</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">start</span><span class="p">])</span>
+
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">visited</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+
+        <span class="c1"># Stop if max distance reached</span>
+        <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="n">max_distance</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">nbr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">nbr</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nbr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">self_neighborhood</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">visited</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">start</span><span class="p">]</span></div>
+
+    
+
+<div class="viewcode-block" id="create_vertices_adjacency_graph">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.create_vertices_adjacency_graph.html#pysdic.create_vertices_adjacency_graph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_vertices_adjacency_graph</span><span class="p">(</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">Integral</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the vertices adjacency graph from the connectivity of the mesh, where two vertices are neighbors if there is an element in the mesh containing both vertices.</span>
+
+<span class="sd">    Note that the function is indepedent of the geometry of the element, thus two vertices will be considered as neighbors if they are part of the same element, regardless of the shape of the element (e.g., triangle, quadrilateral, tetrahedron, hexahedron, ...).</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The input :obj:`connectivity` must be integral-array like. The output integral values will be of the same type as the input :obj:`connectivity` (e.g., if the input :obj:`connectivity` is of type :obj:`numpy.int64`, the output integral values will be of type :obj:`numpy.int64`).</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">        No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">        </span>
+<span class="sd">    n_vertices : Optional[Integral], optional</span>
+<span class="sd">        The total number of vertices in the mesh. If not provided, it will be inferred from the connectivity array.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Set[Integral]]</span>
+<span class="sd">        A list of sets representing the adjacency list of the graph, where each index corresponds to a vertex and each set at that index contains the neighboring vertex indices.</span>
+<span class="sd">    </span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If n_vertices is not an integer or None.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If n_vertices is a non-positive integer.</span>
+<span class="sd">        If the connectivity array is not 2D.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`create_elements_adjacency_graph`</span>
+<span class="sd">        Create the elements adjacency graph from the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``quadrangle 4`` mesh with 10 vertices and 4 elements and compute the vertices adjacency graph from the connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+<span class="sd">        </span>
+<span class="sd">        ``Quadrangle 4`` mesh. The neighboring vertices of vertex 1 are vertices 0, 2, 4, 5 and 6 since they are part of the same elements in the mesh (elements 0 and 1).</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic import create_vertices_adjacency_graph</span>
+<span class="sd">        </span>
+<span class="sd">        connectivity = np.array([[0, 1, 4, 5], [1, 2, 5, 6], [2, 3, 6, 7], [6, 7, 8, 9]], dtype=np.int64)</span>
+<span class="sd">        n_vertices = 10</span>
+<span class="sd">        </span>
+<span class="sd">        adjacency_graph = create_vertices_adjacency_graph(</span>
+<span class="sd">            connectivity=connectivity,</span>
+<span class="sd">            n_vertices=n_vertices</span>
+<span class="sd">        )</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;vertices adjacency graph with length: {len(adjacency_graph)}&quot;)</span>
+<span class="sd">        subset_1 = adjacency_graph[1]</span>
+<span class="sd">        print(f&quot;vertices adjacency graph (neighbors of vertex 1): {subset_1}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        vertices adjacency graph with length: 10</span>
+<span class="sd">        vertices adjacency graph (neighbors of vertex 1): {np.int64(0), np.int64(2), np.int64(4), np.int64(5), np.int64(6)}</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;connectivity must be an integral array. Got array of type </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;connectivity&#39; must be a 2D array of shape (N_e, N_vpe). Got </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Extract number of vertices</span>
+    <span class="k">if</span> <span class="n">n_vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_vertices must be an integer or None. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_vertices</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_vertices must be a positive integer. Got </span><span class="si">{</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Create the edges from the connectivity</span>
+    <span class="c1"># For Nvpe vertices per element, we have Nvpe*(Nvpe-1)/2 edges per element</span>
+    <span class="n">Ne</span><span class="p">,</span> <span class="n">Nvpe</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">Ned</span> <span class="o">=</span> <span class="n">Ne</span> <span class="o">*</span> <span class="n">Nvpe</span> <span class="o">*</span> <span class="p">(</span><span class="n">Nvpe</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+    
+    <span class="n">irow</span><span class="p">,</span> <span class="n">icol</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">Nvpe</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">connectivity</span><span class="p">[:,</span> <span class="n">irow</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">connectivity</span><span class="p">[:,</span> <span class="n">icol</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+    <span class="c1"># Build the graph as an adjacency list for the BFS algorithm</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">graph</span></div>
+
+
+
+<div class="viewcode-block" id="create_elements_adjacency_graph">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.create_elements_adjacency_graph.html#pysdic.create_elements_adjacency_graph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_elements_adjacency_graph</span><span class="p">(</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the elements adjacency graph from the connectivity of the mesh, where two elements are neighbors if they share at least one vertex in the mesh.</span>
+
+<span class="sd">    Note that the function is indepedent of the geometry of the element, thus two elements will be considered as neighbors if they share at least one vertex, regardless of the shape of the elements (e.g., triangle, quadrilateral, tetrahedron, hexahedron, ...).</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The input :obj:`connectivity` must be integral-array like.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">        No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[Set[:class:`int`]]</span>
+<span class="sd">        A list of sets representing the adjacency list of the graph, where each index corresponds to an element and each set at that index contains the neighboring element indices.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the connectivity array is not 2D.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`create_vertices_adjacency_graph`</span>
+<span class="sd">        Create the vertices adjacency graph from the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``quadrangle 4`` mesh with 10 vertices and 4 elements and compute the elements adjacency graph from the connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+<span class="sd">        </span>
+<span class="sd">        ``Quadrangle 4`` mesh. The neighboring elements of element 3 are elements 1 and 2 since they share at least one vertex in the mesh.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic import create_elements_adjacency_graph</span>
+<span class="sd">        </span>
+<span class="sd">        connectivity = np.array([[0, 1, 4, 5], [1, 2, 5, 6], [2, 3, 6, 7], [6, 7, 8, 9]], dtype=np.int64)</span>
+<span class="sd">        n_vertices = 10</span>
+<span class="sd">        </span>
+<span class="sd">        adjacency_graph = create_elements_adjacency_graph(connectivity=connectivity)</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;elements adjacency graph with length: {len(adjacency_graph)}&quot;)</span>
+<span class="sd">        subset_1 = adjacency_graph[3]</span>
+<span class="sd">        print(f&quot;elements adjacency graph (neighbors of element 3): {subset_1}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        elements adjacency graph with length: 4</span>
+<span class="sd">        elements adjacency graph (neighbors of element 3): {1, 2}</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;connectivity must be an integral array. Got array of type </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;connectivity&#39; must be a 2D array of shape (N_e, N_vpe). Got </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">D array instead.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Build the vertex to element mapping</span>
+    <span class="n">vertex_to_elements</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">element_index</span><span class="p">,</span> <span class="n">vertices</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">connectivity</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+            <span class="n">vertex_to_elements</span><span class="p">[</span><span class="n">vertex</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element_index</span><span class="p">)</span>
+            
+    <span class="c1"># Build the graph adjacency matrix for elements</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="k">for</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">vertex_to_elements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)):</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">elements</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">elements</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">graph</span></div>
+
+
+
+<div class="viewcode-block" id="compute_adjacency_matrix">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_adjacency_matrix.html#pysdic.compute_adjacency_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_adjacency_matrix</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the adjacency matrix from the adjacency graph of the vertices, where the distance between two vertices is defined as the minimum number of elements that must be traversed to go from one vertex to another.</span>
+
+<span class="sd">    The output is a symmetric square matrix of shape (:math:`N_v`, :math:`N_v`), where :math:`N_v` is the number of vertices, and the value at position (i, j) represents the distance between vertex i and vertex j in the graph.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The computation of the adjacency matrix is performed using a breadth-first search (BFS) algorithm for each vertex in the graph.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph contains self-loops, if the graph contains invalid vertex indices, ...). </span>
+<span class="sd">        The behavior of the function is undefined if the input graph is not valid.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Sequence[Iterable[Integral]]</span>
+<span class="sd">        A sequence of iterables representing the adjacency list of the graph, where each index corresponds to a vertex and the iterable at that index contains the adjacent vertex indices.</span>
+<span class="sd">        </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to consider between vertices. If the distance between two vertices exceeds this value,</span>
+<span class="sd">        the corresponding entry in the adjacency matrix will be set to -1. If :obj:`None`, there is no maximum distance and all distances will be computed. By default :obj:`None`.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        A square array of shape (:math:`N_v`, :math:`N_v`) representing the path distance matrix between vertices, where the value at position (i, j) represents the distance between vertex i and vertex j in the graph.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input graph is not a sequence of iterables.</span>
+<span class="sd">        If maximum distance is not an integer or None.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If maximum distance is a negative integer.</span>
+<span class="sd">        If n_vertices is a non-positive integer.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`bfs_distance`</span>
+<span class="sd">        Perform a breadth-first search (BFS) to compute the shortest path distances from a starting vertex to all other vertices in the graph, where the distance is defined as the number of edges in</span>
+<span class="sd">        the shortest path between the vertices.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`compute_vertices_adjacency_matrix`</span>
+<span class="sd">        Convenience function to compute the vertices path distance matrix (adjacency matrix) from the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`compute_elements_adjacency_matrix`</span>
+<span class="sd">        Convenience function to compute the elements path distance matrix (adjacency matrix) from the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The distance between two vertices i and j in the graph is defined as follows:</span>
+<span class="sd">    </span>
+<span class="sd">    - :math:`\text{dist}(i, j) = 0` if vertex :math:`j` is the same as vertex :math:`i`, since the distance from a vertex to itself is zero.</span>
+<span class="sd">    - :math:`\text{dist}(i, j) = 1` if vertex :math:`j` is a neighbor of vertex :math:`i`, meaning that there is a direct edge connecting vertex :math:`i` to vertex :math:`j`.</span>
+<span class="sd">    - :math:`\text{dist}(i, j) = d \geq 1` if the shortest path from vertex :math:`i` to vertex :math:`j` has length :math:`d`.</span>
+<span class="sd">    - :math:`\text{dist}(i, j) = -1` if vertex :math:`j` is not reachable from vertex :math:`i`, meaning that there is no path connecting vertex :math:`i` to vertex :math:`j` in the graph.</span>
+<span class="sd">    - :math:`\text{dist}(i, j) = -1` if vertex :math:`j` is not reachable from vertex :math:`i` within the specified ``max_distance``.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 vertices and build the adjacency matrix from the adjacency graph of the vertices, where the distance between two vertices is defined as the minimum number of elements that must be traversed to go from one vertex to another.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+<span class="sd">       </span>
+<span class="sd">       Disconnected graph with 7 vertices for adjacency matrix example.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        from pysdic import compute_adjacency_matrix</span>
+<span class="sd">        </span>
+<span class="sd">        graph = [[1, 2], [0, 2], [0, 1, 3], [2, 4], [3], [6], [5]]</span>
+<span class="sd">        start_vertex = 0</span>
+<span class="sd">        max_distance = None</span>
+<span class="sd">        </span>
+<span class="sd">        adjacency_matrix = compute_adjacency_matrix(graph, max_distance=max_distance)</span>
+<span class="sd">        print(f&quot;adjacency_matrix (shape={adjacency_matrix.shape}):&quot;)</span>
+<span class="sd">        print(adjacency_matrix)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+<span class="sd">    </span>
+<span class="sd">        adjacency_matrix (shape=(7, 7)):</span>
+<span class="sd">        [[ 0  1  1  2  3 -1 -1]</span>
+<span class="sd">         [ 1  0  1  2  3 -1 -1]</span>
+<span class="sd">         [ 1  1  0  1  2 -1 -1]</span>
+<span class="sd">         [ 2  2  1  0  1 -1 -1]</span>
+<span class="sd">         [ 3  3  2  1  0 -1 -1]</span>
+<span class="sd">         [-1 -1 -1 -1 -1  0  1]</span>
+<span class="sd">         [-1 -1 -1 -1 -1  1  0]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">for</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2"> with elements of type </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">neighbors</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be an integer or None. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">max_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>    
+    <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_distance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be a non-negative integer or None. Got </span><span class="si">{</span><span class="n">max_distance</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">):</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">bfs_distance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">_skip_type_check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span>
+    
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+    
+    
+<div class="viewcode-block" id="compute_vertices_adjacency_matrix">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_vertices_adjacency_matrix.html#pysdic.compute_vertices_adjacency_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_vertices_adjacency_matrix</span><span class="p">(</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the vertices path distance matrix (adjacency matrix) from the connectivity of the mesh, where the distance between two vertices is defined as the minimum number of elements that must be traversed to go from one vertex to another.</span>
+<span class="sd">    </span>
+<span class="sd">    Convenience function that combines the creation of the vertices adjacency graph from the connectivity of the mesh and the computation of the adjacency matrix from the vertices adjacency graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The input :obj:`connectivity` must be integral-array like.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">        No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, ...). </span>
+<span class="sd">        The behavior of the function is undefined if the input connectivity is not valid.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">        </span>
+<span class="sd">    n_vertices : Optional[Integral], optional</span>
+<span class="sd">        The total number of vertices in the mesh. If not provided, it will be inferred from the connectivity array.</span>
+<span class="sd">    </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to consider between vertices. If the distance between two vertices exceeds this value,</span>
+<span class="sd">        the corresponding entry in the adjacency matrix will be set to -1. If :obj:`None`, there is no maximum distance and all distances will be computed. By default :obj:`None`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        A square array of shape (:math:`N_v`, :math:`N_v`) representing the path distance matrix between vertices.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If max_distance is not an integer or None.</span>
+<span class="sd">        If n_vertices is not an integer or None.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If max_distance is a negative integer.</span>
+<span class="sd">        If n_vertices is a non-positive integer.</span>
+<span class="sd">        If the connectivity array is not 2D.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`compute_adjacency_matrix`</span>
+<span class="sd">        Compute the adjacency matrix from the adjacency graph of the vertices, where the distance between two vertices is defined as the minimum number of elements that must be traversed to go from one vertex to another.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`create_vertices_adjacency_graph`</span>
+<span class="sd">        Create the vertices adjacency graph from the connectivity of the mesh, where two vertices are neighbors if there is an element in the mesh containing both vertices.</span>
+<span class="sd">    </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``quadrangle 4`` mesh with 10 vertices and 4 elements and compute the vertices adjacency matrix from the connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+<span class="sd">        </span>
+<span class="sd">        ``Quadrangle 4`` mesh.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic import compute_vertices_adjacency_matrix</span>
+<span class="sd">        </span>
+<span class="sd">        connectivity = np.array([[0, 1, 4, 5], [1, 2, 5, 6], [2, 3, 6, 7], [6, 7, 8, 9]])</span>
+<span class="sd">        n_vertices = 10</span>
+<span class="sd">        </span>
+<span class="sd">        adjacency_matrix = compute_vertices_adjacency_matrix(connectivity=connectivity, n_vertices=n_vertices)</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;vertices adjacency matrix with shape: {adjacency_matrix.shape}&quot;)</span>
+<span class="sd">        extracted_subset = adjacency_matrix[1, :]</span>
+<span class="sd">        print(f&quot;vertices adjacency matrix (distances from vertex 1 to all vertices): {extracted_subset}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        vertices adjacency matrix with shape: (10, 10)</span>
+<span class="sd">        vertices adjacency matrix (distances from vertex 1 to all vertices): [1, 0, 1, 2, 1, 1, 1, 2, 3, 3]</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract the graph as an adjacency list from the connectivity</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">create_vertices_adjacency_graph</span><span class="p">(</span><span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">n_vertices</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the adjacency matrix from the graph</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">compute_adjacency_matrix</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+
+
+<div class="viewcode-block" id="compute_elements_adjacency_matrix">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_elements_adjacency_matrix.html#pysdic.compute_elements_adjacency_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_elements_adjacency_matrix</span><span class="p">(</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the elements path distance matrix (adjacency matrix) from the connectivity of the mesh, where the distance between two elements is defined as the minimum number of elements that must be traversed to go from one element to another.</span>
+<span class="sd">    </span>
+<span class="sd">    Convenience function that combines the creation of the elements adjacency graph from the connectivity of the mesh and the computation of the adjacency matrix from the elements adjacency graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The input :obj:`connectivity` must be integral-array like.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">        No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, ...). </span>
+<span class="sd">        The behavior of the function is undefined if the input connectivity is not valid.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">        </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to consider between elements. If the distance between two elements exceeds this value,</span>
+<span class="sd">        the corresponding entry in the adjacency matrix will be set to -1. If :obj:`None`, there is no maximum distance and all distances will be computed. By default :obj:`None`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`numpy.ndarray`</span>
+<span class="sd">        A square array of shape (:math:`N_e`, :math:`N_e`) representing the path distance matrix between elements.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If max_distance is not an integer or None.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If max_distance is a negative integer.</span>
+<span class="sd">        If the connectivity array is not 2D.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`compute_adjacency_matrix`</span>
+<span class="sd">        Compute the adjacency matrix from the adjacency graph of the elements, where the distance between two elements is defined as the minimum number of elements that must be traversed to go from one element to another.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`create_elements_adjacency_graph`</span>
+<span class="sd">        Create the elements adjacency graph from the connectivity of the mesh, where two elements are neighbors if they share a common vertex.</span>
+<span class="sd">    </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``quadrangle 4`` mesh with 10 vertices and 4 elements and compute the vertices adjacency matrix from the connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+<span class="sd">        </span>
+<span class="sd">        ``Quadrangle 4`` mesh.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic import compute_elements_adjacency_matrix</span>
+<span class="sd">        </span>
+<span class="sd">        connectivity = np.array([[0, 1, 4, 5], [1, 2, 5, 6], [2, 3, 6, 7], [6, 7, 8, 9]])</span>
+<span class="sd">        n_elements = connectivity.shape[0] # 4 elements</span>
+<span class="sd">        </span>
+<span class="sd">        adjacency_matrix = compute_elements_adjacency_matrix(connectivity=connectivity)</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;elements adjacency matrix with shape: {adjacency_matrix.shape}&quot;)</span>
+<span class="sd">        print(adjacency_matrix)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        elements adjacency matrix with shape: (4, 4)</span>
+<span class="sd">        [[ 0  1  2  2]</span>
+<span class="sd">         [ 1  0  1  2]</span>
+<span class="sd">         [ 2  1  0  1]</span>
+<span class="sd">         [ 2  2  1  0]]</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract the graph as an adjacency list from the connectivity</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">create_elements_adjacency_graph</span><span class="p">(</span><span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the adjacency matrix from the graph</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">compute_adjacency_matrix</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+
+
+<div class="viewcode-block" id="compute_neighborhood">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_neighborhood.html#pysdic.compute_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_neighborhood</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the neighborhood of each vertex in the graph, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The neighborhood of a vertex is computed using a breadth-first search (BFS) algorithm for each vertex in the graph, where the BFS is limited to a maximum distance specified by :obj:`max_distance`.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph contains self-loops, if the graph contains invalid vertex indices, ...). </span>
+<span class="sd">        The behavior of the function is undefined if the input graph is not valid.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph : Sequence[Iterable[Integral]]</span>
+<span class="sd">        A sequence of iterables representing the adjacency list of the graph, where each index corresponds to a vertex and the iterable at that index contains the adjacent vertex indices.</span>
+<span class="sd">        </span>
+<span class="sd">    max_distance : Integral, optional</span>
+<span class="sd">        The maximum distance to consider for the neighborhood of each vertex. The neighborhood will include all vertices that are within this distance from the vertex in the connectivity of the mesh. By default 1,</span>
+<span class="sd">        which means that only directly adjacent vertices will be included in the neighborhood.</span>
+<span class="sd">        </span>
+<span class="sd">    self_neighborhood : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the neighborhood of each vertex will include the vertex itself (i.e., the vertex will be considered as part of its own neighborhood). If :obj:`False`, the neighborhood of each vertex will not include the vertex itself. By default :obj:`True`.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[List[:class:`int`]]</span>
+<span class="sd">        A list where each element is a list containing the indices of the neighboring vertices for the corresponding vertex in the graph.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input graph is not a sequence of iterables.</span>
+<span class="sd">        If maximum distance is not an integer or None.</span>
+<span class="sd">        If self_neighborhood is not a boolean.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If maximum distance is a negative integer.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The neighborhood of a vertex i in the graph is defined as all vertices j such that the distance between vertex i and vertex j in the graph is less than or equal to the specified :obj:`max_distance`.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`bfs_neighborhood`</span>
+<span class="sd">        Perform a breadth-first search (BFS) to compute the neighborhood of a starting vertex in the graph, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`compute_vertices_neighborhood`</span>
+<span class="sd">        Compute the neighborhood of each vertex in the mesh based on the connectivity and a specified maximum distance.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`compute_elements_neighborhood`</span>
+<span class="sd">        Compute the neighborhood of each element in the mesh based on the connectivity and a specified maximum distance.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 vertices and compute the neighborhood of each vertex in the graph, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+<span class="sd">       </span>
+<span class="sd">       Disconnected graph with 7 vertices for BFS example. Neighborhood of vertex 0 with max_distance=2 includes vertices 0, 1, 2 and 3 since they are within a distance of 2 from vertex 0 in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        from pysdic import compute_neighborhood</span>
+<span class="sd">        </span>
+<span class="sd">        graph = [[1, 2], [0, 2], [0, 1, 3], [2, 4], [3], [6], [5]]</span>
+<span class="sd">        start_vertex = 0</span>
+<span class="sd">        max_distance = 2</span>
+<span class="sd">        </span>
+<span class="sd">        neighborhoods = compute_neighborhood(graph, max_distance, self_neighborhood=True)</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;neighborhood length: {len(neighborhoods)}&quot;)</span>
+<span class="sd">        subneighborhood = neighborhoods[0]</span>
+<span class="sd">        print(f&quot;neighborhood of vertex 0 with max_distance={max_distance}: {subneighborhood}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+<span class="sd">    </span>
+<span class="sd">        neighborhood length: 7</span>
+<span class="sd">        neighborhood of vertex 0 with max_distance=2: [0, 1, 2, 3]</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="k">for</span> <span class="n">neighbors</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;graph must be a sequence of iterables representing the adjacency list of the graph. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2"> with elements of type </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">neighbors</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be an integer or None. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">max_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_distance</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_distance must be a non-negative integer or None. Got </span><span class="si">{</span><span class="n">max_distance</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_neighborhood</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self_neighborhood must be a boolean. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">self_neighborhood</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">vertices_neighborhood</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">):</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">bfs_neighborhood</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="n">self_neighborhood</span><span class="p">)</span> <span class="c1"># List[int] of the indices of the neighboring vertices for vertex i</span>
+        <span class="n">vertices_neighborhood</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">vertices_neighborhood</span></div>
+
+    
+
+<div class="viewcode-block" id="compute_vertices_neighborhood">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_vertices_neighborhood.html#pysdic.compute_vertices_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_vertices_neighborhood</span><span class="p">(</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>    
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the neighborhood of each vertex in the mesh, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+<span class="sd">    </span>
+<span class="sd">    Convenience function that combines the creation of the vertices adjacency graph from the connectivity of the mesh and the computation of the neighborhood of each vertex in the mesh based on the connectivity and a specified maximum distance.</span>
+<span class="sd">        </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The input :obj:`connectivity` must be integral-array like.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        The behavior of the function is undefined if the input connectivity is not valid.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">        </span>
+<span class="sd">    n_vertices : Optional[Integral], optional</span>
+<span class="sd">        The total number of vertices in the mesh. If not provided, it will be inferred from the connectivity array.</span>
+<span class="sd">    </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to consider between vertices. If the distance between two vertices exceeds this value,</span>
+<span class="sd">        the corresponding entry in the adjacency matrix will be set to -1. If :obj:`None`, there is no maximum distance and all distances will be computed. By default :obj:`None`.</span>
+<span class="sd">        </span>
+<span class="sd">    self_neighborhood : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the neighborhood of each vertex will include the vertex itself (i.e., the vertex will be considered as part of its own neighborhood). If :obj:`False`, the neighborhood of each vertex will not include the vertex itself. By default :obj:`True`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------       </span>
+<span class="sd">    List[List[:class:`int`]]</span>
+<span class="sd">        A list where each element is a list containing the indices of the neighboring vertices for the corresponding vertex in the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If max_distance is not an integer or None.</span>
+<span class="sd">        If n_vertices is not an integer or None.</span>
+<span class="sd">        If self_neighborhood is not a boolean.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If max_distance is a negative integer.</span>
+<span class="sd">        If n_vertices is a non-positive integer.</span>
+<span class="sd">        If the connectivity array is not 2D.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`compute_neighborhood`</span>
+<span class="sd">        Compute the neighborhood of each vertex in the graph, where the neighborhood of a vertex is defined as the set of vertices that are within a specified distance from the vertex in the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`create_vertices_adjacency_graph`</span>
+<span class="sd">        Create the vertices adjacency graph from the connectivity of the mesh, where two vertices are neighbors if there is an element in the mesh containing both vertices.        </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``quadrangle 4`` mesh with 10 vertices and 4 elements and compute the vertices adjacency matrix from the connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+<span class="sd">        </span>
+<span class="sd">        ``Quadrangle 4`` mesh. The neighboring vertices of vertex 1 with max_distance=1 are vertices 0, 1, 2, 4, 5, 6 and 7 since they are within a distance of 1 from vertex 1 in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic import compute_vertices_neighborhood</span>
+<span class="sd">        </span>
+<span class="sd">        connectivity = np.array([[0, 1, 4, 5], [1, 2, 5, 6], [2, 3, 6, 7], [6, 7, 8, 9]], dtype=np.int64)</span>
+<span class="sd">        n_vertices = 10</span>
+<span class="sd">        </span>
+<span class="sd">        neighborhood = compute_vertices_neighborhood(connectivity=connectivity, n_vertices=n_vertices, max_distance=1, self_neighborhood=True)</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;vertices neighborhood (length={len(neighborhood)}):&quot;)</span>
+<span class="sd">        subset_1 = neighborhood[1]</span>
+<span class="sd">        print(f&quot;vertices neighborhood (neighbors of vertex 1 with max_distance=1): {subset_1}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        vertices neighborhood (length=10):</span>
+<span class="sd">        vertices neighborhood (neighbors of vertex 1 with max_distance=1): [1, 0, 2, 4, 5, 6]</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract the graph as an adjacency list from the connectivity</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">create_vertices_adjacency_graph</span><span class="p">(</span><span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">n_vertices</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the neighborhood of each vertex in the graph</span>
+    <span class="n">vertices_neighborhood</span> <span class="o">=</span> <span class="n">compute_neighborhood</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="n">self_neighborhood</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">vertices_neighborhood</span></div>
+
+
+
+
+<div class="viewcode-block" id="compute_elements_neighborhood">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_elements_neighborhood.html#pysdic.compute_elements_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_elements_neighborhood</span><span class="p">(</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>    
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the neighborhood of each element in the mesh, where the neighborhood of an element is defined as the set of elements that are within a specified distance from the element in the connectivity of the mesh.</span>
+<span class="sd">    </span>
+<span class="sd">    Convenience function that combines the creation of the elements adjacency graph from the connectivity of the mesh and the computation of the neighborhood of each element in the mesh based on the connectivity and a specified maximum distance.</span>
+<span class="sd">        </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        The behavior of the function is undefined if the input connectivity is not valid.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</span>
+<span class="sd">    </span>
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The maximum distance to consider between elements. If the distance between two elements exceeds this value,</span>
+<span class="sd">        the corresponding entry in the adjacency matrix will be set to -1. If :obj:`None`, there is no maximum distance and all distances will be computed. By default :obj:`None`.</span>
+<span class="sd">        </span>
+<span class="sd">    self_neighborhood : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, the neighborhood of each element will include the element itself (i.e., the element will be considered as part of its own neighborhood). If :obj:`False`, the neighborhood of each element will not include the element itself. By default :obj:`True`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------       </span>
+<span class="sd">    List[List[:class:`int`]]</span>
+<span class="sd">        A list where each element is a list containing the indices of the neighboring elements for the corresponding element in the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If max_distance is not an integer or None.</span>
+<span class="sd">        If self_neighborhood is not a boolean.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If max_distance is a negative integer.</span>
+<span class="sd">        If the connectivity array is not 2D.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`compute_neighborhood`</span>
+<span class="sd">        Compute the neighborhood of each element in the graph, where the neighborhood of an element is defined as the set of elements that are within a specified distance from the element in the connectivity of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    :func:`create_elements_adjacency_graph`</span>
+<span class="sd">        Create the elements adjacency graph from the connectivity of the mesh, where two elements are neighbors if they share a common vertex in the mesh.        </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``quadrangle 4`` mesh with 10 vertices and 4 elements and compute the elements adjacency matrix from the connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+<span class="sd">        </span>
+<span class="sd">        ``Quadrangle 4`` mesh. The neighboring elements of element 0 with max_distance=1 are elements 0, 1 since they are within a distance of 1 from element 0 in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        import numpy as np</span>
+<span class="sd">        from pysdic import compute_elements_neighborhood</span>
+<span class="sd">        </span>
+<span class="sd">        connectivity = np.array([[0, 1, 4, 5], [1, 2, 5, 6], [2, 3, 6, 7], [6, 7, 8, 9]])</span>
+<span class="sd">        </span>
+<span class="sd">        neighborhood = compute_elements_neighborhood(connectivity=connectivity, max_distance=1, self_neighborhood=True)</span>
+<span class="sd">        </span>
+<span class="sd">        print(f&quot;elements neighborhood (length={len(neighborhood)}):&quot;)</span>
+<span class="sd">        subset_1 = neighborhood[0]</span>
+<span class="sd">        print(f&quot;elements neighborhood (neighbors of element 0 with max_distance=1): {subset_1}&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        elements neighborhood (length=10):</span>
+<span class="sd">        elements neighborhood (neighbors of element 0 with max_distance=1): [0, 1]</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract the graph as an adjacency list from the connectivity</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">create_elements_adjacency_graph</span><span class="p">(</span><span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the neighborhood of each element in the graph</span>
+    <span class="n">elements_neighborhood</span> <span class="o">=</span> <span class="n">compute_neighborhood</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="n">self_neighborhood</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">elements_neighborhood</span></div>
+
+
+
+
+<div class="viewcode-block" id="compute_neighborhood_statistics">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.compute_neighborhood_statistics.html#pysdic.compute_neighborhood_statistics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_neighborhood_statistics</span><span class="p">(</span>
+    <span class="n">property_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">neighborhood</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">statistics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">integrated_property</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the specified statistics for the given property array defined at the vertices of a graph (or integration points) based on the neighborhood information for each vertex.</span>
+<span class="sd">    </span>
+<span class="sd">    This function allows you to compute various statistics (e.g., mean, median, min, max, std) for a property defined at the vertices/elements of a mesh, using the values of the property from neighboring vertices/elements as defined in the neighborhood list. </span>
+<span class="sd">    For each vertex/element, we will gather the values of the specified property from its neighboring vertices/elements and then compute the specified statistics to obtain a new array containing the computed statistics for each vertex/element.</span>
+<span class="sd">    </span>
+<span class="sd">    Implemented statistics include:</span>
+<span class="sd">     </span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | Statistic      | Description                                                                                                  |</span>
+<span class="sd">    +================+==============================================================================================================+</span>
+<span class="sd">    | ``mean``       | Compute the mean of the property values from the neighbors.                                                  |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``median``     | Compute the median of the property values from the neighbors.                                                |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``min``        | Compute the minimum of the property values from the neighbors.                                               |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``max``        | Compute the maximum of the property values from the neighbors.                                               |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``std``        | Compute the standard deviation of the property values from the neighbors.                                    |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``var``        | Compute the variance of the property values from the neighbors.                                              |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``Q1``         | Compute the first quartile (25th percentile) of the property values from the neighbors.                      |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``Q3``         | Compute the third quartile (75th percentile) of the property values from the neighbors.                      |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    | ``IQR``        | Compute the interquartile range (IQR) of the property values from the neighbors, defined as Q3 - Q1.         |</span>
+<span class="sd">    +----------------+--------------------------------------------------------------------------------------------------------------+</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        The property array is converted to a 2D array of shape :math:`(N, P)` with type :obj:`numpy.float64` to ensure consistent processing, where :math:`N` is the number of vertices/elements and :math:`P` is the number of properties per vertex/element. </span>
+<span class="sd">        The computation will be done independently for each property if multiple properties are provided (i.e., if :math:`P &gt; 1`), and the resulting array will have the same shape :math:`(N, P)` containing the computed statistics values for each vertex/element and each property.</span>
+<span class="sd">        The neighborhood list will be treated as a list of sequences of type :obj:`numpy.int64` containing the indices of neighboring vertices/elements for each vertex/element in the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    .. note::</span>
+<span class="sd">    </span>
+<span class="sd">        If a vertex/element has no neighbors (i.e., the corresponding sequence in the neighborhood list is empty), the computed statistics for that vertex/element will be set to :obj:`numpy.nan` for all properties, since there are no values to compute the statistics from.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    property_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N, P)` containing the property values defined at the vertices/elements of the mesh. If 1D-array is provided, it will be treated as a single-component property of shape :math:`(N, 1)`.</span>
+<span class="sd">        </span>
+<span class="sd">    neighborhood : List[List[:class:`int`]]]</span>
+<span class="sd">        A list of sequences, where each sequence contains the indices of neighboring vertices/elements for each vertex/element in the mesh. The length of the list should be equal to the number of vertices/elements, and each sequence should contain the indices of the neighbors for the corresponding vertex/element.</span>
+<span class="sd">        </span>
+<span class="sd">    statistics : Union[:class:`str`, Sequence[:class:`str`]]</span>
+<span class="sd">        A string or a sequence of strings specifying the statistics(s) to compute for each vertex/element based on its neighbors.</span>
+<span class="sd">        </span>
+<span class="sd">    integrated_property : :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, enlarge the function to accept properties defined at the integration points of a mesh and compute the specified statistics for each vertex/element based on the values of the property at the integration points of its neighboring elements. </span>
+<span class="sd">        See the note below for more details. By default :obj:`False`.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[:class:`str`, :class:`numpy.ndarray`]</span>
+<span class="sd">        A dictionary where the keys are the names of the computed statistics and the values are arrays of shape :math:`(N, P)` containing the computed statistics values for each vertex/element and each property.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input property array is not 1D or 2D</span>
+<span class="sd">        If the neighborhood list does not match the number of vertices/elements in the property array.</span>
+<span class="sd">        If the statistics parameter is not a string or a sequence of strings.</span>
+<span class="sd">    </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the statistics parameter contains an unsupported statistics name.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    By default, the function is designed to compute statistics for properties defined at the vertices/elements of a mesh based on the neighborhood information for vertices/elements.</span>
+<span class="sd">    In this case, the property array should have a shape of :math:`(N, P)`, where :math:`N` is the number of vertices/elements and :math:`P` is the number of properties per vertex/element. </span>
+<span class="sd">    The neighborhood list should be a list of sequences containing the indices of neighboring vertices/elements for each vertex/element in the mesh with a length equal to :math:`N`.</span>
+<span class="sd">    The output will be a dictionary where each key is the name of the computed statistics and the corresponding value is an array of shape :math:`(N, P)` containing the computed statistics values for each vertex/element and each property.</span>
+<span class="sd">    </span>
+<span class="sd">    However, if the parameter :obj:`integrated_property` is set to :obj:`True`, the function can also accept properties defined at the integration points of a mesh and compute the specified statistics for each vertex/element based on the values of the property at the integration points of its neighboring elements.</span>
+<span class="sd">    In this case, the property array should have a shape of :math:`(N_{ip}, P)`, where :math:`N_{ip}` is the total number of integration points in the mesh and :math:`P` is the number of properties per integration point.</span>
+<span class="sd">    And the neighborhood list should be a list of sequences containing the indices of the integration points that belong to the neighboring elements for each vertex/element in the mesh with a length equal to :math:`N`, where :math:`N` is the number of vertices/elements in the mesh.</span>
+<span class="sd">    The output will still be a dictionary where each key is the name of the computed statistics and the corresponding value is an array of shape :math:`(N, P)` containing the computed statistics values for each vertex/element and each property, but the computation will be based on the values of the property at the integration points of the neighboring elements for each vertex/element in the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 vertices and compute the mean value of a property defined at the vertices of the graph.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: ../_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+<span class="sd">       </span>
+<span class="sd">       Disconnected graph with 7 vertices for BFS example.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        from pysdic import (</span>
+<span class="sd">            compute_neighborhood,</span>
+<span class="sd">            compute_neighborhood_statistics</span>
+<span class="sd">        )</span>
+<span class="sd">        </span>
+<span class="sd">        graph = [[1, 2], [0, 2], [0, 1, 3], [2, 4], [3], [6], [5]]</span>
+<span class="sd">        vertices_neighborhood = compute_neighborhood(graph, max_distance=2, self_neighborhood=True)</span>
+<span class="sd">        </span>
+<span class="sd">        # Define a property array with values for each vertex in the graph</span>
+<span class="sd">        temperature = [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0]</span>
+<span class="sd">        </span>
+<span class="sd">        statistics = compute_neighborhood_statistics(</span>
+<span class="sd">            property_array=temperature,</span>
+<span class="sd">            neighborhood=vertices_neighborhood,</span>
+<span class="sd">            statistics=[&quot;mean&quot;, &quot;median&quot;, &quot;min&quot;, &quot;max&quot;, &quot;std&quot;]</span>
+<span class="sd">        )</span>
+<span class="sd">        </span>
+<span class="sd">        print(&quot;Minimum temperature in the neighborhood of each vertex:&quot;)</span>
+<span class="sd">        print(statistics[&quot;min&quot;].reshape(-1)) # Reshape to 1D array for better display</span>
+<span class="sd">        print(&quot;Maximum temperature in the neighborhood of each vertex:&quot;)</span>
+<span class="sd">        print(statistics[&quot;max&quot;].reshape(-1)) # Reshape to 1D array for better display</span>
+<span class="sd">        print(&quot;Mean temperature in the neighborhood of each vertex:&quot;)</span>
+<span class="sd">        print(statistics[&quot;mean&quot;].reshape(-1)) # Reshape to 1D array for better display</span>
+<span class="sd">        </span>
+<span class="sd">    .. code-block:: console</span>
+<span class="sd">    </span>
+<span class="sd">        Minimum temperature in the neighborhood of each vertex:</span>
+<span class="sd">        [10. 10. 10. 10. 30. 60. 60.]</span>
+<span class="sd">        Maximum temperature in the neighborhood of each vertex:</span>
+<span class="sd">        [40. 40. 50. 50. 50. 70. 70.]</span>
+<span class="sd">        Mean temperature in the neighborhood of each vertex:</span>
+<span class="sd">        [25. 25. 30. 30. 40. 65. 65.]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">property_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">property_array</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">property_array</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">property_array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input property array must be 1D or 2D.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">integrated_property</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;integrated_property must be a boolean. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">integrated_property</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Neighborhood must be a list of sequences containing neighbor indices.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">integrated_property</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">)</span> <span class="o">!=</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Neighborhood list length must match the number of vertices/elements in the property array.&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">statistics</span> <span class="o">=</span> <span class="p">[</span><span class="n">statistics</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Statistic parameter must be a string or a sequence of strings specifying the statistics(s) to compute.&quot;</span><span class="p">)</span>
+    
+    <span class="n">supported_statistics</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="s2">&quot;Q1&quot;</span><span class="p">,</span> <span class="s2">&quot;Q3&quot;</span><span class="p">,</span> <span class="s2">&quot;IQR&quot;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_statistics</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported statistics &#39;</span><span class="si">{</span><span class="n">stat</span><span class="si">}</span><span class="s2">&#39;. Supported statistics are: </span><span class="si">{</span><span class="n">supported_statistics</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Compute the specified statistics for each vertex/element based on its neighbors</span>
+    <span class="n">n_points</span><span class="p">,</span> <span class="n">n_properties</span> <span class="o">=</span> <span class="n">property_array</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">)</span>
+    
+    <span class="n">statistics_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">n_properties</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">i_vertex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">):</span>
+        <span class="n">neighbor_indices</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="p">[</span><span class="n">i_vertex</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbor_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If there are no neighbors, set the statistics to NaN for this vertex/element</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+                <span class="n">statistics_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">continue</span>
+        
+        <span class="n">neighbor_values</span> <span class="o">=</span> <span class="n">property_array</span><span class="p">[</span><span class="n">neighbor_indices</span><span class="p">,</span> <span class="p">:]</span>
+        
+        <span class="c1"># Compute the specified statistics for the current vertex/element based on its neighbors</span>
+        <span class="k">if</span> <span class="s2">&quot;mean&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;median&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;median&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;min&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;max&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;std&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;var&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;var&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Q1&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;Q1&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Q3&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;Q3&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;IQR&quot;</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">Q1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">Q3</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">neighbor_values</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">statistics_dict</span><span class="p">[</span><span class="s2">&quot;IQR&quot;</span><span class="p">][</span><span class="n">i_vertex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Q3</span> <span class="o">-</span> <span class="n">Q1</span>
+    
+    <span class="k">return</span> <span class="n">statistics_dict</span></div>
+
+    
+
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

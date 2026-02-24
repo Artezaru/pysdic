@@ -1,0 +1,1666 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Blender Experiment Class &#8212; pysdic 1.3.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_docs/blender_experiment';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Blender Material BSDF Class and default Materials" href="blender_material_bsdf.html" />
+    <link rel="prev" title="Blender Camera Class" href="blender_camera.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 1.3.2 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../_gallery/index.html">
+    Example Gallery
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../_gallery/index.html">
+    Example Gallery
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_core.html">Core Package API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="shape_functions.html">Shape functions collection (1D, 2D)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gauss_points.html">Gauss quadrature points collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="integration_points_operations.html">Operations on Integration Points (interpolation, projection, etc.)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="adjacency_operations.html">Operations on connectivity and adjacency graphs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.bfs_distance.html">pysdic.bfs_distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.bfs_neighborhood.html">pysdic.bfs_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_adjacency_matrix.html">pysdic.compute_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_neighborhood.html">pysdic.compute_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.create_vertices_adjacency_graph.html">pysdic.create_vertices_adjacency_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.create_elements_adjacency_graph.html">pysdic.create_elements_adjacency_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_vertices_adjacency_matrix.html">pysdic.compute_vertices_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_elements_adjacency_matrix.html">pysdic.compute_elements_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_vertices_neighborhood.html">pysdic.compute_vertices_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_elements_neighborhood.html">pysdic.compute_elements_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_neighborhood_statistics.html">pysdic.compute_neighborhood_statistics</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="triangle_3_meshes_operations.html">Manage and Operate on Triangle 3 Meshes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_mesh_from_open3d.html">pysdic.triangle_3_mesh_from_open3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_mesh_to_open3d.html">pysdic.triangle_3_mesh_to_open3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_cast_rays.html">pysdic.triangle_3_cast_rays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_compute_elements_areas.html">pysdic.triangle_3_compute_elements_areas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_compute_elements_strains.html">pysdic.triangle_3_compute_elements_strains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_compute_elements_normals.html">pysdic.triangle_3_compute_elements_normals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.triangle_3_compute_vertices_normals.html">pysdic.triangle_3_compute_vertices_normals</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="temporal_derivation.html">Build derivation operators to regularize temporal derivatives</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_central_finite_difference_coefficients.html">pysdic.compute_central_finite_difference_coefficients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_forward_finite_difference_coefficients.html">pysdic.compute_forward_finite_difference_coefficients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_backward_finite_difference_coefficients.html">pysdic.compute_backward_finite_difference_coefficients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.apply_central_finite_difference.html">pysdic.apply_central_finite_difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.apply_forward_finite_difference.html">pysdic.apply_forward_finite_difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.apply_backward_finite_difference.html">pysdic.apply_backward_finite_difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.assemble_central_finite_difference_matrix.html">pysdic.assemble_central_finite_difference_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.assemble_forward_finite_difference_matrix.html">pysdic.assemble_forward_finite_difference_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.assemble_backward_finite_difference_matrix.html">pysdic.assemble_backward_finite_difference_matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="build_operator.html">Build Displacement Operator</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="optical_flow.html">Optical Flow Operations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_optical_flow.html">pysdic.compute_optical_flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.display_optical_flow.html">pysdic.display_optical_flow</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="photometric_operations.html">Photometric Quantities and Operations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_bouguer_law.html">pysdic.compute_bouguer_law</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_brdf_ward.html">pysdic.compute_brdf_ward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.compute_brdf_beckmann.html">pysdic.compute_brdf_beckmann</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_objects.html">Package Objects API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="point_cloud.html">PointCloud structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.from_array.html">pysdic.PointCloud.from_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.from_meshio.html">pysdic.PointCloud.from_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.from_vtk.html">pysdic.PointCloud.from_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.from_npz.html">pysdic.PointCloud.from_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.to_array.html">pysdic.PointCloud.to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.to_meshio.html">pysdic.PointCloud.to_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.to_vtk.html">pysdic.PointCloud.to_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.to_npz.html">pysdic.PointCloud.to_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.coordinates.html">pysdic.PointCloud.coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.points.html">pysdic.PointCloud.points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.n_dimensions.html">pysdic.PointCloud.n_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.n_points.html">pysdic.PointCloud.n_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.shape.html">pysdic.PointCloud.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.set_property.html">pysdic.PointCloud.set_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.get_property.html">pysdic.PointCloud.get_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.has_property.html">pysdic.PointCloud.has_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.delete_property.html">pysdic.PointCloud.delete_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.list_properties.html">pysdic.PointCloud.list_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.copy_properties.html">pysdic.PointCloud.copy_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.clear_properties.html">pysdic.PointCloud.clear_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.all_close.html">pysdic.PointCloud.all_close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.all_finite.html">pysdic.PointCloud.all_finite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.concatenate.html">pysdic.PointCloud.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.copy.html">pysdic.PointCloud.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.filter_points.html">pysdic.PointCloud.filter_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.frame_transform.html">pysdic.PointCloud.frame_transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.is_finite.html">pysdic.PointCloud.is_finite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.is_nan.html">pysdic.PointCloud.is_nan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.keep_points.html">pysdic.PointCloud.keep_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.remove_not_finite.html">pysdic.PointCloud.remove_not_finite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.remove_points.html">pysdic.PointCloud.remove_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.bounding_box.html">pysdic.PointCloud.bounding_box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.bounding_sphere.html">pysdic.PointCloud.bounding_sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.PointCloud.visualize.html">pysdic.PointCloud.visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="connectivity.html">Connectivity structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.from_array.html">pysdic.Connectivity.from_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.from_npz.html">pysdic.Connectivity.from_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.to_array.html">pysdic.Connectivity.to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.to_npz.html">pysdic.Connectivity.to_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.elements.html">pysdic.Connectivity.elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.element_type.html">pysdic.Connectivity.element_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.n_elements.html">pysdic.Connectivity.n_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.n_topological_dimensions.html">pysdic.Connectivity.n_topological_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.n_vertices_per_element.html">pysdic.Connectivity.n_vertices_per_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.shape.html">pysdic.Connectivity.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.set_property.html">pysdic.Connectivity.set_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.get_property.html">pysdic.Connectivity.get_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.has_property.html">pysdic.Connectivity.has_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.delete_property.html">pysdic.Connectivity.delete_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.list_properties.html">pysdic.Connectivity.list_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.copy_properties.html">pysdic.Connectivity.copy_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.clear_properties.html">pysdic.Connectivity.clear_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.concatenate.html">pysdic.Connectivity.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.copy.html">pysdic.Connectivity.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.filter_elements.html">pysdic.Connectivity.filter_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.keep_elements.html">pysdic.Connectivity.keep_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Connectivity.remove_elements.html">pysdic.Connectivity.remove_elements</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesh.html">Mesh structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.from_meshio.html">pysdic.Mesh.from_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.from_npz.html">pysdic.Mesh.from_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.from_vtk.html">pysdic.Mesh.from_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.to_meshio.html">pysdic.Mesh.to_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.to_npz.html">pysdic.Mesh.to_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.to_vtk.html">pysdic.Mesh.to_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.connectivity.html">pysdic.Mesh.connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.vertices.html">pysdic.Mesh.vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.coordinates.html">pysdic.Mesh.coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.elements.html">pysdic.Mesh.elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.element_type.html">pysdic.Mesh.element_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.n_dimensions.html">pysdic.Mesh.n_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.n_elements.html">pysdic.Mesh.n_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.n_points.html">pysdic.Mesh.n_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.n_topological_dimensions.html">pysdic.Mesh.n_topological_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.n_vertices.html">pysdic.Mesh.n_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.n_vertices_per_element.html">pysdic.Mesh.n_vertices_per_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.points.html">pysdic.Mesh.points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.copy.html">pysdic.Mesh.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.validate.html">pysdic.Mesh.validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.add_connectivity.html">pysdic.Mesh.add_connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.add_vertices.html">pysdic.Mesh.add_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.get_used_vertices_mask.html">pysdic.Mesh.get_used_vertices_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.filter_connectivity.html">pysdic.Mesh.filter_connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.filter_vertices.html">pysdic.Mesh.filter_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.keep_connectivity.html">pysdic.Mesh.keep_connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.keep_vertices.html">pysdic.Mesh.keep_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.remove_connectivity.html">pysdic.Mesh.remove_connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.remove_unused_vertices.html">pysdic.Mesh.remove_unused_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.remove_vertices.html">pysdic.Mesh.remove_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.get_precomputed.html">pysdic.Mesh.get_precomputed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.list_precomputed.html">pysdic.Mesh.list_precomputed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.clear_precomputed.html">pysdic.Mesh.clear_precomputed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_vertices_neighborhood.html">pysdic.Mesh.compute_vertices_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_elements_neighborhood.html">pysdic.Mesh.compute_elements_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_vertices_adjacency_matrix.html">pysdic.Mesh.compute_vertices_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_elements_adjacency_matrix.html">pysdic.Mesh.compute_elements_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_vertices_neighborhood_statistics.html">pysdic.Mesh.compute_vertices_neighborhood_statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_elements_neighborhood_statistics.html">pysdic.Mesh.compute_elements_neighborhood_statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_shape_functions.html">pysdic.Mesh.compute_shape_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_property_interpolation.html">pysdic.Mesh.compute_property_interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_property_projection.html">pysdic.Mesh.compute_property_projection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.compute_property_derivative.html">pysdic.Mesh.compute_property_derivative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.uvmap.html">pysdic.Mesh.uvmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Mesh.visualize.html">pysdic.Mesh.visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="integration_points.html">IntegrationPoints structures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.from_npz.html">pysdic.IntegrationPoints.from_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.to_npz.html">pysdic.IntegrationPoints.to_npz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.element_indices.html">pysdic.IntegrationPoints.element_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.n_points.html">pysdic.IntegrationPoints.n_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.n_topological_dimensions.html">pysdic.IntegrationPoints.n_topological_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.n_valids.html">pysdic.IntegrationPoints.n_valids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.natural_coordinates.html">pysdic.IntegrationPoints.natural_coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.shape.html">pysdic.IntegrationPoints.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.weights.html">pysdic.IntegrationPoints.weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.set_property.html">pysdic.IntegrationPoints.set_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.get_property.html">pysdic.IntegrationPoints.get_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.has_property.html">pysdic.IntegrationPoints.has_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.delete_property.html">pysdic.IntegrationPoints.delete_property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.list_properties.html">pysdic.IntegrationPoints.list_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.copy_properties.html">pysdic.IntegrationPoints.copy_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.clear_properties.html">pysdic.IntegrationPoints.clear_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.get_precomputed.html">pysdic.IntegrationPoints.get_precomputed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.list_precomputed.html">pysdic.IntegrationPoints.list_precomputed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.clear_precomputed.html">pysdic.IntegrationPoints.clear_precomputed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.concatenate.html">pysdic.IntegrationPoints.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.copy.html">pysdic.IntegrationPoints.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.disable_points.html">pysdic.IntegrationPoints.disable_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.remove_invalids.html">pysdic.IntegrationPoints.remove_invalids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.remove_points.html">pysdic.IntegrationPoints.remove_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.IntegrationPoints.validate.html">pysdic.IntegrationPoints.validate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesh_creation.html">Create triangle 3 meshes for SDIC analyses in 3D space</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.create_triangle_3_heightmap.html">pysdic.create_triangle_3_heightmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.create_triangle_3_axisymmetric.html">pysdic.create_triangle_3_axisymmetric</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="image.html">Image</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.from_array.html">pysdic.Image.from_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.from_file.html">pysdic.Image.from_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.to_array.html">pysdic.Image.to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.to_file.html">pysdic.Image.to_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.dtype.html">pysdic.Image.dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.is_color.html">pysdic.Image.is_color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.is_grayscale.html">pysdic.Image.is_grayscale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.image.html">pysdic.Image.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.height.html">pysdic.Image.height</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.n_channels.html">pysdic.Image.n_channels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.ndim.html">pysdic.Image.ndim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.shape.html">pysdic.Image.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.width.html">pysdic.Image.width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.image_update.html">pysdic.Image.image_update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.construct_interpolation_functions.html">pysdic.Image.construct_interpolation_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.copy.html">pysdic.Image.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_at_image_points.html">pysdic.Image.evaluate_image_at_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_at_pixel_points.html">pysdic.Image.evaluate_image_at_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_dx_at_pixel_points.html">pysdic.Image.evaluate_image_jacobian_dx_at_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_dy_at_pixel_points.html">pysdic.Image.evaluate_image_jacobian_dy_at_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_du_at_pixel_points.html">pysdic.Image.evaluate_image_jacobian_du_at_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_dv_at_pixel_points.html">pysdic.Image.evaluate_image_jacobian_dv_at_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_dx_at_image_points.html">pysdic.Image.evaluate_image_jacobian_dx_at_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_dy_at_image_points.html">pysdic.Image.evaluate_image_jacobian_dy_at_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_du_at_image_points.html">pysdic.Image.evaluate_image_jacobian_du_at_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.evaluate_image_jacobian_dv_at_image_points.html">pysdic.Image.evaluate_image_jacobian_dv_at_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.get_image_pixel_points.html">pysdic.Image.get_image_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.get_image_image_points.html">pysdic.Image.get_image_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.get_interpolation_function.html">pysdic.Image.get_interpolation_function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.image_points_to_pixel_points.html">pysdic.Image.image_points_to_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.pixel_points_to_image_points.html">pysdic.Image.pixel_points_to_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Image.visualize.html">pysdic.Image.visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="camera.html">Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.sensor_height.html">pysdic.Camera.sensor_height</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.sensor_width.html">pysdic.Camera.sensor_width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.distortion.html">pysdic.Camera.distortion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.extrinsic.html">pysdic.Camera.extrinsic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.intrinsic.html">pysdic.Camera.intrinsic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.internal_bypass.html">pysdic.Camera.internal_bypass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.update.html">pysdic.Camera.update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.intrinsic_update.html">pysdic.Camera.intrinsic_update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.distortion_update.html">pysdic.Camera.distortion_update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.extrinsic_update.html">pysdic.Camera.extrinsic_update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.size_update.html">pysdic.Camera.size_update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.image_points_to_pixel_points.html">pysdic.Camera.image_points_to_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.get_camera_normalized_points.html">pysdic.Camera.get_camera_normalized_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.get_camera_pixel_points.html">pysdic.Camera.get_camera_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.get_camera_rays.html">pysdic.Camera.get_camera_rays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.pixel_points_to_image_points.html">pysdic.Camera.pixel_points_to_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.project.html">pysdic.Camera.project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.project_points.html">pysdic.Camera.project_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.visualize_projected_point_cloud.html">pysdic.Camera.visualize_projected_point_cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.Camera.visualize_projected_mesh.html">pysdic.Camera.visualize_projected_mesh</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="view.html">View</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.camera.html">pysdic.View.camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.image.html">pysdic.View.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.image_shape.html">pysdic.View.image_shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.camera_size.html">pysdic.View.camera_size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.project.html">pysdic.View.project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.project_points.html">pysdic.View.project_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.image_project.html">pysdic.View.image_project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.image_project_points.html">pysdic.View.image_project_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.visualize_projected_point_cloud.html">pysdic.View.visualize_projected_point_cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/pysdic.View.visualize_projected_mesh.html">pysdic.View.visualize_projected_mesh</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="projection_result.html">ProjectionResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image_projection_result.html">ImageProjectionResult</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../api_blender.html">Blender Integration API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="blender_camera.html">Blender Camera Class</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Blender Experiment Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blender_material_bsdf.html">Blender Material BSDF Class and default Materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="blender_spotlight.html">Blender SpotLight Class</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_workflow.html">Workflow</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../api_blender.html" class="nav-link">Blender Integration API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Blender Experiment Class</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="blender-experiment-class">
+<h1>Blender Experiment Class<a class="headerlink" href="#blender-experiment-class" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlenderExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nb_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represents a Blender experiment with a defined scene and objects.</p>
+<p>The BlenderExperiment class provides methods to add and configure cameras, spot lights, and objects (mesh + material) in a Blender scene.
+The class also allows setting the properties of the scene such as resolution and pixel aspect ratio.
+Then the class provides methods to render the scene and save the rendered images.</p>
+<p>The number of frames in the experiment can be set using the <cite>end_frame</cite> parameter.
+This parameters can not be updated after the experiment is created.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic.blender</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlenderExperiment</span>
+
+<span class="c1"># Example instantiation</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Nb_frames</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – The number of frames for the experiment (default is 1).</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, prints additional information during the experiment setup (default is False).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.activate_smooth_shading">
+<span class="sig-name descname"><span class="pre">activate_smooth_shading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.activate_smooth_shading"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.activate_smooth_shading" title="Link to this definition">#</a></dt>
+<dd><p>Activate smooth shading for the mesh.</p>
+<p>Smooth shading is a rendering technique that gives the appearance of a smooth surface by interpolating vertex normals across the surface of the mesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh to activate smooth shading for.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.add_camera">
+<span class="sig-name descname"><span class="pre">add_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.add_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.add_camera" title="Link to this definition">#</a></dt>
+<dd><p>Add a camera to the experiment.</p>
+<p>The frames parameter indicates which frames the camera will be active.
+If None, the camera will be active for all frames.
+Else a list of booleans must be provided, where each boolean indicates if the camera is active for that frame.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">camera</span> <span class="o">=</span> <span class="n">BlenderCamera</span><span class="p">()</span>
+<span class="c1"># Define the camera properties here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_camera</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Camera1&quot;</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of the camera must be unique in the experiment and in Blender data.
+Furthemore, because Blender limits the name of the objects to 63 characters and <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> add prefixe for sub-dependant object of the camera,
+the name of the camera must be less than 50 characters.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="blender_camera.html#pysdic.blender.BlenderCamera" title="pysdic.blender.BlenderCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderCamera</span></code></a> for more information on how to define a camera.</p></li>
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderExperiment.update_camera" title="pysdic.blender.BlenderExperiment.update_camera"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_camera()</span></code></a> to update the camera properties in the Blender scene.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera with less than 50 characters.</p></li>
+<li><p><strong>camera</strong> (<a class="reference internal" href="blender_camera.html#pysdic.blender.BlenderCamera" title="pysdic.blender.BlenderCamera"><em>BlenderCamera</em></a>) – The camera object to be added.</p></li>
+<li><p><strong>frames</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>optional</em>) – A list of booleans indicating which frames the camera will be active.
+If None, the camera will be active for all frames (default is None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or camera is not an instance of BlenderCamera.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a camera with the same name already exists in the experiment or in Blender data.
+    If the length of frames is not equal to the number of frames in the experiment (end_frame).
+    If the camera is not completely defined.</p></li>
+<li><p><strong>Blender Details</strong> – </p></li>
+<li><p><strong>---------------</strong> – </p></li>
+<li><p><strong>The camera is created in the Blender scene and linked to the experiment scene with the name {name}.</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.add_mesh">
+<span class="sig-name descname"><span class="pre">add_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.add_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.add_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Add a mesh to the experiment. (Must be a 3D triangular mesh)</p>
+<p>The mesh must be an instance of Mesh.</p>
+<p>The frames parameter indicates which frames the mesh will be active.
+If None, the mesh will be active for all frames.
+Else a list of booleans must be provided, where each boolean indicates if the mesh is active for that frame.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of the mesh must be unique in the experiment and in Blender data.
+Furthemore, because Blender limits the name of the objects to 63 characters and <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> add prefixe for sub-dependant object of the mesh,
+the name of the mesh must be less than 50 characters.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># Define the mesh properties here</span>
+<span class="c1"># ...</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=...</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=...</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="mesh.html#pysdic.Mesh" title="pysdic.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Mesh</span></code></a> for more information on how to define a mesh.</p></li>
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderExperiment.update_mesh" title="pysdic.blender.BlenderExperiment.update_mesh"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_mesh()</span></code></a> to update the mesh properties in the Blender scene.</p></li>
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderExperiment.add_mesh_material" title="pysdic.blender.BlenderExperiment.add_mesh_material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_mesh_material()</span></code></a> to set the material of the mesh.</p></li>
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderExperiment.add_mesh_pattern" title="pysdic.blender.BlenderExperiment.add_mesh_pattern"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_mesh_pattern()</span></code></a> to set the pattern image of the mesh.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh with less than 50 characters.</p></li>
+<li><p><strong>mesh</strong> (<a class="reference internal" href="mesh.html#pysdic.Mesh" title="pysdic.Mesh"><em>Mesh</em></a>) – The mesh object to be added. It must be an instance of Mesh. Must be a 3D triangular mesh.</p></li>
+<li><p><strong>frames</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>optional</em>) – A list of booleans indicating which frames the mesh will be active.
+If None, the mesh will be active for all frames (default is None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or mesh is not an instance of Mesh.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name already exists in the experiment or in Blender data.
+    If the length of frames is not equal to the number of frames in the experiment (end_frame).
+    If the mesh is not completely defined.</p></li>
+<li><p><strong>Blender Details</strong> – </p></li>
+<li><p><strong>---------------</strong> – </p></li>
+<li><p><strong>The mesh is created in the Blender scene and linked to the experiment scene.</strong> – </p></li>
+<li><p><strong>The mesh name is set to the provided name.</strong> – </p></li>
+<li><p><strong>A material is created for the mesh with the name</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_mat.</strong> – </p></li>
+<li><p><strong>The material uses a Principled BSDF shader and is set to use_nodes = True.</strong> – </p></li>
+<li><p><strong>The material is located at the first index</strong><strong> of </strong><strong>the mesh data materials.</strong> – </p></li>
+<li><p><strong>A MixRGB node is created at the input</strong><strong> of </strong><strong>the Principled BSDF Base Color node.</strong> – </p></li>
+<li><p><strong>The MixRGB node name is set to</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_mbp for &quot;Mix BaseColor Pattern&quot;.</strong> – </p></li>
+<li><p><strong>The first input</strong><strong> of </strong><strong>the MixRGB node is the default base color</strong><strong> of </strong><strong>the material</strong><strong> (</strong><strong>white</strong><strong>)</strong><strong>.</strong> – </p></li>
+<li><p><strong>It can be setted to any color using the add_mesh_material method.</strong> – </p></li>
+<li><p><strong>The second input</strong><strong> of </strong><strong>the MixRGB node is the default pattern</strong><strong> of </strong><strong>the material</strong><strong> (</strong><strong>white</strong><strong>)</strong><strong>.</strong> – </p></li>
+<li><p><strong>It can be setted to any pattern using the add_mesh_pattern method.</strong> – </p></li>
+<li><p><strong>The output</strong><strong> of </strong><strong>the MixRGB node is connected to the Base Color input</strong><strong> of </strong><strong>the Principled BSDF node.</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.add_mesh_material">
+<span class="sig-name descname"><span class="pre">add_mesh_material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.add_mesh_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.add_mesh_material" title="Link to this definition">#</a></dt>
+<dd><p>Add a material to the mesh.</p>
+<p>The material must be an instance of BlenderMaterialBSDF.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># Define the mesh properties here</span>
+<span class="c1"># ...</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">cells_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;triangle&quot;</span><span class="p">:</span> <span class="n">elements</span><span class="p">},</span> <span class="n">point_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;uvmap&quot;</span><span class="p">:</span> <span class="n">texture_coordinates</span><span class="p">})</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">set_mesh</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="n">material</span> <span class="o">=</span> <span class="n">BlenderMaterialBSDF</span><span class="p">()</span>
+<span class="c1"># Define the material properties here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh_material</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="n">material</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="blender_material_bsdf.html#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderMaterialBSDF</span></code></a> for more information on how to define a material.</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The material is not updated when the mesh is updated.
+To update the material, you must call this method again with the new material.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh.</p></li>
+<li><p><strong>material</strong> (<a class="reference internal" href="blender_material_bsdf.html#pysdic.blender.BlenderMaterialBSDF" title="pysdic.blender.BlenderMaterialBSDF"><em>BlenderMaterialBSDF</em></a>) – The material object to be added.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or material is not an instance of BlenderMaterialBSDF.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.add_mesh_pattern">
+<span class="sig-name descname"><span class="pre">add_mesh_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.add_mesh_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.add_mesh_pattern" title="Link to this definition">#</a></dt>
+<dd><p>Add a pattern to the mesh material.</p>
+<p>The pattern must be a valid image file path (e.g., PNG, JPEG).
+The pattern will be applied to the mesh material as a texture.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># Define the mesh properties here</span>
+<span class="c1"># ...</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=...</span><span class="p">,</span> <span class="n">triangles</span><span class="o">=...</span><span class="p">)</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh_pattern</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">pattern_path</span><span class="o">=</span><span class="s2">&quot;path/to/pattern.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The UV coordinates of the mesh must be defined in the Mesh object.
+as “uvmap” in the point_data dictionary.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="mesh.html#pysdic.Mesh" title="pysdic.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.Mesh</span></code></a> for more information on how to define a mesh.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh.</p></li>
+<li><p><strong>pattern_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path to the pattern image file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or pattern_path is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.
+    If the pattern path is not valid or the image format is not supported.
+    If the mesh does not have a UVMAP defined.</p></li>
+<li><p><strong>Blender Details</strong> – </p></li>
+<li><p><strong>---------------</strong> – </p></li>
+<li><p><strong>A uv_layer is created for the mesh and the UVMAP is set to the texture coordinates defined in the mesh.</strong> – </p></li>
+<li><p><strong>The uv_layer is named</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_uvm.</strong> – </p></li>
+<li><p><strong>A node is created in the material node tree to load the image texture.</strong> – </p></li>
+<li><p><strong>The node is named</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_imt.</strong> – </p></li>
+<li><p><strong>This node is in CLIP mode to avoid stretching the image.</strong> – </p></li>
+<li><p><strong>The color output</strong><strong> of </strong><strong>the image texture node is connected to the second input</strong><strong> of </strong><strong>the MixRGB node.</strong> – </p></li>
+<li><p><strong>The MixRGB node is connected to the Base Color input</strong><strong> of </strong><strong>the Principled BSDF node in multiply mode.</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.add_spotlight">
+<span class="sig-name descname"><span class="pre">add_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spotlight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.add_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.add_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>Add a spotlight to the experiment.</p>
+<p>The spotlight must be an instance of BlenderSpotLight.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of the light must be unique in the experiment and in Blender data.
+Furthemore, because Blender limits the name of the objects to 63 characters and <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> add prefixe for sub-dependant object of the light,
+the name of the light must be less than 50 characters.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">spotlight</span> <span class="o">=</span> <span class="n">BlenderSpotLight</span><span class="p">()</span>
+<span class="c1"># Define the BlenderSpotLight properties here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_spotlight</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Spotlight1&quot;</span><span class="p">,</span> <span class="n">spotlight</span><span class="o">=</span><span class="n">BlenderSpotLight</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="blender_spotlight.html#pysdic.blender.BlenderSpotLight" title="pysdic.blender.BlenderSpotLight"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlenderSpotLight</span></code></a> for more information on how to define a spotlight.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the spotlight with less than 50 characters.</p></li>
+<li><p><strong>spotlight</strong> (<a class="reference internal" href="blender_spotlight.html#pysdic.blender.BlenderSpotLight" title="pysdic.blender.BlenderSpotLight"><em>BlenderSpotLight</em></a>) – The spotlight object to be added.</p></li>
+<li><p><strong>frames</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>optional</em>) – A list of booleans indicating which frames the spotlight will be active.
+If None, the spotlight will be active for all frames (default is None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or spotlight is not an instance of BlenderSpotLight.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a spotlight with the same name already exists in the experiment or in Blender data.
+    If the length of frames is not equal to the number of frames in the experiment (end_frame).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.change_mesh_pattern">
+<span class="sig-name descname"><span class="pre">change_mesh_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.change_mesh_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.change_mesh_pattern" title="Link to this definition">#</a></dt>
+<dd><p>Change the pattern of the mesh material.</p>
+<p>The pattern must be a valid image file path (e.g., PNG, JPEG).
+The pattern will be applied to the mesh material as a texture.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># Define the mesh properties here</span>
+<span class="c1"># ...</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">cells_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;triangle&quot;</span><span class="p">:</span> <span class="n">elements</span><span class="p">},</span> <span class="n">point_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;uvmap&quot;</span><span class="p">:</span> <span class="n">texture_coordinates</span><span class="p">})</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh_pattern</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">pattern_path</span><span class="o">=</span><span class="s2">&quot;path/to/pattern.png&quot;</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">change_mesh_pattern</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">pattern_path</span><span class="o">=</span><span class="s2">&quot;path/to/new_pattern.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pysdic.blender.BlenderExperiment.add_mesh_pattern" title="pysdic.blender.BlenderExperiment.add_mesh_pattern"><code class="xref py py-class docutils literal notranslate"><span class="pre">add_mesh_pattern</span></code></a> for more information on how to add a pattern.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh.</p></li>
+<li><p><strong>pattern_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path to the new pattern image file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or pattern_path is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.
+    If the pattern path is not valid or the image format is not supported.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.deactivate_smooth_shading">
+<span class="sig-name descname"><span class="pre">deactivate_smooth_shading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.deactivate_smooth_shading"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.deactivate_smooth_shading" title="Link to this definition">#</a></dt>
+<dd><p>Deactivate smooth shading for the mesh.</p>
+<p>Smooth shading is a rendering technique that gives the appearance of a smooth surface by interpolating vertex normals across the surface of the mesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh to deactivate smooth shading for.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_active_camera">
+<span class="sig-name descname"><span class="pre">get_active_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_active_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_active_camera" title="Link to this definition">#</a></dt>
+<dd><p>Get the name of the active camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the active camera.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If no active camera is set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_camera">
+<span class="sig-name descname"><span class="pre">get_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_camera" title="Link to this definition">#</a></dt>
+<dd><p>Get the camera object and its Blender object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the BlenderCamera object and its corresponding Blender object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="blender_camera.html#pysdic.blender.BlenderCamera" title="pysdic.blender.BlenderCamera">BlenderCamera</a>, Object]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_camera_frames">
+<span class="sig-name descname"><span class="pre">get_camera_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_camera_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_camera_frames" title="Link to this definition">#</a></dt>
+<dd><p>Get the frames for which the camera is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of booleans indicating which frames the camera is active.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a camera with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_camera_names">
+<span class="sig-name descname"><span class="pre">get_camera_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_camera_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_camera_names" title="Link to this definition">#</a></dt>
+<dd><p>Get the names of all cameras in the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of camera names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_mesh">
+<span class="sig-name descname"><span class="pre">get_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Get the mesh object and its Blender object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the Mesh object and its corresponding Blender object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="mesh.html#pysdic.Mesh" title="pysdic.Mesh">Mesh</a>, Object]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_mesh_frames">
+<span class="sig-name descname"><span class="pre">get_mesh_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_mesh_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_mesh_frames" title="Link to this definition">#</a></dt>
+<dd><p>Get the frames for which the mesh is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of booleans indicating which frames the mesh is active.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_mesh_names">
+<span class="sig-name descname"><span class="pre">get_mesh_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_mesh_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_mesh_names" title="Link to this definition">#</a></dt>
+<dd><p>Get the names of all meshes in the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of mesh names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_spotlight">
+<span class="sig-name descname"><span class="pre">get_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>Get the spotlight object and its Blender object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the spotlight to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the BlenderSpotLight object and its corresponding Blender object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="blender_spotlight.html#pysdic.blender.BlenderSpotLight" title="pysdic.blender.BlenderSpotLight">BlenderSpotLight</a>, Object]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.get_spotlight_frames">
+<span class="sig-name descname"><span class="pre">get_spotlight_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.get_spotlight_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.get_spotlight_frames" title="Link to this definition">#</a></dt>
+<dd><p>Get the frames for which the spotlight is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the spotlight.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of booleans indicating which frames the spotlight is active.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a spotlight with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.remove_camera">
+<span class="sig-name descname"><span class="pre">remove_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.remove_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.remove_camera" title="Link to this definition">#</a></dt>
+<dd><p>Remove a camera from the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera to remove.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a camera with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.remove_mesh">
+<span class="sig-name descname"><span class="pre">remove_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.remove_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.remove_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Remove a mesh from the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh to remove.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.</p></li>
+<li><p><strong>Blender Details</strong> – </p></li>
+<li><p><strong>---------------</strong> – </p></li>
+<li><p><strong>When removing a mesh</strong><strong>, </strong><strong>the following actions are performed:</strong> – </p></li>
+<li><p><strong>- The mesh {name} is removed from the Blender scene.</strong> – </p></li>
+<li><p><strong>- The material</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_mat is removed from the Blender data.</strong> – </p></li>
+<li><p><strong>- The MixRGB node</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_mbp is removed from the material node tree.</strong> – </p></li>
+<li><p><strong>- The uv_layer</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_uvm is removed from the mesh data.</strong> – </p></li>
+<li><p><strong>- The node texture</strong><strong> [</strong><strong>pysdic</strong><strong>]</strong><strong>_{name}_imt is removed from the material node tree.</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.remove_spotlight">
+<span class="sig-name descname"><span class="pre">remove_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.remove_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.remove_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>Remove a spotlight from the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the spotlight to remove.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a spotlight with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TIFF'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'BW'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.render" title="Link to this definition">#</a></dt>
+<dd><p>Render the experiment scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The path to save the rendered image.</p></li>
+<li><p><strong>output_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – The output format of the rendered image (default is “TIFF”).</p></li>
+<li><p><strong>color_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – The color mode of the rendered image (default is “BW”).</p></li>
+<li><p><strong>color_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – The color depth of the rendered image (default is “8”).</p></li>
+<li><p><strong>N_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – The number of samples for rendering (default is 200).</p></li>
+<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the default render settings will be used (default is True).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name or output_path is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If the output format is not supported.
+    If the frame or the camera is not set.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.set_active_camera">
+<span class="sig-name descname"><span class="pre">set_active_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.set_active_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.set_active_camera" title="Link to this definition">#</a></dt>
+<dd><p>Set the active camera for the experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera to set as active.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a camera with the same name does not exist in the experiment or in Blender data.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.set_active_frame">
+<span class="sig-name descname"><span class="pre">set_active_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.set_active_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.set_active_frame" title="Link to this definition">#</a></dt>
+<dd><p>Set the current frame of the Blender scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The frame number to set.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If frame is not an integer.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If frame is out of range.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.set_camera_frames">
+<span class="sig-name descname"><span class="pre">set_camera_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.set_camera_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.set_camera_frames" title="Link to this definition">#</a></dt>
+<dd><p>Set the frames for which the camera will be active.
+If None, the camera will be active for all frames.
+Else a list of booleans must be provided, where each boolean indicates if the camera is active for that frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera.</p></li>
+<li><p><strong>frames</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>optional</em>) – A list of booleans indicating which frames the camera will be active.
+If None, the camera will be active for all frames (default is None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or frames is not a list of booleans.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a camera with the same name does not exist in the experiment or in Blender data.
+    If the length of frames is not equal to the number of frames in the experiment (end_frame).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.set_default_background">
+<span class="sig-name descname"><span class="pre">set_default_background</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.set_default_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.set_default_background" title="Link to this definition">#</a></dt>
+<dd><p>Set the default background for the experiment scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.set_mesh_frames">
+<span class="sig-name descname"><span class="pre">set_mesh_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.set_mesh_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.set_mesh_frames" title="Link to this definition">#</a></dt>
+<dd><p>Set the frames for which the mesh will be active.
+If None, the mesh will be active for all frames.
+Else a list of booleans must be provided, where each boolean indicates if the mesh is active for that frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh.</p></li>
+<li><p><strong>frames</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>optional</em>) – A list of booleans indicating which frames the mesh will be active.
+If None, the mesh will be active for all frames (default is None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or frames is not a list of booleans.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a mesh with the same name does not exist in the experiment or in Blender data.
+    If the length of frames is not equal to the number of frames in the experiment (end_frame).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.set_spotlight_frames">
+<span class="sig-name descname"><span class="pre">set_spotlight_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.set_spotlight_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.set_spotlight_frames" title="Link to this definition">#</a></dt>
+<dd><p>Set the frames for which the spotlight will be active.
+If None, the spotlight will be active for all frames.
+Else a list of booleans must be provided, where each boolean indicates if the spotlight is active for that frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the spotlight.</p></li>
+<li><p><strong>frames</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>optional</em>) – A list of booleans indicating which frames the spotlight will be active.
+If None, the spotlight will be active for all frames (default is None).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If name is not a string or frames is not a list of booleans.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a spotlight with the same name does not exist in the experiment or in Blender data.
+    If the length of frames is not equal to the number of frames in the experiment (end_frame).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.update_camera">
+<span class="sig-name descname"><span class="pre">update_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.update_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.update_camera" title="Link to this definition">#</a></dt>
+<dd><p>Update the camera properties in the Blender scene.
+This method must be called after updating the camera properties in the BlenderCamera object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">camera</span> <span class="o">=</span> <span class="n">BlenderCamera</span><span class="p">()</span>
+<span class="c1"># Define the camera properties here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_camera</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Camera1&quot;</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="c1"># Update some properties of the camera here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">update_camera</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Camera1&quot;</span><span class="p">)</span> <span class="c1"># To set active the modifications in the Blender scene</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the camera to update.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.update_mesh">
+<span class="sig-name descname"><span class="pre">update_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.update_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.update_mesh" title="Link to this definition">#</a></dt>
+<dd><p>Update the mesh properties in the Blender scene.
+This method must be called after updating the mesh properties in the Mesh object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># Define the mesh properties here</span>
+<span class="c1"># ...</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">cells_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;triangle&quot;</span><span class="p">:</span> <span class="n">elements</span><span class="p">},</span> <span class="n">point_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;uvmap&quot;</span><span class="p">:</span> <span class="n">texture_coordinates</span><span class="p">})</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="c1"># Update some nodes of the mesh here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">update_mesh</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mesh1&quot;</span><span class="p">)</span> <span class="c1"># To set active the modifications in the Blender scene</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a pattern is setted to the mesh, the uvmap are also updated.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The number of nodes must be unchanged !!!</p>
+<p>Furthermore, this method does not update the material properties of the mesh and the pattern image:</p>
+<ul class="simple">
+<li><p>To update the material properties, use the <a class="reference internal" href="#pysdic.blender.BlenderExperiment.add_mesh_material" title="pysdic.blender.BlenderExperiment.add_mesh_material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_mesh_material()</span></code></a> method again.</p></li>
+<li><p>To change the pattern image, use the <a class="reference internal" href="#pysdic.blender.BlenderExperiment.change_mesh_pattern" title="pysdic.blender.BlenderExperiment.change_mesh_pattern"><code class="xref py py-meth docutils literal notranslate"><span class="pre">change_mesh_pattern()</span></code></a> method.</p></li>
+</ul>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the mesh to update.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.update_scene">
+<span class="sig-name descname"><span class="pre">update_scene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.update_scene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.update_scene" title="Link to this definition">#</a></dt>
+<dd><p>Update the Blender scene.
+This method must be called after adding or modifying any objects in the scene.</p>
+<ul class="simple">
+<li><p>Free bake all</p></li>
+<li><p>Bake all</p></li>
+<li><p>Update the view layer and depsgraph</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysdic.blender.BlenderExperiment.update_spotlight">
+<span class="sig-name descname"><span class="pre">update_spotlight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/blender/blender_experiment.html#BlenderExperiment.update_spotlight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.blender.BlenderExperiment.update_spotlight" title="Link to this definition">#</a></dt>
+<dd><p>Update the spotlight properties in the Blender scene.
+This method must be called after updating the spotlight properties in the BlenderSpotLight object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example usage</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">BlenderExperiment</span><span class="p">(</span><span class="n">Nb_frames</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">spotlight</span> <span class="o">=</span> <span class="n">BlenderSpotLight</span><span class="p">()</span>
+<span class="c1"># Define the BlenderSpotLight properties here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_spotlight</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Spotlight1&quot;</span><span class="p">,</span> <span class="n">spotlight</span><span class="o">=</span><span class="n">spotlight</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="c1"># Update some nodes of the spotlight here</span>
+<span class="c1"># ...</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">update_spotlight</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Spotlight1&quot;</span><span class="p">)</span> <span class="c1"># To set active the modifications in the Blender scene</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method does not update the material properties of the spotlight.
+Only the position and rotation are updated.
+The number of nodes mustnot be changed.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the spotlight to update.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="blender_camera.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Blender Camera Class</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="blender_material_bsdf.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Blender Material BSDF Class and default Materials</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.activate_smooth_shading"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.activate_smooth_shading()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.add_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.add_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.add_mesh_material"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_mesh_material()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.add_mesh_pattern"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_mesh_pattern()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.add_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.add_spotlight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.change_mesh_pattern"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.change_mesh_pattern()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.deactivate_smooth_shading"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.deactivate_smooth_shading()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_active_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_active_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_camera_frames"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_camera_frames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_camera_names"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_camera_names()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_mesh_frames"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_mesh_frames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_mesh_names"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_mesh_names()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_spotlight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.get_spotlight_frames"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.get_spotlight_frames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.remove_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.remove_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.remove_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.remove_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.remove_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.remove_spotlight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.render"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.render()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.set_active_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_active_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.set_active_frame"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_active_frame()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.set_camera_frames"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_camera_frames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.set_default_background"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_default_background()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.set_mesh_frames"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_mesh_frames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.set_spotlight_frames"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.set_spotlight_frames()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.update_camera"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.update_camera()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.update_mesh"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.update_mesh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.update_scene"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.update_scene()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.blender.BlenderExperiment.update_spotlight"><code class="docutils literal notranslate"><span class="pre">BlenderExperiment.update_spotlight()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_docs/blender_experiment.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

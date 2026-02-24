@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.core.triangle_3_mesh_operations &#8212; pysdic 1.2.0 documentation</title>
+    <title>pysdic.core.triangle_3_mesh_operations &#8212; pysdic 1.3.2 documentation</title>
   
   
   
@@ -30,6 +30,12 @@
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -37,9 +43,12 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../../_static/documentation_options.js?v=8ca9e7a0"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/core/triangle_3_mesh_operations';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -107,7 +116,7 @@
   
   
   
-    <p class="title logo__title">pysdic 1.2.0 documentation</p>
+    <p class="title logo__title">pysdic 1.3.2 documentation</p>
   
 </a></div>
     
@@ -136,8 +145,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../usage.html">
-    Usage
+  <a class="nav-link nav-internal" href="../../../_gallery/index.html">
+    Example Gallery
   </a>
 </li>
 
@@ -227,8 +236,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../usage.html">
-    Usage
+  <a class="nav-link nav-internal" href="../../../_gallery/index.html">
+    Example Gallery
   </a>
 </li>
 
@@ -326,49 +335,66 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">open3d</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">.objects.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.objects.point_cloud</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..objects.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..objects.point_cloud</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.gauss_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_triangle_3_gauss_points</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shape_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_triangle_3_shape_functions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.integration_points_operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_property_derivative</span>
 
 
 <div class="viewcode-block" id="triangle_3_mesh_from_open3d">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_mesh_from_open3d.html#pysdic.triangle_3_mesh_from_open3d">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_mesh_from_open3d.html#pysdic.triangle_3_mesh_from_open3d">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_mesh_from_open3d</span><span class="p">(</span><span class="n">mesh</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">open3d</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">,</span> <span class="n">open3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">],</span> <span class="n">internal_bypass</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a :class:`Mesh` (:obj:`elements_type` = &quot;triangle_3&quot;) instance from an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)</span>
+<span class="sd">    Create a :class:`Mesh` (:obj:`element_type` = &quot;triangle_3&quot;) instance from an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)</span>
 
 <span class="sd">    .. warning::</span>
 <span class="sd">        </span>
 <span class="sd">        For now, the method only extracts the vertices, triangles, and UV map (if available) from the Open3D mesh.</span>
 <span class="sd">        The other properties (normals, centroids, areas) are not extracted and must be computed separately.</span>
 
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`triangle_3_mesh_to_open3d` for creating an Open3D TriangleMesh object from a :class:`Mesh` instance.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    mesh : Union[:class:`open3d.t.geometry.TriangleMesh`, :class:`open3d.geometry.TriangleMesh`]</span>
 <span class="sd">        An Open3D TriangleMesh object containing the mesh data.</span>
 
-<span class="sd">    internal_bypass : bool, optional</span>
+<span class="sd">    internal_bypass : :class:`bool`, optional</span>
 <span class="sd">        Internal use only. If :obj:`True`, bypasses certain checks for performance, by default :obj:`False`.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`Mesh`</span>
 <span class="sd">        A :class:`Mesh` instance containing the mesh data.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input mesh is not an Open3D TriangleMesh object.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the mesh is empty.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_mesh_to_open3d</span>
+<span class="sd">        For converting a :class:`Mesh` instance to an Open3D TriangleMesh object.</span>
 
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
-<span class="sd">        </span>
+<span class="sd">    Reading a mesh using Open3D and converting it to a :class:`Mesh` instance:</span>
+<span class="sd">    </span>
 <span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
 
 <span class="sd">        import open3d as o3d</span>
 <span class="sd">        from pysdic import Mesh, from_open3d</span>
@@ -386,7 +412,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">open3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">):</span> <span class="c1"># Legacy Open3D mesh</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">triangles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-        <span class="n">mesh_instance</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">vertices</span><span class="p">),</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">,</span> <span class="n">elements_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span> <span class="n">internal_bypass</span><span class="o">=</span><span class="n">internal_bypass</span><span class="p">)</span>
+        <span class="n">mesh_instance</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">vertices</span><span class="p">),</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span> <span class="n">internal_bypass</span><span class="o">=</span><span class="n">internal_bypass</span><span class="p">)</span>
         <span class="n">mesh_instance</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>  <span class="c1"># Validate the mesh structure</span>
 
         <span class="c1"># Check if UV mapping is available</span>
@@ -399,7 +425,7 @@
     <span class="k">else</span><span class="p">:</span> <span class="c1"># Open3D T geometry mesh</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">triangle</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-        <span class="n">mesh_instance</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">,</span> <span class="n">elements_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span> <span class="n">internal_bypass</span><span class="o">=</span><span class="n">internal_bypass</span><span class="p">)</span>
+        <span class="n">mesh_instance</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="n">triangles</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span> <span class="n">internal_bypass</span><span class="o">=</span><span class="n">internal_bypass</span><span class="p">)</span>
         <span class="n">mesh_instance</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>  <span class="c1"># Validate the mesh structure</span>
 
         <span class="c1"># Check if UV mapping is available</span>
@@ -414,12 +440,10 @@
 
 
 <div class="viewcode-block" id="triangle_3_mesh_to_open3d">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_mesh_to_open3d.html#pysdic.triangle_3_mesh_to_open3d">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_mesh_to_open3d.html#pysdic.triangle_3_mesh_to_open3d">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_mesh_to_open3d</span><span class="p">(</span><span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">legacy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">uvmap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">open3d</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">,</span> <span class="n">open3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">TriangleMesh</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert the :class:`Mesh` (:obj:`elements_type` = &quot;triangle_3&quot;) instance to an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)</span>
-
-<span class="sd">    The mesh must not be empty.</span>
+<span class="sd">    Convert the :class:`Mesh` (:obj:`element_type` = &quot;triangle_3&quot;) instance to an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)</span>
 
 <span class="sd">    If :obj:`legacy` is :obj:`True`, the method returns a legacy Open3D TriangleMesh object.</span>
 <span class="sd">    Otherwise, it returns a T geometry TriangleMesh object.</span>
@@ -429,9 +453,6 @@
 <span class="sd">        For now, the method only converts the vertices, triangles, and UV map (if available) to the Open3D mesh.</span>
 <span class="sd">        The other properties stored in the :class:`Triangle3Mesh` instance are not transferred.</span>
 
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`triangle_3_mesh_from_open3d` for creating a :class:`Mesh` instance from an Open3D TriangleMesh object.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -444,21 +465,34 @@
 <span class="sd">    uvmap : :class:`bool`, optional</span>
 <span class="sd">        If :obj:`True`, include the UV mapping in the Open3D mesh if available. Default is :obj:`True`.</span>
 
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Union[:class:`open3d.t.geometry.TriangleMesh`, :class:`open3d.geometry.TriangleMesh`]</span>
 <span class="sd">        An Open3D TriangleMesh object containing the mesh data.</span>
 
+
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the input mesh is not of type &quot;triangle_3&quot;.</span>
+<span class="sd">        </span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If the mesh is empty.   </span>
+<span class="sd">        If the mesh is empty or not 3D embedding dimension.</span>
 
 
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_mesh_from_open3d</span>
+<span class="sd">        For converting an Open3D TriangleMesh object to a :class:`Mesh` instance.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Converting a :class:`Mesh` instance to an Open3D TriangleMesh object:</span>
+<span class="sd">    </span>
 <span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
 
 <span class="sd">        import open3d as o3d</span>
 <span class="sd">        from pysdic import Mesh, to_open3d</span>
@@ -470,7 +504,9 @@
 <span class="sd">        o3dmesh = to_open3d(mesh)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">elements_type</span> <span class="o">==</span> <span class="s2">&quot;triangle_3&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a Mesh instance, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span> <span class="o">==</span> <span class="s2">&quot;triangle_3&quot;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;to_open3d function only supports &#39;triangle_3&#39; element type meshes.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot write an empty mesh to file.&quot;</span><span class="p">)</span>
@@ -508,10 +544,10 @@
 
 
 <div class="viewcode-block" id="triangle_3_compute_elements_areas">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_compute_elements_areas.html#pysdic.triangle_3_compute_elements_areas">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_compute_elements_areas.html#pysdic.triangle_3_compute_elements_areas">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_compute_elements_areas</span><span class="p">(</span>
-    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the areas of triangular elements defined by the given vertices and connectivity.</span>
@@ -521,35 +557,57 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">        \text{Area} = \frac{1}{2} \| \vec{AB} \times \vec{AC} \|</span>
+<span class="sd">        </span>
+<span class="sd">    .. note::</span>
 
-<span class="sd">    .. seealso::</span>
+<span class="sd">        The input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
 
-<span class="sd">        - :func:`triangle_3_compute_elements_normals` for computing the normal vectors of triangular elements.</span>
-<span class="sd">        - :func:`triangle_3_compute_vertices_normals` for computing the normal vectors at each vertex of the mesh.</span>
+<span class="sd">        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</span>
+<span class="sd">        </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    vertices_coordinates : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.</span>
+<span class="sd">    vertices_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.</span>
 
-<span class="sd">    connectivity : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.</span>
+<span class="sd">    connectivity: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`,) representing the area of each triangular element.</span>
+<span class="sd">        An array of shape :math:`(N_e,)` representing the area of each triangular element.</span>
+
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the inputs are not numpy arrays.</span>
+<span class="sd">        </span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If the input arrays do not have the correct shapes.</span>
 
 <span class="sd">    </span>
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_compute_elements_normals</span>
+<span class="sd">        For computing the normal vectors of triangular elements.</span>
+<span class="sd">        </span>
+<span class="sd">    pysdic.triangle_3_compute_vertices_normals</span>
+<span class="sd">        For computing the normal vectors at each vertex of the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Computing the areas of triangular elements:</span>
 
 <span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
 
 <span class="sd">        import numpy as np</span>
 <span class="sd">        from pysdic import triangle_3_compute_elements_areas</span>
@@ -566,8 +624,6 @@
 
 <span class="sd">        areas = triangle_3_compute_elements_areas(vertices, connectivity)</span>
 <span class="sd">        print(areas)</span>
-<span class="sd">        </span>
-<span class="sd">    The output will be:</span>
 
 <span class="sd">    .. code-block:: console</span>
 
@@ -575,13 +631,8 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
-        <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    
-    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vertices_coordinates must be of shape (N_v, 3), got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
@@ -608,10 +659,10 @@
 
 
 <div class="viewcode-block" id="triangle_3_compute_elements_normals">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_compute_elements_normals.html#pysdic.triangle_3_compute_elements_normals">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_compute_elements_normals.html#pysdic.triangle_3_compute_elements_normals">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_compute_elements_normals</span><span class="p">(</span>
-    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the normal vectors of triangular elements defined by the given vertices and connectivity.</span>
@@ -623,35 +674,55 @@
 
 <span class="sd">        \vec{n} = \frac{\vec{AB} \times \vec{AC}}{\| \vec{AB} \times \vec{AC} \|}</span>
 
-<span class="sd">    .. seealso::</span>
+<span class="sd">    .. note::</span>
 
-<span class="sd">        - :func:`triangle_3_compute_elements_areas` for computing the areas of triangular elements.</span>
-<span class="sd">        - :func:`triangle_3_compute_vertices_normals` for computing the normal vectors at each vertex of the mesh.</span>
+<span class="sd">        The input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    vertices_coordinates : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.</span>
+<span class="sd">    vertices_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.</span>
 
-<span class="sd">    connectivity : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.</span>
+<span class="sd">    connectivity: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the normal vector of each triangular element.</span>
+<span class="sd">        An array of shape :math:`(N_e, 3)` representing the normal vector of each triangular element.</span>
+
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the inputs are not numpy arrays.</span>
+<span class="sd">        </span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If the input arrays do not have the correct shapes.</span>
 
 
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_compute_elements_areas</span>
+<span class="sd">        For computing the areas of triangular elements.</span>
+<span class="sd">        </span>
+<span class="sd">    pysdic.triangle_3_compute_vertices_normals</span>
+<span class="sd">        For computing the normal vectors at each vertex of the mesh.</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Computing the normal vectors of triangular elements:</span>
 <span class="sd">    </span>
 <span class="sd">    .. code-block:: python</span>
-
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
 <span class="sd">        import numpy as np</span>
 <span class="sd">        from pysdic import triangle_3_compute_elements_normals</span>
 
@@ -668,8 +739,6 @@
 <span class="sd">        normals = triangle_3_compute_elements_normals(vertices, connectivity)</span>
 <span class="sd">        print(normals)</span>
 
-<span class="sd">    The output will be:</span>
-
 <span class="sd">    .. code-block:: console</span>
 
 <span class="sd">        [[ 0.  0.  1.]</span>
@@ -678,13 +747,8 @@
 <span class="sd">         [ 0.57735027  0.57735027  0.57735027]]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
-        <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-
-    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> 
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vertices_coordinates must be of shape (N_v, 3), got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
@@ -714,10 +778,10 @@
 
 
 <div class="viewcode-block" id="triangle_3_compute_vertices_normals">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_compute_vertices_normals.html#pysdic.triangle_3_compute_vertices_normals">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_compute_vertices_normals.html#pysdic.triangle_3_compute_vertices_normals">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_compute_vertices_normals</span><span class="p">(</span>
-    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the normal vectors at each vertex of a triangular mesh.</span>
@@ -728,36 +792,58 @@
 <span class="sd">    .. math::</span>
 
 <span class="sd">        \vec{n}_v = \frac{\sum_{e \in \text{adj}(v)} \text{Area}_e \cdot \vec{n}_e}{\| \sum_{e \in \text{adj}(v)} \text{Area}_e \cdot \vec{n}_e \|}</span>
+<span class="sd">        </span>
+<span class="sd">    .. note::</span>
 
-<span class="sd">    .. seealso::</span>
+<span class="sd">        The input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
 
-<span class="sd">        - :func:`triangle_3_compute_elements_areas` for computing the areas of triangular elements.</span>
-<span class="sd">        - :func:`triangle_3_compute_elements_normals` for computing the normal vectors of triangular elements.</span>
+<span class="sd">        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    vertices_coordinates : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.</span>
+<span class="sd">    vertices_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.</span>
 
-<span class="sd">    connectivity : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.</span>
+<span class="sd">    connectivity: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_v`, 3) representing the normal vectors at each vertex.</span>
+<span class="sd">        An array of shape :math:`(N_v, 3)` representing the normal vectors at each vertex.</span>
+
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the inputs are not numpy arrays.</span>
+<span class="sd">        </span>
 <span class="sd">    ValueError</span>
 <span class="sd">        If the input arrays do not have the correct shapes.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_compute_elements_areas</span>
+<span class="sd">        For computing the areas of triangular elements.</span>
+<span class="sd">        </span>
+<span class="sd">    pysdic.triangle_3_compute_elements_normals</span>
+<span class="sd">        For computing the normal vectors of triangular elements.</span>
 
 <span class="sd">    </span>
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Computing the normal vectors at each vertex of a triangular mesh:</span>
 
 <span class="sd">    .. code-block:: python</span>
-
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
 <span class="sd">        import numpy as np</span>
 <span class="sd">        from pysdic import triangle_3_compute_vertices_normals</span>
 
@@ -773,9 +859,7 @@
 
 <span class="sd">        vertex_normals = triangle_3_compute_vertices_normals(vertices, connectivity)</span>
 <span class="sd">        print(vertex_normals)</span>
-
-<span class="sd">    The output will be:</span>
-
+<span class="sd">        </span>
 <span class="sd">    .. code-block:: console</span>
 
 <span class="sd">        [[ 0.57735027 -0.57735027  0.57735027]</span>
@@ -784,13 +868,8 @@
 <span class="sd">         [ 0.89442719  0.          0.4472136 ]]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
-        <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-
-    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> 
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vertices_coordinates must be of shape (N_v, 3), got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
@@ -826,80 +905,102 @@
 
 
 <div class="viewcode-block" id="triangle_3_cast_rays">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_cast_rays.html#pysdic.triangle_3_cast_rays">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_cast_rays.html#pysdic.triangle_3_cast_rays">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_cast_rays</span><span class="p">(</span>
-    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">ray_origins</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">ray_directions</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">ray_origins</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">ray_directions</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">nan_open3d_errors</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cast rays into a triangular mesh and compute the intersection points.</span>
 
 <span class="sd">    This function uses Open3D to perform ray-mesh intersection tests.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The inputs :obj:`vertices_coordinates`, :obj:`ray_origins`, and :obj:`ray_directions` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the rays are valid, ...).</span>
+<span class="sd">        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    vertices_coordinates : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.</span>
+<span class="sd">    vertices_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.</span>
 
-<span class="sd">    connectivity : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.</span>
+<span class="sd">    connectivity: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.</span>
 
-<span class="sd">    ray_origins : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_r`, 3) representing the origins of the rays.</span>
+<span class="sd">    ray_origins: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_r, 3)` representing the origins of the rays.</span>
 
-<span class="sd">    ray_directions : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_r`, 3) representing the directions of the rays.</span>
+<span class="sd">    ray_directions: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_r, 3)` representing the directions of the rays.</span>
+<span class="sd">    </span>
+<span class="sd">    nan_open3d_errors: :class:`bool`, optional</span>
+<span class="sd">        If :obj:`True`, handle NaN errors due to Open3D float32 precision issues by setting invalid intersections to NaN and -1, by default :obj:`True`.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    natural_coordinates : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_r`, 2) representing the natural coordinates (:math:`\xi, \eta`) of the intersection points.</span>
+<span class="sd">    natural_coordinates: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_r, 2)` representing the natural coordinates (:math:`\xi, \eta`) of the intersection points.</span>
+<span class="sd">        </span>
+<span class="sd">    element_indices: :class:`numpy.ndarray`</span>
+<span class="sd">        An array of shape :math:`(N_r,)` representing the indices of the intersected elements. If a ray does not intersect any element, the index is -1.</span>
 
-<span class="sd">    element_indices : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_r`,) representing the indices of the intersected elements. If a ray does not intersect any element, the index is -1.</span>
-
-<span class="sd">    nan_open3d_errors : :class:`bool`, optional</span>
-<span class="sd">        If :obj:`True`, handle NaN errors due to Open3D float32 precision issues by setting invalid intersections to NaN and -1, by default :obj:`True`.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the inputs are not numpy arrays.</span>
+
 <span class="sd">    ValueError</span>
 <span class="sd">        If the input arrays do not have the correct shapes.</span>
 
 <span class="sd">    </span>
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.triangle_3_mesh_to_open3d</span>
+<span class="sd">        For converting a :class:`Mesh` instance to an Open3D TriangleMesh object.</span>
+<span class="sd">        </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Casting rays into a triangular mesh:</span>
 <span class="sd">    </span>
 <span class="sd">    .. code-block:: python</span>
-
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
 <span class="sd">        import numpy as np</span>
 <span class="sd">        from pysdic import triangle_3_cast_rays</span>
 
-<span class="sd">        vertices = np.array([[0, 0, 0],</span>
+<span class="sd">        vertices_coordinates = np.array([[0, 0, 0],</span>
 <span class="sd">                             [1, 0, 0],</span>
 <span class="sd">                             [0, 1, 0],</span>
-<span class="sd">                             [0, 0, 1]])  # shape (4, 3)</span>
+<span class="sd">                             [0, 0, 1]])  # shape (Nv, E) = (4, 3)</span>
 
 <span class="sd">        connectivity = np.array([[0, 1, 2],</span>
 <span class="sd">                                 [0, 1, 3],</span>
 <span class="sd">                                 [0, 2, 3],</span>
-<span class="sd">                                 [1, 2, 3]])  # shape (4, 3)</span>
+<span class="sd">                                 [1, 2, 3]])  # shape (Ne, Nvpe) = (4, 3)</span>
 
 <span class="sd">        ray_origins = np.array([[0.1, 0.1, -1],</span>
-<span class="sd">                                [0.5, 0.5, -1]])  # shape (2, 3)</span>
+<span class="sd">                                [0.5, 0.5, -1]])  # shape (Nr, E) = (2, 3)</span>
 
 <span class="sd">        ray_directions = np.array([[0, 0, 1],</span>
-<span class="sd">                                   [0, 0, 1]])  # shape (2, 3)</span>
+<span class="sd">                                   [0, 0, 1]])  # shape (Nr, E) = (2, 3)</span>
 
-<span class="sd">        natural_coords, element_indices = triangle_3_cast_rays(vertices, connectivity, ray_origins, ray_directions)</span>
-<span class="sd">        print(natural_coords)</span>
-<span class="sd">        print(element_indices)</span>
-
-<span class="sd">    The output will be:</span>
-
+<span class="sd">        natural_coordinates, element_indices = triangle_3_cast_rays(vertices_coordinates, connectivity, ray_origins, ray_directions)</span>
+<span class="sd">        print(natural_coordinates) # shape (Nr, K)</span>
+<span class="sd">        print(element_indices) # shape (Nr,)</span>
+<span class="sd">        </span>
 <span class="sd">    .. code-block:: console</span>
 
 <span class="sd">        [[0.1 0.1]</span>
@@ -907,14 +1008,25 @@
 
 <span class="sd">        [0 0]</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
-        <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="sd">    Deduce the coordinates of the intersection points from the natural coordinates and the element connectivity.</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+<span class="sd">        </span>
+<span class="sd">        from pysdic import triangle_3_shape_functions, interpolate_property</span>
+<span class="sd">        </span>
+<span class="sd">        shape_functions = triangle_3_shape_functions(natural_coordinates)  # shape (Nr, Nvpe) = (2, 3)</span>
+<span class="sd">        </span>
+<span class="sd">        points_coordinates = interpolate_property(</span>
+<span class="sd">            vertices_coordinates, </span>
+<span class="sd">            shape_functions, </span>
+<span class="sd">            connectivity, </span>
+<span class="sd">            element_indices</span>
+<span class="sd">        )  # shape (Nr, E) = (2, 3)</span>
 
-    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> 
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vertices_coordinates must be of shape (N_v, 3), got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
@@ -922,13 +1034,8 @@
     <span class="k">if</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;connectivity must be of shape (N_e, 3), got </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
     
-    <span class="n">ray_origins</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ray_origins</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">ray_origins</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
-        <span class="n">ray_origins</span> <span class="o">=</span> <span class="n">ray_origins</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    
-    <span class="n">ray_directions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ray_directions</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">ray_directions</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
-        <span class="n">ray_directions</span> <span class="o">=</span> <span class="n">ray_directions</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">ray_origins</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ray_origins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">ray_directions</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ray_directions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">ray_origins</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">ray_origins</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ray_origins must be of shape (N_r, 3), got </span><span class="si">{</span><span class="n">ray_origins</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
@@ -944,7 +1051,7 @@
     <span class="n">o3d_mesh</span> <span class="o">=</span> <span class="n">triangle_3_mesh_to_open3d</span><span class="p">(</span><span class="n">Mesh</span><span class="p">(</span>
         <span class="n">vertices</span><span class="o">=</span><span class="n">vertices_coordinates</span><span class="p">,</span>
         <span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span>
-        <span class="n">elements_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span>
+        <span class="n">element_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span>
         <span class="n">internal_bypass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">),</span> <span class="n">legacy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">uvmap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -983,319 +1090,187 @@
 
 
 
-<div class="viewcode-block" id="triangle_3_extract_unique_edges">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_extract_unique_edges.html#pysdic.triangle_3_extract_unique_edges">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_extract_unique_edges</span><span class="p">(</span>
-    <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<div class="viewcode-block" id="triangle_3_compute_elements_strains">
+<a class="viewcode-back" href="../../../_autosummary/pysdic.triangle_3_compute_elements_strains.html#pysdic.triangle_3_compute_elements_strains">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_compute_elements_strains</span><span class="p">(</span>
+    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">displacements</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract the unique edges from the triangular mesh connectivity.</span>
+<span class="sd">    Compute the strain tensor for each triangular element in the mesh given the vertex displacements.</span>
 
-<span class="sd">    Each edge is represented as a pair of vertex indices, sorted in ascending order.</span>
-<span class="sd">    The method returns a numpy ndarray of shape (:math:`N_{ed}`, 2) where :math:`N_{ed}` is the number of unique edges.</span>
+<span class="sd">    The strain tensor is computed using the linear strain-displacement relationship for triangular elements.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    connectivity : :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.</span>
+<span class="sd">    .. math::</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_{ed}`, 2) where :math:`N_{ed}` is the number of unique edges, representing the vertex indices of each edge.</span>
-
+<span class="sd">        \boldsymbol{\varepsilon} = \frac{1}{2} \left( \nabla \mathbf{U} + (\nabla \mathbf{U})^T \right)</span>
+<span class="sd">        </span>
+<span class="sd">    where :math:`\mathbf{U}` is the displacement vector.</span>
 <span class="sd">    </span>
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-<span class="sd">    </span>
-<span class="sd">    .. code-block:: python</span>
+<span class="sd">    .. note::</span>
 
-<span class="sd">        import numpy as np</span>
-<span class="sd">        from pysdic import triangle_3_extract_unique_edges</span>
-
-<span class="sd">        connectivity = np.array([[0, 1, 2],</span>
-<span class="sd">                                 [1, 3, 2]])  # shape (2, 3)</span>
-
-<span class="sd">        edges = triangle_3_extract_unique_edges(connectivity)</span>
-<span class="sd">        print(edges)</span>
-
-<span class="sd">    The output will be:</span>
-
-<span class="sd">    .. code-block:: console</span>
-
-<span class="sd">        [[0 1]</span>
-<span class="sd">         [0 2]</span>
-<span class="sd">         [1 2]</span>
-<span class="sd">         [1 3]</span>
-<span class="sd">         [2 3]]</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;connectivity must be of shape (N_e, 3), got </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-    
-    <span class="c1"># Extract edges from triangles</span>
-    <span class="n">edges</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
-        <span class="n">connectivity</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>
-        <span class="n">connectivity</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
-        <span class="n">connectivity</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
-    <span class="p">))</span> <span class="c1"># Shape (M*3, 2)</span>
-
-    <span class="c1"># Sort each edge to ensure (min, max) ordering</span>
-    <span class="n">edges</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="c1"># Conversion to void type for easy comparison</span>
-    <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">((</span><span class="n">numpy</span><span class="o">.</span><span class="n">void</span><span class="p">,</span> <span class="n">edges</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span> <span class="o">*</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-
-    <span class="c1"># Create a view of the points as a 1D array of void type</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-
-    <span class="c1"># Use numpy.unique to find unique edges</span>
-    <span class="n">unique_a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-
-    <span class="c1"># Convert back to original edge format</span>
-    <span class="n">unique_edges</span> <span class="o">=</span> <span class="n">unique_a</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">edges</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">unique_edges</span></div>
-
-
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_bfs_distance</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">start_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Perform a breadth-first search (BFS) to compute the shortest path distances from a starting vertex to all other vertices in the graph.</span>
-
+<span class="sd">        The inputs :obj:`vertices_coordinates` and :obj:`displacements` will be converted to :obj:`numpy.float64` for computation.</span>
+<span class="sd">        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.</span>
+<span class="sd">        </span>
 <span class="sd">    .. warning::</span>
 
-<span class="sd">        This is an internal function and should not be called directly.</span>
-
+<span class="sd">        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the displacements are valid, ...).</span>
+<span class="sd">        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    graph : :class:`dict`</span>
-<span class="sd">        A dictionary representing the adjacency list of the graph, where keys are vertex indices and values are lists of adjacent vertex indices.</span>
-
-<span class="sd">    start_index : :class:`int`</span>
-<span class="sd">        The starting vertex index for the BFS.</span>
-
-<span class="sd">    n_points : :class:`int`</span>
-<span class="sd">        The total number of vertices in the graph.</span>
-
+<span class="sd">    vertices_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, E)` representing the coordinates of the vertices in the embedded space of dimension :math:`E`.</span>
+<span class="sd">        </span>
+<span class="sd">    connectivity: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.</span>
+<span class="sd">        </span>
+<span class="sd">    displacements: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, E)` representing the displacements of the vertices in the embedded space of dimension :math:`E`.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`numpy.ndarray`</span>
-<span class="sd">        An array of shape (:math:`N_v`,) representing the shortest path distances from the starting vertex to all other vertices.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Breadth-first search (BFS) to find shortest paths from vertex i</span>
-    <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_vertices</span>  <span class="c1"># -1 indicates unvisited vertices</span>
-    <span class="n">distances</span><span class="p">[</span><span class="n">start_index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">start_index</span><span class="p">])</span>
-
-    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
-        <span class="n">current_distance</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
-        
-        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">distances</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># Not visited neighbor</span>
-                <span class="n">distances</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_distance</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
-
-
-<div class="viewcode-block" id="triangle_3_build_vertices_adjacency_matrix">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_build_vertices_adjacency_matrix.html#pysdic.triangle_3_build_vertices_adjacency_matrix">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_build_vertices_adjacency_matrix</span><span class="p">(</span>
-    <span class="n">edges</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Build the vertices path distance matrix (adjacency matrix) from the edges of a triangular mesh.</span>
-
-<span class="sd">    The distance between two vertices is defined as the minimum number of edges that must be traversed to go from one vertex to another.</span>
-<span class="sd">    The output is a symmetric square matrix of shape (:math:`N_v`, :math:`N_v`), where :math:`N_v` is the number of vertices.</span>
-
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`triangle_3_build_elements_adjacency_matrix` for building the elements path distance matrix.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    edges : numpy.ndarray</span>
-<span class="sd">        An array of shape (:math:`N_{ed}`, 2) representing the vertex indices.</span>
-
-<span class="sd">    n_vertices : Optional[int], optional</span>
-<span class="sd">        The total number of vertices in the mesh. If :obj:`None`, it is inferred from the maximum vertex index in the edges, by default :obj:`None`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    numpy.ndarray</span>
-<span class="sd">        A square array of shape (:math:`N_v`, :math:`N_v`) representing the path distance matrix between vertices.</span>
-
-
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-<span class="sd">    .. code-block:: python</span>
-
-<span class="sd">        import numpy as np</span>
-<span class="sd">        from pysdic import triangle_3_build_vertices_adjacency_matrix</span>
-
-<span class="sd">        edges = np.array([[0, 1],</span>
-<span class="sd">                          [1, 2],</span>
-<span class="sd">                          [2, 3],</span>
-<span class="sd">                          [3, 4],</span>
-<span class="sd">                          [1, 3]])  # shape (5, 2)</span>
-
-<span class="sd">        distance_matrix = triangle_3_build_vertices_adjacency_matrix(edges)</span>
-<span class="sd">        print(distance_matrix)</span>
-
-<span class="sd">    The output will be:</span>
-
-<span class="sd">    .. code-block:: console</span>
-
-<span class="sd">        [[0 1 2 2 3]</span>
-<span class="sd">         [1 0 1 1 2]</span>
-<span class="sd">         [2 1 0 1 2]</span>
-<span class="sd">         [2 1 1 0 1]</span>
-<span class="sd">         [3 2 2 1 0]]</span>
+<span class="sd">        An array of shape :math:`(N_e, E, E)` representing the strain tensor for each triangular element along the global coordinates :math:`(x, y, z, ...)`.</span>
 <span class="sd">        </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">edges</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">edges</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the inputs are not numpy arrays.</span>
+<span class="sd">        </span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the input arrays do not have the correct shapes.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The strain tensor is computed as the symmetric part of the displacement gradient tensor.</span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
+<span class="sd">    </span>
+<span class="sd">        \boldsymbol{\varepsilon} = \frac{1}{2} \left( \nabla \mathbf{U} + (\nabla \mathbf{U})^T \right)</span>
+<span class="sd">        </span>
+<span class="sd">    The displacement gradient tensor :math:`\nabla \mathbf{U}` is obtained by differentiating the displacement field</span>
+<span class="sd">    with respect to the global coordinates using the shape function derivatives for triangular elements such as:</span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
 
-    <span class="k">if</span> <span class="n">edges</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;edges must be of shape (N_ed, 2), got </span><span class="si">{</span><span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">n_vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_vertices</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_vertices must be a positive integer or None, got </span><span class="si">{</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">n_vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-        
-    <span class="k">if</span> <span class="n">n_vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    
-    <span class="c1"># Build the graph adjacency matrix</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
-            <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
-            <span class="n">graph</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="n">graph</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<span class="sd">        \nabla_X U(\xi, \eta, \zeta, ...) = J \cdot (J^T J)^{-1} \cdot \sum_{i=1}^{N_{vpe}} \nabla_{\xi} N_i(\xi, \eta, \zeta, ...) U_i</span>
 
-    <span class="c1"># Initialize the distance matrix with zeros</span>
-    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="sd">    where :math:`J` is the Jacobian matrix of the transformation from natural coordinates to global coordinates,</span>
+<span class="sd">    :math:`N_i` are the shape functions, and :math:`U_i` are the nodal displacements.</span>
+<span class="sd">    </span>
+<span class="sd">    If the embedded space dimension :math:`E` is equal to the topological dimension of the element (:math:`K=2` for triangular elements),</span>
+<span class="sd">    the strain tensor can be directly compute using Jacobian inverse : </span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
 
-    <span class="c1"># Fill the upper triangle of the distance matrix</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">):</span>
-        <span class="n">distances</span> <span class="o">=</span> <span class="n">_bfs_distance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">)</span>
-        <span class="n">distance_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">distances</span>
-
-    <span class="c1"># Make the distance matrix symmetric</span>
-    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">distance_matrix</span></div>
-
-
-
-<div class="viewcode-block" id="triangle_3_build_elements_adjacency_matrix">
-<a class="viewcode-back" href="../../../generated/pysdic.triangle_3_build_elements_adjacency_matrix.html#pysdic.triangle_3_build_elements_adjacency_matrix">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_build_elements_adjacency_matrix</span><span class="p">(</span>
-    <span class="n">connectivity</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Build the elements path distance matrix (adjacency matrix) from the connectivity of a triangular mesh.</span>
-
-<span class="sd">    The distance between two elements is defined as the minimum number of shared edges that must be traversed to go from one element to another.</span>
-<span class="sd">    The output is a symmetric square matrix of shape (:math:`N_e`, :math:`N_e`), where :math:`N_e` is the number of elements.</span>
-
-<span class="sd">    .. seealso::</span>
-
-<span class="sd">        - :func:`triangle_3_build_vertices_adjacency_matrix` for building the vertices path distance matrix.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    connectivity : numpy.ndarray</span>
-<span class="sd">        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    numpy.ndarray</span>
-<span class="sd">        A square array of shape (:math:`N_e`, :math:`N_e`) representing the path distance matrix between elements.</span>
-
-
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
+<span class="sd">        \nabla_X U(\xi, \eta, \zeta, ...) = J^{-1} \cdot \sum_{i=1}^{N_{vpe}} \nabla_{\xi} N_i(\xi, \eta, \zeta, ...) U_i</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.compute_jacobian_matrix</span>
+<span class="sd">        For constructing the Jacobian matrix :math:`J` of the transformation from natural coordinates :math:`(\xi, \eta, \zeta, ...)` to</span>
+<span class="sd">        global coordinates :math:`(x, y, z, ...)`.</span>
+<span class="sd">        </span>
+<span class="sd">    pysdic.compute_property_derivative</span>
+<span class="sd">        Derivate a property defined at the nodes of a mesh to given integration points within elements with respect to global coordinates :math:`(x,y,z,...)` using shape function derivatives.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Computing the strain tensor for triangular elements:</span>
+<span class="sd">    </span>
 <span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
 
 <span class="sd">        import numpy as np</span>
-<span class="sd">        from pysdic import triangle_3_build_elements_adjacency_matrix</span>
+<span class="sd">        from pysdic import triangle_3_compute_elements_strains</span>
+
+<span class="sd">        vertices = np.array([[0, 0, 0],</span>
+<span class="sd">                             [1, 0, 0],</span>
+<span class="sd">                             [0, 1, 0],</span>
+<span class="sd">                             [0, 0, 1]])  # shape (4, 3)</span>
 
 <span class="sd">        connectivity = np.array([[0, 1, 2],</span>
-<span class="sd">                                 [1, 2, 3],</span>
-<span class="sd">                                 [2, 3, 4],</span>
-<span class="sd">                                 [0, 2, 4]])  # shape (4, 3)</span>
+<span class="sd">                                 [0, 1, 3],</span>
+<span class="sd">                                 [0, 2, 3],</span>
+<span class="sd">                                 [1, 2, 3]])  # shape (4, 3)</span>
 
-<span class="sd">        distance_matrix = triangle_3_build_elements_adjacency_matrix(connectivity)</span>
-<span class="sd">        print(distance_matrix)</span>
+<span class="sd">        displacements = np.array([[0, 0, 0],</span>
+<span class="sd">                                  [0.1, 0, 0],</span>
+<span class="sd">                                  [0, 0.1, 0],</span>
+<span class="sd">                                  [0, 0, 0.1]])  # shape (4, 3)</span>
 
-<span class="sd">    The output will be:</span>
+<span class="sd">        strains = triangle_3_compute_elements_strains(vertices, connectivity, displacements)</span>
+<span class="sd">        print(strains)</span>
 
 <span class="sd">    .. code-block:: console</span>
 
-<span class="sd">        [[0 1 2 1]</span>
-<span class="sd">         [1 0 1 2]</span>
-<span class="sd">         [2 1 0 3]</span>
-<span class="sd">         [1 2 3 0]]</span>
-<span class="sd">        </span>
+<span class="sd">        [[[ 0.1  0.   0. ]</span>
+<span class="sd">          [ 0.   0.1  0. ]</span>
+<span class="sd">          [ 0.   0.   0. ]]</span>
+
+<span class="sd">         [[ 0.1  0.   0. ]</span>
+<span class="sd">          [ 0.   0.   0. ]</span>
+<span class="sd">          [ 0.   0.   0.1]]</span>
+
+<span class="sd">         [[ 0.   0.   0. ]</span>
+<span class="sd">          [ 0.   0.1  0. ]</span>
+<span class="sd">          [ 0.   0.   0.1]]</span>
+
+<span class="sd">         [[ 0.1 -0.1 -0.1]</span>
+<span class="sd">          [-0.1  0.1 -0.1]</span>
+<span class="sd">          [-0.1 -0.1  0.1]]]</span>
+<span class="sd">          </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        
     <span class="n">connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">connectivity</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
         <span class="n">connectivity</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
+        
+    <span class="n">displacements</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">displacements</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">displacements</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">displacements</span> <span class="o">=</span> <span class="n">displacements</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;vertices_coordinates must be of shape (N_v, E), got </span><span class="si">{</span><span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;connectivity must be of shape (N_e, 3), got </span><span class="si">{</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
     
-    <span class="n">n_elements</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">n_elements</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-
-    <span class="c1"># Build element adjacency graph based on shared edges</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_elements</span><span class="p">)}</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_elements</span><span class="p">):</span>
-        <span class="n">vertices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">connectivity</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">):</span>
-            <span class="n">other_vertices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">connectivity</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertices</span> <span class="o">&amp;</span> <span class="n">other_vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Shared edge</span>
-                <span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-                <span class="n">graph</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">displacements</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">displacements</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;displacements must be of shape (N_v, E), got </span><span class="si">{</span><span class="n">displacements</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Get the gauss point of each triangular element.</span>
+    <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">get_triangle_3_gauss_points</span><span class="p">()</span> <span class="c1"># shape (1, 2) // single gauss point at the centroid of the triangle.</span>
+    <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># shape (N_e, 2)</span>
+    <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>  <span class="c1"># shape (N_e,)</span>
         
-    <span class="c1"># Initialize the distance matrix with zeros</span>
-    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="c1"># Derivate the displacements at the gauss points with respect to global coordinates</span>
+    <span class="n">displacement_gradients</span> <span class="o">=</span> <span class="n">compute_property_derivative</span><span class="p">(</span>
+        <span class="n">property_array</span><span class="o">=</span><span class="n">displacements</span><span class="p">,</span>
+        <span class="n">vertices_coordinates</span><span class="o">=</span><span class="n">vertices_coordinates</span><span class="p">,</span>
+        <span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">,</span>
+        <span class="n">element_type</span><span class="o">=</span><span class="s2">&quot;triangle_3&quot;</span><span class="p">,</span>
+        <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">natural_coordinates</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="o">=</span><span class="n">element_indices</span><span class="p">,</span> 
+    <span class="p">)</span> <span class="c1"># shape (N_e, N_d, E) where N_d is the size of property (here displacements N_d=E) and E is the embedded space dimension.</span>
+    
+    <span class="c1"># Compute the strain tensor as the symmetric part of the displacement gradient tensor</span>
+    <span class="n">strain</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">displacement_gradients</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">displacement_gradients</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># shape (N_e, E, E)</span>
+    
+    <span class="k">return</span> <span class="n">strain</span></div>
 
-    <span class="c1"># Fill the upper triangle of the distance matrix</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_elements</span><span class="p">):</span>
-        <span class="n">distances</span> <span class="o">=</span> <span class="n">_bfs_distance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">)</span>
-        <span class="n">distance_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">distances</span>
-
-    <span class="c1"># Make the distance matrix symmetric</span>
-    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">distance_matrix</span></div>
-
+    
 </pre></div>
 
                 </article>

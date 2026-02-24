@@ -1,0 +1,616 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Project a Mesh on a Camera and obtains the corresponding pixel coordinates (and jacobians of the projection) &#8212; pysdic 1.3.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=8ca9e7a0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_gallery/example_project_a_mesh_on_a_camera';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Heightmap interpolation and projection at integration points" href="example_integration_points_interpolation.html" />
+    <link rel="prev" title="Adjacency matrix computation for meshes" href="example_adjacency_mesh_computation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 1.3.2 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Example Gallery
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Example Gallery
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="example_mesh_simple_workflow.html">Simple mesh workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_pointcloud_simple_workflow.html">Simple point cloud workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_photometric_rendering_on_cylinder.html">Rendering Photometric Properties on a Cylinder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_adjacency_mesh_computation.html">Adjacency matrix computation for meshes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Project a Mesh on a Camera and obtains the corresponding pixel coordinates (and jacobians of the projection)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_integration_points_interpolation.html">Heightmap interpolation and projection at integration points</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Example Gallery</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Project a Mesh on a Camera and obtains the corresponding pixel coordinates (and jacobians of the projection)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-docs-source-gallery-example-project-a-mesh-on-a-camera-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="project-a-mesh-on-a-camera-and-obtains-the-corresponding-pixel-coordinates-and-jacobians-of-the-projection">
+<span id="example-project-a-mesh-on-a-camera"></span><span id="sphx-glr-docs-source-gallery-example-project-a-mesh-on-a-camera-py"></span><h1>Project a Mesh on a Camera and obtains the corresponding pixel coordinates (and jacobians of the projection)<a class="headerlink" href="#project-a-mesh-on-a-camera-and-obtains-the-corresponding-pixel-coordinates-and-jacobians-of-the-projection" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#define-a-cylinder-mesh" id="id1">Define a cylinder Mesh</a></p></li>
+<li><p><a class="reference internal" href="#define-a-camera" id="id2">Define a Camera</a></p></li>
+<li><p><a class="reference internal" href="#project-the-mesh-on-the-camera" id="id3">Project the Mesh on the Camera</a></p></li>
+<li><p><a class="reference internal" href="#display-the-projected-points-on-the-image-plane" id="id4">Display the projected points on the image plane</a></p></li>
+</ul>
+</nav>
+<p>This example demonstrates how to project a mesh on a camera and compute the corresponding gray levels values and XYZ jacobian
+using the <code class="docutils literal notranslate"><span class="pre">pysdic</span></code> library.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../_docs/mesh.html#pysdic.Mesh" title="pysdic.Mesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.Mesh()</span></code></a> - Official documentation for the Mesh class.</p></li>
+<li><p><a class="reference internal" href="../_docs/camera.html#pysdic.Camera" title="pysdic.Camera"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.Camera()</span></code></a> - Official documentation for the Camera class.</p></li>
+</ul>
+</div>
+<section id="define-a-cylinder-mesh">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Define a cylinder Mesh</a><a class="headerlink" href="#define-a-cylinder-mesh" title="Link to this heading">#</a></h2>
+<p>We will create a simple cylindrical mesh located at the origin and oriented along the z-axis. The cylinder will have a radius of 1 and a height of 2, with its center at the origin.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pysdic</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">py3dframe</span>
+
+<span class="c1"># Create the frame associated with the mesh (identity frame at the origin)</span>
+<span class="n">mesh_frame</span> <span class="o">=</span> <span class="n">py3dframe</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">from_axes</span><span class="p">(</span>
+    <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">x_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">y_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">z_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Create the cylindrical mesh</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">nt</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Number of points along the circumference</span>
+<span class="n">nh</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Number of points along the height</span>
+
+<span class="n">cylinder_mesh</span> <span class="o">=</span> <span class="n">pysdic</span><span class="o">.</span><span class="n">create_triangle_3_axisymmetric</span><span class="p">(</span>
+    <span class="n">profile_curve</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">h</span><span class="p">:</span> <span class="n">radius</span><span class="p">,</span>
+    <span class="n">frame</span><span class="o">=</span><span class="n">mesh_frame</span><span class="p">,</span>
+    <span class="n">height_bounds</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">n_height</span><span class="o">=</span><span class="n">nh</span><span class="p">,</span>
+    <span class="n">n_theta</span><span class="o">=</span><span class="n">nt</span><span class="p">,</span>
+    <span class="n">closed</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-a-camera">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Define a Camera</a><a class="headerlink" href="#define-a-camera" title="Link to this heading">#</a></h2>
+<p>We will create a camera located at (0, -5, 0) and looking towards the origin with a focal length of 800 pixels and an image size of (800, 600) pixels.</p>
+<p>See the package <code class="docutils literal notranslate"><span class="pre">pycvcam</span></code> for more details on how to create and manipulate cameras in Python for <code class="docutils literal notranslate"><span class="pre">pysidc</span></code>.
+For this example, we will consider a camera with an intrinsic and extrisnic model CV2-like but a distortion model more complex to show the flexibility of the library.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pycvcam</span>
+
+<span class="n">intrinsic</span> <span class="o">=</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">Cv2Intrinsic</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">800.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">],</span>
+                 <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">800.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">],</span>
+                 <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
+<span class="p">)</span>
+
+<span class="n">camera_frame</span> <span class="o">=</span> <span class="n">py3dframe</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">from_axes</span><span class="p">(</span>
+    <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">x_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="n">y_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">z_axis</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">extrinsic</span> <span class="o">=</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">Cv2Extrinsic</span><span class="o">.</span><span class="n">from_frame</span><span class="p">(</span><span class="n">camera_frame</span><span class="p">)</span>
+
+<span class="n">parameters_in_pixels</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>  <span class="c1"># Example distortion parameters</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters_in_pixels</span> <span class="o">/</span> <span class="mf">800.0</span>  <span class="c1"># Normalize by focal length</span>
+<span class="n">distortion</span> <span class="o">=</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">ZernikeDistortion</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span> <span class="c1"># Zernike Order 1</span>
+
+<span class="n">camera</span> <span class="o">=</span> <span class="n">pysdic</span><span class="o">.</span><span class="n">Camera</span><span class="p">(</span>
+    <span class="n">sensor_height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+    <span class="n">sensor_width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+    <span class="n">intrinsic</span><span class="o">=</span><span class="n">intrinsic</span><span class="p">,</span>
+    <span class="n">extrinsic</span><span class="o">=</span><span class="n">extrinsic</span><span class="p">,</span>
+    <span class="n">distortion</span><span class="o">=</span><span class="n">distortion</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="project-the-mesh-on-the-camera">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Project the Mesh on the Camera</a><a class="headerlink" href="#project-the-mesh-on-the-camera" title="Link to this heading">#</a></h2>
+<p>Project the mesh on the camera using the <code class="docutils literal notranslate"><span class="pre">project_points</span></code> method of the Camera class to obtain the pixel coordinates of the projected points and the jacobian of the projection with respect to the camera parameters and the XYZ coordinates of the points.</p>
+<ul class="simple">
+<li><p>dx: boolean, whether to compute the jacobian with respect to the XYZ coordinates of the points.</p></li>
+<li><p>dintrinsic: boolean, whether to compute the jacobian with respect to the intrinsic parameters of the camera.</p></li>
+<li><p>dextrinsic: boolean, whether to compute the jacobian with respect to the extrinsic parameters of the camera.</p></li>
+<li><p>ddistortion: boolean, whether to compute the jacobian with respect to the distortion parameters of the camera.</p></li>
+</ul>
+<p>The output will be a <a class="reference internal" href="../_docs/projection_result.html#pysdic.ProjectionResult" title="pysdic.ProjectionResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">pysdic.ProjectionResult</span></code></a> object containing the projected pixel coordinates and the jacobians.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">projection_result</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">project_points</span><span class="p">(</span><span class="n">cylinder_mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dintrinsic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dextrinsic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ddistortion</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">image_points</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">image_points</span> <span class="c1"># The projected 2D image points of shape (N_vertices, 2)</span>
+<span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_dx</span> <span class="c1"># The jacobian with respect to the world points of shape (N_vertices, 2, 3)</span>
+<span class="n">jacobian_dintrinsic</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_dintrinsic</span> <span class="c1"># The jacobian with respect to the intrinsic parameters of shape (N_vertices, 2, N_intrinsic_parameters)</span>
+<span class="n">jacobian_dextrinsic</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_dextrinsic</span> <span class="c1"># The jacobian with respect to the extrinsic parameters of shape (N_vertices, 2, N_extrinsic_parameters)</span>
+<span class="n">jacobian_ddistortion</span> <span class="o">=</span> <span class="n">projection_result</span><span class="o">.</span><span class="n">jacobian_ddistortion</span> <span class="c1"># The jacobian with respect to the distortion parameters of shape (N_vertices, 2, N_distortion_parameters)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Projected image points shape: </span><span class="si">{</span><span class="n">image_points</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jacobian with respect to XYZ coordinates shape: </span><span class="si">{</span><span class="n">jacobian_dx</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jacobian with respect to intrinsic parameters shape: </span><span class="si">{</span><span class="n">jacobian_dintrinsic</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jacobian with respect to extrinsic parameters shape: </span><span class="si">{</span><span class="n">jacobian_dextrinsic</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jacobian with respect to distortion parameters shape: </span><span class="si">{</span><span class="n">jacobian_ddistortion</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">visible_mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">image_points</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Mask of the points that are visible in the camera (not projected to infinity due to distortion or being behind the camera)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of visible points: </span><span class="si">{</span><span class="n">visible_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="n">cylinder_mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">pixel_coordinates</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">image_points_to_pixel_points</span><span class="p">(</span><span class="n">image_points</span><span class="p">)</span> <span class="c1"># Convert the projected image points to pixel coordinates (switch from (x, y) to (row, column))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projected image points shape: (2000, 2)
+Jacobian with respect to XYZ coordinates shape: (2000, 2, 3)
+Jacobian with respect to intrinsic parameters shape: (2000, 2, 4)
+Jacobian with respect to extrinsic parameters shape: (2000, 2, 6)
+Jacobian with respect to distortion parameters shape: (2000, 2, 6)
+Number of visible points: 2000 out of 2000
+</pre></div>
+</div>
+</section>
+<section id="display-the-projected-points-on-the-image-plane">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Display the projected points on the image plane</a><a class="headerlink" href="#display-the-projected-points-on-the-image-plane" title="Link to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">camera</span><span class="o">.</span><span class="n">visualize_projected_mesh</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="o">=</span><span class="n">cylinder_mesh</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_example_project_a_mesh_on_a_camera_001.png" srcset="../_images/sphx_glr_example_project_a_mesh_on_a_camera_001.png" alt="Projected 2D Mesh on Image Plane" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.621 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-docs-source-gallery-example-project-a-mesh-on-a-camera-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/d50c3ba26d6c11368c8462f18fad7f36/example_project_a_mesh_on_a_camera.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_project_a_mesh_on_a_camera.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/df518858019f7461a585f9cb8ba500f8/example_project_a_mesh_on_a_camera.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_project_a_mesh_on_a_camera.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1d5c4cd8a107e9085140dc158598ab9b/example_project_a_mesh_on_a_camera.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_project_a_mesh_on_a_camera.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_adjacency_mesh_computation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Adjacency matrix computation for meshes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_integration_points_interpolation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Heightmap interpolation and projection at integration points</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-cylinder-mesh">Define a cylinder Mesh</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-camera">Define a Camera</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#project-the-mesh-on-the-camera">Project the Mesh on the Camera</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#display-the-projected-points-on-the-image-plane">Display the projected points on the image plane</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_gallery/example_project_a_mesh_on_a_camera.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
