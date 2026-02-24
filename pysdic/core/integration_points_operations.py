@@ -2431,11 +2431,11 @@ def assemble_property_projection(
     - :math:`N_v` the number of nodes in the mesh.
     - :math:`N_{p}` the number of integration points.
     - :math:`P` the number of property components (e.g., 1 for scalar properties, 3
-    for vector properties).
+      for vector properties).
     - :math:`P_{points}` the property array at the integration points with shape
-    :math:`(N_{p}, P)`.
+      :math:`(N_{p}, P)`.
     - :math:`P_{nodes}` the property array at the mesh nodes with shape
-    :math:`(N_v, P)`.
+      :math:`(N_v, P)`.
     - :math:`N_f` the shape functions matrix with shape :math:`(N_{p}, N_v)`.
     - :math:`W` the diagonal matrix of weights with shape :math:`(N_{p}, N_{p})`.
 
