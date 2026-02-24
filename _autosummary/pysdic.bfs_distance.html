@@ -659,52 +659,55 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.bfs_distance">
 <span class="sig-name descname"><span class="pre">bfs_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">_skip_type_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/adjacency_operations.html#bfs_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.bfs_distance" title="Link to this definition">#</a></dt>
-<dd><p>Perform a breadth-first search (BFS) to compute the shortest path distances from a starting vertex to all other vertices in the graph.</p>
+<dd><p>Perform a breadth-first search (BFS) to compute the shortest path distances from a
+starting vertex to all other vertices in the graph.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>No tests are performed to check if the input graph is valid (e.g., if the graph contains self-loops, if the graph contains invalid vertex indices, …).
+<p>No tests are performed to check if the input graph is valid (e.g., if the graph
+contains self-loops, if the graph contains invalid vertex indices, …).
 The behavior of the function is undefined if the input graph is not valid.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<em>Sequence</em><em>[</em><em>Iterable</em><em>[</em><em>Integral</em><em>]</em><em>]</em>) – A sequence of iterables representing the adjacency list of the graph, where each index corresponds to a vertex and the iterable at that index contains the adjacent vertex indices.
-The length of the input sequence is equal to the number of vertices in the graph.</p></li>
+<li><p><strong>graph</strong> (<em>Sequence</em><em>[</em><em>Iterable</em><em>[</em><em>Integral</em><em>]</em><em>]</em>) – A sequence of iterables representing the adjacency list of the graph, where each
+index corresponds to a vertex and the iterable at that index contains the
+adjacent vertex indices. The length of the input sequence is equal to the
+number of vertices in the graph.</p></li>
 <li><p><strong>start</strong> (<em>Integral</em>) – The starting vertex index for the BFS.</p></li>
-<li><p><strong>max_distance</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The maximum distance to search for in the BFS. If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, there is no maximum distance and all reachable vertices will be included in the distance computation.
-If an integer is provided, the BFS will only consider vertices that are within this distance from the starting vertex, and any vertex that is not reachable within this distance will have a distance of -1. By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
+<li><p><strong>max_distance</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The maximum distance to search for in the BFS. If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, there is no
+maximum distance and all reachable vertices will be included in the distance
+computation. If an integer is provided, the BFS will only consider vertices
+that are within this distance from the starting vertex, and any vertex that is
+not reachable within this distance will have a distance of -1.
+By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
 <li><p><strong>_skip_type_check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of integers representing the shortest path distances from the starting vertex to all other vertices in the graph.
+<dd class="field-even"><p>A list of integers representing the shortest path distances from the starting
+vertex to all other vertices in the graph.
 The length of the output list is equal to the number of vertices in the graph.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If the input graph is not a sequence of iterables.
-    If the start vertex index is not an integer.
-    If maximum distance is not an integer or None.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If the start vertex index is out of bounds.
-    If maximum distance is a negative integer.</p></li>
-</ul>
-</dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Lets note <span class="math notranslate nohighlight">\(A\)</span> the starting vertex of the graph and <span class="math notranslate nohighlight">\(T\)</span> the target vertex of the graph.
-The BFS algorithm explores the graph in layers, starting from vertex <span class="math notranslate nohighlight">\(A\)</span> and visiting all its neighbors (vertices directly connected to <span class="math notranslate nohighlight">\(A\)</span>) before moving on to the neighbors’ neighbors, and so on.
-The distance from vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> is determined by the layer at which vertex <span class="math notranslate nohighlight">\(T\)</span> is first encountered during the BFS traversal.</p>
 <p>The distance from vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> is defined as follows:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = 0\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is the same as vertex <span class="math notranslate nohighlight">\(A\)</span>, since the distance from a vertex to itself is zero.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = 1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is a neighbor of vertex <span class="math notranslate nohighlight">\(A\)</span>, meaning that there is a direct edge connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = d \geq 1\)</span> if the shortest path from vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> has length <span class="math notranslate nohighlight">\(d\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex <span class="math notranslate nohighlight">\(A\)</span>, meaning that there is no path connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> in the graph.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex <span class="math notranslate nohighlight">\(A\)</span> within the specified <code class="docutils literal notranslate"><span class="pre">max_distance</span></code>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = 0\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is the same as vertex <span class="math notranslate nohighlight">\(A\)</span>,</p></li>
 </ul>
+<p>since the distance from a vertex to itself is zero.
+- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = 1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is a neighbor of vertex <span class="math notranslate nohighlight">\(A\)</span>,
+meaning that there is a direct edge connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span>.
+- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = d \geq 1\)</span> if the shortest path from vertex <span class="math notranslate nohighlight">\(A\)</span> to
+vertex <span class="math notranslate nohighlight">\(T\)</span> has length <span class="math notranslate nohighlight">\(d\)</span>.
+- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex
+<span class="math notranslate nohighlight">\(A\)</span>, meaning that there is no path connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex
+<span class="math notranslate nohighlight">\(T\)</span> in the graph.
+- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex
+<span class="math notranslate nohighlight">\(A\)</span> within the specified <code class="docutils literal notranslate"><span class="pre">max_distance</span></code>.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
