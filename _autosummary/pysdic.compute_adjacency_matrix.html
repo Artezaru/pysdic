@@ -659,38 +659,43 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.compute_adjacency_matrix">
 <span class="sig-name descname"><span class="pre">compute_adjacency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/adjacency_operations.html#compute_adjacency_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.compute_adjacency_matrix" title="Link to this definition">#</a></dt>
-<dd><p>Compute the adjacency matrix from the adjacency graph of the vertices, where the distance between two vertices is defined as the minimum number of elements that must be traversed to go from one vertex to another.</p>
-<p>The output is a symmetric square matrix of shape (<span class="math notranslate nohighlight">\(N_v\)</span>, <span class="math notranslate nohighlight">\(N_v\)</span>), where <span class="math notranslate nohighlight">\(N_v\)</span> is the number of vertices, and the value at position (i, j) represents the distance between vertex i and vertex j in the graph.</p>
+<dd><p>Compute the adjacency matrix from the adjacency graph of the vertices, where the
+distance between two vertices is defined as the minimum number of elements that
+must be traversed to go from one vertex to another.</p>
+<p>The output is a symmetric square matrix of shape (<span class="math notranslate nohighlight">\(N_v\)</span>, <span class="math notranslate nohighlight">\(N_v\)</span>), where
+<span class="math notranslate nohighlight">\(N_v\)</span> is the number of vertices, and the value at position (i, j) represents
+the distance between vertex i and vertex j in the graph.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The computation of the adjacency matrix is performed using a breadth-first search (BFS) algorithm for each vertex in the graph.</p>
+<p>The computation of the adjacency matrix is performed using a breadth-first
+search (BFS) algorithm for each vertex in the graph.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>No tests are performed to check if the input graph is valid (e.g., if the graph contains self-loops, if the graph contains invalid vertex indices, …).
+<p>No tests are performed to check if the input graph is valid (e.g., if the graph
+contains self-loops, if the graph contains invalid vertex indices, …).
 The behavior of the function is undefined if the input graph is not valid.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<em>Sequence</em><em>[</em><em>Iterable</em><em>[</em><em>Integral</em><em>]</em><em>]</em>) – A sequence of iterables representing the adjacency list of the graph, where each index corresponds to a vertex and the iterable at that index contains the adjacent vertex indices.</p></li>
-<li><p><strong>max_distance</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The maximum distance to consider between vertices. If the distance between two vertices exceeds this value,
-the corresponding entry in the adjacency matrix will be set to -1. If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, there is no maximum distance and all distances will be computed. By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
+<li><p><strong>graph</strong> (<em>Sequence</em><em>[</em><em>Iterable</em><em>[</em><em>Integral</em><em>]</em><em>]</em>) – A sequence of iterables representing the adjacency list of the graph, where each
+index corresponds to a vertex and the iterable at that index contains the
+adjacent vertex indices.</p></li>
+<li><p><strong>max_distance</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The maximum distance to consider between vertices. If the distance between two
+vertices exceeds this value,
+the corresponding entry in the adjacency matrix will be set to -1.
+If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, there is no maximum distance and all distances will be computed.
+By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A square array of shape (<span class="math notranslate nohighlight">\(N_v\)</span>, <span class="math notranslate nohighlight">\(N_v\)</span>) representing the path distance matrix between vertices, where the value at position (i, j) represents the distance between vertex i and vertex j in the graph.</p>
+<dd class="field-even"><p>A square array of shape (<span class="math notranslate nohighlight">\(N_v\)</span>, <span class="math notranslate nohighlight">\(N_v\)</span>) representing the path
+distance matrix between vertices, where the value at position (i, j) represents
+the distance between vertex i and vertex j in the graph.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If the input graph is not a sequence of iterables.
-    If maximum distance is not an integer or None.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If maximum distance is a negative integer.
-    If n_vertices is a non-positive integer.</p></li>
-</ul>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -714,7 +719,10 @@ the corresponding entry in the adjacency matrix will be set to -1. If <a class="
 <li><p><span class="math notranslate nohighlight">\(\text{dist}(i, j) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(j\)</span> is not reachable from vertex <span class="math notranslate nohighlight">\(i\)</span> within the specified <code class="docutils literal notranslate"><span class="pre">max_distance</span></code>.</p></li>
 </ul>
 <p class="rubric">Examples</p>
-<p>Create a simple disconnected graph of 7 vertices and build the adjacency matrix from the adjacency graph of the vertices, where the distance between two vertices is defined as the minimum number of elements that must be traversed to go from one vertex to another.</p>
+<p>Create a simple disconnected graph of 7 vertices and build the adjacency matrix from
+the adjacency graph of the vertices, where the distance between two vertices is
+defined as the minimum number of elements that must be traversed to go from one
+vertex to another.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/graph_bfs.png"><img alt="../_images/graph_bfs.png" src="../_images/graph_bfs.png" style="width: 50%;" />
 </a>

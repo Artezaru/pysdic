@@ -659,9 +659,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.compute_neighborhood_statistics">
 <span class="sig-name descname"><span class="pre">compute_neighborhood_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">property_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighborhood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statistics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrated_property</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/adjacency_operations.html#compute_neighborhood_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.compute_neighborhood_statistics" title="Link to this definition">#</a></dt>
-<dd><p>Compute the specified statistics for the given property array defined at the vertices of a graph (or integration points) based on the neighborhood information for each vertex.</p>
-<p>This function allows you to compute various statistics (e.g., mean, median, min, max, std) for a property defined at the vertices/elements of a mesh, using the values of the property from neighboring vertices/elements as defined in the neighborhood list.
-For each vertex/element, we will gather the values of the specified property from its neighboring vertices/elements and then compute the specified statistics to obtain a new array containing the computed statistics for each vertex/element.</p>
+<dd><p>Compute the specified statistics for the given property array defined at the
+vertices of a graph (or integration points) based on the neighborhood information
+for each vertex.</p>
+<p>This function allows you to compute various statistics (e.g., mean, median, min,
+max, std) for a property defined at the vertices/elements of a mesh, using the
+values of the property from neighboring vertices/elements as defined in the
+neighborhood list.
+For each vertex/element, we will gather the values of the specified property from
+its neighboring vertices/elements and then compute the specified statistics to
+obtain a new array containing the computed statistics for each vertex/element.</p>
 <p>Implemented statistics include:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -702,50 +709,82 @@ For each vertex/element, we will gather the values of the specified property fro
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The property array is converted to a 2D array of shape <span class="math notranslate nohighlight">\((N, P)\)</span> with type <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> to ensure consistent processing, where <span class="math notranslate nohighlight">\(N\)</span> is the number of vertices/elements and <span class="math notranslate nohighlight">\(P\)</span> is the number of properties per vertex/element.
-The computation will be done independently for each property if multiple properties are provided (i.e., if <span class="math notranslate nohighlight">\(P &gt; 1\)</span>), and the resulting array will have the same shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the computed statistics values for each vertex/element and each property.
-The neighborhood list will be treated as a list of sequences of type <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> containing the indices of neighboring vertices/elements for each vertex/element in the mesh.</p>
+<p>The property array is converted to a 2D array of shape <span class="math notranslate nohighlight">\((N, P)\)</span> with
+type <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> to ensure consistent processing, where <span class="math notranslate nohighlight">\(N\)</span> is
+the number of vertices/elements and <span class="math notranslate nohighlight">\(P\)</span> is the number of properties
+per vertex/element.
+The computation will be done independently for each property if multiple
+properties are provided (i.e., if <span class="math notranslate nohighlight">\(P &gt; 1\)</span>), and the resulting array
+will have the same shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the computed statistics
+values for each vertex/element and each property.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If a vertex/element has no neighbors (i.e., the corresponding sequence in the neighborhood list is empty), the computed statistics for that vertex/element will be set to <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a> for all properties, since there are no values to compute the statistics from.</p>
+<p>If a vertex/element has no neighbors (i.e., the corresponding sequence
+in the neighborhood list is empty), the computed statistics for that
+vertex/element will be set to <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.4)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a> for all properties, since
+there are no values to compute the statistics from.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>property_array</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the property values defined at the vertices/elements of the mesh. If 1D-array is provided, it will be treated as a single-component property of shape <span class="math notranslate nohighlight">\((N, 1)\)</span>.</p></li>
-<li><p><strong>neighborhood</strong> (List[List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]]]) – A list of sequences, where each sequence contains the indices of neighboring vertices/elements for each vertex/element in the mesh. The length of the list should be equal to the number of vertices/elements, and each sequence should contain the indices of the neighbors for the corresponding vertex/element.</p></li>
-<li><p><strong>statistics</strong> (Union[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, Sequence[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – A string or a sequence of strings specifying the statistics(s) to compute for each vertex/element based on its neighbors.</p></li>
-<li><p><strong>integrated_property</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, enlarge the function to accept properties defined at the integration points of a mesh and compute the specified statistics for each vertex/element based on the values of the property at the integration points of its neighboring elements.
+<li><p><strong>property_array</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the property values defined at the
+vertices/elements of the mesh. If 1D-array is provided, it will be treated as a
+single-component property of shape <span class="math notranslate nohighlight">\((N, 1)\)</span>.</p></li>
+<li><p><strong>neighborhood</strong> (List[List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]]]) – A list of sequences, where each sequence contains the indices of neighboring
+vertices/elements for each vertex/element in the mesh. The length of the list
+should be equal to the number of vertices/elements, and each sequence should
+contain the indices of the neighbors for the corresponding vertex/element.</p></li>
+<li><p><strong>statistics</strong> (Union[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, Sequence[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – A string or a sequence of strings specifying the statistics(s) to compute for
+each vertex/element based on its neighbors.</p></li>
+<li><p><strong>integrated_property</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, enlarge the function to accept properties defined at the
+integration points of a mesh and compute the specified statistics for each
+vertex/element based on the values of the property at the integration points
+of its neighboring elements.
 See the note below for more details. By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary where the keys are the names of the computed statistics and the values are arrays of shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the computed statistics values for each vertex/element and each property.</p>
+<dd class="field-even"><p>A dictionary where the keys are the names of the computed statistics and the
+values are arrays of shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the computed statistics
+values for each vertex/element and each property.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>]</p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – If the input property array is not 1D or 2D
-    If the neighborhood list does not match the number of vertices/elements in the property array.
-    If the statistics parameter is not a string or a sequence of strings.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If the statistics parameter contains an unsupported statistics name.</p></li>
-</ul>
-</dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>By default, the function is designed to compute statistics for properties defined at the vertices/elements of a mesh based on the neighborhood information for vertices/elements.
-In this case, the property array should have a shape of <span class="math notranslate nohighlight">\((N, P)\)</span>, where <span class="math notranslate nohighlight">\(N\)</span> is the number of vertices/elements and <span class="math notranslate nohighlight">\(P\)</span> is the number of properties per vertex/element.
-The neighborhood list should be a list of sequences containing the indices of neighboring vertices/elements for each vertex/element in the mesh with a length equal to <span class="math notranslate nohighlight">\(N\)</span>.
-The output will be a dictionary where each key is the name of the computed statistics and the corresponding value is an array of shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the computed statistics values for each vertex/element and each property.</p>
-<p>However, if the parameter <code class="xref py py-obj docutils literal notranslate"><span class="pre">integrated_property</span></code> is set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the function can also accept properties defined at the integration points of a mesh and compute the specified statistics for each vertex/element based on the values of the property at the integration points of its neighboring elements.
-In this case, the property array should have a shape of <span class="math notranslate nohighlight">\((N_{ip}, P)\)</span>, where <span class="math notranslate nohighlight">\(N_{ip}\)</span> is the total number of integration points in the mesh and <span class="math notranslate nohighlight">\(P\)</span> is the number of properties per integration point.
-And the neighborhood list should be a list of sequences containing the indices of the integration points that belong to the neighboring elements for each vertex/element in the mesh with a length equal to <span class="math notranslate nohighlight">\(N\)</span>, where <span class="math notranslate nohighlight">\(N\)</span> is the number of vertices/elements in the mesh.
-The output will still be a dictionary where each key is the name of the computed statistics and the corresponding value is an array of shape <span class="math notranslate nohighlight">\((N, P)\)</span> containing the computed statistics values for each vertex/element and each property, but the computation will be based on the values of the property at the integration points of the neighboring elements for each vertex/element in the mesh.</p>
+<p>By default, the function is designed to compute statistics for properties defined at
+the vertices/elements of a mesh based on the neighborhood information for
+vertices/elements.
+In this case, the property array should have a shape of <span class="math notranslate nohighlight">\((N, P)\)</span>, where
+<span class="math notranslate nohighlight">\(N\)</span> is the number of vertices/elements and <span class="math notranslate nohighlight">\(P\)</span> is the number of
+properties per vertex/element.
+The neighborhood list should be a list of sequences containing the indices of
+neighboring vertices/elements for each vertex/element in the mesh with a length
+equal to <span class="math notranslate nohighlight">\(N\)</span>.
+The output will be a dictionary where each key is the name of the computed
+statistics and the corresponding value is an array of shape <span class="math notranslate nohighlight">\((N, P)\)</span>
+containing the computed statistics values for each vertex/element and each property.</p>
+<p>However, if the parameter <code class="xref py py-obj docutils literal notranslate"><span class="pre">integrated_property</span></code> is set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>,
+the function can also accept properties defined at the integration points of a mesh
+and compute the specified statistics for each vertex/element based on the values of
+the property at the integration points of its neighboring elements.
+In this case, the property array should have a shape of <span class="math notranslate nohighlight">\((N_{ip}, P)\)</span>, where
+<span class="math notranslate nohighlight">\(N_{ip}\)</span> is the total number of integration points in the mesh and <span class="math notranslate nohighlight">\(P\)</span>
+is the number of properties per integration point.
+And the neighborhood list should be a list of sequences containing the indices of
+the integration points that belong to the neighboring elements for each
+vertex/element in the mesh with a length equal to <span class="math notranslate nohighlight">\(N\)</span>, where <span class="math notranslate nohighlight">\(N\)</span> is
+the number of vertices/elements in the mesh.
+The output will still be a dictionary where each key is the name of the computed
+statistics and the corresponding value is an array of shape <span class="math notranslate nohighlight">\((N, P)\)</span>
+containing the computed statistics values for each vertex/element and each property,
+but the computation will be based on the values of the property at the integration
+points of the neighboring elements for each vertex/element in the mesh.</p>
 <p class="rubric">Examples</p>
-<p>Create a simple disconnected graph of 7 vertices and compute the mean value of a property defined at the vertices of the graph.</p>
+<p>Create a simple disconnected graph of 7 vertices and compute the mean value of a
+property defined at the vertices of the graph.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/graph_bfs.png"><img alt="../_images/graph_bfs.png" src="../_images/graph_bfs.png" style="width: 50%;" />
 </a>
@@ -759,23 +798,25 @@ The output will still be a dictionary where each key is the name of the computed
 <span class="linenos"> 4</span><span class="p">)</span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span><span class="n">graph</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
-<span class="linenos"> 7</span><span class="n">vertices_neighborhood</span> <span class="o">=</span> <span class="n">compute_neighborhood</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="c1"># Define a property array with values for each vertex in the graph</span>
-<span class="linenos">10</span><span class="n">temperature</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">]</span>
-<span class="linenos">11</span>
-<span class="linenos">12</span><span class="n">statistics</span> <span class="o">=</span> <span class="n">compute_neighborhood_statistics</span><span class="p">(</span>
-<span class="linenos">13</span>    <span class="n">property_array</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
-<span class="linenos">14</span>    <span class="n">neighborhood</span><span class="o">=</span><span class="n">vertices_neighborhood</span><span class="p">,</span>
-<span class="linenos">15</span>    <span class="n">statistics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]</span>
-<span class="linenos">16</span><span class="p">)</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Minimum temperature in the neighborhood of each vertex:&quot;</span><span class="p">)</span>
-<span class="linenos">19</span><span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Reshape to 1D array for better display</span>
-<span class="linenos">20</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum temperature in the neighborhood of each vertex:&quot;</span><span class="p">)</span>
-<span class="linenos">21</span><span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Reshape to 1D array for better display</span>
-<span class="linenos">22</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean temperature in the neighborhood of each vertex:&quot;</span><span class="p">)</span>
-<span class="linenos">23</span><span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Reshape to 1D array for better display</span>
+<span class="linenos"> 7</span><span class="n">vertices_neighborhood</span> <span class="o">=</span> <span class="n">compute_neighborhood</span><span class="p">(</span>
+<span class="linenos"> 8</span>    <span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="kc">True</span>
+<span class="linenos"> 9</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1"># Define a property array with values for each vertex in the graph</span>
+<span class="linenos">12</span><span class="n">temperature</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">]</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="n">statistics</span> <span class="o">=</span> <span class="n">compute_neighborhood_statistics</span><span class="p">(</span>
+<span class="linenos">15</span>    <span class="n">property_array</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+<span class="linenos">16</span>    <span class="n">neighborhood</span><span class="o">=</span><span class="n">vertices_neighborhood</span><span class="p">,</span>
+<span class="linenos">17</span>    <span class="n">statistics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]</span>
+<span class="linenos">18</span><span class="p">)</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Minimum temperature in the neighborhood of each vertex:&quot;</span><span class="p">)</span>
+<span class="linenos">21</span><span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Reshape to 1D array for better display</span>
+<span class="linenos">22</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum temperature in the neighborhood of each vertex:&quot;</span><span class="p">)</span>
+<span class="linenos">23</span><span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Reshape to 1D array for better display</span>
+<span class="linenos">24</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean temperature in the neighborhood of each vertex:&quot;</span><span class="p">)</span>
+<span class="linenos">25</span><span class="nb">print</span><span class="p">(</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Reshape to 1D array for better display</span>
 </pre></div>
 </div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Minimum temperature in the neighborhood of each vertex:</span>

@@ -696,18 +696,12 @@ The length of the output list is equal to the number of vertices in the graph.</
 <p class="rubric">Notes</p>
 <p>The distance from vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> is defined as follows:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = 0\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is the same as vertex <span class="math notranslate nohighlight">\(A\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = 0\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is the same as vertex <span class="math notranslate nohighlight">\(A\)</span>, since the distance from a vertex to itself is zero.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = 1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is a neighbor of vertex <span class="math notranslate nohighlight">\(A\)</span>, meaning that there is a direct edge connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = d \geq 1\)</span> if the shortest path from vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> has length <span class="math notranslate nohighlight">\(d\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex <span class="math notranslate nohighlight">\(A\)</span>, meaning that there is no path connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span> in the graph.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex <span class="math notranslate nohighlight">\(A\)</span> within the specified <code class="docutils literal notranslate"><span class="pre">max_distance</span></code>.</p></li>
 </ul>
-<p>since the distance from a vertex to itself is zero.
-- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = 1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is a neighbor of vertex <span class="math notranslate nohighlight">\(A\)</span>,
-meaning that there is a direct edge connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex <span class="math notranslate nohighlight">\(T\)</span>.
-- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = d \geq 1\)</span> if the shortest path from vertex <span class="math notranslate nohighlight">\(A\)</span> to
-vertex <span class="math notranslate nohighlight">\(T\)</span> has length <span class="math notranslate nohighlight">\(d\)</span>.
-- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex
-<span class="math notranslate nohighlight">\(A\)</span>, meaning that there is no path connecting vertex <span class="math notranslate nohighlight">\(A\)</span> to vertex
-<span class="math notranslate nohighlight">\(T\)</span> in the graph.
-- <span class="math notranslate nohighlight">\(\text{dist}(A, T) = -1\)</span> if vertex <span class="math notranslate nohighlight">\(T\)</span> is not reachable from vertex
-<span class="math notranslate nohighlight">\(A\)</span> within the specified <code class="docutils literal notranslate"><span class="pre">max_distance</span></code>.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -716,12 +710,14 @@ vertex <span class="math notranslate nohighlight">\(T\)</span> has length <span 
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>Create a simple disconnected graph of 7 vertices and compute the shortest path distances from a starting vertex (0) to all other vertices in the graph.</p>
+<p>Create a simple disconnected graph of 7 vertices and compute the shortest path
+distances from a starting vertex (0) to all other vertices in the graph.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/graph_bfs.png"><img alt="../_images/graph_bfs.png" src="../_images/graph_bfs.png" style="width: 50%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Disconnected graph with 7 vertices for BFS example. Distance from vertex 0 to vertex 4 is 3 (0 -&gt; 2 -&gt; 3 -&gt; 4).</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+<p><span class="caption-text">Disconnected graph with 7 vertices for BFS example. Distance from vertex 0 to
+vertex 4 is 3 (0 -&gt; 2 -&gt; 3 -&gt; 4).</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">bfs_distance</span>

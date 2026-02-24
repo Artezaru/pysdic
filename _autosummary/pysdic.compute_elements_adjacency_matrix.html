@@ -659,27 +659,40 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pysdic.compute_elements_adjacency_matrix">
 <span class="sig-name descname"><span class="pre">compute_elements_adjacency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connectivity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pysdic/core/adjacency_operations.html#compute_elements_adjacency_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.compute_elements_adjacency_matrix" title="Link to this definition">#</a></dt>
-<dd><p>Compute the elements path distance matrix (adjacency matrix) from the connectivity of the mesh, where the distance between two elements is defined as the minimum number of elements that must be traversed to go from one element to another.</p>
-<p>Convenience function that combines the creation of the elements adjacency graph from the connectivity of the mesh and the computation of the adjacency matrix from the elements adjacency graph.</p>
+<dd><p>Compute the elements path distance matrix (adjacency matrix) from the connectivity
+of the mesh, where the distance between two elements is defined as the minimum
+number of elements that must be traversed to go from one element to another.</p>
+<p>Convenience function that combines the creation of the elements adjacency graph from
+the connectivity of the mesh and the computation of the adjacency matrix from the
+elements adjacency graph.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The input <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> must be integral-array like.</p>
+<ul class="simple">
+<li><p>The input <code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity</span></code> must be integral-array like.</p></li>
+</ul>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>No tests are performed to check if the input connectivity is valid (e.g., if the connectivity contains invalid vertex indices, …).
-The behavior of the function is undefined if the input connectivity is not valid.</p>
+<p>No tests are performed to check if the input connectivity is valid
+(e.g., if the connectivity contains invalid vertex indices, …).
+The behavior of the function is undefined in that case.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>connectivity</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_e, N_{vpe})\)</span> defining the connectivity of the elements in the mesh, where each row contains the indices of the nodes that form an element.</p></li>
-<li><p><strong>max_distance</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The maximum distance to consider between elements. If the distance between two elements exceeds this value,
-the corresponding entry in the adjacency matrix will be set to -1. If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, there is no maximum distance and all distances will be computed. By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
+<li><p><strong>connectivity</strong> (<em>ArrayLike</em>) – An array of shape <span class="math notranslate nohighlight">\((N_e, N_{vpe})\)</span> defining the connectivity of the
+elements in the mesh, where each row contains the indices of the nodes that
+form an element.</p></li>
+<li><p><strong>max_distance</strong> (<em>Optional</em><em>[</em><em>Integral</em><em>]</em><em>, </em><em>optional</em>) – The maximum distance to consider between elements. If the distance between two
+elements exceeds this value,
+the corresponding entry in the adjacency matrix will be set to -1.
+If <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, there is no maximum distance and all distances will be computed.
+By default <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A square array of shape (<span class="math notranslate nohighlight">\(N_e\)</span>, <span class="math notranslate nohighlight">\(N_e\)</span>) representing the path distance matrix between elements.</p>
+<dd class="field-even"><p>A square array of shape (<span class="math notranslate nohighlight">\(N_e\)</span>, <span class="math notranslate nohighlight">\(N_e\)</span>) representing the path
+distance matrix between elements.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
@@ -702,7 +715,8 @@ the corresponding entry in the adjacency matrix will be set to -1. If <a class="
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>Create a simple <code class="docutils literal notranslate"><span class="pre">quadrangle</span> <span class="pre">4</span></code> mesh with 10 vertices and 4 elements and compute the vertices adjacency matrix from the connectivity.</p>
+<p>Create a simple <code class="docutils literal notranslate"><span class="pre">quadrangle</span> <span class="pre">4</span></code> mesh with 10 vertices and 4 elements and compute
+the elements adjacency matrix from the connectivity.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/graph_mesh.png"><img alt="../_images/graph_mesh.png" src="../_images/graph_mesh.png" style="width: 50%;" />
 </a>
@@ -713,13 +727,18 @@ the corresponding entry in the adjacency matrix will be set to -1. If <a class="
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="linenos"> 2</span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_elements_adjacency_matrix</span>
 <span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="n">connectivity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
-<span class="linenos"> 5</span><span class="n">n_elements</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 4 elements</span>
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">compute_elements_adjacency_matrix</span><span class="p">(</span><span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">)</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;elements adjacency matrix with shape: </span><span class="si">{</span><span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="linenos">10</span><span class="nb">print</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+<span class="linenos"> 4</span><span class="n">connectivity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="linenos"> 5</span>    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="linenos"> 6</span>    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="linenos"> 7</span>    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="linenos"> 8</span>    <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+<span class="linenos"> 9</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="linenos">10</span><span class="n">n_elements</span> <span class="o">=</span> <span class="n">connectivity</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 4 elements</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">compute_elements_adjacency_matrix</span><span class="p">(</span><span class="n">connectivity</span><span class="o">=</span><span class="n">connectivity</span><span class="p">)</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;elements adjacency matrix with shape: </span><span class="si">{</span><span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="linenos">15</span><span class="nb">print</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">elements adjacency matrix with shape: (4, 4)</span>
