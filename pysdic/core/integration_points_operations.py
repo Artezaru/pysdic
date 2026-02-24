@@ -45,8 +45,7 @@ def assemble_shape_function_matrix(
     .. note::
 
         - Input :obj:`shape_functions` will be converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -285,8 +284,7 @@ def compute_shape_function_matrix(
     .. note::
 
         - Input :obj:`natural_coordinates` will be converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -498,8 +496,7 @@ def remap_vertices_coordinates(
     .. note::
 
         - Input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -697,8 +694,7 @@ def assemble_jacobian_matrix(
 
     .. note::
 
-        - Inputs :obj:`shape_function_derivatives` and :obj:`remapped_coordinates` will 
-        be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`shape_function_derivatives` and :obj:`remapped_coordinates` will be converted to :obj:`numpy.float64`.
         
     .. warning::
 
@@ -932,10 +928,8 @@ def compute_jacobian_matrix(
 
     .. note::
 
-        - Inputs :obj:`vertices_coordinates` and :obj:`natural_coordinates` will be 
-        converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`vertices_coordinates` and :obj:`natural_coordinates` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -1181,10 +1175,8 @@ def assemble_property_derivative(
 
     .. note::
 
-        - Inputs :obj:`property_array`, :obj:`shape_function_derivatives`
-        and :obj:`jacobian_matrix` will be converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`property_array`, :obj:`shape_function_derivatives` and :obj:`jacobian_matrix` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -1575,10 +1567,8 @@ def compute_property_derivative(
 
     .. note::
 
-        - Inputs :obj:`property_array`, :obj:`vertices_coordinates`
-        and :obj:`natural_coordinates` will be converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`property_array`, :obj:`vertices_coordinates` and :obj:`natural_coordinates` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -1848,10 +1838,8 @@ def assemble_property_interpolation(
 
     .. note::
 
-        - Inputs :obj:`property_array` and :obj:`shape_functions` will be converted to
-        :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`property_array` and :obj:`shape_functions` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -2118,10 +2106,8 @@ def compute_property_interpolation(
 
     .. note::
 
-        - Inputs :obj:`property_array` and :obj:`natural_coordinates` will be converted
-        to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`property_array` and :obj:`natural_coordinates` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
@@ -2347,8 +2333,7 @@ def assemble_property_projection(
 
     .. note::
 
-        - Inputs :obj:`property_array`, :obj:`shape_function_matrix` and
-        :obj:`point_weights` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`property_array`, :obj:`shape_function_matrix` and :obj:`point_weights` will be converted to :obj:`numpy.float64`.
 
     .. warning::
 
@@ -2429,20 +2414,11 @@ def assemble_property_projection(
     Lets consider the following notations:
 
     - :math:`N_v` the number of nodes in the mesh.
-
     - :math:`N_{p}` the number of integration points.
-
-    - :math:`P` the number of property components (e.g., 1 for scalar properties, 3
-    for vector properties).
-
-    - :math:`P_{points}` the property array at the integration points with shape
-    :math:`(N_{p}, P)`.
-
-    - :math:`P_{nodes}` the property array at the mesh nodes with shape
-    :math:`(N_v, P)`.
-
+    - :math:`P` the number of property components (e.g., 1 for scalar properties, 3 for vector properties).
+    - :math:`P_{points}` the property array at the integration points with shape :math:`(N_{p}, P)`.
+    - :math:`P_{nodes}` the property array at the mesh nodes with shape :math:`(N_v, P)`.
     - :math:`N_f` the shape functions matrix with shape :math:`(N_{p}, N_v)`.
-
     - :math:`W` the diagonal matrix of weights with shape :math:`(N_{p}, N_{p})`.
 
     We know that:
@@ -2704,10 +2680,8 @@ def compute_property_projection(
 
     .. note::
 
-        - Inputs :obj:`property_array`, :obj:`natural_coordinates` and
-        :obj:`point_weights` will be converted to :obj:`numpy.float64`.
-        - Inputs :obj:`connectivity` and :obj:`element_indices` will be
-        converted to :obj:`numpy.int64`.
+        - Inputs :obj:`property_array`, :obj:`natural_coordinates` and :obj:`point_weights` will be converted to :obj:`numpy.float64`.
+        - Inputs :obj:`connectivity` and :obj:`element_indices` will be converted to :obj:`numpy.int64`.
 
     .. warning::
 
