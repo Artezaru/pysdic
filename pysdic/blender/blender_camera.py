@@ -9,6 +9,9 @@ from numbers import Number, Integral
 import json
 import os
 import numpy
+import pycvcam
+
+from ..objects.camera import Camera
 
 class BlenderCamera(object):
     r"""
@@ -101,6 +104,49 @@ class BlenderCamera(object):
         self.resolution = resolution
         self.pixel_size = pixel_size
         self.clip_distance = clip_distance
+        
+    
+    @classmethod
+    def from_camera(cls, camera: Camera, resolution: Union[Sequence[Integral], numpy.ndarray], clip_distance: Union[Sequence[Number], numpy.ndarray]) -> BlenderCamera:
+        r"""
+        Create a BlenderCamera object from a Camera object.
+        
+        .. warning::
+        
+            This can be use only if the :meth:`Camera.intrinsic` is :class:`pycvcam.Cv2Intrinsic` and the :meth:`Camera.extrinsic` is :class:`pycvcam.Cv2Extrinsic`.
+            
+        Parameters
+        ----------
+        camera : Camera
+            The Camera object to create the BlenderCamera from.
+            
+        resolution : Union[Sequence[Integral], numpy.ndarray]
+            The resolution of the camera in numbers of pixels, by default None.
+            The two values are used for x and y axes respectively.
+            
+        clip_distance : Union[Sequence[Number], numpy.ndarray]
+            The distance of the near and far clipping planes of the camera, by default None.
+            The two values are used for near and far clipping planes respectively.
+            
+        Returns
+        -------
+        BlenderCamera
+            The created BlenderCamera object.
+        """
+        if not isinstance(camera, Camera):
+            raise ValueError("Camera must be a Camera object.")
+        if camera.intrinsic is None or not isinstance(camera.intrinsic, pycvcam.Cv2Intrinsic):
+            raise ValueError("Camera intrinsic must be a Cv2Intrinsic object.")
+        if camera.extrinsic is None or not isinstance(camera.extrinsic, pycvcam.Cv2Extrinsic):
+            raise ValueError("Camera extrinsic must be a Cv2Extrinsic object.")
+        
+        return cls(
+            frame=camera.extrinsic.frame,
+            intrinsic_matrix=camera.intrinsic.intrinsic_matrix,
+            resolution=resolution,
+            clip_distance=clip_distance,
+            pixel_size=camera.pixel_size,
+        )
 
 
 

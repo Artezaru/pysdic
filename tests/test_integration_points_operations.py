@@ -82,7 +82,8 @@ def test_remap_vertices_coordinates_with_m1():
             )
 
 
-def test_assemble_shape_function_matrix():
+
+def test_compute_shape_function_matrix():
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -99,9 +100,15 @@ def test_assemble_shape_function_matrix():
     natural_coordinates[mask] = natural_coordinates[mask] / natural_coordinates.sum(axis=1)[mask][:, None]
     element_indices = numpy.random.randint(0, 5, size=(8,))
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
+    shape_functions = pysdic.compute_shape_functions(natural_coordinates, return_derivatives=False, element_type='triangle_3')
 
-    shape_function_matrix = pysdic.assemble_shape_function_matrix(shape_functions, element_connectivity, element_indices, n_vertices=10)
+    shape_function_matrix = pysdic.compute_shape_function_matrix(
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices,
+        n_vertices=10
+    )        
 
     assert shape_function_matrix.shape == (8, 10)
     for i in range(8):
@@ -111,7 +118,8 @@ def test_assemble_shape_function_matrix():
         assert numpy.allclose(shape_function_matrix[i], expected_row)
 
 
-def test_assemble_shape_function_matrix_with_m1():
+
+def test_compute_shape_function_matrix_with_m1():
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -128,18 +136,19 @@ def test_assemble_shape_function_matrix_with_m1():
     natural_coordinates[mask] = natural_coordinates[mask] / natural_coordinates.sum(axis=1)[mask][:, None]
     element_indices = numpy.array([0, -1, 2, -1, 4, 1])
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
+    shape_functions = pysdic.compute_shape_functions(natural_coordinates, return_derivatives=False, element_type='triangle_3')
 
     default = 42.15
-    shape_function_matrix = pysdic.assemble_shape_function_matrix(
-        shape_functions,
-        element_connectivity,
-        element_indices,
+    shape_function_matrix = pysdic.compute_shape_function_matrix(
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices,
         n_vertices=10,
         skip_m1=True,
         default=default
     )
-
+    
     assert shape_function_matrix.shape == (6, 10)
     for i in range(6):
         elem_idx = element_indices[i]
@@ -151,7 +160,8 @@ def test_assemble_shape_function_matrix_with_m1():
         assert numpy.allclose(shape_function_matrix[i], expected_row)
 
 
-def test_assemble_shape_function_matrix_sparse_versus_dense():
+
+def test_compute_shape_function_matrix_sparse_versus_dense():
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -168,20 +178,22 @@ def test_assemble_shape_function_matrix_sparse_versus_dense():
     natural_coordinates[mask] = natural_coordinates[mask] / natural_coordinates.sum(axis=1)[mask][:, None]
     element_indices = numpy.random.randint(0, 5, size=(8,))
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
+    shape_functions = pysdic.compute_shape_functions(natural_coordinates, return_derivatives=False, element_type='triangle_3')
 
-    shape_function_matrix_dense = pysdic.assemble_shape_function_matrix(
-        shape_functions,
-        element_connectivity,
-        element_indices,
+    shape_function_matrix_dense = pysdic.compute_shape_function_matrix(
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices,
         n_vertices=10,
         sparse=False
     )
 
-    shape_function_matrix_sparse = pysdic.assemble_shape_function_matrix(
-        shape_functions,
-        element_connectivity,
-        element_indices,
+    shape_function_matrix_sparse = pysdic.compute_shape_function_matrix(
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices,
         n_vertices=10,
         sparse=True
     ).toarray()
@@ -189,7 +201,9 @@ def test_assemble_shape_function_matrix_sparse_versus_dense():
     assert numpy.allclose(shape_function_matrix_dense, shape_function_matrix_sparse)
 
 
-def test_interpolate_property():
+
+@pytest.mark.parametrize("P", [0, 1, 2, 3])
+def test_interpolate_property(P):
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -206,21 +220,24 @@ def test_interpolate_property():
     natural_coordinates[mask] = natural_coordinates[mask] / natural_coordinates.sum(axis=1)[mask][:, None]
     element_indices = numpy.random.randint(0, 5, size=(8,))
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
+    if P != 0:
+        vertex_properties = numpy.random.rand(10, P)
+    else: 
+        vertex_properties = numpy.random.rand(10)
+        P = 1
 
-    vertex_properties = numpy.random.rand(10, 4)
-
-    interpolated_properties = pysdic.interpolate_property(
+    interpolated_properties = pysdic.compute_property_interpolation(
         vertex_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices
     )
+    assert interpolated_properties.shape == (8, P)
 
-    assert interpolated_properties.shape == (8, 4)
 
-
-def test_interpolate_property_at_nodes():
+@pytest.mark.parametrize("P", [0, 1, 2, 3])
+def test_interpolate_property_at_nodes(P):
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -239,27 +256,30 @@ def test_interpolate_property_at_nodes():
     ])  # Nodal points for triangle_3
 
     element_indices = numpy.array([0, 1, 2])
+    
+    if P != 0:
+        vertex_properties = numpy.random.rand(10, P) 
+    else: 
+        vertex_properties = numpy.random.rand(10)
+        P = 1
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
-
-    vertex_properties = numpy.random.rand(10, 4)
-
-    interpolated_properties = pysdic.interpolate_property(
+    interpolated_properties = pysdic.compute_property_interpolation(
         vertex_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices
     )
 
-    assert interpolated_properties.shape == (3, 4)
+    assert interpolated_properties.shape == (3, P)
     for i in range(3):
         elem_idx = element_indices[i]
         expected_property = vertex_properties[element_connectivity[elem_idx][i]]
         assert numpy.allclose(interpolated_properties[i], expected_property)
 
 
-
-def test_interpolate_property_with_m1():
+@pytest.mark.parametrize("P", [0, 1, 2, 3])
+def test_interpolate_property_with_m1(P):
     numpy.random.seed(42)
     vertices_coordinates = numpy.random.rand(10, 3)
 
@@ -276,36 +296,41 @@ def test_interpolate_property_with_m1():
     natural_coordinates[mask] = natural_coordinates[mask] / natural_coordinates.sum(axis=1)[mask][:, None]
     element_indices = numpy.array([0, -1, 2, -1, 4, 1])
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
+    shape_functions = pysdic.compute_shape_functions(natural_coordinates, return_derivatives=False, element_type='triangle_3')
 
-    vertex_properties = numpy.random.rand(10, 4)
+    if P != 0:
+        vertex_properties = numpy.random.rand(10, P) 
+    else: 
+        vertex_properties = numpy.random.rand(10)
+        P = 1
 
     default = -7.3
-    interpolated_properties = pysdic.interpolate_property(
+    interpolated_properties = pysdic.compute_property_interpolation(
         vertex_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices,
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices,
         skip_m1=True,
         default=default
     )
 
-    assert interpolated_properties.shape == (6, 4)
+    assert interpolated_properties.shape == (6, P)
     for i in range(6):
         elem_idx = element_indices[i]
         if elem_idx == -1:
-            expected_property = numpy.full(4, default)
+            expected_property = numpy.full(P, default)
         else:
-            expected_property = numpy.zeros(4)
+            expected_property = numpy.zeros(P)
             for a in range(3):
                 expected_property += shape_functions[i, a] * vertex_properties[element_connectivity[elem_idx][a]]
         assert numpy.allclose(interpolated_properties[i], expected_property)
 
 
+
 @pytest.mark.parametrize("P", [0, 1, 2, 3])
 def test_project_property(P):
     numpy.random.seed(42)
-    vertices_coordinates = numpy.random.rand(10, 3)
 
     element_connectivity = numpy.array([
         [0, 1, 2],
@@ -323,75 +348,69 @@ def test_project_property(P):
     element_indices = numpy.repeat(numpy.arange(N_e), N_p)
     N_p = natural_coordinates.shape[0]
 
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
-
     if P != 0:
         vertex_properties = numpy.random.rand(10, P)
     else:
         vertex_properties = numpy.random.rand(10)
 
-    integrated_points_properties = pysdic.interpolate_property(
+    integrated_points_properties = pysdic.compute_property_interpolation(
         vertex_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices
     )
 
-    projected_properties = pysdic.project_property_to_vertices(
+    projected_properties = pysdic.compute_property_projection(
         integrated_points_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices,
-        n_vertices=10
-    )
-
-    assert projected_properties.shape == (10, 1) if P == 0 else (10, P)
-    assert numpy.allclose(projected_properties.sum(axis=0), vertex_properties.sum(axis=0))
-
-
-@pytest.mark.parametrize("P", [0, 1, 2, 3])
-def test_project_property(P):
-    numpy.random.seed(42)
-    vertices_coordinates = numpy.random.rand(10, 3)
-
-    element_connectivity = numpy.array([
-        [0, 1, 2],
-        [2, 3, 4],
-        [4, 5, 6],
-        [6, 7, 8],
-        [8, 9, 0],
-    ])
-
-    N_e = element_connectivity.shape[0]
-
-    natural_coordinates = numpy.array([[0.3, 0.3], [0.2, 0.5], [0.5, 0.2], [0.1, 0.1]])
-    N_p = natural_coordinates.shape[0]
-    natural_coordinates = numpy.vstack([natural_coordinates] * N_e)
-    element_indices = numpy.repeat(numpy.arange(N_e), N_p)
-    N_p = natural_coordinates.shape[0]
-
-    shape_functions = pysdic.triangle_3_shape_functions(natural_coordinates, return_derivatives=False)
-
-    if P != 0:
-        vertex_properties = numpy.random.rand(10, P)
-    else:
-        vertex_properties = numpy.random.rand(10)
-
-    integrated_points_properties = pysdic.interpolate_property(
-        vertex_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices
-    )
-
-    projected_properties = pysdic.project_property_to_vertices(
-        integrated_points_properties,
-        shape_functions,
-        element_connectivity,
-        element_indices,
+        connectivity=element_connectivity,
+        element_type='triangle_3',
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices,
         n_vertices=10,
         sparse=True
     )
 
     assert projected_properties.shape == (10, 1) if P == 0 else (10, P)
     assert numpy.allclose(projected_properties.sum(axis=0), vertex_properties.sum(axis=0))
+
+
+
+@pytest.mark.parametrize("P", [0, 1, 2, 3])
+@pytest.mark.parametrize("E", [2, 3])
+def test_derivate_property(P, E):
+    numpy.random.seed(42)
+    vertices_coordinates = numpy.random.rand(10, E)
+    
+    element_connectivity = numpy.array([
+        [0, 1, 2],
+        [2, 3, 4],
+        [4, 5, 6],
+        [6, 7, 8],
+        [8, 9, 0],
+    ])
+
+    N_e = element_connectivity.shape[0]
+
+    natural_coordinates = numpy.array([[0.3, 0.3], [0.2, 0.5], [0.5, 0.2], [0.1, 0.1]])
+    N_p = natural_coordinates.shape[0]
+    natural_coordinates = numpy.vstack([natural_coordinates] * N_e)
+    element_indices = numpy.repeat(numpy.arange(N_e), N_p)
+    N_p = natural_coordinates.shape[0]
+
+    if P != 0:
+        vertex_properties = numpy.random.rand(10, P)
+    else:
+        vertex_properties = numpy.random.rand(10)
+        P = 1
+        
+    derivate_property = pysdic.compute_property_derivative(
+        vertex_properties, 
+        vertices_coordinates, 
+        connectivity=element_connectivity, 
+        element_type='triangle_3', 
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices
+    )
+    
+    assert derivate_property.shape == (N_p, P, E)

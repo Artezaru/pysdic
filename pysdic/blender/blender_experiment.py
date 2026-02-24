@@ -28,8 +28,7 @@ from numbers import Integral
 from .blender_camera import BlenderCamera
 from .blender_material_bsdf import BlenderMaterialBSDF
 from .blender_spotlight import BlenderSpotLight
-from .blender_mesh import BlenderMesh
-from ..core.objects.mesh import Mesh
+from ..objects.mesh import Mesh
 
 import os
 import numpy
@@ -571,7 +570,7 @@ class BlenderExperiment:
     # =======================================================
     # Blender Scene Management (MESH)
     # =======================================================
-    def add_mesh(self, name: str, mesh: Union[Mesh, BlenderMesh], frames: Optional[List[bool]] = None) -> None:
+    def add_mesh(self, name: str, mesh: Mesh, frames: Optional[List[bool]] = None) -> None:
         r"""
         Add a mesh to the experiment. (Must be a 3D triangular mesh)
 
@@ -593,7 +592,7 @@ class BlenderExperiment:
             experiment = BlenderExperiment(Nb_frames=10)
             # Define the mesh properties here
             # ...
-            mesh = Mesh(vertices=..., triangles=...)
+            mesh = Mesh(vertices=..., connectivity=...)
             experiment.add_mesh(name="Mesh1", mesh=mesh, frames=[True, False, True, False, True, False, True, False, True, False])
 
         .. seealso::
@@ -608,8 +607,8 @@ class BlenderExperiment:
         name : str
             The name of the mesh with less than 50 characters.
         
-        mesh : Union[Mesh, BlenderMesh]
-            The mesh object to be added. It must be an instance of Mesh or BlenderMesh. Must be a 3D triangular mesh.
+        mesh : Mesh
+            The mesh object to be added. It must be an instance of Mesh. Must be a 3D triangular mesh.
 
         frames : List[bool], optional
             A list of booleans indicating which frames the mesh will be active.
@@ -652,8 +651,8 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} already exists.")
         if name in bpy.data.objects:
             raise ValueError(f"Object with name {name} already exists in Blender data.")
-        if not isinstance(mesh, (Mesh, BlenderMesh)):
-            raise TypeError("mesh must be an instance of Mesh or BlenderMesh")
+        if not isinstance(mesh, Mesh):
+            raise TypeError("mesh must be an instance of Mesh")
         if not mesh.elements_type == 'triangle_3' or not mesh.n_dimensions == 3:
             raise ValueError("Only 3D triangular meshes are supported.")
         
@@ -662,7 +661,7 @@ class BlenderExperiment:
 
         # Extract the vertices and faces from the mesh
         points = mesh.vertices.points
-        cells = mesh.connectivity
+        cells = mesh.connectivity.elements
         
         # ======================
         # MESH CREATION
@@ -836,10 +835,10 @@ class BlenderExperiment:
         mesh, blender_mesh = self.get_mesh(name)
 
         # Check if the mesh has a UVMAP defined
-        if mesh.elements_uvmap is None:
+        if mesh.uvmap is None:
             raise ValueError(f"Mesh {name} does not have a UVMAP defined.")
 
-        uvmap = mesh.elements_uvmap # Get the UVMap from the mesh (shape: (M, 6))
+        uvmap = mesh.uvmap # Get the UVMap from the mesh (shape: (M, 6))
 
         # Setting the UVMap
         if f"[pysdic]_{name}_uvm" in blender_mesh.data.uv_layers:
@@ -1390,8 +1389,8 @@ class BlenderExperiment:
 
         # Extract the vertices and faces from the mesh
         points = mesh.vertices.points
-        cells = mesh.connectivity
-        uvmap = mesh.elements_uvmap
+        cells = mesh.connectivity.elements
+        uvmap = mesh.uvmap
 
         # Apply the vertices and faces to the Blender mesh
         for i, vertex in enumerate(blender_mesh.data.vertices):

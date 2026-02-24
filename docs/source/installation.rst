@@ -13,20 +13,17 @@ Or install it directly from the GitHub repository using:
 
     pip install git+https://github.com/Artezaru/pysdic.git
 
-Development Installation
-------------------------------
+Requiements
+------------
 
-To install the package for development, first clone the repository using:
+The following dependencies are required to use ``pysdic``:
 
-.. code-block:: bash
-
-    git clone https://github.com/Artezaru/pysdic.git
-
-Then, go to the directory and run the following command:
-
-.. code-block:: bash
-
-    pip install -e .
-
-Use ``-e .[dev]`` to install it with the development dependencies.
-
+- **NumPy**: A fundamental package for scientific computing in Python.
+- **SciPy**: A library used for scientific and technical computing.
+- **Matplotlib**: A plotting library for creating static, animated, and interactive visualizations
+- **OpenCV**: A library for computer vision and image processing.
+- **Open3D**: A library for 3D data processing and visualization.
+- **PyVista**: A library for 3D visualization and analysis of scientific data.
+- **PyCVCam**: A library for camera control and image acquisition.
+- **Meshio**: A library for reading and writing mesh files in various formats.
+- **Py3DFrame**: A library for working with 3D data frames.

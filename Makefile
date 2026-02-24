@@ -34,26 +34,24 @@ bump:
 
 # 3. Clean the documentation
 clean:
-	@echo "Cleaning up generated files at docs/source/generated/"
-	@rm -rf docs/source/generated
-	@echo "Removing build directory: $(BUILDDIR)"
+	@echo "Cleaning up generated files at docs/source/_autosummary/"
+	@rm -rf docs/source/_autosummary
+	@echo "Cleaning up generated files at docs/source/_gallery/"
+	@rm -rf docs/source/_gallery
+	@echo "Cleaning up generated files at docs/source/_gallery_backreferences/"
+	@rm -rf docs/source/_gallery_backreferences
+	@echo "Cleaning up generated file name docs/source/sg_execution_times.rst"
+	@rm -f docs/source/sg_execution_times.rst
+	@echo "Cleaning up generated build documentation at docs/build/"
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O);
 	@echo "Recreating necessary directories..."
 	cd $(BUILDDIR); mkdir -p html; mkdir -p latex
 	@echo "Clean complete."
 
-# 4. Generate autosummary documentation
-autosummary:
-	@echo "Generating autosummary files in docs/source/api_doc/*.rst"
-	@sphinx-autogen -o docs/source/generated/ docs/source/api_documentation/*.rst
-	@echo "Autosummary generation complete."
-	@echo "Run python autosummary_change_titles.py to update the names in the generated files."
-	@python3 docs/source/autosummary_change_titles.py
-
 # 5. Generate HTML documentation
 html:
 	@echo "Generating HTML documentation at $(BUILDDIR)/html/"
-	$(SPHINXBUILD) -b html $(SOURCEDIR) $(BUILDDIR)/html
+	$(SPHINXBUILD) -v -b html $(SOURCEDIR) $(BUILDDIR)/html
 
 # 6. Git Push origin Master
 git:

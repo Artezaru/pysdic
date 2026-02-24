@@ -14,47 +14,64 @@
 
 from __future__ import annotations
 from typing import Union, Tuple, Optional
+from numpy.typing import ArrayLike
 
 import numpy
 import open3d
 
-from collections import deque
-
-from .objects.mesh import Mesh
-from .objects.point_cloud import PointCloud
+from ..objects.mesh import Mesh
+from ..objects.point_cloud import PointCloud
+from .gauss_points import get_triangle_3_gauss_points
+from .shape_functions import compute_triangle_3_shape_functions
+from .integration_points_operations import compute_property_derivative
 
 
 def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh], internal_bypass: bool = False) -> Mesh:
     r"""
-    Create a :class:`Mesh` (:obj:`elements_type` = "triangle_3") instance from an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
+    Create a :class:`Mesh` (:obj:`element_type` = "triangle_3") instance from an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
 
     .. warning::
         
         For now, the method only extracts the vertices, triangles, and UV map (if available) from the Open3D mesh.
         The other properties (normals, centroids, areas) are not extracted and must be computed separately.
 
-    .. seealso::
-
-        - :func:`triangle_3_mesh_to_open3d` for creating an Open3D TriangleMesh object from a :class:`Mesh` instance.
 
     Parameters
     ----------
     mesh : Union[:class:`open3d.t.geometry.TriangleMesh`, :class:`open3d.geometry.TriangleMesh`]
         An Open3D TriangleMesh object containing the mesh data.
 
-    internal_bypass : bool, optional
+    internal_bypass : :class:`bool`, optional
         Internal use only. If :obj:`True`, bypasses certain checks for performance, by default :obj:`False`.
+
 
     Returns
     -------
     :class:`Mesh`
         A :class:`Mesh` instance containing the mesh data.
+        
+        
+    Raises
+    ------
+    TypeError
+        If the input mesh is not an Open3D TriangleMesh object.
+        
+    ValueError
+        If the mesh is empty.
+        
+        
+    See Also
+    --------
+    pysdic.triangle_3_mesh_to_open3d
+        For converting a :class:`Mesh` instance to an Open3D TriangleMesh object.
 
 
     Example
     -------
-        
+    Reading a mesh using Open3D and converting it to a :class:`Mesh` instance:
+    
     .. code-block:: python
+        :linenos:
 
         import open3d as o3d
         from pysdic import Mesh, from_open3d
@@ -72,7 +89,7 @@ def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open
     if isinstance(mesh, open3d.geometry.TriangleMesh): # Legacy Open3D mesh
         vertices = numpy.asarray(mesh.vertices, dtype=numpy.float64)
         triangles = numpy.asarray(mesh.triangles, dtype=numpy.int64)
-        mesh_instance = Mesh(vertices=PointCloud.from_array(vertices), connectivity=triangles, elements_type="triangle_3", internal_bypass=internal_bypass)
+        mesh_instance = Mesh(vertices=PointCloud.from_array(vertices), connectivity=triangles, element_type="triangle_3", internal_bypass=internal_bypass)
         mesh_instance.validate()  # Validate the mesh structure
 
         # Check if UV mapping is available
@@ -85,7 +102,7 @@ def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open
     else: # Open3D T geometry mesh
         vertices = numpy.asarray(mesh.vertex.positions.numpy(), dtype=numpy.float64)
         triangles = numpy.asarray(mesh.triangle.indices.numpy(), dtype=numpy.int64)
-        mesh_instance = Mesh(vertices=vertices, connectivity=triangles, elements_type="triangle_3", internal_bypass=internal_bypass)
+        mesh_instance = Mesh(vertices=vertices, connectivity=triangles, element_type="triangle_3", internal_bypass=internal_bypass)
         mesh_instance.validate()  # Validate the mesh structure
 
         # Check if UV mapping is available
@@ -100,9 +117,7 @@ def triangle_3_mesh_from_open3d(mesh: Union[open3d.t.geometry.TriangleMesh, open
 
 def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = True) -> Union[open3d.t.geometry.TriangleMesh, open3d.geometry.TriangleMesh]:
     r"""
-    Convert the :class:`Mesh` (:obj:`elements_type` = "triangle_3") instance to an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
-
-    The mesh must not be empty.
+    Convert the :class:`Mesh` (:obj:`element_type` = "triangle_3") instance to an Open3D TriangleMesh object. (Only for 3D embedding dimension meshes :math:`E=3`)
 
     If :obj:`legacy` is :obj:`True`, the method returns a legacy Open3D TriangleMesh object.
     Otherwise, it returns a T geometry TriangleMesh object.
@@ -112,9 +127,6 @@ def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = Tr
         For now, the method only converts the vertices, triangles, and UV map (if available) to the Open3D mesh.
         The other properties stored in the :class:`Triangle3Mesh` instance are not transferred.
 
-    .. seealso::
-
-        - :func:`triangle_3_mesh_from_open3d` for creating a :class:`Mesh` instance from an Open3D TriangleMesh object.
 
     Parameters
     ----------
@@ -127,21 +139,34 @@ def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = Tr
     uvmap : :class:`bool`, optional
         If :obj:`True`, include the UV mapping in the Open3D mesh if available. Default is :obj:`True`.
 
+
     Returns
     -------
     Union[:class:`open3d.t.geometry.TriangleMesh`, :class:`open3d.geometry.TriangleMesh`]
         An Open3D TriangleMesh object containing the mesh data.
 
+
     Raises
     ------
+    TypeError
+        If the input mesh is not of type "triangle_3".
+        
     ValueError
-        If the mesh is empty.   
+        If the mesh is empty or not 3D embedding dimension.
 
 
-    Example
-    -------
-
+    See Also
+    --------
+    pysdic.triangle_3_mesh_from_open3d
+        For converting an Open3D TriangleMesh object to a :class:`Mesh` instance.
+        
+        
+    Examples
+    --------
+    Converting a :class:`Mesh` instance to an Open3D TriangleMesh object:
+    
     .. code-block:: python
+        :linenos:
 
         import open3d as o3d
         from pysdic import Mesh, to_open3d
@@ -153,7 +178,9 @@ def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = Tr
         o3dmesh = to_open3d(mesh)
 
     """
-    if not mesh.elements_type == "triangle_3":
+    if not isinstance(mesh, Mesh):
+        raise TypeError(f"Expected a Mesh instance, got {type(mesh)}.")
+    if not mesh.element_type == "triangle_3":
         raise TypeError("to_open3d function only supports 'triangle_3' element type meshes.")
     if mesh.n_vertices == 0 or mesh.n_elements == 0:
         raise ValueError("Cannot write an empty mesh to file.")
@@ -190,8 +217,8 @@ def triangle_3_mesh_to_open3d(mesh: Mesh, legacy: bool = False, uvmap: bool = Tr
 
 
 def triangle_3_compute_elements_areas(
-    vertices_coordinates: numpy.ndarray,
-    connectivity: numpy.ndarray,
+    vertices_coordinates: ArrayLike,
+    connectivity: ArrayLike,
 ) -> numpy.ndarray:
     r"""
     Compute the areas of triangular elements defined by the given vertices and connectivity.
@@ -201,35 +228,57 @@ def triangle_3_compute_elements_areas(
     .. math::
 
         \text{Area} = \frac{1}{2} \| \vec{AB} \times \vec{AC} \|
+        
+    .. note::
 
-    .. seealso::
+        The input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64` for computation.
+        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.
+        
+    .. warning::
 
-        - :func:`triangle_3_compute_elements_normals` for computing the normal vectors of triangular elements.
-        - :func:`triangle_3_compute_vertices_normals` for computing the normal vectors at each vertex of the mesh.
+        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, ...).
+        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.
+        
 
     Parameters
     ----------
-    vertices_coordinates : :class:`numpy.ndarray`
-        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.
+    vertices_coordinates: ArrayLike
+        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.
 
-    connectivity : :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.
+    connectivity: ArrayLike
+        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.
+
 
     Returns
     -------
     :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`,) representing the area of each triangular element.
+        An array of shape :math:`(N_e,)` representing the area of each triangular element.
+
 
     Raises
     ------
+    TypeError
+        If the inputs are not numpy arrays.
+        
     ValueError
         If the input arrays do not have the correct shapes.
 
     
-    Example
-    -------
+    See Also
+    --------
+    pysdic.triangle_3_compute_elements_normals
+        For computing the normal vectors of triangular elements.
+        
+    pysdic.triangle_3_compute_vertices_normals
+        For computing the normal vectors at each vertex of the mesh.
+        
+        
+    Examples
+    --------
+    Computing the areas of triangular elements:
 
     .. code-block:: python
+        :linenos:
 
         import numpy as np
         from pysdic import triangle_3_compute_elements_areas
@@ -246,8 +295,6 @@ def triangle_3_compute_elements_areas(
 
         areas = triangle_3_compute_elements_areas(vertices, connectivity)
         print(areas)
-        
-    The output will be:
 
     .. code-block:: console
 
@@ -255,13 +302,8 @@ def triangle_3_compute_elements_areas(
 
 
     """
-    vertices_coordinates = numpy.asarray(vertices_coordinates)
-    if not numpy.issubdtype(vertices_coordinates.dtype, numpy.floating):
-        vertices_coordinates = vertices_coordinates.astype(numpy.float64)
-    
-    connectivity = numpy.asarray(connectivity)
-    if not numpy.issubdtype(connectivity.dtype, numpy.integer):
-        connectivity = connectivity.astype(numpy.int64)
+    vertices_coordinates = numpy.asarray(vertices_coordinates, dtype=numpy.float64)
+    connectivity = numpy.asarray(connectivity, dtype=numpy.int64)
 
     if vertices_coordinates.ndim != 2 or vertices_coordinates.shape[1] != 3:
         raise ValueError(f"vertices_coordinates must be of shape (N_v, 3), got {vertices_coordinates.shape}.")
@@ -287,8 +329,8 @@ def triangle_3_compute_elements_areas(
 
 
 def triangle_3_compute_elements_normals(
-    vertices_coordinates: numpy.ndarray,
-    connectivity: numpy.ndarray,
+    vertices_coordinates: ArrayLike,
+    connectivity: ArrayLike,
 ) -> numpy.ndarray:
     r"""
     Compute the normal vectors of triangular elements defined by the given vertices and connectivity.
@@ -300,35 +342,55 @@ def triangle_3_compute_elements_normals(
 
         \vec{n} = \frac{\vec{AB} \times \vec{AC}}{\| \vec{AB} \times \vec{AC} \|}
 
-    .. seealso::
+    .. note::
 
-        - :func:`triangle_3_compute_elements_areas` for computing the areas of triangular elements.
-        - :func:`triangle_3_compute_vertices_normals` for computing the normal vectors at each vertex of the mesh.
+        The input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64` for computation.
+        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.
+        
+    .. warning::
+
+        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, ...).
+        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.
 
     Parameters
     ----------
-    vertices_coordinates : :class:`numpy.ndarray`
-        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.
+    vertices_coordinates: ArrayLike
+        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.
 
-    connectivity : :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.
+    connectivity: ArrayLike
+        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.
 
     Returns
     -------
     :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`, 3) representing the normal vector of each triangular element.
+        An array of shape :math:`(N_e, 3)` representing the normal vector of each triangular element.
+
 
     Raises
     ------
+    TypeError
+        If the inputs are not numpy arrays.
+        
     ValueError
         If the input arrays do not have the correct shapes.
 
 
-    Example
-    -------
+    See Also
+    --------
+    pysdic.triangle_3_compute_elements_areas
+        For computing the areas of triangular elements.
+        
+    pysdic.triangle_3_compute_vertices_normals
+        For computing the normal vectors at each vertex of the mesh.
+        
+
+    Examples
+    --------
+    Computing the normal vectors of triangular elements:
     
     .. code-block:: python
-
+        :linenos:
+        
         import numpy as np
         from pysdic import triangle_3_compute_elements_normals
 
@@ -345,8 +407,6 @@ def triangle_3_compute_elements_normals(
         normals = triangle_3_compute_elements_normals(vertices, connectivity)
         print(normals)
 
-    The output will be:
-
     .. code-block:: console
 
         [[ 0.  0.  1.]
@@ -355,13 +415,8 @@ def triangle_3_compute_elements_normals(
          [ 0.57735027  0.57735027  0.57735027]]
 
     """
-    vertices_coordinates = numpy.asarray(vertices_coordinates)
-    if not numpy.issubdtype(vertices_coordinates.dtype, numpy.floating):
-        vertices_coordinates = vertices_coordinates.astype(numpy.float64)
-
-    connectivity = numpy.asarray(connectivity)
-    if not numpy.issubdtype(connectivity.dtype, numpy.integer):
-        connectivity = connectivity.astype(numpy.int64)
+    vertices_coordinates = numpy.asarray(vertices_coordinates, dtype=numpy.float64) 
+    connectivity = numpy.asarray(connectivity, dtype=numpy.int64)
 
     if vertices_coordinates.ndim != 2 or vertices_coordinates.shape[1] != 3:
         raise ValueError(f"vertices_coordinates must be of shape (N_v, 3), got {vertices_coordinates.shape}.")
@@ -390,8 +445,8 @@ def triangle_3_compute_elements_normals(
 
 
 def triangle_3_compute_vertices_normals(
-    vertices_coordinates: numpy.ndarray,
-    connectivity: numpy.ndarray,
+    vertices_coordinates: ArrayLike,
+    connectivity: ArrayLike,
 ) -> numpy.ndarray:
     r"""
     Compute the normal vectors at each vertex of a triangular mesh.
@@ -402,36 +457,58 @@ def triangle_3_compute_vertices_normals(
     .. math::
 
         \vec{n}_v = \frac{\sum_{e \in \text{adj}(v)} \text{Area}_e \cdot \vec{n}_e}{\| \sum_{e \in \text{adj}(v)} \text{Area}_e \cdot \vec{n}_e \|}
+        
+    .. note::
 
-    .. seealso::
+        The input :obj:`vertices_coordinates` will be converted to :obj:`numpy.float64` for computation.
+        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.
+        
+    .. warning::
 
-        - :func:`triangle_3_compute_elements_areas` for computing the areas of triangular elements.
-        - :func:`triangle_3_compute_elements_normals` for computing the normal vectors of triangular elements.
+        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, ...).
+        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.
+
 
     Parameters
     ----------
-    vertices_coordinates : :class:`numpy.ndarray`
-        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.
+    vertices_coordinates: ArrayLike
+        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.
 
-    connectivity : :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.
+    connectivity: ArrayLike
+        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.
+
 
     Returns
     -------
     :class:`numpy.ndarray`
-        An array of shape (:math:`N_v`, 3) representing the normal vectors at each vertex.
+        An array of shape :math:`(N_v, 3)` representing the normal vectors at each vertex.
+
 
     Raises
     ------
+    TypeError
+        If the inputs are not numpy arrays.
+        
     ValueError
         If the input arrays do not have the correct shapes.
+        
+        
+    See Also
+    --------
+    pysdic.triangle_3_compute_elements_areas
+        For computing the areas of triangular elements.
+        
+    pysdic.triangle_3_compute_elements_normals
+        For computing the normal vectors of triangular elements.
 
     
-    Example
-    -------
+    Examples
+    --------
+    Computing the normal vectors at each vertex of a triangular mesh:
 
     .. code-block:: python
-
+        :linenos:
+        
         import numpy as np
         from pysdic import triangle_3_compute_vertices_normals
 
@@ -447,9 +524,7 @@ def triangle_3_compute_vertices_normals(
 
         vertex_normals = triangle_3_compute_vertices_normals(vertices, connectivity)
         print(vertex_normals)
-
-    The output will be:
-
+        
     .. code-block:: console
 
         [[ 0.57735027 -0.57735027  0.57735027]
@@ -458,13 +533,8 @@ def triangle_3_compute_vertices_normals(
          [ 0.89442719  0.          0.4472136 ]]
 
     """
-    vertices_coordinates = numpy.asarray(vertices_coordinates)
-    if not numpy.issubdtype(vertices_coordinates.dtype, numpy.floating):
-        vertices_coordinates = vertices_coordinates.astype(numpy.float64)
-
-    connectivity = numpy.asarray(connectivity)
-    if not numpy.issubdtype(connectivity.dtype, numpy.integer):
-        connectivity = connectivity.astype(numpy.int64)
+    vertices_coordinates = numpy.asarray(vertices_coordinates, dtype=numpy.float64) 
+    connectivity = numpy.asarray(connectivity, dtype=numpy.int64)
 
     if vertices_coordinates.ndim != 2 or vertices_coordinates.shape[1] != 3:
         raise ValueError(f"vertices_coordinates must be of shape (N_v, 3), got {vertices_coordinates.shape}.")
@@ -499,78 +569,100 @@ def triangle_3_compute_vertices_normals(
 
 
 def triangle_3_cast_rays(
-    vertices_coordinates: numpy.ndarray,
-    connectivity: numpy.ndarray,
-    ray_origins: numpy.ndarray,
-    ray_directions: numpy.ndarray,
+    vertices_coordinates: ArrayLike,
+    connectivity: ArrayLike,
+    ray_origins: ArrayLike,
+    ray_directions: ArrayLike,
     nan_open3d_errors: bool = True,
 ) -> Tuple[numpy.ndarray, numpy.ndarray]:
     r"""
     Cast rays into a triangular mesh and compute the intersection points.
 
     This function uses Open3D to perform ray-mesh intersection tests.
+    
+    .. note::
+
+        The inputs :obj:`vertices_coordinates`, :obj:`ray_origins`, and :obj:`ray_directions` will be converted to :obj:`numpy.float64` for computation.
+        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.
+        
+    .. warning::
+
+        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the rays are valid, ...).
+        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.
+
 
     Parameters
     ----------
-    vertices_coordinates : :class:`numpy.ndarray`
-        An array of shape (:math:`N_v`, 3) representing the coordinates of the vertices.
+    vertices_coordinates: ArrayLike
+        An array of shape :math:`(N_v, 3)` representing the coordinates of the vertices.
 
-    connectivity : :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.
+    connectivity: ArrayLike
+        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.
 
-    ray_origins : :class:`numpy.ndarray`
-        An array of shape (:math:`N_r`, 3) representing the origins of the rays.
+    ray_origins: ArrayLike
+        An array of shape :math:`(N_r, 3)` representing the origins of the rays.
 
-    ray_directions : :class:`numpy.ndarray`
-        An array of shape (:math:`N_r`, 3) representing the directions of the rays.
+    ray_directions: ArrayLike
+        An array of shape :math:`(N_r, 3)` representing the directions of the rays.
+    
+    nan_open3d_errors: :class:`bool`, optional
+        If :obj:`True`, handle NaN errors due to Open3D float32 precision issues by setting invalid intersections to NaN and -1, by default :obj:`True`.
+
 
     Returns
     -------
-    natural_coordinates : :class:`numpy.ndarray`
-        An array of shape (:math:`N_r`, 2) representing the natural coordinates (:math:`\xi, \eta`) of the intersection points.
+    natural_coordinates: :class:`numpy.ndarray`
+        An array of shape :math:`(N_r, 2)` representing the natural coordinates (:math:`\xi, \eta`) of the intersection points.
+        
+    element_indices: :class:`numpy.ndarray`
+        An array of shape :math:`(N_r,)` representing the indices of the intersected elements. If a ray does not intersect any element, the index is -1.
 
-    element_indices : :class:`numpy.ndarray`
-        An array of shape (:math:`N_r`,) representing the indices of the intersected elements. If a ray does not intersect any element, the index is -1.
-
-    nan_open3d_errors : :class:`bool`, optional
-        If :obj:`True`, handle NaN errors due to Open3D float32 precision issues by setting invalid intersections to NaN and -1, by default :obj:`True`.
 
     Raises
     ------
+    TypeError
+        If the inputs are not numpy arrays.
+
     ValueError
         If the input arrays do not have the correct shapes.
 
     
-    Example
-    -------
+    See Also
+    --------
+    pysdic.triangle_3_mesh_to_open3d
+        For converting a :class:`Mesh` instance to an Open3D TriangleMesh object.
+        
+
+    Examples
+    --------
+    Casting rays into a triangular mesh:
     
     .. code-block:: python
-
+        :linenos:
+        
         import numpy as np
         from pysdic import triangle_3_cast_rays
 
-        vertices = np.array([[0, 0, 0],
+        vertices_coordinates = np.array([[0, 0, 0],
                              [1, 0, 0],
                              [0, 1, 0],
-                             [0, 0, 1]])  # shape (4, 3)
+                             [0, 0, 1]])  # shape (Nv, E) = (4, 3)
 
         connectivity = np.array([[0, 1, 2],
                                  [0, 1, 3],
                                  [0, 2, 3],
-                                 [1, 2, 3]])  # shape (4, 3)
+                                 [1, 2, 3]])  # shape (Ne, Nvpe) = (4, 3)
 
         ray_origins = np.array([[0.1, 0.1, -1],
-                                [0.5, 0.5, -1]])  # shape (2, 3)
+                                [0.5, 0.5, -1]])  # shape (Nr, E) = (2, 3)
 
         ray_directions = np.array([[0, 0, 1],
-                                   [0, 0, 1]])  # shape (2, 3)
+                                   [0, 0, 1]])  # shape (Nr, E) = (2, 3)
 
-        natural_coords, element_indices = triangle_3_cast_rays(vertices, connectivity, ray_origins, ray_directions)
-        print(natural_coords)
-        print(element_indices)
-
-    The output will be:
-
+        natural_coordinates, element_indices = triangle_3_cast_rays(vertices_coordinates, connectivity, ray_origins, ray_directions)
+        print(natural_coordinates) # shape (Nr, K)
+        print(element_indices) # shape (Nr,)
+        
     .. code-block:: console
 
         [[0.1 0.1]
@@ -578,14 +670,25 @@ def triangle_3_cast_rays(
 
         [0 0]
 
-    """
-    vertices_coordinates = numpy.asarray(vertices_coordinates)
-    if not numpy.issubdtype(vertices_coordinates.dtype, numpy.floating):
-        vertices_coordinates = vertices_coordinates.astype(numpy.float64)
+    Deduce the coordinates of the intersection points from the natural coordinates and the element connectivity.
+    
+    .. code-block:: python
+        :linenos:
+        
+        from pysdic import triangle_3_shape_functions, interpolate_property
+        
+        shape_functions = triangle_3_shape_functions(natural_coordinates)  # shape (Nr, Nvpe) = (2, 3)
+        
+        points_coordinates = interpolate_property(
+            vertices_coordinates, 
+            shape_functions, 
+            connectivity, 
+            element_indices
+        )  # shape (Nr, E) = (2, 3)
 
-    connectivity = numpy.asarray(connectivity)
-    if not numpy.issubdtype(connectivity.dtype, numpy.integer):
-        connectivity = connectivity.astype(numpy.int64)
+    """
+    vertices_coordinates = numpy.asarray(vertices_coordinates, dtype=numpy.float64) 
+    connectivity = numpy.asarray(connectivity, dtype=numpy.int64)
 
     if vertices_coordinates.ndim != 2 or vertices_coordinates.shape[1] != 3:
         raise ValueError(f"vertices_coordinates must be of shape (N_v, 3), got {vertices_coordinates.shape}.")
@@ -593,13 +696,8 @@ def triangle_3_cast_rays(
     if connectivity.ndim != 2 or connectivity.shape[1] != 3:
         raise ValueError(f"connectivity must be of shape (N_e, 3), got {connectivity.shape}.")
     
-    ray_origins = numpy.asarray(ray_origins)
-    if not numpy.issubdtype(ray_origins.dtype, numpy.floating):
-        ray_origins = ray_origins.astype(numpy.float64)
-    
-    ray_directions = numpy.asarray(ray_directions)
-    if not numpy.issubdtype(ray_directions.dtype, numpy.floating):
-        ray_directions = ray_directions.astype(numpy.float64)
+    ray_origins = numpy.asarray(ray_origins, dtype=numpy.float64)
+    ray_directions = numpy.asarray(ray_directions, dtype=numpy.float64)
 
     if ray_origins.ndim != 2 or ray_origins.shape[1] != 3:
         raise ValueError(f"ray_origins must be of shape (N_r, 3), got {ray_origins.shape}.")
@@ -615,7 +713,7 @@ def triangle_3_cast_rays(
     o3d_mesh = triangle_3_mesh_to_open3d(Mesh(
         vertices=vertices_coordinates,
         connectivity=connectivity,
-        elements_type="triangle_3",
+        element_type="triangle_3",
         internal_bypass=True,
     ), legacy=False, uvmap=False)
 
@@ -653,307 +751,181 @@ def triangle_3_cast_rays(
     return natural_coordinates, element_indices
 
 
-def triangle_3_extract_unique_edges(
-    connectivity: numpy.ndarray,
+def triangle_3_compute_elements_strains(
+    vertices_coordinates: ArrayLike,
+    connectivity: ArrayLike,
+    displacements: ArrayLike,
 ) -> numpy.ndarray:
     r"""
-    Extract the unique edges from the triangular mesh connectivity.
+    Compute the strain tensor for each triangular element in the mesh given the vertex displacements.
 
-    Each edge is represented as a pair of vertex indices, sorted in ascending order.
-    The method returns a numpy ndarray of shape (:math:`N_{ed}`, 2) where :math:`N_{ed}` is the number of unique edges.
+    The strain tensor is computed using the linear strain-displacement relationship for triangular elements.
 
-    Parameters
-    ----------
-    connectivity : :class:`numpy.ndarray`
-        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.
+    .. math::
 
-    Returns
-    -------
-    :class:`numpy.ndarray`
-        An array of shape (:math:`N_{ed}`, 2) where :math:`N_{ed}` is the number of unique edges, representing the vertex indices of each edge.
-
+        \boldsymbol{\varepsilon} = \frac{1}{2} \left( \nabla \mathbf{U} + (\nabla \mathbf{U})^T \right)
+        
+    where :math:`\mathbf{U}` is the displacement vector.
     
-    Example
-    -------
-    
-    .. code-block:: python
+    .. note::
 
-        import numpy as np
-        from pysdic import triangle_3_extract_unique_edges
-
-        connectivity = np.array([[0, 1, 2],
-                                 [1, 3, 2]])  # shape (2, 3)
-
-        edges = triangle_3_extract_unique_edges(connectivity)
-        print(edges)
-
-    The output will be:
-
-    .. code-block:: console
-
-        [[0 1]
-         [0 2]
-         [1 2]
-         [1 3]
-         [2 3]]
-
-    """
-    connectivity = numpy.asarray(connectivity)
-    if not numpy.issubdtype(connectivity.dtype, numpy.integer):
-        connectivity = connectivity.astype(numpy.int64)
-
-    if connectivity.ndim != 2 or connectivity.shape[1] != 3:
-        raise ValueError(f"connectivity must be of shape (N_e, 3), got {connectivity.shape}.")
-    
-    if connectivity.shape[0] == 0:
-        return numpy.empty((0, 2), dtype=numpy.int64)
-    
-    # Extract edges from triangles
-    edges = numpy.vstack((
-        connectivity[:, [0, 1]],
-        connectivity[:, [1, 2]],
-        connectivity[:, [2, 0]]
-    )) # Shape (M*3, 2)
-
-    # Sort each edge to ensure (min, max) ordering
-    edges = numpy.sort(edges, axis=1)
-
-    # Conversion to void type for easy comparison
-    dtype = numpy.dtype((numpy.void, edges.dtype.itemsize * edges.shape[1]))
-
-    # Create a view of the points as a 1D array of void type
-    a = numpy.ascontiguousarray(edges).view(dtype).ravel()
-
-    # Use numpy.unique to find unique edges
-    unique_a = numpy.unique(a)
-
-    # Convert back to original edge format
-    unique_edges = unique_a.view(edges.dtype).reshape(-1, edges.shape[1])
-    return unique_edges
-
-
-
-def _bfs_distance(graph: dict, start_index: int, n_vertices: int) -> numpy.ndarray:
-    r"""
-    Perform a breadth-first search (BFS) to compute the shortest path distances from a starting vertex to all other vertices in the graph.
-
+        The inputs :obj:`vertices_coordinates` and :obj:`displacements` will be converted to :obj:`numpy.float64` for computation.
+        The input :obj:`connectivity` will be converted to :obj:`numpy.int64` for computation.
+        
     .. warning::
 
-        This is an internal function and should not be called directly.
-
+        No tests are performed to check if the inputs array content are consistent (e.g., if the connectivity contains invalid vertex indices, if the displacements are valid, ...).
+        Only the shapes and types of the input arrays are validated. The behavior of the function is undefined if the input arrays are not consistent.
+    
+    
     Parameters
     ----------
-    graph : :class:`dict`
-        A dictionary representing the adjacency list of the graph, where keys are vertex indices and values are lists of adjacent vertex indices.
-
-    start_index : :class:`int`
-        The starting vertex index for the BFS.
-
-    n_points : :class:`int`
-        The total number of vertices in the graph.
-
+    vertices_coordinates: ArrayLike
+        An array of shape :math:`(N_v, E)` representing the coordinates of the vertices in the embedded space of dimension :math:`E`.
+        
+    connectivity: ArrayLike
+        An array of shape :math:`(N_e, 3)` representing the connectivity of the triangular elements.
+        
+    displacements: ArrayLike
+        An array of shape :math:`(N_v, E)` representing the displacements of the vertices in the embedded space of dimension :math:`E`.
+        
+        
     Returns
     -------
     :class:`numpy.ndarray`
-        An array of shape (:math:`N_v`,) representing the shortest path distances from the starting vertex to all other vertices.
-
-    """
-    # Breadth-first search (BFS) to find shortest paths from vertex i
-    distances = [-1] * n_vertices  # -1 indicates unvisited vertices
-    distances[start_index] = 0
-    queue = deque([start_index])
-
-    while queue:
-        node = queue.popleft()
-        current_distance = distances[node]
+        An array of shape :math:`(N_e, E, E)` representing the strain tensor for each triangular element along the global coordinates :math:`(x, y, z, ...)`.
         
-        for neighbor in graph[node]:
-            if distances[neighbor] == -1:  # Not visited neighbor
-                distances[neighbor] = current_distance + 1
-                queue.append(neighbor)
+        
+    Raises
+    ------
+    TypeError
+        If the inputs are not numpy arrays.
+        
+    ValueError
+        If the input arrays do not have the correct shapes.
+        
+        
+    Notes
+    -----
+    The strain tensor is computed as the symmetric part of the displacement gradient tensor.
+    
+    .. math::
+    
+        \boldsymbol{\varepsilon} = \frac{1}{2} \left( \nabla \mathbf{U} + (\nabla \mathbf{U})^T \right)
+        
+    The displacement gradient tensor :math:`\nabla \mathbf{U}` is obtained by differentiating the displacement field
+    with respect to the global coordinates using the shape function derivatives for triangular elements such as:
+    
+    .. math::
 
-    return numpy.array(distances, dtype=numpy.int64)
+        \nabla_X U(\xi, \eta, \zeta, ...) = J \cdot (J^T J)^{-1} \cdot \sum_{i=1}^{N_{vpe}} \nabla_{\xi} N_i(\xi, \eta, \zeta, ...) U_i
 
+    where :math:`J` is the Jacobian matrix of the transformation from natural coordinates to global coordinates,
+    :math:`N_i` are the shape functions, and :math:`U_i` are the nodal displacements.
+    
+    If the embedded space dimension :math:`E` is equal to the topological dimension of the element (:math:`K=2` for triangular elements),
+    the strain tensor can be directly compute using Jacobian inverse : 
+    
+    .. math::
 
-
-def triangle_3_build_vertices_adjacency_matrix(
-    edges: numpy.ndarray,
-    n_vertices: Optional[int] = None,
-) -> numpy.ndarray:
-    r"""
-    Build the vertices path distance matrix (adjacency matrix) from the edges of a triangular mesh.
-
-    The distance between two vertices is defined as the minimum number of edges that must be traversed to go from one vertex to another.
-    The output is a symmetric square matrix of shape (:math:`N_v`, :math:`N_v`), where :math:`N_v` is the number of vertices.
-
-    .. seealso::
-
-        - :func:`triangle_3_build_elements_adjacency_matrix` for building the elements path distance matrix.
-
-    Parameters
-    ----------
-    edges : numpy.ndarray
-        An array of shape (:math:`N_{ed}`, 2) representing the vertex indices.
-
-    n_vertices : Optional[int], optional
-        The total number of vertices in the mesh. If :obj:`None`, it is inferred from the maximum vertex index in the edges, by default :obj:`None`.
-
-    Returns
-    -------
-    numpy.ndarray
-        A square array of shape (:math:`N_v`, :math:`N_v`) representing the path distance matrix between vertices.
-
-
-    Example
-    -------
+        \nabla_X U(\xi, \eta, \zeta, ...) = J^{-1} \cdot \sum_{i=1}^{N_{vpe}} \nabla_{\xi} N_i(\xi, \eta, \zeta, ...) U_i
+    
+    
+    See Also
+    --------
+    pysdic.compute_jacobian_matrix
+        For constructing the Jacobian matrix :math:`J` of the transformation from natural coordinates :math:`(\xi, \eta, \zeta, ...)` to
+        global coordinates :math:`(x, y, z, ...)`.
+        
+    pysdic.compute_property_derivative
+        Derivate a property defined at the nodes of a mesh to given integration points within elements with respect to global coordinates :math:`(x,y,z,...)` using shape function derivatives.
+    
+    
+    Examples
+    --------
+    Computing the strain tensor for triangular elements:
+    
     .. code-block:: python
+        :linenos:
 
         import numpy as np
-        from pysdic import triangle_3_build_vertices_adjacency_matrix
+        from pysdic import triangle_3_compute_elements_strains
 
-        edges = np.array([[0, 1],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4],
-                          [1, 3]])  # shape (5, 2)
-
-        distance_matrix = triangle_3_build_vertices_adjacency_matrix(edges)
-        print(distance_matrix)
-
-    The output will be:
-
-    .. code-block:: console
-
-        [[0 1 2 2 3]
-         [1 0 1 1 2]
-         [2 1 0 1 2]
-         [2 1 1 0 1]
-         [3 2 2 1 0]]
-        
-    """
-    edges = numpy.asarray(edges)
-    if not numpy.issubdtype(edges.dtype, numpy.integer):
-        edges = edges.astype(numpy.int64)
-
-    if edges.ndim != 2 or edges.shape[1] != 2:
-        raise ValueError(f"edges must be of shape (N_ed, 2), got {edges.shape}.")
-    
-    if n_vertices is not None and (not isinstance(n_vertices, int) or n_vertices <= 0):
-        raise ValueError(f"n_vertices must be a positive integer or None, got {n_vertices}.")
-    
-    if edges.shape[0] == 0:
-        if n_vertices is None:
-            return numpy.empty((0, 0), dtype=numpy.int64)
-        else:
-            return numpy.zeros((n_vertices, n_vertices), dtype=numpy.int64)
-        
-    if n_vertices is None:
-        n_vertices = numpy.max(edges) + 1
-    
-    # Build the graph adjacency matrix
-    graph = {}
-    for (u, v) in edges:
-        if u not in graph:
-            graph[u] = []
-        if v not in graph:
-            graph[v] = []
-        graph[u].append(v)
-        graph[v].append(u)
-
-    # Initialize the distance matrix with zeros
-    distance_matrix = numpy.zeros((n_vertices, n_vertices), dtype=numpy.int64)
-
-    # Fill the upper triangle of the distance matrix
-    for i in range(n_vertices):
-        distances = _bfs_distance(graph, i, n_vertices)
-        distance_matrix[i, :] = distances
-
-    # Make the distance matrix symmetric
-    distance_matrix = numpy.maximum(distance_matrix, distance_matrix.T)
-
-    return distance_matrix
-
-
-def triangle_3_build_elements_adjacency_matrix(
-    connectivity: numpy.ndarray,
-) -> numpy.ndarray:
-    r"""
-    Build the elements path distance matrix (adjacency matrix) from the connectivity of a triangular mesh.
-
-    The distance between two elements is defined as the minimum number of shared edges that must be traversed to go from one element to another.
-    The output is a symmetric square matrix of shape (:math:`N_e`, :math:`N_e`), where :math:`N_e` is the number of elements.
-
-    .. seealso::
-
-        - :func:`triangle_3_build_vertices_adjacency_matrix` for building the vertices path distance matrix.
-
-    Parameters
-    ----------
-    connectivity : numpy.ndarray
-        An array of shape (:math:`N_e`, 3) representing the connectivity of the triangular elements.
-
-    Returns
-    -------
-    numpy.ndarray
-        A square array of shape (:math:`N_e`, :math:`N_e`) representing the path distance matrix between elements.
-
-
-    Example
-    -------
-    .. code-block:: python
-
-        import numpy as np
-        from pysdic import triangle_3_build_elements_adjacency_matrix
+        vertices = np.array([[0, 0, 0],
+                             [1, 0, 0],
+                             [0, 1, 0],
+                             [0, 0, 1]])  # shape (4, 3)
 
         connectivity = np.array([[0, 1, 2],
-                                 [1, 2, 3],
-                                 [2, 3, 4],
-                                 [0, 2, 4]])  # shape (4, 3)
+                                 [0, 1, 3],
+                                 [0, 2, 3],
+                                 [1, 2, 3]])  # shape (4, 3)
 
-        distance_matrix = triangle_3_build_elements_adjacency_matrix(connectivity)
-        print(distance_matrix)
+        displacements = np.array([[0, 0, 0],
+                                  [0.1, 0, 0],
+                                  [0, 0.1, 0],
+                                  [0, 0, 0.1]])  # shape (4, 3)
 
-    The output will be:
+        strains = triangle_3_compute_elements_strains(vertices, connectivity, displacements)
+        print(strains)
 
     .. code-block:: console
 
-        [[0 1 2 1]
-         [1 0 1 2]
-         [2 1 0 3]
-         [1 2 3 0]]
-        
+        [[[ 0.1  0.   0. ]
+          [ 0.   0.1  0. ]
+          [ 0.   0.   0. ]]
+
+         [[ 0.1  0.   0. ]
+          [ 0.   0.   0. ]
+          [ 0.   0.   0.1]]
+
+         [[ 0.   0.   0. ]
+          [ 0.   0.1  0. ]
+          [ 0.   0.   0.1]]
+
+         [[ 0.1 -0.1 -0.1]
+          [-0.1  0.1 -0.1]
+          [-0.1 -0.1  0.1]]]
+          
     """
+    vertices_coordinates = numpy.asarray(vertices_coordinates)
+    if not numpy.issubdtype(vertices_coordinates.dtype, numpy.floating):
+        vertices_coordinates = vertices_coordinates.astype(numpy.float64)
+        
     connectivity = numpy.asarray(connectivity)
     if not numpy.issubdtype(connectivity.dtype, numpy.integer):
         connectivity = connectivity.astype(numpy.int64)
-
+        
+    displacements = numpy.asarray(displacements)
+    if not numpy.issubdtype(displacements.dtype, numpy.floating):
+        displacements = displacements.astype(numpy.float64)
+        
+    if vertices_coordinates.ndim != 2:
+        raise ValueError(f"vertices_coordinates must be of shape (N_v, E), got {vertices_coordinates.shape}.")
+    
     if connectivity.ndim != 2 or connectivity.shape[1] != 3:
         raise ValueError(f"connectivity must be of shape (N_e, 3), got {connectivity.shape}.")
     
-    n_elements = connectivity.shape[0]
-    if n_elements == 0:
-        return numpy.empty((0, 0), dtype=numpy.int64)
-
-    # Build element adjacency graph based on shared edges
-    graph = {i: [] for i in range(n_elements)}
-
-    for i in range(n_elements):
-        vertices = set(connectivity[i])
-        for j in range(i + 1, n_elements):
-            other_vertices = set(connectivity[j])
-            if len(vertices & other_vertices) == 2:  # Shared edge
-                graph[i].append(j)
-                graph[j].append(i)
+    if displacements.ndim != 2 or displacements.shape != vertices_coordinates.shape:
+        raise ValueError(f"displacements must be of shape (N_v, E), got {displacements.shape}.")
+    
+    # Get the gauss point of each triangular element.
+    natural_coordinates = get_triangle_3_gauss_points() # shape (1, 2) // single gauss point at the centroid of the triangle.
+    natural_coordinates = numpy.repeat(natural_coordinates, connectivity.shape[0], axis=0) # shape (N_e, 2)
+    element_indices = numpy.arange(connectivity.shape[0], dtype=numpy.int64)  # shape (N_e,)
         
-    # Initialize the distance matrix with zeros
-    distance_matrix = numpy.zeros((n_elements, n_elements), dtype=numpy.int64)
-
-    # Fill the upper triangle of the distance matrix
-    for i in range(n_elements):
-        distances = _bfs_distance(graph, i, n_elements)
-        distance_matrix[i, :] = distances
-
-    # Make the distance matrix symmetric
-    distance_matrix = numpy.maximum(distance_matrix, distance_matrix.T)
-
-    return distance_matrix
+    # Derivate the displacements at the gauss points with respect to global coordinates
+    displacement_gradients = compute_property_derivative(
+        property_array=displacements,
+        vertices_coordinates=vertices_coordinates,
+        connectivity=connectivity,
+        element_type="triangle_3",
+        natural_coordinates=natural_coordinates,
+        element_indices=element_indices, 
+    ) # shape (N_e, N_d, E) where N_d is the size of property (here displacements N_d=E) and E is the embedded space dimension.
+    
+    # Compute the strain tensor as the symmetric part of the displacement gradient tensor
+    strain = 0.5 * (displacement_gradients + numpy.transpose(displacement_gradients, (0, 2, 1)))  # shape (N_e, E, E)
+    
+    return strain
+    

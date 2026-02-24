@@ -27,8 +27,7 @@ __all__.extend(['BlenderExperiment'])
 from .blender_spotlight import BlenderSpotLight
 __all__.extend(['BlenderSpotLight'])
 
-from  .blender_mesh import BlenderMesh
-__all__.extend(['BlenderMesh'])
-
 from .blender_camera import BlenderCamera
 __all__.extend(['BlenderCamera'])
+
+from .. import *

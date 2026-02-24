@@ -26,14 +26,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install sphinx pydata-sphinx-theme
+        pip install sphinx pydata-sphinx-theme sphinx-copybutton sphinx-gallery sphinx_design
         pip install .
 
     - name: Build documentation
       run: |
         sphinx-autogen -o docs/source/generated/ docs/source/api_documentation/*.rst
         python3 docs/source/autosummary_change_titles.py
-        sphinx-build -b html docs/source/ public/
+        sphinx-build -v -b html docs/source/ public/
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
