@@ -19,7 +19,7 @@ In this section:
 
 - ``graph`` is a ``List[List[int]]`` containing for each vertex the list of its neighbors.
 - ``adjacency_matrix`` is a Numpy or Scipy sparse square matrix of integers storing the distance between vertices in the graph.
-- ``neighborhood`` is a list of Numpy arrays containing for each vertex the list of its neighbors within a certain distance.
+- ``neighborhood`` is a ``List[List[int]]`` containing for each vertex the list of its neighbors within a certain distance.
 
 Core algorithms (BFS)
 -------------------------
