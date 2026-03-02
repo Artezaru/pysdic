@@ -12,6 +12,9 @@ Python Stereo Digital Image Correlation Toolbox.
    Therefore, all float arrays are automatically converted to ``numpy.float64`` for computation and all integer arrays are converted to ``numpy.int64`` for computation.
    This means that when you pass arrays to the functions in the package, they will be converted to these data types if they are not already in that format.
 
+This package cames with an other package called ``pycvcam`` to define the camera models.
+
+
 Contents
 --------
 
