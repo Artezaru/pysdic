@@ -1401,7 +1401,7 @@ class BlenderCamera(object):
         # Create the dictionary
         data = {
             "type": "BlenderCamera",
-            "frame": self.frame.save_to_dict(),
+            "frame": self.frame.to_dict(),
             "fx": self.fx,
             "fy": self.fy,
             "cx": self.cx,
@@ -1453,7 +1453,7 @@ class BlenderCamera(object):
             raise ValueError("data must be a dictionary.")
 
         # Create the BlenderCamera instance
-        frame = Frame.load_from_dict(data["frame"])
+        frame = Frame.from_dict(data["frame"])
         camera = cls(frame=frame)
 
         # Set the parameters

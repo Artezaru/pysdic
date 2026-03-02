@@ -19,6 +19,7 @@ from py3dframe import Frame, Rotation
 import numpy
 from numbers import Number
 
+
 class BlenderSpotLight(object):
     r"""
     Represents a spot light in 3D space with a defined position and orientation.
@@ -26,15 +27,15 @@ class BlenderSpotLight(object):
     The spot light orientation is defined by the frame.
     The spot light emits along the z-axis of the frame.
 
-    The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV): 
+    The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV):
 
     - origin: The position of the light in 3D space.
     - x-axis: any direction perpendicular to the optical axis of the light.
     - y-axis: any direction perpendicular to the optical axis of the light.
     - z-axis: The optical axis of the light (from the light to the scene).
 
-    The attribute ``spot_size`` is the apperture angle of the spot light. 
-    It is defined as the angle between the two edges of the cone of light emitted by the spot light. 
+    The attribute ``spot_size`` is the apperture angle of the spot light.
+    It is defined as the angle between the two edges of the cone of light emitted by the spot light.
     The figure below shows the definition of the spot light size in Blender (Image source: Blender Manual)
 
     .. figure:: /_static/blender/blender_spot_light_size.png
@@ -42,7 +43,7 @@ class BlenderSpotLight(object):
         :align: center
 
         Blender spot light size definition.
-    
+
     The attribute ``spot_blend`` is the proportion of the spot light this a smooth transition between the spot light and the background light.
     Setting the ``spot_blend`` to 0.0 will create a sharp transition between the spot light and the background light.
 
@@ -75,7 +76,6 @@ class BlenderSpotLight(object):
         self.spot_blend = spot_blend
         self.energy = energy
 
-
     # ==============================================
     # Property getters and setters
     # ==============================================
@@ -86,7 +86,7 @@ class BlenderSpotLight(object):
 
         The spot light emits along the z-axis of the frame.
 
-            The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV): 
+            The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV):
 
             - origin: The position of the light in 3D space.
             - x-axis: any direction perpendicular to the optical axis of the light.
@@ -109,22 +109,21 @@ class BlenderSpotLight(object):
         if not isinstance(frame, Frame):
             raise ValueError("Frame must be a Frame object.")
         self._frame = frame
-    
 
     @property
     def spot_size(self) -> Optional[float]:
         """
-        Get or set the spot_size of the spot light.      
+        Get or set the spot_size of the spot light.
 
-        The attribute ``spot_size`` is the apperture angle of the spot light. 
-        It is defined as the angle between the two edges of the cone of light emitted by the spot light. 
+        The attribute ``spot_size`` is the apperture angle of the spot light.
+        It is defined as the angle between the two edges of the cone of light emitted by the spot light.
         The figure below shows the definition of the spot light size in Blender (Image source: Blender Manual)
 
         .. figure:: /_static/blender/blender_spot_light_size.png
             :width: 400
             :align: center
 
-            Blender spot light size definition.  
+            Blender spot light size definition.
 
         Returns
         -------
@@ -132,22 +131,22 @@ class BlenderSpotLight(object):
             The spot size of the light in radians.
         """
         return self._spot_size
-    
+
     @spot_size.setter
     def spot_size(self, spot_size: float) -> None:
         if not isinstance(spot_size, Number):
             raise ValueError("spot_size must be a number.")
         if not 0 <= spot_size <= numpy.pi:
-            raise ValueError("spot_size must be between 0 and pi radians (180 degrees).")
+            raise ValueError(
+                "spot_size must be between 0 and pi radians (180 degrees)."
+            )
         self._spot_size = float(spot_size)
-
-
 
     @property
     def spot_blend(self) -> float:
         """
         Get or set the spot_blend value of the spot light.
-        
+
         The attribute ``spot_blend`` is the proportion of the spot light this a smooth transition between the spot light and the background light.
         Setting the ``spot_blend`` to 0.0 will create a sharp transition between the spot light and the background light.
 
@@ -166,13 +165,11 @@ class BlenderSpotLight(object):
             raise ValueError("spot_blend must be between 0 and 1.")
         self._spot_blend = float(spot_blend)
 
-
-
     @property
     def energy(self) -> float:
         """
         Get or set the energy of the spot light.
-        
+
         The energy of the spot light. The energy this light would emit over its entire area if it wasn’t limited by the spot angle.
         The energy is used to calculate the intensity of the light in the scene.
 
@@ -182,7 +179,7 @@ class BlenderSpotLight(object):
             The energy of the light.
         """
         return self._energy
-    
+
     @energy.setter
     def energy(self, energy: float) -> None:
         if not isinstance(energy, (int, float)):
@@ -190,7 +187,6 @@ class BlenderSpotLight(object):
         if energy < 0:
             raise ValueError("Energy must be greater than or equal to 0.")
         self._energy = float(energy)
-
 
     # =============================================
     # OpenCV and OpenGL methods
@@ -206,14 +202,14 @@ class BlenderSpotLight(object):
         -------
         Rotation
             The rotation of the light.
-        
+
         numpy.ndarray
             The translation of the light with shape (3, 1).
         """
         rotation = self.frame.get_global_rotation(convention=4)
         translation = self.frame.get_global_translation(convention=4)
         return rotation, translation
-    
+
     def set_OpenCV_RT(self, rotation: Rotation, translation: numpy.ndarray) -> None:
         r"""
         Get the rotation and translation of the spotlight in the OpenCV format.
@@ -231,7 +227,7 @@ class BlenderSpotLight(object):
         """
         self.frame.set_global_rotation(rotation, convention=4)
         self.frame.set_global_translation(translation, convention=4)
-    
+
     def get_OpenGL_RT(self) -> Tuple[Rotation, numpy.ndarray]:
         r"""
         Get the rotation and translation of the light in the OpenGL format.
@@ -251,18 +247,18 @@ class BlenderSpotLight(object):
         -------
         Rotation
             The rotation of the light.
-        
+
         numpy.ndarray
             The translation of the light with shape (3, 1).
         """
         rotation = self.frame.get_global_rotation(convention=0)
         x_axis = rotation.as_matrix()[:, 0].reshape((3, 1))
-        y_axis = - rotation.as_matrix()[:, 1].reshape((3, 1))
-        z_axis = - rotation.as_matrix()[:, 2].reshape((3, 1))
+        y_axis = -rotation.as_matrix()[:, 1].reshape((3, 1))
+        z_axis = -rotation.as_matrix()[:, 2].reshape((3, 1))
         rotation = Rotation.from_matrix(numpy.column_stack((x_axis, y_axis, z_axis)))
         translation = self.frame.get_global_translation(convention=0)
         return rotation, translation
-    
+
     def set_OpenGL_RT(self, rotation: Rotation, translation: numpy.ndarray) -> None:
         r"""
         Set the rotation and translation of the light in the OpenGL format.
@@ -282,13 +278,13 @@ class BlenderSpotLight(object):
         -----------
         rotation: Rotation
             The rotation of the light.
-        
+
         translation: numpy.ndarray
             The translation of the light with shape (3, 1).
         """
         x_axis = rotation.as_matrix()[:, 0].reshape((3, 1))
-        y_axis = - rotation.as_matrix()[:, 1].reshape((3, 1))
-        z_axis = - rotation.as_matrix()[:, 2].reshape((3, 1))
+        y_axis = -rotation.as_matrix()[:, 1].reshape((3, 1))
+        z_axis = -rotation.as_matrix()[:, 2].reshape((3, 1))
         rotation = Rotation.from_matrix(numpy.column_stack((x_axis, y_axis, z_axis)))
         self.frame.set_global_rotation(rotation, convention=0)
         self.frame.set_global_translation(translation, convention=0)
@@ -338,10 +334,10 @@ class BlenderSpotLight(object):
         # Create the dictionary
         data = {
             "type": "BlenderSpotLight",
-            "frame": self.frame.save_to_dict(),
+            "frame": self.frame.to_dict(),
             "energy": self.energy,
             "spot_size": self.spot_size,
-            "spot_blend": self.spot_blend
+            "spot_blend": self.spot_blend,
         }
 
         # Add the description
@@ -349,10 +345,8 @@ class BlenderSpotLight(object):
             if not isinstance(description, str):
                 raise ValueError("Description must be a string.")
             data["description"] = description
-        
+
         return data
-
-
 
     @classmethod
     def from_dict(cls, data: Dict) -> BlenderSpotLight:
@@ -365,7 +359,7 @@ class BlenderSpotLight(object):
         ----------
         data : dict
             A dictionary containing the spot light's data.
-        
+
         Returns
         -------
         BlenderSpotLight
@@ -379,16 +373,16 @@ class BlenderSpotLight(object):
         # Check for the input type
         if not isinstance(data, dict):
             raise ValueError("data must be a dictionary.")
-        
+
         # Create the Camera instance
-        frame = Frame.load_from_dict(data["frame"])
+        frame = Frame.from_dict(data["frame"])
         spot_size = data.get("spot_size", numpy.pi)
         spot_blend = data.get("spot_blend", 0.0)
         energy = data.get("energy", 1.0)
 
-        return cls(frame=frame, energy=energy, spot_size=spot_size, spot_blend=spot_blend)
-
-
+        return cls(
+            frame=frame, energy=energy, spot_size=spot_size, spot_blend=spot_blend
+        )
 
     def to_json(self, filepath: str, description: Optional[str] = None) -> None:
         """
@@ -400,7 +394,7 @@ class BlenderSpotLight(object):
         ----------
         filepath : str
             The path to the JSON file.
-        
+
         description : Optional[str], optional
             A description of the spot light, by default None.
             If provided, it will be included in the JSON file under the key "description".
@@ -417,8 +411,6 @@ class BlenderSpotLight(object):
         with open(filepath, "w") as file:
             json.dump(data, file, indent=4)
 
-
-    
     @classmethod
     def from_json(cls, filepath: str) -> BlenderSpotLight:
         """
@@ -430,12 +422,12 @@ class BlenderSpotLight(object):
         ----------
         filepath : str
             The path to the JSON file.
-        
+
         Returns
         -------
         BlenderSpotLight
             A BlenderSpotLight instance.
-        
+
         Raises
         ------
         FileNotFoundError
@@ -444,8 +436,6 @@ class BlenderSpotLight(object):
         # Load the dictionary from the JSON file
         with open(filepath, "r") as file:
             data = json.load(file)
-        
+
         # Create the Frame instance
         return cls.from_dict(data)
-
-    
