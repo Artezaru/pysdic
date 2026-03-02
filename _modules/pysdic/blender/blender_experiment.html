@@ -335,13 +335,15 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="k">try</span> <span class="p">:</span> 
+<span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">bpy</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">bmesh</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">bpy_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Object</span>
-<span class="k">except</span> <span class="ne">ImportError</span> <span class="p">:</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] This module can only be used within Blender&#39;s Python environment.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] Some functionalities can raise errors if Blender is not properly initialized.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;[WARNING] Some functionalities can raise errors if Blender is not properly initialized.&quot;</span>
+    <span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
@@ -353,6 +355,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
 
 <div class="viewcode-block" id="BlenderExperiment">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment">[docs]</a>
@@ -368,7 +371,7 @@
 <span class="sd">    This parameters can not be updated after the experiment is created.</span>
 
 <span class="sd">    .. code-block:: python</span>
-<span class="sd">        </span>
+
 <span class="sd">        from pysdic.blender import BlenderExperiment</span>
 
 <span class="sd">        # Example instantiation</span>
@@ -382,6 +385,7 @@
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        If True, prints additional information during the experiment setup (default is False).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nb_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Nb_frames</span><span class="p">,</span> <span class="n">Integral</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Nb_frames must be an integer&quot;</span><span class="p">)</span>
@@ -391,7 +395,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;verbose must be a boolean&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Nb_frames</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_objects</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># {&quot;name&quot; : List[BlenderCamera, List[bool]]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_objects</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># {&quot;name&quot; : List[BlenderCamera, List[bool]]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_spotlight_objects</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mesh_objects</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_active_camera</span> <span class="o">=</span> <span class="kc">None</span>
@@ -399,7 +403,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_blender</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_rendering_settings</span><span class="p">()</span>
 
-        
     <span class="c1"># =======================================================</span>
     <span class="c1"># Reset Blender</span>
     <span class="c1"># =======================================================</span>
@@ -415,7 +418,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Deleting all objects in the active scene</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;SELECT&#39;</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;SELECT&quot;</span><span class="p">)</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
         <span class="c1"># Deleting all meshes</span>
         <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="p">:</span>
@@ -448,9 +451,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">scenes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment_scene&quot;</span><span class="p">)</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>  <span class="c1"># Reset 3D cursor</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Start frame</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># End frame</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># End frame</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] Blender environment reset and new experiment scene initialized.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;[INFO] Blender environment reset and new experiment scene initialized.&quot;</span>
+            <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_default_rendering_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -464,26 +469,25 @@
 <span class="sd">        - Sets the TIFF codec to NONE.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="s1">&#39;CYCLES&#39;</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;GPU&#39;</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="s2">&quot;CYCLES&quot;</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;GPU&quot;</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">view_settings</span><span class="o">.</span><span class="n">view_transform</span> <span class="o">=</span> <span class="s1">&#39;Filmic&#39;</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">view_settings</span><span class="o">.</span><span class="n">view_transform</span> <span class="o">=</span> <span class="s2">&quot;Filmic&quot;</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">compression</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">tiff_codec</span> <span class="o">=</span> <span class="s2">&quot;NONE&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] Blender experiment initialized with default rendering settings.&quot;</span><span class="p">)</span>
-
-
-
-
-
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;[INFO] Blender experiment initialized with default rendering settings.&quot;</span>
+            <span class="p">)</span>
 
     <span class="c1"># =======================================================</span>
     <span class="c1"># Blender Scene Management (CAMERA)</span>
     <span class="c1"># =======================================================</span>
 <div class="viewcode-block" id="BlenderExperiment.add_camera">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.add_camera">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">BlenderCamera</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_camera</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">BlenderCamera</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a camera to the experiment.</span>
 
@@ -510,14 +514,14 @@
 
 <span class="sd">            - :class:`BlenderCamera` for more information on how to define a camera.</span>
 <span class="sd">            - :meth:`update_camera` to update the camera properties in the Blender scene.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the camera with less than 50 characters.</span>
-<span class="sd">        </span>
+
 <span class="sd">        camera : BlenderCamera</span>
-<span class="sd">            The camera object to be added. </span>
+<span class="sd">            The camera object to be added.</span>
 
 <span class="sd">        frames : List[bool], optional</span>
 <span class="sd">            A list of booleans indicating which frames the camera will be active.</span>
@@ -548,14 +552,14 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;camera must be an instance of BlenderCamera&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">camera</span><span class="o">.</span><span class="n">is_complete</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;BlenderCamera is not completely defined.&quot;</span><span class="p">)</span>
-    
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
         <span class="c1"># Create the camera</span>
         <span class="n">camera_data</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">blender_camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">camera_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_objects</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">camera</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="c1"># Store the camera and its frames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_objects</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">camera</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># Store the camera and its frames</span>
 
         <span class="c1"># Link the camera to the scene</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">blender_camera</span><span class="p">)</span>
@@ -570,7 +574,6 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] BlenderCamera &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; added to the experiment.&quot;</span><span class="p">)</span></div>
 
 
-
 <div class="viewcode-block" id="BlenderExperiment.set_camera_frames">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.set_camera_frames">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_camera_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -583,7 +586,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        frames : List[bool], optional</span>
 <span class="sd">            A list of booleans indicating which frames the camera will be active.</span>
 <span class="sd">            If None, the camera will be active for all frames (default is None).</span>
@@ -612,7 +615,7 @@
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;frames must be a list of booleans&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -628,17 +631,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_camera_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the frames for which the camera is active.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        List[bool]</span>
 <span class="sd">            A list of booleans indicating which frames the camera is active.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -652,7 +655,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BlenderCamera with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -660,18 +663,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_objects</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
 
 
-
 <div class="viewcode-block" id="BlenderExperiment.get_camera">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_camera">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">BlenderCamera</span><span class="p">,</span> <span class="n">Object</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the camera object and its Blender object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the camera to retrieve.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[BlenderCamera, Object]</span>
@@ -683,7 +685,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BlenderCamera with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -696,10 +698,9 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;[ERROR] camera must be an instance of BlenderCamera&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blender_camera</span><span class="p">,</span> <span class="n">Object</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;[ERROR] blender_camera must be an instance of Object&quot;</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">camera</span><span class="p">,</span> <span class="n">blender_camera</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderExperiment.get_camera_names">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_camera_names">[docs]</a>
@@ -714,7 +715,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderExperiment.remove_camera">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.remove_camera">[docs]</a>
@@ -740,7 +740,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BlenderCamera with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -755,7 +755,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] BlenderCamera &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; removed from the experiment.&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.update_camera">
@@ -776,7 +775,7 @@
 <span class="sd">            # Update some properties of the camera here</span>
 <span class="sd">            # ...</span>
 <span class="sd">            experiment.update_camera(name=&quot;Camera1&quot;) # To set active the modifications in the Blender scene</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
@@ -798,28 +797,41 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;BlenderCamera is not completely defined.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Set the lens unit of the camera</span>
-        <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">lens_unit</span> <span class="o">=</span> <span class="s1">&#39;MILLIMETERS&#39;</span>
+        <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">lens_unit</span> <span class="o">=</span> <span class="s2">&quot;MILLIMETERS&quot;</span>
 
         <span class="c1"># Set the position and rotation of the camera</span>
         <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">get_OpenGL_RT</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Camera rotation:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Camera translation:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">translation</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rotation</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">translation</span><span class="p">))</span>
+        <span class="n">quat</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_quat</span><span class="p">()</span>
+
         <span class="n">blender_camera</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">translation</span>
-        <span class="n">blender_quaternion</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_quat</span><span class="p">(</span><span class="n">scalar_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># blender convention [qw, qx, qy, qz]</span>
-        <span class="n">blender_camera</span><span class="o">.</span><span class="n">rotation_mode</span> <span class="o">=</span> <span class="s1">&#39;QUATERNION&#39;</span>
-        <span class="n">blender_camera</span><span class="o">.</span><span class="n">rotation_quaternion</span> <span class="o">=</span> <span class="n">blender_quaternion</span> 
+        <span class="n">blender_quaternion</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_quat</span><span class="p">(</span>
+            <span class="n">scalar_first</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>  <span class="c1"># blender convention [qw, qx, qy, qz]</span>
+        <span class="n">blender_camera</span><span class="o">.</span><span class="n">rotation_mode</span> <span class="o">=</span> <span class="s2">&quot;QUATERNION&quot;</span>
+        <span class="n">blender_camera</span><span class="o">.</span><span class="n">rotation_quaternion</span> <span class="o">=</span> <span class="n">blender_quaternion</span>
 
         <span class="c1"># Set the clipping of the camera</span>
         <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">clnear</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_start</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">clnear</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_start</span> <span class="o">=</span> <span class="mf">1e-6</span> <span class="c1"># Lower limit for the near clipping plane</span>
+            <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_start</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="mf">1e-6</span>  <span class="c1"># Lower limit for the near clipping plane</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">clfar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_end</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">clfar</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_end</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span> <span class="c1"># Upper limit for the far clipping plane</span>
+            <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_end</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span>
+            <span class="p">)</span>  <span class="c1"># Upper limit for the far clipping plane</span>
 
         <span class="c1"># Set the focal length of the camera</span>
         <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">lens</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length must be greater than 1 millimeter for Blender.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Focal length must be greater than 1 millimeter for Blender.&quot;</span>
+            <span class="p">)</span>
         <span class="n">blender_camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">lens</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">lens</span>
 
         <span class="c1"># Set size of the sensor</span>
@@ -837,7 +849,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] BlenderCamera &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; updated in the experiment.&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.set_active_camera">
@@ -872,7 +883,7 @@
         <span class="n">camera</span><span class="p">,</span> <span class="n">blender_camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_camera</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">camera</span><span class="o">.</span><span class="n">is_complete</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;BlenderCamera is not completely defined.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Set the active camera</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">blender_camera</span>
 
@@ -894,7 +905,6 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] BlenderCamera &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; set as active in the experiment.&quot;</span><span class="p">)</span></div>
 
 
-
 <div class="viewcode-block" id="BlenderExperiment.get_active_camera">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_active_camera">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_active_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -905,7 +915,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            The name of the active camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        ValueError</span>
@@ -914,15 +924,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_camera</span></div>
 
 
-
-
-
     <span class="c1"># =======================================================</span>
     <span class="c1"># Blender Scene Management (MESH)</span>
     <span class="c1"># =======================================================</span>
 <div class="viewcode-block" id="BlenderExperiment.add_mesh">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.add_mesh">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_mesh</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a mesh to the experiment. (Must be a 3D triangular mesh)</span>
 
@@ -958,7 +967,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh with less than 50 characters.</span>
-<span class="sd">        </span>
+
 <span class="sd">        mesh : Mesh</span>
 <span class="sd">            The mesh object to be added. It must be an instance of Mesh. Must be a 3D triangular mesh.</span>
 
@@ -993,7 +1002,7 @@
 <span class="sd">        The second input of the MixRGB node is the default pattern of the material (white).</span>
 <span class="sd">        It can be setted to any pattern using the ``add_mesh_pattern`` method.</span>
 
-<span class="sd">        The output of the MixRGB node is connected to the ``Base Color`` input of the Principled BSDF node.          </span>
+<span class="sd">        The output of the MixRGB node is connected to the ``Base Color`` input of the Principled BSDF node.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name must be a string&quot;</span><span class="p">)</span>
@@ -1005,16 +1014,16 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists in Blender data.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;mesh must be an instance of Mesh&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">elements_type</span> <span class="o">==</span> <span class="s1">&#39;triangle_3&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span> <span class="o">==</span> <span class="s2">&quot;triangle_3&quot;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_dimensions</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Only 3D triangular meshes are supported.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
         <span class="c1"># Extract the vertices and faces from the mesh</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">points</span>
         <span class="n">cells</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">elements</span>
-        
+
         <span class="c1"># ======================</span>
         <span class="c1"># MESH CREATION</span>
         <span class="c1"># ======================</span>
@@ -1036,10 +1045,10 @@
         <span class="c1"># =======================</span>
 
         <span class="c1"># Creating the material</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mat&#39;</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">:</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mat&quot;</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Material with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mat already exists.&quot;</span><span class="p">)</span>
 
-        <span class="n">blender_material</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mat&#39;</span><span class="p">)</span>
+        <span class="n">blender_material</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mat&quot;</span><span class="p">)</span>
         <span class="n">blender_material</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Assign the material to the object</span>
@@ -1059,29 +1068,43 @@
         <span class="c1">#</span>
         <span class="c1"># If the user add a pattern, we update the second input of the MixRGB node with the pattern.</span>
         <span class="c1"># If the user add a material, we update the first input of the MixRGB node with the color.</span>
-        
+
         <span class="c1"># Access the nodes of the material</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>  <span class="c1"># Access the material&#39;s node tree</span>
         <span class="n">links</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>  <span class="c1"># Access node tree links</span>
 
         <span class="c1"># Create a MixRGB node (type &#39;MIX&#39;) to combine base color and pattern</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MixRGB node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp already exists.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;MixRGB node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp already exists.&quot;</span>
+            <span class="p">)</span>
 
-        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeMixRGB&#39;</span><span class="p">)</span>
-        <span class="n">mix_node</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span>
-        <span class="n">mix_node</span><span class="o">.</span><span class="n">blend_type</span> <span class="o">=</span> <span class="s1">&#39;MULTIPLY&#39;</span>
-        <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Fac&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Full multiplication</span>
+        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ShaderNodeMixRGB&quot;</span><span class="p">)</span>
+        <span class="n">mix_node</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span>
+        <span class="n">mix_node</span><span class="o">.</span><span class="n">blend_type</span> <span class="o">=</span> <span class="s2">&quot;MULTIPLY&quot;</span>
+        <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Fac&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Full multiplication</span>
 
         <span class="c1"># Set the default input values for the MixRGB node</span>
-        <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Default base color (white)</span>
-        <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Default pattern (white)</span>
+        <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Default base color (white)</span>
+        <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Default pattern (white)</span>
 
         <span class="c1"># Ensure the Principled BSDF node exists</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;Principled BSDF&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No &#39;Principled BSDF&#39; node found in the material. Ensure nodes are enabled.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;Principled BSDF&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No &#39;Principled BSDF&#39; node found in the material. Ensure nodes are enabled.&quot;</span>
+            <span class="p">)</span>
 
-        <span class="n">principled</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="s1">&#39;Principled BSDF&#39;</span><span class="p">]</span>
+        <span class="n">principled</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Principled BSDF&quot;</span><span class="p">]</span>
         <span class="n">input_base_color</span> <span class="o">=</span> <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span>
         <span class="n">existing_link</span> <span class="o">=</span> <span class="n">input_base_color</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">input_base_color</span><span class="o">.</span><span class="n">links</span> <span class="k">else</span> <span class="kc">None</span>
 
@@ -1089,10 +1112,13 @@
             <span class="c1"># disconnect the existing link</span>
             <span class="n">links</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">existing_link</span><span class="p">)</span>
             <span class="c1"># connect the existing link to the MixRGB node `Color1`.</span>
-            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">existing_link</span><span class="o">.</span><span class="n">from_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">existing_link</span><span class="o">.</span><span class="n">from_socket</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color1&#39;</span><span class="p">])</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+                <span class="n">existing_link</span><span class="o">.</span><span class="n">from_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">existing_link</span><span class="o">.</span><span class="n">from_socket</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
+                <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
 
         <span class="c1"># Connect the MixRGB node to the Principled BSDF node</span>
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">],</span> <span class="n">input_base_color</span><span class="p">)</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span> <span class="n">input_base_color</span><span class="p">)</span>
 
         <span class="c1"># =========================</span>
         <span class="c1"># FINALIZE MESH</span>
@@ -1108,7 +1134,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; added to the experiment.&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.add_mesh_pattern">
@@ -1132,8 +1157,8 @@
 <span class="sd">            experiment.add_mesh_pattern(name=&quot;Mesh1&quot;, pattern_path=&quot;path/to/pattern.png&quot;)</span>
 
 <span class="sd">        .. warning::</span>
-<span class="sd">        </span>
-<span class="sd">            The UV coordinates of the mesh must be defined in the Mesh object.   </span>
+
+<span class="sd">            The UV coordinates of the mesh must be defined in the Mesh object.</span>
 <span class="sd">            as &quot;uvmap&quot; in the point_data dictionary.</span>
 
 <span class="sd">        .. seealso::</span>
@@ -1144,10 +1169,10 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh.</span>
-<span class="sd">        </span>
+
 <span class="sd">        pattern_path : str</span>
 <span class="sd">            The path to the pattern image file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -1180,9 +1205,13 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pattern_path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pattern path </span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2"> is not valid.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;.bmp&#39;</span><span class="p">,</span> <span class="s1">&#39;.tiff&#39;</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pattern path </span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2"> is not a valid image format.&quot;</span><span class="p">)</span>
-        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpeg&quot;</span><span class="p">,</span> <span class="s2">&quot;.bmp&quot;</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Pattern path </span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2"> is not a valid image format.&quot;</span>
+            <span class="p">)</span>
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1193,18 +1222,26 @@
         <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a UVMAP defined.&quot;</span><span class="p">)</span>
 
-        <span class="n">uvmap</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span> <span class="c1"># Get the UVMap from the mesh (shape: (M, 6))</span>
+        <span class="n">uvmap</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span>  <span class="c1"># Get the UVMap from the mesh (shape: (M, 6))</span>
 
         <span class="c1"># Setting the UVMap</span>
         <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm&quot;</span> <span class="ow">in</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;UVMap with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm already exists.&quot;</span><span class="p">)</span>
-        
+
         <span class="n">uv_layer</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">poly_index</span><span class="p">,</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">):</span> <span class="c1"># poly_index is the index of the polygon in the mesh (ie triangle)</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">loop_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">loop_indices</span><span class="p">):</span> <span class="c1"># index is the index of the vertex in the polygon</span>
-                <span class="n">loop</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loops</span><span class="p">[</span><span class="n">loop_index</span><span class="p">]</span> <span class="c1"># The loop associated to the current vertex in the polygon</span>
-                <span class="n">uv_layer</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">loop</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">uv</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">uvmap</span><span class="p">[</span><span class="n">poly_index</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>  <span class="c1"># Set the UV coordinates for each loop</span>
-            
+        <span class="k">for</span> <span class="n">poly_index</span><span class="p">,</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span>
+        <span class="p">):</span>  <span class="c1"># poly_index is the index of the polygon in the mesh (ie triangle)</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">loop_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                <span class="n">polygon</span><span class="o">.</span><span class="n">loop_indices</span>
+            <span class="p">):</span>  <span class="c1"># index is the index of the vertex in the polygon</span>
+                <span class="n">loop</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loops</span><span class="p">[</span>
+                    <span class="n">loop_index</span>
+                <span class="p">]</span>  <span class="c1"># The loop associated to the current vertex in the polygon</span>
+                <span class="n">uv_layer</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">loop</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">uv</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                    <span class="n">uvmap</span><span class="p">[</span><span class="n">poly_index</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">index</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+                <span class="p">)</span>  <span class="c1"># Set the UV coordinates for each loop</span>
+
         <span class="c1"># Access the material</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; has no material assigned.&quot;</span><span class="p">)</span>
@@ -1217,27 +1254,32 @@
         <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>  <span class="c1"># Access node tree links</span>
 
         <span class="c1"># Add an image texture node</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_imt&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image texture node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt already exists.&quot;</span><span class="p">)</span>
-        
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Image texture node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt already exists.&quot;</span>
+            <span class="p">)</span>
+
         <span class="n">tex_image_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ShaderNodeTexImage&quot;</span><span class="p">)</span>
-        <span class="n">tex_image_node</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_imt&#39;</span>
+        <span class="n">tex_image_node</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt&quot;</span>
         <span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pattern_path</span><span class="p">)</span>
-        <span class="n">tex_image_node</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="s1">&#39;CLIP&#39;</span>  
+        <span class="n">tex_image_node</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;CLIP&quot;</span>
 
         <span class="c1"># Get the MixRGB node and connect the image texture node to it</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MixRGB node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp does not exist.&quot;</span><span class="p">)</span>
-        
-        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span><span class="p">)</span>
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">tex_image_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color2&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;MixRGB node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp does not exist.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span><span class="p">)</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">tex_image_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color2&quot;</span><span class="p">])</span>
 
         <span class="c1"># Update the mesh</span>
         <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Pattern &#39;</span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2">&#39; added to mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in the experiment.&quot;</span><span class="p">)</span></div>
-
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[INFO] Pattern &#39;</span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2">&#39; added to mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in the experiment.&quot;</span>
+            <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BlenderExperiment.add_mesh_material">
@@ -1274,10 +1316,10 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh.</span>
-<span class="sd">        </span>
+
 <span class="sd">        material : BlenderMaterialBSDF</span>
 <span class="sd">            The material object to be added.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -1293,7 +1335,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1306,21 +1348,25 @@
         <span class="n">blender_material</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Material for &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; does not use nodes.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Access the nodes</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>  <span class="c1"># Access the material&#39;s node tree</span>
         <span class="n">_</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>  <span class="c1"># Access node tree links</span>
 
         <span class="c1"># Access the Principled BSDF node</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;Principled BSDF&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No &#39;Principled BSDF&#39; node found in the material. Ensure nodes are enabled.&quot;</span><span class="p">)</span>
-        
-        <span class="n">principled</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Principled BSDF&#39;</span><span class="p">)</span>
-        
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;Principled BSDF&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No &#39;Principled BSDF&#39; node found in the material. Ensure nodes are enabled.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">principled</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Principled BSDF&quot;</span><span class="p">)</span>
+
         <span class="c1"># Access the mix node</span>
-        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span><span class="p">)</span>
+        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">blender_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">mix_node</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No MixRGB node found for mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Ensure the mesh has been added with a material.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No MixRGB node found for mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Ensure the mesh has been added with a material.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Set the properties</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">base_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1339,27 +1385,41 @@
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">weight</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_weight</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">subsurface_weight</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Radius&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_radius</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Radius&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">subsurface_radius</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Scale&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_scale</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Scale&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">subsurface_scale</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_IOR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface IOR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_IOR</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_anisotropy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Anisotropy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">subsurface_anisotropy</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Anisotropy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">subsurface_anisotropy</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">specular_IOR_level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Specular IOR Level&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">specular_IOR_level</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Specular IOR Level&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">specular_IOR_level</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">specular_tint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Specular Tint&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">specular_tint</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">anisotropic</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Anisotropic&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">anisotropic</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">anisotropic_rotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Anisotropic Rotation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">anisotropic_rotation</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Anisotropic Rotation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">anisotropic_rotation</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">tangent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Tangent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">tangent</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">transmission_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Transmission Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">transmission_weight</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Transmission Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">transmission_weight</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">coat_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Coat Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">coat_weight</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">coat_roughness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1373,15 +1433,21 @@
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">sheen_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Sheen Weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">sheen_weight</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">sheen_roughness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Sheen Roughness&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">sheen_roughness</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Sheen Roughness&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">sheen_roughness</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">sheen_tint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Sheen Tint&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">sheen_tint</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">emission_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Emission Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">emission_color</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">emission_strength</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Emission Strength&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">emission_strength</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Emission Strength&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">emission_strength</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">thin_film_thickness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Thin Film Thickness&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">thin_film_thickness</span>
+            <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Thin Film Thickness&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">material</span><span class="o">.</span><span class="n">thin_film_thickness</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">thin_film_IOR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Thin Film IOR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">thin_film_IOR</span>
 
@@ -1390,7 +1456,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Material added to mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in the experiment.&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.set_mesh_frames">
@@ -1405,7 +1470,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh.</span>
-<span class="sd">        </span>
+
 <span class="sd">        frames : List[bool], optional</span>
 <span class="sd">            A list of booleans indicating which frames the mesh will be active.</span>
 <span class="sd">            If None, the mesh will be active for all frames (default is None).</span>
@@ -1434,7 +1499,7 @@
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;frames must be a list of booleans&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1454,7 +1519,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; frames set in the experiment.&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.activate_smooth_shading">
@@ -1483,7 +1547,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1491,7 +1555,9 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">blender_mesh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># Set smooth shading</span>
-        <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;use_smooth&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">))</span>
+        <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span>
+            <span class="s2">&quot;use_smooth&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Update the mesh</span>
         <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
@@ -1505,14 +1571,14 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">deactivate_smooth_shading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deactivate smooth shading for the mesh.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Smooth shading is a rendering technique that gives the appearance of a smooth surface by interpolating vertex normals across the surface of the mesh.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh to deactivate smooth shading for.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -1526,7 +1592,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1534,32 +1600,33 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">blender_mesh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># Set flat shading</span>
-        <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;use_smooth&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">))</span>
+        <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span>
+            <span class="s2">&quot;use_smooth&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Update the mesh</span>
         <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Smooth shading deactivated for mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span></div>
 
 
-    
 <div class="viewcode-block" id="BlenderExperiment.get_mesh_frames">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_mesh_frames">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_mesh_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the frames for which the mesh is active.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        List[bool]</span>
 <span class="sd">            A list of booleans indicating which frames the mesh is active.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -1573,26 +1640,25 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
         <span class="c1"># Get the frames for which the mesh is active</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh_objects</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderExperiment.get_mesh">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_mesh">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">Object</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the mesh object and its Blender object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh to retrieve.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[Mesh, Object]</span>
@@ -1604,7 +1670,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1617,10 +1683,9 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;[ERROR] mesh must be an instance of Mesh&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blender_mesh</span><span class="p">,</span> <span class="n">Object</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;[ERROR] blender_mesh must be an instance of Object&quot;</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">blender_mesh</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderExperiment.get_mesh_names">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_mesh_names">[docs]</a>
@@ -1634,7 +1699,6 @@
 <span class="sd">            A list of mesh names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.remove_mesh">
@@ -1672,7 +1736,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1685,14 +1749,14 @@
         <span class="n">material</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">material</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Material for &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; does not use nodes.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Access the nodes of the material</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>  <span class="c1"># Access the material&#39;s node tree</span>
         <span class="n">_</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>  <span class="c1"># Access node tree links</span>
 
         <span class="c1"># Remove the MixRGB node</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_mbp&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_mbp&quot;</span><span class="p">]</span>
             <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mix_node</span><span class="p">)</span>
 
         <span class="c1"># Remove the material</span>
@@ -1700,13 +1764,13 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
 
         <span class="c1"># Remove the uv_layer</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_uvm&#39;</span> <span class="ow">in</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">:</span>
-            <span class="n">uv_layer</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_uvm&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm&quot;</span> <span class="ow">in</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">:</span>
+            <span class="n">uv_layer</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm&quot;</span><span class="p">]</span>
             <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">uv_layer</span><span class="p">)</span>
 
         <span class="c1"># Remove the image texture node</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_imt&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="n">tex_image_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_imt&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">tex_image_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt&quot;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
             <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tex_image_node</span><span class="p">)</span>
@@ -1746,11 +1810,11 @@
 
 <span class="sd">            The number of nodes must be unchanged !!!</span>
 
-<span class="sd">            Furthermore, this method does not update the material properties of the mesh and the pattern image: </span>
-<span class="sd">            </span>
+<span class="sd">            Furthermore, this method does not update the material properties of the mesh and the pattern image:</span>
+
 <span class="sd">            - To update the material properties, use the :meth:`add_mesh_material` method again.</span>
 <span class="sd">            - To change the pattern image, use the :meth:`change_mesh_pattern` method.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
@@ -1762,7 +1826,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1784,22 +1848,31 @@
             <span class="n">poly</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
         <span class="c1"># Update the uvmap if it exists</span>
-        <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_uvm&#39;</span> <span class="ow">in</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">:</span>
-            <span class="n">uv_layer</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_uvm&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm&quot;</span> <span class="ow">in</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">:</span>
+            <span class="n">uv_layer</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_uvm&quot;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">uvmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">poly_index</span><span class="p">,</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">):</span> <span class="c1"># poly_index is the index of the polygon in the mesh (ie triangle)</span>
-                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">loop_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">loop_indices</span><span class="p">):</span> <span class="c1"># index is the index of the vertex in the polygon</span>
-                        <span class="n">loop</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loops</span><span class="p">[</span><span class="n">loop_index</span><span class="p">]</span> <span class="c1"># The loop associated to the current vertex in the polygon</span>
-                        <span class="n">uv_layer</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">loop</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">uv</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">uvmap</span><span class="p">[</span><span class="n">poly_index</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>  <span class="c1"># Set the UV coordinates for each loop</span>
+                <span class="k">for</span> <span class="n">poly_index</span><span class="p">,</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                    <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span>
+                <span class="p">):</span>  <span class="c1"># poly_index is the index of the polygon in the mesh (ie triangle)</span>
+                    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">loop_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                        <span class="n">polygon</span><span class="o">.</span><span class="n">loop_indices</span>
+                    <span class="p">):</span>  <span class="c1"># index is the index of the vertex in the polygon</span>
+                        <span class="n">loop</span> <span class="o">=</span> <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loops</span><span class="p">[</span>
+                            <span class="n">loop_index</span>
+                        <span class="p">]</span>  <span class="c1"># The loop associated to the current vertex in the polygon</span>
+                        <span class="n">uv_layer</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">loop</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">uv</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                            <span class="n">uvmap</span><span class="p">[</span><span class="n">poly_index</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">index</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+                        <span class="p">)</span>  <span class="c1"># Set the UV coordinates for each loop</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mesh </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a UVMAP defined but the uv_layer exists.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Mesh </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a UVMAP defined but the uv_layer exists.&quot;</span>
+                <span class="p">)</span>
 
         <span class="c1"># Update the mesh</span>
         <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; updated in the experiment.&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="BlenderExperiment.change_mesh_pattern">
@@ -1830,10 +1903,10 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the mesh.</span>
-<span class="sd">        </span>
+
 <span class="sd">        pattern_path : str</span>
 <span class="sd">            The path to the new pattern image file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -1841,7 +1914,7 @@
 <span class="sd">        ValueError</span>
 <span class="sd">            If a mesh with the same name does not exist in the experiment or in Blender data.</span>
 <span class="sd">            If the pattern path is not valid or the image format is not supported.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name must be a string&quot;</span><span class="p">)</span>
@@ -1853,9 +1926,13 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pattern_path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pattern path </span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2"> is not valid.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;.bmp&#39;</span><span class="p">,</span> <span class="s1">&#39;.tiff&#39;</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pattern path </span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2"> is not a valid image format.&quot;</span><span class="p">)</span>
-        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpeg&quot;</span><span class="p">,</span> <span class="s2">&quot;.bmp&quot;</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Pattern path </span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2"> is not a valid image format.&quot;</span>
+            <span class="p">)</span>
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -1874,31 +1951,40 @@
         <span class="n">_</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>  <span class="c1"># Access node tree links</span>
 
         <span class="c1"># Add an image texture node</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_imt&#39;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image texture node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt does not exist.&quot;</span><span class="p">)</span>
-        
-        <span class="n">tex_image_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_imt&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt&quot;</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Image texture node with name [pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt does not exist.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">tex_image_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;[pysdic]_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_imt&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
         <span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pattern_path</span><span class="p">)</span>
-        <span class="n">tex_image_node</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="s1">&#39;CLIP&#39;</span>  <span class="c1"># Set the extension to CLIP to avoid stretching the image</span>
+        <span class="n">tex_image_node</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;CLIP&quot;</span>  <span class="c1"># Set the extension to CLIP to avoid stretching the image</span>
+        <span class="p">)</span>
         <span class="n">tex_image_node</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>  <span class="c1"># Reload the image to apply the changes</span>
 
         <span class="c1"># Update the mesh</span>
         <span class="n">blender_mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Pattern changed to &#39;</span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2">&#39; for mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in the experiment.&quot;</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[INFO] Pattern changed to &#39;</span><span class="si">{</span><span class="n">pattern_path</span><span class="si">}</span><span class="s2">&#39; for mesh &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; in the experiment.&quot;</span>
+            <span class="p">)</span></div>
 
-   
-    
 
     <span class="c1"># =======================================================</span>
     <span class="c1"># Blender Scene Management (SPOTLIGHT)</span>
     <span class="c1"># =======================================================</span>
 <div class="viewcode-block" id="BlenderExperiment.add_spotlight">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.add_spotlight">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_spotlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">spotlight</span><span class="p">:</span> <span class="n">BlenderSpotLight</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_spotlight</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">spotlight</span><span class="p">:</span> <span class="n">BlenderSpotLight</span><span class="p">,</span>
+        <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a spotlight to the experiment.</span>
 
@@ -1921,16 +2007,16 @@
 
 <span class="sd">        .. seealso::</span>
 
-<span class="sd">            - :class:`BlenderSpotLight` for more information on how to define a spotlight.     </span>
+<span class="sd">            - :class:`BlenderSpotLight` for more information on how to define a spotlight.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the spotlight with less than 50 characters.</span>
-<span class="sd">        </span>
+
 <span class="sd">        spotlight : BlenderSpotLight</span>
 <span class="sd">            The spotlight object to be added.</span>
-<span class="sd">        </span>
+
 <span class="sd">        frames : List[bool], optional</span>
 <span class="sd">            A list of booleans indicating which frames the spotlight will be active.</span>
 <span class="sd">            If None, the spotlight will be active for all frames (default is None).</span>
@@ -1961,7 +2047,7 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
         <span class="c1"># Create the spotlight</span>
-        <span class="n">spotlight_data</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">lights</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;SPOT&#39;</span><span class="p">)</span>
+        <span class="n">spotlight_data</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">lights</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;SPOT&quot;</span><span class="p">)</span>
         <span class="n">blender_spotlight</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">spotlight_data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_spotlight_objects</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">spotlight</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 
@@ -1978,10 +2064,11 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Spotlight &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; added to the experiment.&quot;</span><span class="p">)</span></div>
 
 
-    
 <div class="viewcode-block" id="BlenderExperiment.set_spotlight_frames">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.set_spotlight_frames">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_spotlight_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_spotlight_frames</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the frames for which the spotlight will be active.</span>
 <span class="sd">        If None, the spotlight will be active for all frames.</span>
@@ -1991,7 +2078,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the spotlight.</span>
-<span class="sd">        </span>
+
 <span class="sd">        frames : List[bool], optional</span>
 <span class="sd">            A list of booleans indicating which frames the spotlight will be active.</span>
 <span class="sd">            If None, the spotlight will be active for all frames (default is None).</span>
@@ -2020,7 +2107,7 @@
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;frames must be a list of booleans&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -2039,23 +2126,22 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Spotlight &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; frames set in the experiment.&quot;</span><span class="p">)</span></div>
 
 
-
 <div class="viewcode-block" id="BlenderExperiment.get_spotlight_frames">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_spotlight_frames">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_spotlight_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the frames for which the spotlight is active.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the spotlight.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        List[bool]</span>
 <span class="sd">            A list of booleans indicating which frames the spotlight is active.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -2069,26 +2155,25 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spotlight with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
         <span class="c1"># Get the frames for which the spotlight is active</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spotlight_objects</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderExperiment.get_spotlight">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.get_spotlight">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_spotlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">BlenderSpotLight</span><span class="p">,</span> <span class="n">Object</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the spotlight object and its Blender object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            The name of the spotlight to retrieve.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[BlenderSpotLight, Object]</span>
@@ -2100,7 +2185,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spotlight with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -2113,10 +2198,9 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;[ERROR] spotlight must be an instance of BlenderSpotLight&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blender_spotlight</span><span class="p">,</span> <span class="n">Object</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;[ERROR] blender_spotlight must be an instance of Object&quot;</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">spotlight</span><span class="p">,</span> <span class="n">blender_spotlight</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderExperiment.remove_spotlight">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.remove_spotlight">[docs]</a>
@@ -2142,7 +2226,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spotlight with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -2155,7 +2239,6 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Spotlight &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; removed from the experiment.&quot;</span><span class="p">)</span></div>
 
 
-    
 <div class="viewcode-block" id="BlenderExperiment.update_spotlight">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.update_spotlight">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_spotlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -2174,11 +2257,11 @@
 <span class="sd">            # Update some nodes of the spotlight here</span>
 <span class="sd">            # ...</span>
 <span class="sd">            experiment.update_spotlight(name=&quot;Spotlight1&quot;) # To set active the modifications in the Blender scene</span>
-<span class="sd">        </span>
+
 <span class="sd">        .. warning::</span>
 
 <span class="sd">            This method does not update the material properties of the spotlight.</span>
-<span class="sd">            Only the position and rotation are updated.  </span>
+<span class="sd">            Only the position and rotation are updated.</span>
 <span class="sd">            The number of nodes mustnot be changed.</span>
 
 <span class="sd">        Parameters</span>
@@ -2192,7 +2275,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spotlight with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No object with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> in Blender data.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -2202,8 +2285,10 @@
         <span class="c1"># Set the position and rotation of the camera</span>
         <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span> <span class="o">=</span> <span class="n">spotlight</span><span class="o">.</span><span class="n">get_OpenGL_RT</span><span class="p">()</span>
         <span class="n">blender_spotlight</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">translation</span>
-        <span class="n">blender_quaternion</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_quat</span><span class="p">(</span><span class="n">scalar_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># blender convention [qw, qx, qy, qz]</span>
-        <span class="n">blender_spotlight</span><span class="o">.</span><span class="n">rotation_mode</span> <span class="o">=</span> <span class="s1">&#39;QUATERNION&#39;</span>
+        <span class="n">blender_quaternion</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_quat</span><span class="p">(</span>
+            <span class="n">scalar_first</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>  <span class="c1"># blender convention [qw, qx, qy, qz]</span>
+        <span class="n">blender_spotlight</span><span class="o">.</span><span class="n">rotation_mode</span> <span class="o">=</span> <span class="s2">&quot;QUATERNION&quot;</span>
         <span class="n">blender_spotlight</span><span class="o">.</span><span class="n">rotation_quaternion</span> <span class="o">=</span> <span class="n">blender_quaternion</span>
 
         <span class="c1"># Set the spotlight properties</span>
@@ -2218,16 +2303,14 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Spotlight &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; updated in the experiment.&quot;</span><span class="p">)</span></div>
 
 
-
-
     <span class="c1"># =======================================================</span>
     <span class="c1"># Blender Scene Management (DEFAULT)</span>
     <span class="c1"># =======================================================</span>
 <div class="viewcode-block" id="BlenderExperiment.set_default_background">
 <a class="viewcode-back" href="../../../_docs/blender_experiment.html#pysdic.blender.BlenderExperiment.set_default_background">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_default_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        Set the default background for the experiment scene. </span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the default background for the experiment scene.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">worlds</span><span class="p">[</span><span class="s2">&quot;World&quot;</span><span class="p">]</span>
@@ -2255,7 +2338,7 @@
 
         <span class="c1"># Update the scene</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">ptcache</span><span class="o">.</span><span class="n">free_bake_all</span><span class="p">()</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">ptcache</span><span class="o">.</span><span class="n">bake_all</span><span class="p">()</span>       
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">ptcache</span><span class="o">.</span><span class="n">bake_all</span><span class="p">()</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">depsgraph</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
@@ -2273,7 +2356,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        frame : int</span>
 <span class="sd">            The frame number to set.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        -------</span>
 <span class="sd">        TypeError</span>
@@ -2285,7 +2368,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;frame must be an integer&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">frame</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">frame</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;frame must be between 1 and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_end_frame</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
@@ -2294,9 +2377,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Active frame set to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span><span class="si">}</span><span class="s2"> in the experiment scene.&quot;</span><span class="p">)</span></div>
-
-
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[INFO] Active frame set to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span><span class="si">}</span><span class="s2"> in the experiment scene.&quot;</span>
+            <span class="p">)</span></div>
 
 
     <span class="c1"># =======================================================</span>
@@ -2311,8 +2394,8 @@
         <span class="n">color_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span>
         <span class="n">color_depth</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;8&quot;</span><span class="p">,</span>
         <span class="n">N_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-        <span class="n">default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render the experiment scene.</span>
 
@@ -2323,13 +2406,13 @@
 
 <span class="sd">        output_format : str, optional</span>
 <span class="sd">            The output format of the rendered image (default is &quot;TIFF&quot;).</span>
-<span class="sd">        </span>
+
 <span class="sd">        color_mode : str, optional</span>
 <span class="sd">            The color mode of the rendered image (default is &quot;BW&quot;).</span>
 
 <span class="sd">        color_depth : str, optional</span>
 <span class="sd">            The color depth of the rendered image (default is &quot;8&quot;).</span>
-<span class="sd">        </span>
+
 <span class="sd">        N_samples : int, optional</span>
 <span class="sd">            The number of samples for rendering (default is 200).</span>
 
@@ -2346,20 +2429,26 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;output_path must be a string&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Ensure the experiment scene is active</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_experiment_scene</span>
 
         <span class="c1"># Set the current frame and camera</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No active frame set. Use set_active_frame() to set the current frame.&quot;</span><span class="p">)</span>
-        
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No active frame set. Use set_active_frame() to set the current frame.&quot;</span>
+            <span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_camera</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No active camera set. Use set_active_camera() to set the current camera.&quot;</span><span class="p">)</span>
-        
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No active camera set. Use set_active_camera() to set the current camera.&quot;</span>
+            <span class="p">)</span>
+
         <span class="n">camera_frames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_camera_frames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_camera</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">camera_frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BlenderCamera </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_camera</span><span class="si">}</span><span class="s2"> is not active for frame </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;BlenderCamera </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_camera</span><span class="si">}</span><span class="s2"> is not active for frame </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_frame</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Set the render settings</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">file_format</span> <span class="o">=</span> <span class="n">output_format</span>
@@ -2371,8 +2460,8 @@
         <span class="c1"># If default is True, set the default render settings</span>
         <span class="k">if</span> <span class="n">default</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_rendering_settings</span><span class="p">()</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="s1">&#39;CYCLES&#39;</span>
-  
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="s2">&quot;CYCLES&quot;</span>
+
         <span class="c1"># Perform the rendering</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">write_still</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rendered image saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
