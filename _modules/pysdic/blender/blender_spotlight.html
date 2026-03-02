@@ -340,6 +340,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Number</span>
 
+
 <div class="viewcode-block" id="BlenderSpotLight">
 <a class="viewcode-back" href="../../../_docs/blender_spotlight.html#pysdic.blender.BlenderSpotLight">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BlenderSpotLight</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -349,15 +350,15 @@
 <span class="sd">    The spot light orientation is defined by the frame.</span>
 <span class="sd">    The spot light emits along the z-axis of the frame.</span>
 
-<span class="sd">    The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV): </span>
+<span class="sd">    The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV):</span>
 
 <span class="sd">    - origin: The position of the light in 3D space.</span>
 <span class="sd">    - x-axis: any direction perpendicular to the optical axis of the light.</span>
 <span class="sd">    - y-axis: any direction perpendicular to the optical axis of the light.</span>
 <span class="sd">    - z-axis: The optical axis of the light (from the light to the scene).</span>
 
-<span class="sd">    The attribute ``spot_size`` is the apperture angle of the spot light. </span>
-<span class="sd">    It is defined as the angle between the two edges of the cone of light emitted by the spot light. </span>
+<span class="sd">    The attribute ``spot_size`` is the apperture angle of the spot light.</span>
+<span class="sd">    It is defined as the angle between the two edges of the cone of light emitted by the spot light.</span>
 <span class="sd">    The figure below shows the definition of the spot light size in Blender (Image source: Blender Manual)</span>
 
 <span class="sd">    .. figure:: /_static/blender/blender_spot_light_size.png</span>
@@ -365,7 +366,7 @@
 <span class="sd">        :align: center</span>
 
 <span class="sd">        Blender spot light size definition.</span>
-<span class="sd">    </span>
+
 <span class="sd">    The attribute ``spot_blend`` is the proportion of the spot light this a smooth transition between the spot light and the background light.</span>
 <span class="sd">    Setting the ``spot_blend`` to 0.0 will create a sharp transition between the spot light and the background light.</span>
 
@@ -398,7 +399,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spot_blend</span> <span class="o">=</span> <span class="n">spot_blend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">energy</span>
 
-
     <span class="c1"># ==============================================</span>
     <span class="c1"># Property getters and setters</span>
     <span class="c1"># ==============================================</span>
@@ -409,7 +409,7 @@
 
 <span class="sd">        The spot light emits along the z-axis of the frame.</span>
 
-<span class="sd">            The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV): </span>
+<span class="sd">            The frame of the light defines the orientation of the camera in 3D space with (convention OPENCV):</span>
 
 <span class="sd">            - origin: The position of the light in 3D space.</span>
 <span class="sd">            - x-axis: any direction perpendicular to the optical axis of the light.</span>
@@ -432,22 +432,21 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">Frame</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Frame must be a Frame object.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">frame</span>
-    
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">spot_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get or set the spot_size of the spot light.      </span>
+<span class="sd">        Get or set the spot_size of the spot light.</span>
 
-<span class="sd">        The attribute ``spot_size`` is the apperture angle of the spot light. </span>
-<span class="sd">        It is defined as the angle between the two edges of the cone of light emitted by the spot light. </span>
+<span class="sd">        The attribute ``spot_size`` is the apperture angle of the spot light.</span>
+<span class="sd">        It is defined as the angle between the two edges of the cone of light emitted by the spot light.</span>
 <span class="sd">        The figure below shows the definition of the spot light size in Blender (Image source: Blender Manual)</span>
 
 <span class="sd">        .. figure:: /_static/blender/blender_spot_light_size.png</span>
 <span class="sd">            :width: 400</span>
 <span class="sd">            :align: center</span>
 
-<span class="sd">            Blender spot light size definition.  </span>
+<span class="sd">            Blender spot light size definition.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -455,22 +454,22 @@
 <span class="sd">            The spot size of the light in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spot_size</span>
-    
+
     <span class="nd">@spot_size</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">spot_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spot_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spot_size</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;spot_size must be a number.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">spot_size</span> <span class="o">&lt;=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;spot_size must be between 0 and pi radians (180 degrees).&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;spot_size must be between 0 and pi radians (180 degrees).&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_spot_size</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">spot_size</span><span class="p">)</span>
-
-
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">spot_blend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or set the spot_blend value of the spot light.</span>
-<span class="sd">        </span>
+
 <span class="sd">        The attribute ``spot_blend`` is the proportion of the spot light this a smooth transition between the spot light and the background light.</span>
 <span class="sd">        Setting the ``spot_blend`` to 0.0 will create a sharp transition between the spot light and the background light.</span>
 
@@ -489,13 +488,11 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;spot_blend must be between 0 and 1.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_spot_blend</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">spot_blend</span><span class="p">)</span>
 
-
-
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or set the energy of the spot light.</span>
-<span class="sd">        </span>
+
 <span class="sd">        The energy of the spot light. The energy this light would emit over its entire area if it wasn’t limited by the spot angle.</span>
 <span class="sd">        The energy is used to calculate the intensity of the light in the scene.</span>
 
@@ -505,7 +502,7 @@
 <span class="sd">            The energy of the light.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span>
-    
+
     <span class="nd">@energy</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
@@ -513,7 +510,6 @@
         <span class="k">if</span> <span class="n">energy</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Energy must be greater than or equal to 0.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
-
 
     <span class="c1"># =============================================</span>
     <span class="c1"># OpenCV and OpenGL methods</span>
@@ -531,7 +527,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        Rotation</span>
 <span class="sd">            The rotation of the light.</span>
-<span class="sd">        </span>
+
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The translation of the light with shape (3, 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -539,7 +535,7 @@
         <span class="n">translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_translation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span></div>
 
-    
+
 <div class="viewcode-block" id="BlenderSpotLight.set_OpenCV_RT">
 <a class="viewcode-back" href="../../../_docs/blender_spotlight.html#pysdic.blender.BlenderSpotLight.set_OpenCV_RT">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_OpenCV_RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -560,7 +556,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_rotation</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_translation</span><span class="p">(</span><span class="n">translation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
-    
+
 <div class="viewcode-block" id="BlenderSpotLight.get_OpenGL_RT">
 <a class="viewcode-back" href="../../../_docs/blender_spotlight.html#pysdic.blender.BlenderSpotLight.get_OpenGL_RT">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_OpenGL_RT</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Rotation</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
@@ -582,19 +578,19 @@
 <span class="sd">        -------</span>
 <span class="sd">        Rotation</span>
 <span class="sd">            The rotation of the light.</span>
-<span class="sd">        </span>
+
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The translation of the light with shape (3, 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_rotation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">x_axis</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">)))</span>
         <span class="n">translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_translation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span></div>
 
-    
+
 <div class="viewcode-block" id="BlenderSpotLight.set_OpenGL_RT">
 <a class="viewcode-back" href="../../../_docs/blender_spotlight.html#pysdic.blender.BlenderSpotLight.set_OpenGL_RT">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_OpenGL_RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -616,13 +612,13 @@
 <span class="sd">        -----------</span>
 <span class="sd">        rotation: Rotation</span>
 <span class="sd">            The rotation of the light.</span>
-<span class="sd">        </span>
+
 <span class="sd">        translation: numpy.ndarray</span>
 <span class="sd">            The translation of the light with shape (3, 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x_axis</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_rotation</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_translation</span><span class="p">(</span><span class="n">translation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
@@ -675,10 +671,10 @@
         <span class="c1"># Create the dictionary</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;BlenderSpotLight&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">save_to_dict</span><span class="p">(),</span>
+            <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
             <span class="s2">&quot;energy&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span>
             <span class="s2">&quot;spot_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spot_size</span><span class="p">,</span>
-            <span class="s2">&quot;spot_blend&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spot_blend</span>
+            <span class="s2">&quot;spot_blend&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spot_blend</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># Add the description</span>
@@ -686,10 +682,8 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Description must be a string.&quot;</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
-        
+
         <span class="k">return</span> <span class="n">data</span></div>
-
-
 
 
 <div class="viewcode-block" id="BlenderSpotLight.from_dict">
@@ -705,7 +699,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        data : dict</span>
 <span class="sd">            A dictionary containing the spot light&#39;s data.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        BlenderSpotLight</span>
@@ -719,16 +713,16 @@
         <span class="c1"># Check for the input type</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;data must be a dictionary.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Create the Camera instance</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">load_from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">])</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">])</span>
         <span class="n">spot_size</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spot_size&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="n">spot_blend</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spot_blend&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
         <span class="n">energy</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="n">energy</span><span class="p">,</span> <span class="n">spot_size</span><span class="o">=</span><span class="n">spot_size</span><span class="p">,</span> <span class="n">spot_blend</span><span class="o">=</span><span class="n">spot_blend</span><span class="p">)</span></div>
-
-
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="n">energy</span><span class="p">,</span> <span class="n">spot_size</span><span class="o">=</span><span class="n">spot_size</span><span class="p">,</span> <span class="n">spot_blend</span><span class="o">=</span><span class="n">spot_blend</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BlenderSpotLight.to_json">
@@ -743,7 +737,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        filepath : str</span>
 <span class="sd">            The path to the JSON file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        description : Optional[str], optional</span>
 <span class="sd">            A description of the spot light, by default None.</span>
 <span class="sd">            If provided, it will be included in the JSON file under the key &quot;description&quot;.</span>
@@ -761,8 +755,6 @@
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
 
-
-    
 <div class="viewcode-block" id="BlenderSpotLight.from_json">
 <a class="viewcode-back" href="../../../_docs/blender_spotlight.html#pysdic.blender.BlenderSpotLight.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
@@ -776,12 +768,12 @@
 <span class="sd">        ----------</span>
 <span class="sd">        filepath : str</span>
 <span class="sd">            The path to the JSON file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        BlenderSpotLight</span>
 <span class="sd">            A BlenderSpotLight instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        FileNotFoundError</span>
@@ -790,13 +782,11 @@
         <span class="c1"># Load the dictionary from the JSON file</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        
+
         <span class="c1"># Create the Frame instance</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 </div>
 
-
-    
 </pre></div>
 
                 </article>
