@@ -315,12 +315,13 @@ def create_triangle_3_heightmap(
     # Compute the local coordinates of each vertex
     X = x_min + (x_max - x_min) * fx  # (n_x, )
     Y = y_min + (y_max - y_min) * fy  # (n_y, )
-    print(f"X: {X.shape}, Y: {Y.shape}")
     X = X[numpy.newaxis, :].repeat(n_y, axis=0)  # (n_y, n_x)
     Y = Y[:, numpy.newaxis].repeat(n_x, axis=1)  # (n_y, n_x)
-    print(f"X: {X.shape}, Y: {Y.shape}")
     Z = height_function(X, Y)  # (n_y, n_x)
-    print(f"Z: {Z.shape}")
+    if not isinstance(Z, numpy.ndarray) or Z.shape != (n_y, n_x):
+        raise ValueError(
+            "height_function must return a ND-array of shape (n_y, n_x) when called with the generated X and Y coordinates."
+        )
 
     # Convert the local points to vertices coordinates using the frame transform
     local_coordinates = numpy.stack((X, Y, Z), axis=0)  # (3, n_y, n_x)
@@ -739,6 +740,13 @@ def create_triangle_3_axisymmetric(
     height = height[:, numpy.newaxis].repeat(n_theta, axis=1)  # (n_height, n_theta)
     theta = theta[numpy.newaxis, :].repeat(n_height, axis=0)  # (n_height, n_theta)
     radius = profile_curve(height)  # (n_height, n_theta)
+
+    if not isinstance(radius, numpy.ndarray) or radius.shape != (n_height, n_theta):
+        raise ValueError(
+            "profile_curve must return a ND-array of shape (n_height, n_theta) when called with the generated height coordinates."
+        )
+    if numpy.any(radius <= 0):
+        raise ValueError("profile_curve must return strictly positive radius values.")
 
     X = radius * numpy.cos(theta)  # (n_height, n_theta)
     Y = radius * numpy.sin(theta)  # (n_height, n_theta)

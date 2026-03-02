@@ -13,6 +13,7 @@ import pycvcam
 
 from ..objects.camera import Camera
 
+
 class BlenderCamera(object):
     r"""
     Represents a camera in 3D space with intrinsic parameters, orientation, and position.
@@ -53,6 +54,7 @@ class BlenderCamera(object):
     - pixel_size: The pixel size of the camera in millimeters (distance unit). A 2-element array representing the pixel size of the camera in millimeters along the x and y axes.
     - clip_distance: The distances in millimeters to the near and far clipping planes. A 2-element array representing the distances of the near and far clipping planes of the camera in millimeters. Only points between the near and far clipping planes are visible in the camera view.
 
+
     Parameters
     ----------
     frame : Frame, optional
@@ -75,26 +77,27 @@ class BlenderCamera(object):
         The distance of the near and far clipping planes of the camera, by default None.
         The two values are used for near and far clipping planes respectively.
     """
+
     def __init__(
-            self,
-            frame: Frame = None,
-            intrinsic_matrix: Optional[numpy.ndarray] = None,
-            resolution: Optional[Union[Sequence[Integral], numpy.ndarray]] = None,
-            pixel_size: Optional[Union[Sequence[Number], numpy.ndarray]] = None,
-            clip_distance: Optional[Union[Sequence[Number], numpy.ndarray]] = None,
-        ) -> None:
+        self,
+        frame: Frame = None,
+        intrinsic_matrix: Optional[numpy.ndarray] = None,
+        resolution: Optional[Union[Sequence[Integral], numpy.ndarray]] = None,
+        pixel_size: Optional[Union[Sequence[Number], numpy.ndarray]] = None,
+        clip_distance: Optional[Union[Sequence[Number], numpy.ndarray]] = None,
+    ) -> None:
 
         # Default values
-        self._fx = None # focal length in pixels in x direction
-        self._fy = None # focal length in pixels in y direction
-        self._cx = None # principal point in pixels in x direction
-        self._cy = None # principal point in pixels in y direction
-        self._px = None # pixel size in millimeters in x direction
-        self._py = None # pixel size in millimeters in y direction
-        self._rx = None # resolution in number of pixels in x direction
-        self._ry = None # resolution in number of pixels in y direction
-        self._clnear = None # near clipping plane in millimeters
-        self._clfar = None # far clipping plane in millimeters
+        self._fx = None  # focal length in pixels in x direction
+        self._fy = None  # focal length in pixels in y direction
+        self._cx = None  # principal point in pixels in x direction
+        self._cy = None  # principal point in pixels in y direction
+        self._px = None  # pixel size in millimeters in x direction
+        self._py = None  # pixel size in millimeters in y direction
+        self._rx = None  # resolution in number of pixels in x direction
+        self._ry = None  # resolution in number of pixels in y direction
+        self._clnear = None  # near clipping plane in millimeters
+        self._clfar = None  # far clipping plane in millimeters
 
         # Set the values
         if frame is None:
@@ -104,30 +107,34 @@ class BlenderCamera(object):
         self.resolution = resolution
         self.pixel_size = pixel_size
         self.clip_distance = clip_distance
-        
-    
+
     @classmethod
-    def from_camera(cls, camera: Camera, resolution: Union[Sequence[Integral], numpy.ndarray], clip_distance: Union[Sequence[Number], numpy.ndarray]) -> BlenderCamera:
+    def from_camera(
+        cls,
+        camera: Camera,
+        resolution: Union[Sequence[Integral], numpy.ndarray],
+        clip_distance: Union[Sequence[Number], numpy.ndarray],
+    ) -> BlenderCamera:
         r"""
         Create a BlenderCamera object from a Camera object.
-        
+
         .. warning::
-        
+
             This can be use only if the :meth:`Camera.intrinsic` is :class:`pycvcam.Cv2Intrinsic` and the :meth:`Camera.extrinsic` is :class:`pycvcam.Cv2Extrinsic`.
-            
+
         Parameters
         ----------
         camera : Camera
             The Camera object to create the BlenderCamera from.
-            
+
         resolution : Union[Sequence[Integral], numpy.ndarray]
             The resolution of the camera in numbers of pixels, by default None.
             The two values are used for x and y axes respectively.
-            
+
         clip_distance : Union[Sequence[Number], numpy.ndarray]
             The distance of the near and far clipping planes of the camera, by default None.
             The two values are used for near and far clipping planes respectively.
-            
+
         Returns
         -------
         BlenderCamera
@@ -135,11 +142,15 @@ class BlenderCamera(object):
         """
         if not isinstance(camera, Camera):
             raise ValueError("Camera must be a Camera object.")
-        if camera.intrinsic is None or not isinstance(camera.intrinsic, pycvcam.Cv2Intrinsic):
+        if camera.intrinsic is None or not isinstance(
+            camera.intrinsic, pycvcam.Cv2Intrinsic
+        ):
             raise ValueError("Camera intrinsic must be a Cv2Intrinsic object.")
-        if camera.extrinsic is None or not isinstance(camera.extrinsic, pycvcam.Cv2Extrinsic):
+        if camera.extrinsic is None or not isinstance(
+            camera.extrinsic, pycvcam.Cv2Extrinsic
+        ):
             raise ValueError("Camera extrinsic must be a Cv2Extrinsic object.")
-        
+
         return cls(
             frame=camera.extrinsic.frame,
             intrinsic_matrix=camera.intrinsic.intrinsic_matrix,
@@ -148,8 +159,6 @@ class BlenderCamera(object):
             pixel_size=camera.pixel_size,
         )
 
-
-
     # ===============================================
     # Frame
     # ===============================================
@@ -157,11 +166,11 @@ class BlenderCamera(object):
     def frame(self) -> Frame:
         r"""
         Get or set the frame of the camera.
-        
+
         The frame of the camera defines the orientation of the camera in 3D space.
         The camera observes the scene along the z-axis of the frame.
 
-        The frame of the camera defines the orientation of the camera in 3D space with (convention OPENCV): 
+        The frame of the camera defines the orientation of the camera in 3D space with (convention OPENCV):
 
         - origin: The position of the camera in 3D space.
         - x-axis: The right direction of the camera (left to right).
@@ -171,7 +180,7 @@ class BlenderCamera(object):
         .. figure:: /_static/blender/opencv_camera_frame.png
             :width: 500
             :align: center
-            
+
             OpenCV camera frame convention (source: OpenCV)
 
         .. seealso::
@@ -184,14 +193,12 @@ class BlenderCamera(object):
             The frame of the camera.
         """
         return self._frame
-    
+
     @frame.setter
     def frame(self, frame: Frame) -> None:
         if not isinstance(frame, Frame):
             raise ValueError("Frame must be a Frame object.")
         self._frame = frame
-
-
 
     # =============================================
     # Focal length
@@ -228,19 +235,22 @@ class BlenderCamera(object):
         if not isinstance(fx, Number):
             raise ValueError("Focal length in pixels in x direction must be a number.")
         if not numpy.isfinite(fx):
-            raise ValueError("Focal length in pixels in x direction must be a finite number.")
+            raise ValueError(
+                "Focal length in pixels in x direction must be a finite number."
+            )
         if fx <= 0:
-            raise ValueError("Focal length in pixels in x direction must be greater than 0.")
+            raise ValueError(
+                "Focal length in pixels in x direction must be greater than 0."
+            )
         self._fx = float(fx)
 
     @property
     def fx(self) -> float:
         return self.focal_length_x
-    
+
     @fx.setter
     def fx(self, fx: Optional[Number]) -> None:
         self.focal_length_x = fx
-
 
     @property
     def focal_length_y(self) -> Optional[float]:
@@ -265,7 +275,7 @@ class BlenderCamera(object):
             The focal length of the camera in pixels in y direction. (or None if not set)
         """
         return self._fy
-    
+
     @focal_length_y.setter
     def focal_length_y(self, fy: Optional[Number]) -> None:
         if fy is None or numpy.isnan(fy):
@@ -274,11 +284,15 @@ class BlenderCamera(object):
         if not isinstance(fy, Number):
             raise ValueError("Focal length in pixels in y direction must be a number.")
         if not numpy.isfinite(fy):
-            raise ValueError("Focal length in pixels in y direction must be a finite number.")
+            raise ValueError(
+                "Focal length in pixels in y direction must be a finite number."
+            )
         if fy <= 0:
-            raise ValueError("Focal length in pixels in y direction must be greater than 0.")
+            raise ValueError(
+                "Focal length in pixels in y direction must be greater than 0."
+            )
         self._fy = float(fy)
-    
+
     @property
     def fy(self) -> float:
         return self.focal_length_y
@@ -287,7 +301,6 @@ class BlenderCamera(object):
     def fy(self, fy: Optional[Number]) -> None:
         self.focal_length_y = fy
 
-    
     @property
     def focal_length(self) -> Tuple[Optional[float], Optional[float]]:
         r"""
@@ -301,7 +314,7 @@ class BlenderCamera(object):
             The focal length of the camera in pixels. (or None if not set)
         """
         return self._fx, self._fy
-    
+
     @focal_length.setter
     def focal_length(self, focal_length: Optional[Sequence[Number]]) -> None:
         if focal_length is None:
@@ -315,8 +328,6 @@ class BlenderCamera(object):
             raise ValueError("Focal length must be a sequence of two numbers.")
         self.focal_length_x = focal_length[0]
         self.focal_length_y = focal_length[1]
-
-
 
     # =============================================
     # Principal point
@@ -344,24 +355,30 @@ class BlenderCamera(object):
             The principal point of the camera in pixels in x direction. (or None if not set)
         """
         return self._cx
-    
+
     @principal_point_x.setter
     def principal_point_x(self, cx: Optional[Number]) -> None:
         if cx is None or numpy.isnan(cx):
             self._cx = None
             return
         if not isinstance(cx, Number):
-            raise ValueError("Principal point in pixels in x direction must be a number.")
+            raise ValueError(
+                "Principal point in pixels in x direction must be a number."
+            )
         if not numpy.isfinite(cx):
-            raise ValueError("Principal point in pixels in x direction must be a finite number.")
+            raise ValueError(
+                "Principal point in pixels in x direction must be a finite number."
+            )
         if cx < 0:
-            raise ValueError("Principal point in pixels in x direction must be greater than or equal to 0.")
+            raise ValueError(
+                "Principal point in pixels in x direction must be greater than or equal to 0."
+            )
         self._cx = float(cx)
 
     @property
     def cx(self) -> float:
         return self.principal_point_x
-    
+
     @cx.setter
     def cx(self, cx: Optional[Number]) -> None:
         self.principal_point_x = cx
@@ -389,24 +406,30 @@ class BlenderCamera(object):
             The principal point of the camera in pixels in y direction. (or None if not set)
         """
         return self._cy
-    
+
     @principal_point_y.setter
     def principal_point_y(self, cy: Optional[Number]) -> None:
         if cy is None or numpy.isnan(cy):
             self._cy = None
             return
         if not isinstance(cy, Number):
-            raise ValueError("Principal point in pixels in y direction must be a number.")
+            raise ValueError(
+                "Principal point in pixels in y direction must be a number."
+            )
         if not numpy.isfinite(cy):
-            raise ValueError("Principal point in pixels in y direction must be a finite number.")
+            raise ValueError(
+                "Principal point in pixels in y direction must be a finite number."
+            )
         if cy < 0:
-            raise ValueError("Principal point in pixels in y direction must be greater than or equal to 0.")
+            raise ValueError(
+                "Principal point in pixels in y direction must be greater than or equal to 0."
+            )
         self._cy = float(cy)
-    
+
     @property
     def cy(self) -> float:
         return self.principal_point_y
-    
+
     @cy.setter
     def cy(self, cy: Optional[Number]) -> None:
         self.principal_point_y = cy
@@ -424,7 +447,7 @@ class BlenderCamera(object):
             The principal point of the camera in pixels. (or None if not set)
         """
         return self._cx, self._cy
-    
+
     @principal_point.setter
     def principal_point(self, principal_point: Optional[Sequence[Number]]) -> None:
         if principal_point is None:
@@ -439,7 +462,6 @@ class BlenderCamera(object):
         self.principal_point_x = principal_point[0]
         self.principal_point_y = principal_point[1]
 
-    
     # =============================================
     # Pixel size
     # =============================================
@@ -464,24 +486,30 @@ class BlenderCamera(object):
             The pixel size of the camera in millimeters in x direction. (or None if not set)
         """
         return self._px
-    
+
     @pixel_size_x.setter
     def pixel_size_x(self, px: Optional[Number]) -> None:
         if px is None or numpy.isnan(px):
             self._px = None
             return
         if not isinstance(px, Number):
-            raise ValueError("Pixel size in millimeters in x direction must be a number.")
+            raise ValueError(
+                "Pixel size in millimeters in x direction must be a number."
+            )
         if not numpy.isfinite(px):
-            raise ValueError("Pixel size in millimeters in x direction must be a finite number.")
+            raise ValueError(
+                "Pixel size in millimeters in x direction must be a finite number."
+            )
         if px <= 0:
-            raise ValueError("Pixel size in millimeters in x direction must be greater than 0.")
+            raise ValueError(
+                "Pixel size in millimeters in x direction must be greater than 0."
+            )
         self._px = float(px)
 
     @property
     def px(self) -> float:
         return self.pixel_size_x
-    
+
     @px.setter
     def px(self, px: Optional[Number]) -> None:
         self.pixel_size_x = px
@@ -507,24 +535,30 @@ class BlenderCamera(object):
             The pixel size of the camera in millimeters in y direction. (or None if not set)
         """
         return self._py
-    
+
     @pixel_size_y.setter
     def pixel_size_y(self, py: Optional[Number]) -> None:
         if py is None or numpy.isnan(py):
             self._py = None
             return
         if not isinstance(py, Number):
-            raise ValueError("Pixel size in millimeters in y direction must be a number.")
+            raise ValueError(
+                "Pixel size in millimeters in y direction must be a number."
+            )
         if not numpy.isfinite(py):
-            raise ValueError("Pixel size in millimeters in y direction must be a finite number.")
+            raise ValueError(
+                "Pixel size in millimeters in y direction must be a finite number."
+            )
         if py <= 0:
-            raise ValueError("Pixel size in millimeters in y direction must be greater than 0.")
+            raise ValueError(
+                "Pixel size in millimeters in y direction must be greater than 0."
+            )
         self._py = float(py)
 
     @property
     def py(self) -> float:
         return self.pixel_size_y
-    
+
     @py.setter
     def py(self, py: Optional[Number]) -> None:
         self.pixel_size_y = py
@@ -542,7 +576,7 @@ class BlenderCamera(object):
             The pixel size of the camera in millimeters. (or None if not set)
         """
         return self._px, self._py
-    
+
     @pixel_size.setter
     def pixel_size(self, pixel_size: Optional[Sequence[Number]]) -> None:
         if pixel_size is None:
@@ -581,24 +615,30 @@ class BlenderCamera(object):
             The resolution of the camera in number of pixels in x direction. (or None if not set)
         """
         return self._rx
-    
+
     @resolution_x.setter
     def resolution_x(self, rx: Optional[Number]) -> None:
         if rx is None or numpy.isnan(rx):
             self._rx = None
             return
         if not isinstance(rx, Number):
-            raise ValueError("Resolution in number of pixels in x direction must be a number.")
+            raise ValueError(
+                "Resolution in number of pixels in x direction must be a number."
+            )
         if not numpy.isfinite(rx):
-            raise ValueError("Resolution in number of pixels in x direction must be a finite number.")
+            raise ValueError(
+                "Resolution in number of pixels in x direction must be a finite number."
+            )
         if rx <= 0:
-            raise ValueError("Resolution in number of pixels in x direction must be greater than 0.")
+            raise ValueError(
+                "Resolution in number of pixels in x direction must be greater than 0."
+            )
         self._rx = int(rx)
 
     @property
     def rx(self) -> float:
         return self.resolution_x
-    
+
     @rx.setter
     def rx(self, rx: Optional[Number]) -> None:
         self.resolution_x = rx
@@ -624,24 +664,30 @@ class BlenderCamera(object):
             The resolution of the camera in number of pixels in y direction. (or None if not set)
         """
         return self._ry
-    
+
     @resolution_y.setter
     def resolution_y(self, ry: Optional[Number]) -> None:
         if ry is None or numpy.isnan(ry):
             self._ry = None
             return
         if not isinstance(ry, Number):
-            raise ValueError("Resolution in number of pixels in y direction must be a number.")
+            raise ValueError(
+                "Resolution in number of pixels in y direction must be a number."
+            )
         if not numpy.isfinite(ry):
-            raise ValueError("Resolution in number of pixels in y direction must be a finite number.")
+            raise ValueError(
+                "Resolution in number of pixels in y direction must be a finite number."
+            )
         if ry <= 0:
-            raise ValueError("Resolution in number of pixels in y direction must be greater than 0.")
+            raise ValueError(
+                "Resolution in number of pixels in y direction must be greater than 0."
+            )
         self._ry = int(ry)
 
     @property
     def ry(self) -> float:
         return self.resolution_y
-    
+
     @ry.setter
     def ry(self, ry: Optional[Number]) -> None:
         self.resolution_y = ry
@@ -659,7 +705,7 @@ class BlenderCamera(object):
             The resolution of the camera in number of pixels. (or None if not set)
         """
         return self._rx, self._ry
-    
+
     @resolution.setter
     def resolution(self, resolution: Optional[Sequence[Number]]) -> None:
         if resolution is None:
@@ -673,7 +719,6 @@ class BlenderCamera(object):
             raise ValueError("Resolution must be a sequence of two numbers.")
         self.resolution_x = resolution[0]
         self.resolution_y = resolution[1]
-
 
     # =============================================
     # Clipping distance
@@ -700,7 +745,7 @@ class BlenderCamera(object):
             The near clipping plane of the camera in millimeters. (or None if not set)
         """
         return self._clnear
-    
+
     @clip_distance_near.setter
     def clip_distance_near(self, clnear: Optional[Number]) -> None:
         if clnear is None or numpy.isnan(clnear):
@@ -709,15 +754,19 @@ class BlenderCamera(object):
         if not isinstance(clnear, Number):
             raise ValueError("Near clipping plane in millimeters must be a number.")
         if not numpy.isfinite(clnear):
-            raise ValueError("Near clipping plane in millimeters must be a finite number.")
+            raise ValueError(
+                "Near clipping plane in millimeters must be a finite number."
+            )
         if clnear <= 0:
-            raise ValueError("Near clipping plane in millimeters must be greater than 0.")
+            raise ValueError(
+                "Near clipping plane in millimeters must be greater than 0."
+            )
         self._clnear = float(clnear)
 
     @property
     def clnear(self) -> float:
         return self.clip_distance_near
-    
+
     @clnear.setter
     def clnear(self, clnear: Optional[Number]) -> None:
         self.clip_distance_near = clnear
@@ -744,7 +793,7 @@ class BlenderCamera(object):
             The far clipping plane of the camera in millimeters. (or None if not set)
         """
         return self._clfar
-    
+
     @clip_distance_far.setter
     def clip_distance_far(self, clfar: Optional[Number]) -> None:
         if clfar is None or numpy.isnan(clfar):
@@ -753,15 +802,19 @@ class BlenderCamera(object):
         if not isinstance(clfar, Number):
             raise ValueError("Far clipping plane in millimeters must be a number.")
         if not numpy.isfinite(clfar):
-            raise ValueError("Far clipping plane in millimeters must be a finite number.")
+            raise ValueError(
+                "Far clipping plane in millimeters must be a finite number."
+            )
         if clfar <= 0:
-            raise ValueError("Far clipping plane in millimeters must be greater than 0.")
+            raise ValueError(
+                "Far clipping plane in millimeters must be greater than 0."
+            )
         self._clfar = float(clfar)
 
     @property
     def clfar(self) -> float:
         return self.clip_distance_far
-    
+
     @clfar.setter
     def clfar(self, clfar: Optional[Number]) -> None:
         self.clip_distance_far = clfar
@@ -780,7 +833,7 @@ class BlenderCamera(object):
             The near and far clipping planes of the camera in millimeters. (or None if not set)
         """
         return self._clnear, self._clfar
-    
+
     @clip_distance.setter
     def clip_distance(self, clip_distance: Optional[Sequence[Number]]) -> None:
         if clip_distance is None:
@@ -820,12 +873,11 @@ class BlenderCamera(object):
         """
         if self._fx is None or self._fy is None or self._cx is None or self._cy is None:
             return None
-        return numpy.array([
-            [self._fx, 0, self._cx],
-            [0, self._fy, self._cy],
-            [0, 0, 1]
-        ], dtype=numpy.float64)
-    
+        return numpy.array(
+            [[self._fx, 0, self._cx], [0, self._fy, self._cy], [0, 0, 1]],
+            dtype=numpy.float64,
+        )
+
     @intrinsic_matrix.setter
     def intrinsic_matrix(self, intrinsic_matrix: Optional[numpy.ndarray]) -> None:
         if intrinsic_matrix is None:
@@ -845,7 +897,7 @@ class BlenderCamera(object):
         self.fy = intrinsic_matrix[1, 1]
         self.cx = intrinsic_matrix[0, 2]
         self.cy = intrinsic_matrix[1, 2]
-    
+
     # =============================================
     # Methods to check if each parameter is set
     # =============================================
@@ -870,7 +922,7 @@ class BlenderCamera(object):
             if self._clnear >= self._clfar:
                 return False
         return True
-    
+
     # =============================================
     # Extract other parameters
     # =============================================
@@ -895,11 +947,11 @@ class BlenderCamera(object):
         if self._px is None or self._rx is None:
             return None
         return self._px * self._rx
-    
+
     @property
     def sensor_width(self) -> Optional[float]:
         return self.sensor_size_x
-    
+
     @property
     def sensor_size_y(self) -> Optional[float]:
         r"""
@@ -921,11 +973,11 @@ class BlenderCamera(object):
         if self._py is None or self._ry is None:
             return None
         return self._py * self._ry
-    
+
     @property
     def sensor_height(self) -> Optional[float]:
         return self.sensor_size_y
-    
+
     @property
     def pixel_aspect_x(self) -> Optional[float]:
         r"""
@@ -946,7 +998,7 @@ class BlenderCamera(object):
         if self._fx < self._fy:
             return self._fy / self._fx
         return 1
-    
+
     @property
     def pixel_aspect_y(self) -> Optional[float]:
         r"""
@@ -967,7 +1019,7 @@ class BlenderCamera(object):
         if self._fy < self._fx:
             return self._fx / self._fy
         return 1
-    
+
     @property
     def aspect_ratio(self) -> Optional[float]:
         r"""
@@ -985,7 +1037,6 @@ class BlenderCamera(object):
         if self._fx is None or self._fy is None:
             return None
         return self.pixel_aspect_y / self.pixel_aspect_x
-    
 
     @property
     def sensor_fit(self) -> Optional[str]:
@@ -1011,7 +1062,6 @@ class BlenderCamera(object):
         if self.pixel_aspect_x * self.rx >= self.pixel_aspect_y * self.ry:
             return "HORIZONTAL"
         return "VERTICAL"
-    
 
     @property
     def view_factor(self) -> Optional[float]:
@@ -1036,12 +1086,11 @@ class BlenderCamera(object):
             return None
         if self._rx is None or self._ry is None:
             return None
-        
+
         if self.sensor_fit == "HORIZONTAL":
             return self._rx
         if self.sensor_fit == "VERTICAL":
             return self.aspect_ratio * self._ry
-
 
     @property
     def sensor_size(self) -> Optional[float]:
@@ -1070,7 +1119,6 @@ class BlenderCamera(object):
             return self.sensor_size_x
         if self.sensor_fit == "VERTICAL":
             return self.sensor_size_y
-
 
     @property
     def lens(self) -> Optional[float]:
@@ -1104,7 +1152,6 @@ class BlenderCamera(object):
             return None
         return self.focal_length_x * self.sensor_size / self.view_factor
 
-
     @property
     def shift_x(self) -> Optional[float]:
         r"""
@@ -1137,8 +1184,7 @@ class BlenderCamera(object):
             return None
         if self._rx is None or self._ry is None:
             return None
-        return - (self._cx - (self._rx - 1) / 2) / self.view_factor
-    
+        return -(self._cx - (self._rx - 1) / 2) / self.view_factor
 
     @property
     def shift_y(self) -> Optional[float]:
@@ -1154,7 +1200,7 @@ class BlenderCamera(object):
             sy = \frac{(c_y - (r_y - 1) / 2) ar}{vf}
 
         where :math:`c_y` is the principal point in pixels in y direction, :math:`r_y` is the resolution in number of pixels in y direction, :math:`vf` is the view factor of the camera and :math:`ar` is the aspect ratio of the camera.
-        
+
         .. warning::
 
             This shift y is only for Blender. No reel physical meaning.
@@ -1170,8 +1216,7 @@ class BlenderCamera(object):
             return None
         if self._rx is None or self._ry is None:
             return None
-        return (self._cy - (self._ry - 1) / 2) / self.view_factor * self.aspect_ratio 
-    
+        return (self._cy - (self._ry - 1) / 2) / self.view_factor * self.aspect_ratio
 
     # =============================================
     # OpenCV and OpenGL methods
@@ -1187,14 +1232,14 @@ class BlenderCamera(object):
         -------
         Rotation
             The rotation of the camera.
-        
+
         numpy.ndarray
             The translation of the camera with shape (3, 1).
         """
         rotation = self.frame.get_global_rotation(convention=4)
         translation = self.frame.get_global_translation(convention=4)
         return rotation, translation
-    
+
     def set_OpenCV_RT(self, rotation: Rotation, translation: numpy.ndarray) -> None:
         r"""
         Set the rotation and translation of the camera in the OpenCV format.
@@ -1212,7 +1257,7 @@ class BlenderCamera(object):
         """
         self.frame.set_global_rotation(rotation, convention=4)
         self.frame.set_global_translation(translation, convention=4)
-    
+
     @property
     def OpenCV_tvec(self) -> numpy.ndarray:
         r"""
@@ -1227,7 +1272,7 @@ class BlenderCamera(object):
             The translation vector of the camera with shape (3,).
         """
         return self.frame.get_global_translation(convention=4).reshape((3,))
-    
+
     @OpenCV_tvec.setter
     def OpenCV_tvec(self, tvec: numpy.ndarray) -> None:
         self.frame.set_global_translation(tvec, convention=4)
@@ -1251,7 +1296,6 @@ class BlenderCamera(object):
     def OpenCV_rvec(self, rvec: numpy.ndarray) -> None:
         self.frame.set_global_rotation(Rotation.from_rotvec(rvec), convention=4)
 
-
     def get_OpenGL_RT(self) -> Tuple[Rotation, numpy.ndarray]:
         r"""
         Get the rotation and translation of the camera in the OpenGL format.
@@ -1267,18 +1311,18 @@ class BlenderCamera(object):
         -------
         Rotation
             The rotation of the camera.
-        
+
         numpy.ndarray
             The translation of the camera with shape (3, 1).
         """
         rotation = self.frame.get_global_rotation(convention=0)
         x_axis = rotation.as_matrix()[:, 0].reshape((3, 1))
-        y_axis = - rotation.as_matrix()[:, 1].reshape((3, 1))
-        z_axis = - rotation.as_matrix()[:, 2].reshape((3, 1))
+        y_axis = -rotation.as_matrix()[:, 1].reshape((3, 1))
+        z_axis = -rotation.as_matrix()[:, 2].reshape((3, 1))
         rotation = Rotation.from_matrix(numpy.column_stack((x_axis, y_axis, z_axis)))
         translation = self.frame.get_global_translation(convention=0)
         return rotation, translation
-    
+
     def set_OpenGL_RT(self, rotation: Rotation, translation: numpy.ndarray) -> None:
         r"""
         Set the rotation and translation of the camera in the OpenGL format.
@@ -1299,12 +1343,11 @@ class BlenderCamera(object):
             The translation of the camera with shape (3, 1).
         """
         x_axis = rotation.as_matrix()[:, 0].reshape((3, 1))
-        y_axis = - rotation.as_matrix()[:, 1].reshape((3, 1))
-        z_axis = - rotation.as_matrix()[:, 2].reshape((3, 1))
+        y_axis = -rotation.as_matrix()[:, 1].reshape((3, 1))
+        z_axis = -rotation.as_matrix()[:, 2].reshape((3, 1))
         rotation = Rotation.from_matrix(numpy.column_stack((x_axis, y_axis, z_axis)))
         self.frame.set_global_rotation(rotation, convention=0)
         self.frame.set_global_translation(translation, convention=0)
-
 
     # =============================================
     # Save and load methods
@@ -1342,8 +1385,8 @@ class BlenderCamera(object):
         Parameters
         ----------
         description : Optional[str]
-            A description of the camera, by default None. 
-            This message will be included in the dictionary under the key "description" if provided. 
+            A description of the camera, by default None.
+            This message will be included in the dictionary under the key "description" if provided.
 
         Returns
         -------
@@ -1354,7 +1397,7 @@ class BlenderCamera(object):
         ------
         ValueError
             If the description is not a string.
-        """        
+        """
         # Create the dictionary
         data = {
             "type": "BlenderCamera",
@@ -1368,7 +1411,7 @@ class BlenderCamera(object):
             "px": self.px,
             "py": self.py,
             "clnear": self.clnear,
-            "clfar": self.clfar
+            "clfar": self.clfar,
         }
 
         # Add the description
@@ -1376,7 +1419,7 @@ class BlenderCamera(object):
             if not isinstance(description, str):
                 raise ValueError("Description must be a string.")
             data["description"] = description
-        
+
         return data
 
     @classmethod
@@ -1394,7 +1437,7 @@ class BlenderCamera(object):
         ----------
         data : dict
             A dictionary containing the camera's data.
-        
+
         Returns
         -------
         BlenderCamera
@@ -1408,7 +1451,7 @@ class BlenderCamera(object):
         # Check for the input type
         if not isinstance(data, dict):
             raise ValueError("data must be a dictionary.")
-        
+
         # Create the BlenderCamera instance
         frame = Frame.load_from_dict(data["frame"])
         camera = cls(frame=frame)
@@ -1426,7 +1469,6 @@ class BlenderCamera(object):
         camera.clfar = data.get("clfar", None)
 
         return camera
-    
 
     def to_json(self, filename: str, description: Optional[str] = None) -> None:
         r"""
@@ -1438,9 +1480,9 @@ class BlenderCamera(object):
         ----------
         filename : str
             The path to the JSON file.
-        
+
         description : Optional[str]
-            A description of the camera, by default None. 
+            A description of the camera, by default None.
             This message will be included in the JSON file under the key "description" if provided.
 
         Raises
@@ -1466,12 +1508,12 @@ class BlenderCamera(object):
         ----------
         filename : str
             The path to the JSON file.
-        
+
         Returns
         -------
         BlenderCamera
             A BlenderCamera instance.
-        
+
         Raises
         ------
         FileNotFoundError
@@ -1480,6 +1522,6 @@ class BlenderCamera(object):
         # Load the dictionary from the JSON file
         with open(filename, "r") as file:
             data = json.load(file)
-        
+
         # Create the Frame instance
         return cls.from_dict(data)
