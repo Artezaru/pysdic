@@ -334,6 +334,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..objects.camera</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span>
 
+
 <div class="viewcode-block" id="BlenderCamera">
 <a class="viewcode-back" href="../../../_docs/blender_camera.html#pysdic.blender.BlenderCamera">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BlenderCamera</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -376,6 +377,7 @@
 <span class="sd">    - pixel_size: The pixel size of the camera in millimeters (distance unit). A 2-element array representing the pixel size of the camera in millimeters along the x and y axes.</span>
 <span class="sd">    - clip_distance: The distances in millimeters to the near and far clipping planes. A 2-element array representing the distances of the near and far clipping planes of the camera in millimeters. Only points between the near and far clipping planes are visible in the camera view.</span>
 
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    frame : Frame, optional</span>
@@ -398,26 +400,27 @@
 <span class="sd">        The distance of the near and far clipping planes of the camera, by default None.</span>
 <span class="sd">        The two values are used for near and far clipping planes respectively.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">intrinsic_matrix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">resolution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">pixel_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">clip_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">intrinsic_matrix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">pixel_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">clip_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="c1"># Default values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># focal length in pixels in x direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># focal length in pixels in y direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># principal point in pixels in x direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># principal point in pixels in y direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_px</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># pixel size in millimeters in x direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_py</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># pixel size in millimeters in y direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># resolution in number of pixels in x direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># resolution in number of pixels in y direction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_clnear</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># near clipping plane in millimeters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_clfar</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># far clipping plane in millimeters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># focal length in pixels in x direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># focal length in pixels in y direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># principal point in pixels in x direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># principal point in pixels in y direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_px</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pixel size in millimeters in x direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_py</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pixel size in millimeters in y direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># resolution in number of pixels in x direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># resolution in number of pixels in y direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clnear</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># near clipping plane in millimeters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clfar</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># far clipping plane in millimeters</span>
 
         <span class="c1"># Set the values</span>
         <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -427,32 +430,36 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pixel_size</span> <span class="o">=</span> <span class="n">pixel_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clip_distance</span> <span class="o">=</span> <span class="n">clip_distance</span>
-        
-    
+
 <div class="viewcode-block" id="BlenderCamera.from_camera">
 <a class="viewcode-back" href="../../../_docs/blender_camera.html#pysdic.blender.BlenderCamera.from_camera">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_camera</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">camera</span><span class="p">:</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">resolution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">clip_distance</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BlenderCamera</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_camera</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">camera</span><span class="p">:</span> <span class="n">Camera</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">clip_distance</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BlenderCamera</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a BlenderCamera object from a Camera object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        .. warning::</span>
-<span class="sd">        </span>
+
 <span class="sd">            This can be use only if the :meth:`Camera.intrinsic` is :class:`pycvcam.Cv2Intrinsic` and the :meth:`Camera.extrinsic` is :class:`pycvcam.Cv2Extrinsic`.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        camera : Camera</span>
 <span class="sd">            The Camera object to create the BlenderCamera from.</span>
-<span class="sd">            </span>
+
 <span class="sd">        resolution : Union[Sequence[Integral], numpy.ndarray]</span>
 <span class="sd">            The resolution of the camera in numbers of pixels, by default None.</span>
 <span class="sd">            The two values are used for x and y axes respectively.</span>
-<span class="sd">            </span>
+
 <span class="sd">        clip_distance : Union[Sequence[Number], numpy.ndarray]</span>
 <span class="sd">            The distance of the near and far clipping planes of the camera, by default None.</span>
 <span class="sd">            The two values are used for near and far clipping planes respectively.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        BlenderCamera</span>
@@ -460,11 +467,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">Camera</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Camera must be a Camera object.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span><span class="p">,</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">Cv2Intrinsic</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span><span class="p">,</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">Cv2Intrinsic</span>
+        <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Camera intrinsic must be a Cv2Intrinsic object.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">,</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">Cv2Extrinsic</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">,</span> <span class="n">pycvcam</span><span class="o">.</span><span class="n">Cv2Extrinsic</span>
+        <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Camera extrinsic must be a Cv2Extrinsic object.&quot;</span><span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">frame</span><span class="o">=</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span>
             <span class="n">intrinsic_matrix</span><span class="o">=</span><span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span><span class="o">.</span><span class="n">intrinsic_matrix</span><span class="p">,</span>
@@ -474,8 +485,6 @@
         <span class="p">)</span></div>
 
 
-
-
     <span class="c1"># ===============================================</span>
     <span class="c1"># Frame</span>
     <span class="c1"># ===============================================</span>
@@ -483,11 +492,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Frame</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or set the frame of the camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        The frame of the camera defines the orientation of the camera in 3D space.</span>
 <span class="sd">        The camera observes the scene along the z-axis of the frame.</span>
 
-<span class="sd">        The frame of the camera defines the orientation of the camera in 3D space with (convention OPENCV): </span>
+<span class="sd">        The frame of the camera defines the orientation of the camera in 3D space with (convention OPENCV):</span>
 
 <span class="sd">        - origin: The position of the camera in 3D space.</span>
 <span class="sd">        - x-axis: The right direction of the camera (left to right).</span>
@@ -497,7 +506,7 @@
 <span class="sd">        .. figure:: /_static/blender/opencv_camera_frame.png</span>
 <span class="sd">            :width: 500</span>
 <span class="sd">            :align: center</span>
-<span class="sd">            </span>
+
 <span class="sd">            OpenCV camera frame convention (source: OpenCV)</span>
 
 <span class="sd">        .. seealso::</span>
@@ -510,14 +519,12 @@
 <span class="sd">            The frame of the camera.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span>
-    
+
     <span class="nd">@frame</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">Frame</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Frame must be a Frame object.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">frame</span>
-
-
 
     <span class="c1"># =============================================</span>
     <span class="c1"># Focal length</span>
@@ -554,19 +561,22 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length in pixels in x direction must be a number.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">fx</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length in pixels in x direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Focal length in pixels in x direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">fx</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length in pixels in x direction must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Focal length in pixels in x direction must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_x</span>
-    
+
     <span class="nd">@fx</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_x</span> <span class="o">=</span> <span class="n">fx</span>
-
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">focal_length_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -591,7 +601,7 @@
 <span class="sd">            The focal length of the camera in pixels in y direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span>
-    
+
     <span class="nd">@focal_length_y</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">focal_length_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">fy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">fy</span><span class="p">):</span>
@@ -600,11 +610,15 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fy</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length in pixels in y direction must be a number.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">fy</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length in pixels in y direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Focal length in pixels in y direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">fy</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length in pixels in y direction must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Focal length in pixels in y direction must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fy</span><span class="p">)</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_y</span>
@@ -613,7 +627,6 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">fy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_y</span> <span class="o">=</span> <span class="n">fy</span>
 
-    
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">focal_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -627,7 +640,7 @@
 <span class="sd">            The focal length of the camera in pixels. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span>
-    
+
     <span class="nd">@focal_length</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">focal_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focal_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">focal_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -641,8 +654,6 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Focal length must be a sequence of two numbers.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_x</span> <span class="o">=</span> <span class="n">focal_length</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_y</span> <span class="o">=</span> <span class="n">focal_length</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-
 
     <span class="c1"># =============================================</span>
     <span class="c1"># Principal point</span>
@@ -670,24 +681,30 @@
 <span class="sd">            The principal point of the camera in pixels in x direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span>
-    
+
     <span class="nd">@principal_point_x</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">principal_point_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">cx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">cx</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Principal point in pixels in x direction must be a number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Principal point in pixels in x direction must be a number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">cx</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Principal point in pixels in x direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Principal point in pixels in x direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">cx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Principal point in pixels in x direction must be greater than or equal to 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Principal point in pixels in x direction must be greater than or equal to 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_x</span>
-    
+
     <span class="nd">@cx</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_x</span> <span class="o">=</span> <span class="n">cx</span>
@@ -715,24 +732,30 @@
 <span class="sd">            The principal point of the camera in pixels in y direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span>
-    
+
     <span class="nd">@principal_point_y</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">principal_point_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">cy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">cy</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Principal point in pixels in y direction must be a number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Principal point in pixels in y direction must be a number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">cy</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Principal point in pixels in y direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Principal point in pixels in y direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">cy</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Principal point in pixels in y direction must be greater than or equal to 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Principal point in pixels in y direction must be greater than or equal to 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_y</span>
-    
+
     <span class="nd">@cy</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_y</span> <span class="o">=</span> <span class="n">cy</span>
@@ -750,7 +773,7 @@
 <span class="sd">            The principal point of the camera in pixels. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span>
-    
+
     <span class="nd">@principal_point</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">principal_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">principal_point</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">principal_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -765,7 +788,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_x</span> <span class="o">=</span> <span class="n">principal_point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_y</span> <span class="o">=</span> <span class="n">principal_point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    
     <span class="c1"># =============================================</span>
     <span class="c1"># Pixel size</span>
     <span class="c1"># =============================================</span>
@@ -790,24 +812,30 @@
 <span class="sd">            The pixel size of the camera in millimeters in x direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px</span>
-    
+
     <span class="nd">@pixel_size_x</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_size_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">px</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">px</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">px</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_px</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel size in millimeters in x direction must be a number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pixel size in millimeters in x direction must be a number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">px</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel size in millimeters in x direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pixel size in millimeters in x direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">px</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel size in millimeters in x direction must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pixel size in millimeters in x direction must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_px</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">px</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">px</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_size_x</span>
-    
+
     <span class="nd">@px</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">px</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">px</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pixel_size_x</span> <span class="o">=</span> <span class="n">px</span>
@@ -833,24 +861,30 @@
 <span class="sd">            The pixel size of the camera in millimeters in y direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py</span>
-    
+
     <span class="nd">@pixel_size_y</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_size_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">py</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">py</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">py</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_py</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">py</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel size in millimeters in y direction must be a number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pixel size in millimeters in y direction must be a number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">py</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel size in millimeters in y direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pixel size in millimeters in y direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">py</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pixel size in millimeters in y direction must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Pixel size in millimeters in y direction must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_py</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">py</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">py</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_size_y</span>
-    
+
     <span class="nd">@py</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">py</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">py</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pixel_size_y</span> <span class="o">=</span> <span class="n">py</span>
@@ -868,7 +902,7 @@
 <span class="sd">            The pixel size of the camera in millimeters. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py</span>
-    
+
     <span class="nd">@pixel_size</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">pixel_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -907,24 +941,30 @@
 <span class="sd">            The resolution of the camera in number of pixels in x direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span>
-    
+
     <span class="nd">@resolution_x</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">resolution_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">rx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rx</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution in number of pixels in x direction must be a number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Resolution in number of pixels in x direction must be a number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">rx</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution in number of pixels in x direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Resolution in number of pixels in x direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">rx</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution in number of pixels in x direction must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Resolution in number of pixels in x direction must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">rx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_x</span>
-    
+
     <span class="nd">@rx</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">rx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution_x</span> <span class="o">=</span> <span class="n">rx</span>
@@ -950,24 +990,30 @@
 <span class="sd">            The resolution of the camera in number of pixels in y direction. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span>
-    
+
     <span class="nd">@resolution_y</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">resolution_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ry</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ry</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ry</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution in number of pixels in y direction must be a number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Resolution in number of pixels in y direction must be a number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">ry</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution in number of pixels in y direction must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Resolution in number of pixels in y direction must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">ry</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution in number of pixels in y direction must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Resolution in number of pixels in y direction must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ry</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">ry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_y</span>
-    
+
     <span class="nd">@ry</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">ry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution_y</span> <span class="o">=</span> <span class="n">ry</span>
@@ -985,7 +1031,7 @@
 <span class="sd">            The resolution of the camera in number of pixels. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span>
-    
+
     <span class="nd">@resolution</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">resolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resolution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">resolution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -999,7 +1045,6 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Resolution must be a sequence of two numbers.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution_x</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution_y</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
 
     <span class="c1"># =============================================</span>
     <span class="c1"># Clipping distance</span>
@@ -1026,7 +1071,7 @@
 <span class="sd">            The near clipping plane of the camera in millimeters. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clnear</span>
-    
+
     <span class="nd">@clip_distance_near</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clip_distance_near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clnear</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">clnear</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">clnear</span><span class="p">):</span>
@@ -1035,15 +1080,19 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clnear</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Near clipping plane in millimeters must be a number.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">clnear</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Near clipping plane in millimeters must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Near clipping plane in millimeters must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">clnear</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Near clipping plane in millimeters must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Near clipping plane in millimeters must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clnear</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">clnear</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clnear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_distance_near</span>
-    
+
     <span class="nd">@clnear</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clnear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clnear</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clip_distance_near</span> <span class="o">=</span> <span class="n">clnear</span>
@@ -1070,7 +1119,7 @@
 <span class="sd">            The far clipping plane of the camera in millimeters. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clfar</span>
-    
+
     <span class="nd">@clip_distance_far</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clip_distance_far</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clfar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">clfar</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">clfar</span><span class="p">):</span>
@@ -1079,15 +1128,19 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clfar</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Far clipping plane in millimeters must be a number.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">clfar</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Far clipping plane in millimeters must be a finite number.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Far clipping plane in millimeters must be a finite number.&quot;</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">clfar</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Far clipping plane in millimeters must be greater than 0.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Far clipping plane in millimeters must be greater than 0.&quot;</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clfar</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">clfar</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clfar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_distance_far</span>
-    
+
     <span class="nd">@clfar</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clfar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clfar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Number</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clip_distance_far</span> <span class="o">=</span> <span class="n">clfar</span>
@@ -1106,7 +1159,7 @@
 <span class="sd">            The near and far clipping planes of the camera in millimeters. (or None if not set)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clnear</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clfar</span>
-    
+
     <span class="nd">@clip_distance</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clip_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clip_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Number</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">clip_distance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1146,12 +1199,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span><span class="p">],</span>
-            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span><span class="p">],</span>
-            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cx</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cy</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="nd">@intrinsic_matrix</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">intrinsic_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intrinsic_matrix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">intrinsic_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1171,7 +1223,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fy</span> <span class="o">=</span> <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-    
+
     <span class="c1"># =============================================</span>
     <span class="c1"># Methods to check if each parameter is set</span>
     <span class="c1"># =============================================</span>
@@ -1199,7 +1251,7 @@
                 <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-    
+
     <span class="c1"># =============================================</span>
     <span class="c1"># Extract other parameters</span>
     <span class="c1"># =============================================</span>
@@ -1224,11 +1276,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_size_x</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_size_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1250,11 +1302,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_py</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_size_y</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_aspect_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1275,7 +1327,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span>
         <span class="k">return</span> <span class="mi">1</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pixel_aspect_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1296,7 +1348,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span>
         <span class="k">return</span> <span class="mi">1</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">aspect_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1314,7 +1366,6 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect_y</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect_x</span>
-    
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -1340,7 +1391,6 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_aspect_y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ry</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;HORIZONTAL&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;VERTICAL&quot;</span>
-    
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">view_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -1365,12 +1415,11 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_fit</span> <span class="o">==</span> <span class="s2">&quot;HORIZONTAL&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_fit</span> <span class="o">==</span> <span class="s2">&quot;VERTICAL&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect_ratio</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span>
-
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">sensor_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -1399,7 +1448,6 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_size_x</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_fit</span> <span class="o">==</span> <span class="s2">&quot;VERTICAL&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_size_y</span>
-
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">lens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -1433,7 +1481,6 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_size</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_factor</span>
 
-
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shift_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1466,8 +1513,7 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_factor</span>
-    
+        <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cx</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_factor</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">shift_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -1483,7 +1529,7 @@
 <span class="sd">            sy = \frac{(c_y - (r_y - 1) / 2) ar}{vf}</span>
 
 <span class="sd">        where :math:`c_y` is the principal point in pixels in y direction, :math:`r_y` is the resolution in number of pixels in y direction, :math:`vf` is the view factor of the camera and :math:`ar` is the aspect ratio of the camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        .. warning::</span>
 
 <span class="sd">            This shift y is only for Blender. No reel physical meaning.</span>
@@ -1499,8 +1545,7 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect_ratio</span> 
-    
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cy</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ry</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect_ratio</span>
 
     <span class="c1"># =============================================</span>
     <span class="c1"># OpenCV and OpenGL methods</span>
@@ -1518,7 +1563,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        Rotation</span>
 <span class="sd">            The rotation of the camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The translation of the camera with shape (3, 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1526,7 +1571,7 @@
         <span class="n">translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_translation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span></div>
 
-    
+
 <div class="viewcode-block" id="BlenderCamera.set_OpenCV_RT">
 <a class="viewcode-back" href="../../../_docs/blender_camera.html#pysdic.blender.BlenderCamera.set_OpenCV_RT">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_OpenCV_RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1547,7 +1592,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_rotation</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_translation</span><span class="p">(</span><span class="n">translation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">OpenCV_tvec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1562,7 +1607,7 @@
 <span class="sd">            The translation vector of the camera with shape (3,).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_translation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
-    
+
     <span class="nd">@OpenCV_tvec</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">OpenCV_tvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tvec</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_translation</span><span class="p">(</span><span class="n">tvec</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -1586,7 +1631,6 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">OpenCV_rvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rvec</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_rotation</span><span class="p">(</span><span class="n">Rotation</span><span class="o">.</span><span class="n">from_rotvec</span><span class="p">(</span><span class="n">rvec</span><span class="p">),</span> <span class="n">convention</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
-
 <div class="viewcode-block" id="BlenderCamera.get_OpenGL_RT">
 <a class="viewcode-back" href="../../../_docs/blender_camera.html#pysdic.blender.BlenderCamera.get_OpenGL_RT">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_OpenGL_RT</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Rotation</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
@@ -1604,19 +1648,19 @@
 <span class="sd">        -------</span>
 <span class="sd">        Rotation</span>
 <span class="sd">            The rotation of the camera.</span>
-<span class="sd">        </span>
+
 <span class="sd">        numpy.ndarray</span>
 <span class="sd">            The translation of the camera with shape (3, 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_rotation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">x_axis</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">)))</span>
         <span class="n">translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">get_global_translation</span><span class="p">(</span><span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">translation</span></div>
 
-    
+
 <div class="viewcode-block" id="BlenderCamera.set_OpenGL_RT">
 <a class="viewcode-back" href="../../../_docs/blender_camera.html#pysdic.blender.BlenderCamera.set_OpenGL_RT">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_OpenGL_RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1639,12 +1683,11 @@
 <span class="sd">            The translation of the camera with shape (3, 1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x_axis</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">z_axis</span> <span class="o">=</span> <span class="o">-</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">rotation</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_rotation</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_global_translation</span><span class="p">(</span><span class="n">translation</span><span class="p">,</span> <span class="n">convention</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
-
 
 
     <span class="c1"># =============================================</span>
@@ -1685,8 +1728,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        description : Optional[str]</span>
-<span class="sd">            A description of the camera, by default None. </span>
-<span class="sd">            This message will be included in the dictionary under the key &quot;description&quot; if provided. </span>
+<span class="sd">            A description of the camera, by default None.</span>
+<span class="sd">            This message will be included in the dictionary under the key &quot;description&quot; if provided.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1697,7 +1740,7 @@
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If the description is not a string.</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Create the dictionary</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;BlenderCamera&quot;</span><span class="p">,</span>
@@ -1711,7 +1754,7 @@
             <span class="s2">&quot;px&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="p">,</span>
             <span class="s2">&quot;py&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="p">,</span>
             <span class="s2">&quot;clnear&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clnear</span><span class="p">,</span>
-            <span class="s2">&quot;clfar&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clfar</span>
+            <span class="s2">&quot;clfar&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clfar</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># Add the description</span>
@@ -1719,7 +1762,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Description must be a string.&quot;</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
-        
+
         <span class="k">return</span> <span class="n">data</span></div>
 
 
@@ -1740,7 +1783,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        data : dict</span>
 <span class="sd">            A dictionary containing the camera&#39;s data.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        BlenderCamera</span>
@@ -1754,7 +1797,7 @@
         <span class="c1"># Check for the input type</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;data must be a dictionary.&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Create the BlenderCamera instance</span>
         <span class="n">frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">load_from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">])</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
@@ -1773,7 +1816,6 @@
 
         <span class="k">return</span> <span class="n">camera</span></div>
 
-    
 
 <div class="viewcode-block" id="BlenderCamera.to_json">
 <a class="viewcode-back" href="../../../_docs/blender_camera.html#pysdic.blender.BlenderCamera.to_json">[docs]</a>
@@ -1787,9 +1829,9 @@
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
 <span class="sd">            The path to the JSON file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        description : Optional[str]</span>
-<span class="sd">            A description of the camera, by default None. </span>
+<span class="sd">            A description of the camera, by default None.</span>
 <span class="sd">            This message will be included in the JSON file under the key &quot;description&quot; if provided.</span>
 
 <span class="sd">        Raises</span>
@@ -1818,12 +1860,12 @@
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
 <span class="sd">            The path to the JSON file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        BlenderCamera</span>
 <span class="sd">            A BlenderCamera instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        FileNotFoundError</span>
@@ -1832,7 +1874,7 @@
         <span class="c1"># Load the dictionary from the JSON file</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        
+
         <span class="c1"># Create the Frame instance</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 </div>
