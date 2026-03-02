@@ -14,13 +14,15 @@
 
 from __future__ import annotations
 
-try : 
+try:
     import bpy
     import bmesh
     from bpy_types import Object
-except ImportError :
+except ImportError:
     print("[WARNING] This module can only be used within Blender's Python environment.")
-    print("[WARNING] Some functionalities can raise errors if Blender is not properly initialized.")
+    print(
+        "[WARNING] Some functionalities can raise errors if Blender is not properly initialized."
+    )
 
 from typing import Tuple, Optional, List, Union
 from numbers import Integral
@@ -32,6 +34,7 @@ from ..objects.mesh import Mesh
 
 import os
 import numpy
+
 
 class BlenderExperiment:
     r"""
@@ -45,7 +48,7 @@ class BlenderExperiment:
     This parameters can not be updated after the experiment is created.
 
     .. code-block:: python
-        
+
         from pysdic.blender import BlenderExperiment
 
         # Example instantiation
@@ -59,6 +62,7 @@ class BlenderExperiment:
     verbose : bool, optional
         If True, prints additional information during the experiment setup (default is False).
     """
+
     def __init__(self, Nb_frames: int = 1, verbose: bool = False) -> None:
         if not isinstance(Nb_frames, Integral):
             raise TypeError("Nb_frames must be an integer")
@@ -68,7 +72,7 @@ class BlenderExperiment:
             raise TypeError("verbose must be a boolean")
         self._verbose = verbose
         self._end_frame = int(Nb_frames)
-        self._camera_objects = {} # {"name" : List[BlenderCamera, List[bool]]}
+        self._camera_objects = {}  # {"name" : List[BlenderCamera, List[bool]]}
         self._spotlight_objects = {}
         self._mesh_objects = {}
         self._active_camera = None
@@ -76,7 +80,6 @@ class BlenderExperiment:
         self._reset_blender()
         self._set_default_rendering_settings()
 
-        
     # =======================================================
     # Reset Blender
     # =======================================================
@@ -92,7 +95,7 @@ class BlenderExperiment:
 
         """
         # Deleting all objects in the active scene
-        bpy.ops.object.select_all(action='SELECT')
+        bpy.ops.object.select_all(action="SELECT")
         bpy.ops.object.delete()
         # Deleting all meshes
         for mesh in bpy.data.meshes:
@@ -125,9 +128,11 @@ class BlenderExperiment:
         self._experiment_scene = bpy.data.scenes.new(name="experiment_scene")
         bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)  # Reset 3D cursor
         bpy.context.scene.frame_start = 1  # Start frame
-        bpy.context.scene.frame_end = self._end_frame + 1 # End frame
+        bpy.context.scene.frame_end = self._end_frame + 1  # End frame
         if self._verbose:
-            print("[INFO] Blender environment reset and new experiment scene initialized.")
+            print(
+                "[INFO] Blender environment reset and new experiment scene initialized."
+            )
 
     def _set_default_rendering_settings(self) -> None:
         """
@@ -141,24 +146,23 @@ class BlenderExperiment:
         - Sets the TIFF codec to NONE.
 
         """
-        bpy.context.scene.render.engine = 'CYCLES'
-        bpy.context.scene.cycles.device = 'GPU'
+        bpy.context.scene.render.engine = "CYCLES"
+        bpy.context.scene.cycles.device = "GPU"
         bpy.context.scene.cycles.use_denoising = False
-        bpy.context.scene.view_settings.view_transform = 'Filmic'
+        bpy.context.scene.view_settings.view_transform = "Filmic"
         bpy.context.scene.render.image_settings.compression = 0
         bpy.context.scene.render.image_settings.tiff_codec = "NONE"
         if self._verbose:
-            print("[INFO] Blender experiment initialized with default rendering settings.")
-
-
-
-
-
+            print(
+                "[INFO] Blender experiment initialized with default rendering settings."
+            )
 
     # =======================================================
     # Blender Scene Management (CAMERA)
     # =======================================================
-    def add_camera(self, name: str, camera: BlenderCamera, frames: Optional[List[bool]] = None) -> None:
+    def add_camera(
+        self, name: str, camera: BlenderCamera, frames: Optional[List[bool]] = None
+    ) -> None:
         r"""
         Add a camera to the experiment.
 
@@ -185,14 +189,14 @@ class BlenderExperiment:
 
             - :class:`BlenderCamera` for more information on how to define a camera.
             - :meth:`update_camera` to update the camera properties in the Blender scene.
-        
+
         Parameters
         ----------
         name : str
             The name of the camera with less than 50 characters.
-        
+
         camera : BlenderCamera
-            The camera object to be added. 
+            The camera object to be added.
 
         frames : List[bool], optional
             A list of booleans indicating which frames the camera will be active.
@@ -223,14 +227,14 @@ class BlenderExperiment:
             raise TypeError("camera must be an instance of BlenderCamera")
         if not camera.is_complete():
             raise ValueError("BlenderCamera is not completely defined.")
-    
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
         # Create the camera
         camera_data = bpy.data.cameras.new(name=name)
         blender_camera = bpy.data.objects.new(name, camera_data)
-        self._camera_objects[name] = [camera, None] # Store the camera and its frames
+        self._camera_objects[name] = [camera, None]  # Store the camera and its frames
 
         # Link the camera to the scene
         self._experiment_scene.collection.objects.link(blender_camera)
@@ -244,7 +248,6 @@ class BlenderExperiment:
         if self._verbose:
             print(f"[INFO] BlenderCamera '{name}' added to the experiment.")
 
-
     def set_camera_frames(self, name: str, frames: Optional[List[bool]] = None) -> None:
         r"""
         Set the frames for which the camera will be active.
@@ -255,7 +258,7 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the camera.
-        
+
         frames : List[bool], optional
             A list of booleans indicating which frames the camera will be active.
             If None, the camera will be active for all frames (default is None).
@@ -284,7 +287,7 @@ class BlenderExperiment:
                     raise TypeError("frames must be a list of booleans")
         else:
             frames = [True] * self._end_frame
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -297,17 +300,17 @@ class BlenderExperiment:
     def get_camera_frames(self, name: str) -> List[bool]:
         r"""
         Get the frames for which the camera is active.
-        
+
         Parameters
         ----------
         name : str
             The name of the camera.
-        
+
         Returns
         -------
         List[bool]
             A list of booleans indicating which frames the camera is active.
-        
+
         Raises
         -------
         TypeError
@@ -321,23 +324,22 @@ class BlenderExperiment:
             raise ValueError(f"BlenderCamera with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
         # Get the frames for which the camera is active
         return self._camera_objects[name][1]
 
-
     def get_camera(self, name: str) -> Tuple[BlenderCamera, Object]:
         r"""
         Get the camera object and its Blender object.
-        
+
         Parameters
         ----------
         name : str
             The name of the camera to retrieve.
-        
+
         Returns
         -------
         Tuple[BlenderCamera, Object]
@@ -349,7 +351,7 @@ class BlenderExperiment:
             raise ValueError(f"BlenderCamera with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -362,9 +364,8 @@ class BlenderExperiment:
             raise TypeError("[ERROR] camera must be an instance of BlenderCamera")
         if not isinstance(blender_camera, Object):
             raise TypeError("[ERROR] blender_camera must be an instance of Object")
-        
+
         return camera, blender_camera
-    
 
     def get_camera_names(self) -> List[str]:
         r"""
@@ -376,7 +377,6 @@ class BlenderExperiment:
             A list of camera names.
         """
         return list(self._camera_objects.keys())
-    
 
     def remove_camera(self, name: str) -> None:
         r"""
@@ -400,7 +400,7 @@ class BlenderExperiment:
             raise ValueError(f"BlenderCamera with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -415,7 +415,6 @@ class BlenderExperiment:
 
         if self._verbose:
             print(f"[INFO] BlenderCamera '{name}' removed from the experiment.")
-
 
     def update_camera(self, name: str) -> None:
         r"""
@@ -433,7 +432,7 @@ class BlenderExperiment:
             # Update some properties of the camera here
             # ...
             experiment.update_camera(name="Camera1") # To set active the modifications in the Blender scene
-        
+
         Parameters
         ----------
         name : str
@@ -455,28 +454,41 @@ class BlenderExperiment:
             raise ValueError("BlenderCamera is not completely defined.")
 
         # Set the lens unit of the camera
-        blender_camera.data.lens_unit = 'MILLIMETERS'
+        blender_camera.data.lens_unit = "MILLIMETERS"
 
         # Set the position and rotation of the camera
         rotation, translation = camera.get_OpenGL_RT()
+        print("Camera rotation:\n", rotation)
+        print("Camera translation:\n", translation)
+        print(type(rotation), type(translation))
+        quat = rotation.as_quat()
+
         blender_camera.location = translation
-        blender_quaternion = rotation.as_quat(scalar_first=True) # blender convention [qw, qx, qy, qz]
-        blender_camera.rotation_mode = 'QUATERNION'
-        blender_camera.rotation_quaternion = blender_quaternion 
+        blender_quaternion = rotation.as_quat(
+            scalar_first=True
+        )  # blender convention [qw, qx, qy, qz]
+        blender_camera.rotation_mode = "QUATERNION"
+        blender_camera.rotation_quaternion = blender_quaternion
 
         # Set the clipping of the camera
         if camera.clnear is not None:
             blender_camera.data.clip_start = camera.clnear
         else:
-            blender_camera.data.clip_start = 1e-6 # Lower limit for the near clipping plane
+            blender_camera.data.clip_start = (
+                1e-6  # Lower limit for the near clipping plane
+            )
         if camera.clfar is not None:
             blender_camera.data.clip_end = camera.clfar
         else:
-            blender_camera.data.clip_end = numpy.inf # Upper limit for the far clipping plane
+            blender_camera.data.clip_end = (
+                numpy.inf
+            )  # Upper limit for the far clipping plane
 
         # Set the focal length of the camera
         if camera.lens < 1:
-            raise ValueError("Focal length must be greater than 1 millimeter for Blender.")
+            raise ValueError(
+                "Focal length must be greater than 1 millimeter for Blender."
+            )
         blender_camera.data.lens = camera.lens
 
         # Set size of the sensor
@@ -494,7 +506,6 @@ class BlenderExperiment:
 
         if self._verbose:
             print(f"[INFO] BlenderCamera '{name}' updated in the experiment.")
-
 
     def set_active_camera(self, name: str) -> None:
         r"""
@@ -526,7 +537,7 @@ class BlenderExperiment:
         camera, blender_camera = self.get_camera(name)
         if not camera.is_complete():
             raise ValueError("BlenderCamera is not completely defined.")
-        
+
         # Set the active camera
         bpy.context.scene.camera = blender_camera
 
@@ -547,7 +558,6 @@ class BlenderExperiment:
         if self._verbose:
             print(f"[INFO] BlenderCamera '{name}' set as active in the experiment.")
 
-
     def get_active_camera(self) -> str:
         r"""
         Get the name of the active camera.
@@ -556,7 +566,7 @@ class BlenderExperiment:
         -------
         str
             The name of the active camera.
-        
+
         Raises
         -------
         ValueError
@@ -564,13 +574,12 @@ class BlenderExperiment:
         """
         return self._active_camera
 
-
-
-
     # =======================================================
     # Blender Scene Management (MESH)
     # =======================================================
-    def add_mesh(self, name: str, mesh: Mesh, frames: Optional[List[bool]] = None) -> None:
+    def add_mesh(
+        self, name: str, mesh: Mesh, frames: Optional[List[bool]] = None
+    ) -> None:
         r"""
         Add a mesh to the experiment. (Must be a 3D triangular mesh)
 
@@ -606,7 +615,7 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the mesh with less than 50 characters.
-        
+
         mesh : Mesh
             The mesh object to be added. It must be an instance of Mesh. Must be a 3D triangular mesh.
 
@@ -641,7 +650,7 @@ class BlenderExperiment:
         The second input of the MixRGB node is the default pattern of the material (white).
         It can be setted to any pattern using the ``add_mesh_pattern`` method.
 
-        The output of the MixRGB node is connected to the ``Base Color`` input of the Principled BSDF node.          
+        The output of the MixRGB node is connected to the ``Base Color`` input of the Principled BSDF node.
         """
         if not isinstance(name, str):
             raise TypeError("name must be a string")
@@ -653,16 +662,16 @@ class BlenderExperiment:
             raise ValueError(f"Object with name {name} already exists in Blender data.")
         if not isinstance(mesh, Mesh):
             raise TypeError("mesh must be an instance of Mesh")
-        if not mesh.elements_type == 'triangle_3' or not mesh.n_dimensions == 3:
+        if not mesh.element_type == "triangle_3" or not mesh.n_dimensions == 3:
             raise ValueError("Only 3D triangular meshes are supported.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
         # Extract the vertices and faces from the mesh
         points = mesh.vertices.points
         cells = mesh.connectivity.elements
-        
+
         # ======================
         # MESH CREATION
         # ======================
@@ -684,10 +693,10 @@ class BlenderExperiment:
         # =======================
 
         # Creating the material
-        if f'[pysdic]_{name}_mat' in bpy.data.materials:
+        if f"[pysdic]_{name}_mat" in bpy.data.materials:
             raise ValueError(f"Material with name [pysdic]_{name}_mat already exists.")
 
-        blender_material = bpy.data.materials.new(name=f'[pysdic]_{name}_mat')
+        blender_material = bpy.data.materials.new(name=f"[pysdic]_{name}_mat")
         blender_material.use_nodes = True
 
         # Assign the material to the object
@@ -707,29 +716,43 @@ class BlenderExperiment:
         #
         # If the user add a pattern, we update the second input of the MixRGB node with the pattern.
         # If the user add a material, we update the first input of the MixRGB node with the color.
-        
+
         # Access the nodes of the material
         nodes = blender_material.node_tree.nodes  # Access the material's node tree
         links = blender_material.node_tree.links  # Access node tree links
 
         # Create a MixRGB node (type 'MIX') to combine base color and pattern
-        if f'[pysdic]_{name}_mbp' in nodes:
-            raise ValueError(f"MixRGB node with name [pysdic]_{name}_mbp already exists.")
+        if f"[pysdic]_{name}_mbp" in nodes:
+            raise ValueError(
+                f"MixRGB node with name [pysdic]_{name}_mbp already exists."
+            )
 
-        mix_node = nodes.new(type='ShaderNodeMixRGB')
-        mix_node.name = f'[pysdic]_{name}_mbp'
-        mix_node.blend_type = 'MULTIPLY'
-        mix_node.inputs['Fac'].default_value = 1.0  # Full multiplication
+        mix_node = nodes.new(type="ShaderNodeMixRGB")
+        mix_node.name = f"[pysdic]_{name}_mbp"
+        mix_node.blend_type = "MULTIPLY"
+        mix_node.inputs["Fac"].default_value = 1.0  # Full multiplication
 
         # Set the default input values for the MixRGB node
-        mix_node.inputs['Color1'].default_value = (1.0, 1.0, 1.0, 1.0)  # Default base color (white)
-        mix_node.inputs['Color2'].default_value = (1.0, 1.0, 1.0, 1.0)  # Default pattern (white)
+        mix_node.inputs["Color1"].default_value = (
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+        )  # Default base color (white)
+        mix_node.inputs["Color2"].default_value = (
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+        )  # Default pattern (white)
 
         # Ensure the Principled BSDF node exists
-        if not 'Principled BSDF' in nodes:
-            raise ValueError("No 'Principled BSDF' node found in the material. Ensure nodes are enabled.")
+        if not "Principled BSDF" in nodes:
+            raise ValueError(
+                "No 'Principled BSDF' node found in the material. Ensure nodes are enabled."
+            )
 
-        principled = nodes['Principled BSDF']
+        principled = nodes["Principled BSDF"]
         input_base_color = principled.inputs["Base Color"]
         existing_link = input_base_color.links[0] if input_base_color.links else None
 
@@ -737,10 +760,13 @@ class BlenderExperiment:
             # disconnect the existing link
             links.remove(existing_link)
             # connect the existing link to the MixRGB node `Color1`.
-            links.new(existing_link.from_node.outputs[existing_link.from_socket.name], mix_node.inputs['Color1'])
+            links.new(
+                existing_link.from_node.outputs[existing_link.from_socket.name],
+                mix_node.inputs["Color1"],
+            )
 
         # Connect the MixRGB node to the Principled BSDF node
-        links.new(mix_node.outputs['Color'], input_base_color)
+        links.new(mix_node.outputs["Color"], input_base_color)
 
         # =========================
         # FINALIZE MESH
@@ -756,7 +782,6 @@ class BlenderExperiment:
 
         if self._verbose:
             print(f"[INFO] Mesh '{name}' added to the experiment.")
-
 
     def add_mesh_pattern(self, name: str, pattern_path: str) -> None:
         r"""
@@ -777,8 +802,8 @@ class BlenderExperiment:
             experiment.add_mesh_pattern(name="Mesh1", pattern_path="path/to/pattern.png")
 
         .. warning::
-        
-            The UV coordinates of the mesh must be defined in the Mesh object.   
+
+            The UV coordinates of the mesh must be defined in the Mesh object.
             as "uvmap" in the point_data dictionary.
 
         .. seealso::
@@ -789,10 +814,10 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the mesh.
-        
+
         pattern_path : str
             The path to the pattern image file.
-        
+
         Raises
         -------
         TypeError
@@ -825,9 +850,13 @@ class BlenderExperiment:
             raise ValueError(f"No object with name {name} in Blender data.")
         if not os.path.isfile(pattern_path):
             raise ValueError(f"Pattern path {pattern_path} is not valid.")
-        if not pattern_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
-            raise ValueError(f"Pattern path {pattern_path} is not a valid image format.")
-        
+        if not pattern_path.lower().endswith(
+            (".png", ".jpg", ".jpeg", ".bmp", ".tiff")
+        ):
+            raise ValueError(
+                f"Pattern path {pattern_path} is not a valid image format."
+            )
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -838,18 +867,26 @@ class BlenderExperiment:
         if mesh.uvmap is None:
             raise ValueError(f"Mesh {name} does not have a UVMAP defined.")
 
-        uvmap = mesh.uvmap # Get the UVMap from the mesh (shape: (M, 6))
+        uvmap = mesh.uvmap  # Get the UVMap from the mesh (shape: (M, 6))
 
         # Setting the UVMap
         if f"[pysdic]_{name}_uvm" in blender_mesh.data.uv_layers:
             raise ValueError(f"UVMap with name [pysdic]_{name}_uvm already exists.")
-        
+
         uv_layer = blender_mesh.data.uv_layers.new(name=f"[pysdic]_{name}_uvm")
-        for poly_index, polygon in enumerate(blender_mesh.data.polygons): # poly_index is the index of the polygon in the mesh (ie triangle)
-            for index, loop_index in enumerate(polygon.loop_indices): # index is the index of the vertex in the polygon
-                loop = blender_mesh.data.loops[loop_index] # The loop associated to the current vertex in the polygon
-                uv_layer.data[loop.index].uv = tuple(uvmap[poly_index, 2*index:2*(index+1)])  # Set the UV coordinates for each loop
-            
+        for poly_index, polygon in enumerate(
+            blender_mesh.data.polygons
+        ):  # poly_index is the index of the polygon in the mesh (ie triangle)
+            for index, loop_index in enumerate(
+                polygon.loop_indices
+            ):  # index is the index of the vertex in the polygon
+                loop = blender_mesh.data.loops[
+                    loop_index
+                ]  # The loop associated to the current vertex in the polygon
+                uv_layer.data[loop.index].uv = tuple(
+                    uvmap[poly_index, 2 * index : 2 * (index + 1)]
+                )  # Set the UV coordinates for each loop
+
         # Access the material
         if not blender_mesh.data.materials:
             raise ValueError(f"Mesh '{name}' has no material assigned.")
@@ -862,27 +899,32 @@ class BlenderExperiment:
         links = material.node_tree.links  # Access node tree links
 
         # Add an image texture node
-        if f'[pysdic]_{name}_imt' in nodes:
-            raise ValueError(f"Image texture node with name [pysdic]_{name}_imt already exists.")
-        
+        if f"[pysdic]_{name}_imt" in nodes:
+            raise ValueError(
+                f"Image texture node with name [pysdic]_{name}_imt already exists."
+            )
+
         tex_image_node = nodes.new(type="ShaderNodeTexImage")
-        tex_image_node.name = f'[pysdic]_{name}_imt'
+        tex_image_node.name = f"[pysdic]_{name}_imt"
         tex_image_node.image = bpy.data.images.load(pattern_path)
-        tex_image_node.extension = 'CLIP'  
+        tex_image_node.extension = "CLIP"
 
         # Get the MixRGB node and connect the image texture node to it
-        if not f'[pysdic]_{name}_mbp' in nodes:
-            raise ValueError(f"MixRGB node with name [pysdic]_{name}_mbp does not exist.")
-        
-        mix_node = nodes.get(f'[pysdic]_{name}_mbp')
-        links.new(tex_image_node.outputs['Color'], mix_node.inputs['Color2'])
+        if not f"[pysdic]_{name}_mbp" in nodes:
+            raise ValueError(
+                f"MixRGB node with name [pysdic]_{name}_mbp does not exist."
+            )
+
+        mix_node = nodes.get(f"[pysdic]_{name}_mbp")
+        links.new(tex_image_node.outputs["Color"], mix_node.inputs["Color2"])
 
         # Update the mesh
         blender_mesh.data.update()
 
         if self._verbose:
-            print(f"[INFO] Pattern '{pattern_path}' added to mesh '{name}' in the experiment.")
-
+            print(
+                f"[INFO] Pattern '{pattern_path}' added to mesh '{name}' in the experiment."
+            )
 
     def add_mesh_material(self, name: str, material: BlenderMaterialBSDF) -> None:
         r"""
@@ -916,10 +958,10 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the mesh.
-        
+
         material : BlenderMaterialBSDF
             The material object to be added.
-        
+
         Raises
         -------
         TypeError
@@ -935,7 +977,7 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -948,21 +990,25 @@ class BlenderExperiment:
         blender_material = blender_mesh.data.materials[0]
         if not blender_material.use_nodes:
             raise ValueError(f"Material for '{name}' does not use nodes.")
-        
+
         # Access the nodes
         nodes = blender_material.node_tree.nodes  # Access the material's node tree
         _ = blender_material.node_tree.links  # Access node tree links
 
         # Access the Principled BSDF node
-        if not 'Principled BSDF' in nodes:
-            raise ValueError("No 'Principled BSDF' node found in the material. Ensure nodes are enabled.")
-        
-        principled = blender_material.node_tree.nodes.get('Principled BSDF')
-        
+        if not "Principled BSDF" in nodes:
+            raise ValueError(
+                "No 'Principled BSDF' node found in the material. Ensure nodes are enabled."
+            )
+
+        principled = blender_material.node_tree.nodes.get("Principled BSDF")
+
         # Access the mix node
-        mix_node = blender_material.node_tree.nodes.get(f'[pysdic]_{name}_mbp')
+        mix_node = blender_material.node_tree.nodes.get(f"[pysdic]_{name}_mbp")
         if not mix_node:
-            raise ValueError(f"No MixRGB node found for mesh '{name}'. Ensure the mesh has been added with a material.")
+            raise ValueError(
+                f"No MixRGB node found for mesh '{name}'. Ensure the mesh has been added with a material."
+            )
 
         # Set the properties
         if material.base_color is not None:
@@ -981,27 +1027,41 @@ class BlenderExperiment:
         if material.weight is not None:
             principled.inputs["Weight"].default_value = material.weight
         if material.subsurface_weight is not None:
-            principled.inputs["Subsurface Weight"].default_value = material.subsurface_weight
+            principled.inputs["Subsurface Weight"].default_value = (
+                material.subsurface_weight
+            )
         if material.subsurface_radius is not None:
-            principled.inputs["Subsurface Radius"].default_value = material.subsurface_radius
+            principled.inputs["Subsurface Radius"].default_value = (
+                material.subsurface_radius
+            )
         if material.subsurface_scale is not None:
-            principled.inputs["Subsurface Scale"].default_value = material.subsurface_scale
+            principled.inputs["Subsurface Scale"].default_value = (
+                material.subsurface_scale
+            )
         if material.subsurface_IOR is not None:
             principled.inputs["Subsurface IOR"].default_value = material.subsurface_IOR
         if material.subsurface_anisotropy is not None:
-            principled.inputs["Subsurface Anisotropy"].default_value = material.subsurface_anisotropy
+            principled.inputs["Subsurface Anisotropy"].default_value = (
+                material.subsurface_anisotropy
+            )
         if material.specular_IOR_level is not None:
-            principled.inputs["Specular IOR Level"].default_value = material.specular_IOR_level
+            principled.inputs["Specular IOR Level"].default_value = (
+                material.specular_IOR_level
+            )
         if material.specular_tint is not None:
             principled.inputs["Specular Tint"].default_value = material.specular_tint
         if material.anisotropic is not None:
             principled.inputs["Anisotropic"].default_value = material.anisotropic
         if material.anisotropic_rotation is not None:
-            principled.inputs["Anisotropic Rotation"].default_value = material.anisotropic_rotation
+            principled.inputs["Anisotropic Rotation"].default_value = (
+                material.anisotropic_rotation
+            )
         if material.tangent is not None:
             principled.inputs["Tangent"].default_value = material.tangent
         if material.transmission_weight is not None:
-            principled.inputs["Transmission Weight"].default_value = material.transmission_weight
+            principled.inputs["Transmission Weight"].default_value = (
+                material.transmission_weight
+            )
         if material.coat_weight is not None:
             principled.inputs["Coat Weight"].default_value = material.coat_weight
         if material.coat_roughness is not None:
@@ -1015,15 +1075,21 @@ class BlenderExperiment:
         if material.sheen_weight is not None:
             principled.inputs["Sheen Weight"].default_value = material.sheen_weight
         if material.sheen_roughness is not None:
-            principled.inputs["Sheen Roughness"].default_value = material.sheen_roughness
+            principled.inputs["Sheen Roughness"].default_value = (
+                material.sheen_roughness
+            )
         if material.sheen_tint is not None:
             principled.inputs["Sheen Tint"].default_value = material.sheen_tint
         if material.emission_color is not None:
             principled.inputs["Emission Color"].default_value = material.emission_color
         if material.emission_strength is not None:
-            principled.inputs["Emission Strength"].default_value = material.emission_strength
+            principled.inputs["Emission Strength"].default_value = (
+                material.emission_strength
+            )
         if material.thin_film_thickness is not None:
-            principled.inputs["Thin Film Thickness"].default_value = material.thin_film_thickness
+            principled.inputs["Thin Film Thickness"].default_value = (
+                material.thin_film_thickness
+            )
         if material.thin_film_IOR is not None:
             principled.inputs["Thin Film IOR"].default_value = material.thin_film_IOR
 
@@ -1032,7 +1098,6 @@ class BlenderExperiment:
 
         if self._verbose:
             print(f"[INFO] Material added to mesh '{name}' in the experiment.")
-
 
     def set_mesh_frames(self, name: str, frames: Optional[List[bool]] = None) -> None:
         r"""
@@ -1044,7 +1109,7 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the mesh.
-        
+
         frames : List[bool], optional
             A list of booleans indicating which frames the mesh will be active.
             If None, the mesh will be active for all frames (default is None).
@@ -1073,7 +1138,7 @@ class BlenderExperiment:
                     raise TypeError("frames must be a list of booleans")
         else:
             frames = [True] * self._end_frame
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1093,7 +1158,6 @@ class BlenderExperiment:
 
         if self._verbose:
             print(f"[INFO] Mesh '{name}' frames set in the experiment.")
-
 
     def activate_smooth_shading(self, name: str) -> None:
         r"""
@@ -1119,7 +1183,7 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1127,7 +1191,9 @@ class BlenderExperiment:
         _, blender_mesh = self.get_mesh(name)
 
         # Set smooth shading
-        blender_mesh.data.polygons.foreach_set("use_smooth", [True] * len(blender_mesh.data.polygons))
+        blender_mesh.data.polygons.foreach_set(
+            "use_smooth", [True] * len(blender_mesh.data.polygons)
+        )
 
         # Update the mesh
         blender_mesh.data.update()
@@ -1138,14 +1204,14 @@ class BlenderExperiment:
     def deactivate_smooth_shading(self, name: str) -> None:
         r"""
         Deactivate smooth shading for the mesh.
-        
+
         Smooth shading is a rendering technique that gives the appearance of a smooth surface by interpolating vertex normals across the surface of the mesh.
 
         Parameters
         ----------
         name : str
             The name of the mesh to deactivate smooth shading for.
-        
+
         Raises
         -------
         TypeError
@@ -1159,7 +1225,7 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1167,29 +1233,30 @@ class BlenderExperiment:
         _, blender_mesh = self.get_mesh(name)
 
         # Set flat shading
-        blender_mesh.data.polygons.foreach_set("use_smooth", [False] * len(blender_mesh.data.polygons))
+        blender_mesh.data.polygons.foreach_set(
+            "use_smooth", [False] * len(blender_mesh.data.polygons)
+        )
 
         # Update the mesh
         blender_mesh.data.update()
-        
+
         if self._verbose:
             print(f"[INFO] Smooth shading deactivated for mesh '{name}'.")
 
-    
     def get_mesh_frames(self, name: str) -> List[bool]:
         r"""
         Get the frames for which the mesh is active.
-        
+
         Parameters
         ----------
         name : str
             The name of the mesh.
-        
+
         Returns
         -------
         List[bool]
             A list of booleans indicating which frames the mesh is active.
-        
+
         Raises
         -------
         TypeError
@@ -1203,23 +1270,22 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
         # Get the frames for which the mesh is active
         return self._mesh_objects[name][1]
-    
 
     def get_mesh(self, name: str) -> Tuple[Mesh, Object]:
         r"""
         Get the mesh object and its Blender object.
-        
+
         Parameters
         ----------
         name : str
             The name of the mesh to retrieve.
-        
+
         Returns
         -------
         Tuple[Mesh, Object]
@@ -1231,7 +1297,7 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1244,9 +1310,8 @@ class BlenderExperiment:
             raise TypeError("[ERROR] mesh must be an instance of Mesh")
         if not isinstance(blender_mesh, Object):
             raise TypeError("[ERROR] blender_mesh must be an instance of Object")
-        
+
         return mesh, blender_mesh
-    
 
     def get_mesh_names(self) -> List[str]:
         r"""
@@ -1258,7 +1323,6 @@ class BlenderExperiment:
             A list of mesh names.
         """
         return list(self._mesh_objects.keys())
-
 
     def remove_mesh(self, name: str) -> None:
         r"""
@@ -1293,7 +1357,7 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1306,14 +1370,14 @@ class BlenderExperiment:
         material = blender_mesh.data.materials[0]
         if not material.use_nodes:
             raise ValueError(f"Material for '{name}' does not use nodes.")
-        
+
         # Access the nodes of the material
         nodes = material.node_tree.nodes  # Access the material's node tree
         _ = material.node_tree.links  # Access node tree links
 
         # Remove the MixRGB node
-        if f'[pysdic]_{name}_mbp' in nodes:
-            mix_node = nodes[f'[pysdic]_{name}_mbp']
+        if f"[pysdic]_{name}_mbp" in nodes:
+            mix_node = nodes[f"[pysdic]_{name}_mbp"]
             nodes.remove(mix_node)
 
         # Remove the material
@@ -1321,13 +1385,13 @@ class BlenderExperiment:
         bpy.data.materials.remove(material)
 
         # Remove the uv_layer
-        if f'[pysdic]_{name}_uvm' in blender_mesh.data.uv_layers:
-            uv_layer = blender_mesh.data.uv_layers[f'[pysdic]_{name}_uvm']
+        if f"[pysdic]_{name}_uvm" in blender_mesh.data.uv_layers:
+            uv_layer = blender_mesh.data.uv_layers[f"[pysdic]_{name}_uvm"]
             blender_mesh.data.uv_layers.remove(uv_layer)
 
         # Remove the image texture node
-        if f'[pysdic]_{name}_imt' in nodes:
-            tex_image_node = nodes[f'[pysdic]_{name}_imt']
+        if f"[pysdic]_{name}_imt" in nodes:
+            tex_image_node = nodes[f"[pysdic]_{name}_imt"]
             if tex_image_node.image is not None:
                 bpy.data.images.remove(tex_image_node.image)
             nodes.remove(tex_image_node)
@@ -1364,11 +1428,11 @@ class BlenderExperiment:
 
             The number of nodes must be unchanged !!!
 
-            Furthermore, this method does not update the material properties of the mesh and the pattern image: 
-            
+            Furthermore, this method does not update the material properties of the mesh and the pattern image:
+
             - To update the material properties, use the :meth:`add_mesh_material` method again.
             - To change the pattern image, use the :meth:`change_mesh_pattern` method.
-        
+
         Parameters
         ----------
         name : str
@@ -1380,7 +1444,7 @@ class BlenderExperiment:
             raise ValueError(f"Mesh with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1402,22 +1466,31 @@ class BlenderExperiment:
             poly.vertices = [int(vertex) for vertex in cells[i]]
 
         # Update the uvmap if it exists
-        if f'[pysdic]_{name}_uvm' in blender_mesh.data.uv_layers:
-            uv_layer = blender_mesh.data.uv_layers[f'[pysdic]_{name}_uvm']
+        if f"[pysdic]_{name}_uvm" in blender_mesh.data.uv_layers:
+            uv_layer = blender_mesh.data.uv_layers[f"[pysdic]_{name}_uvm"]
             if uvmap is not None:
-                for poly_index, polygon in enumerate(blender_mesh.data.polygons): # poly_index is the index of the polygon in the mesh (ie triangle)
-                    for index, loop_index in enumerate(polygon.loop_indices): # index is the index of the vertex in the polygon
-                        loop = blender_mesh.data.loops[loop_index] # The loop associated to the current vertex in the polygon
-                        uv_layer.data[loop.index].uv = tuple(uvmap[poly_index, 2*index:2*(index+1)])  # Set the UV coordinates for each loop
+                for poly_index, polygon in enumerate(
+                    blender_mesh.data.polygons
+                ):  # poly_index is the index of the polygon in the mesh (ie triangle)
+                    for index, loop_index in enumerate(
+                        polygon.loop_indices
+                    ):  # index is the index of the vertex in the polygon
+                        loop = blender_mesh.data.loops[
+                            loop_index
+                        ]  # The loop associated to the current vertex in the polygon
+                        uv_layer.data[loop.index].uv = tuple(
+                            uvmap[poly_index, 2 * index : 2 * (index + 1)]
+                        )  # Set the UV coordinates for each loop
             else:
-                raise ValueError(f"Mesh {name} does not have a UVMAP defined but the uv_layer exists.")
+                raise ValueError(
+                    f"Mesh {name} does not have a UVMAP defined but the uv_layer exists."
+                )
 
         # Update the mesh
         blender_mesh.data.update()
 
         if self._verbose:
             print(f"[INFO] Mesh '{name}' updated in the experiment.")
-
 
     def change_mesh_pattern(self, name: str, pattern_path: str) -> None:
         r"""
@@ -1445,10 +1518,10 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the mesh.
-        
+
         pattern_path : str
             The path to the new pattern image file.
-        
+
         Raises
         -------
         TypeError
@@ -1456,7 +1529,7 @@ class BlenderExperiment:
         ValueError
             If a mesh with the same name does not exist in the experiment or in Blender data.
             If the pattern path is not valid or the image format is not supported.
-        
+
         """
         if not isinstance(name, str):
             raise TypeError("name must be a string")
@@ -1468,9 +1541,13 @@ class BlenderExperiment:
             raise ValueError(f"No object with name {name} in Blender data.")
         if not os.path.isfile(pattern_path):
             raise ValueError(f"Pattern path {pattern_path} is not valid.")
-        if not pattern_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
-            raise ValueError(f"Pattern path {pattern_path} is not a valid image format.")
-        
+        if not pattern_path.lower().endswith(
+            (".png", ".jpg", ".jpeg", ".bmp", ".tiff")
+        ):
+            raise ValueError(
+                f"Pattern path {pattern_path} is not a valid image format."
+            )
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1489,28 +1566,37 @@ class BlenderExperiment:
         _ = material.node_tree.links  # Access node tree links
 
         # Add an image texture node
-        if not f'[pysdic]_{name}_imt' in nodes:
-            raise ValueError(f"Image texture node with name [pysdic]_{name}_imt does not exist.")
-        
-        tex_image_node = nodes[f'[pysdic]_{name}_imt']
+        if not f"[pysdic]_{name}_imt" in nodes:
+            raise ValueError(
+                f"Image texture node with name [pysdic]_{name}_imt does not exist."
+            )
+
+        tex_image_node = nodes[f"[pysdic]_{name}_imt"]
         if tex_image_node.image is not None:
             bpy.data.images.remove(tex_image_node.image)
         tex_image_node.image = bpy.data.images.load(pattern_path)
-        tex_image_node.extension = 'CLIP'  # Set the extension to CLIP to avoid stretching the image
+        tex_image_node.extension = (
+            "CLIP"  # Set the extension to CLIP to avoid stretching the image
+        )
         tex_image_node.image.reload()  # Reload the image to apply the changes
 
         # Update the mesh
         blender_mesh.data.update()
 
         if self._verbose:
-            print(f"[INFO] Pattern changed to '{pattern_path}' for mesh '{name}' in the experiment.")
-   
-    
+            print(
+                f"[INFO] Pattern changed to '{pattern_path}' for mesh '{name}' in the experiment."
+            )
 
     # =======================================================
     # Blender Scene Management (SPOTLIGHT)
     # =======================================================
-    def add_spotlight(self, name: str, spotlight: BlenderSpotLight, frames: Optional[List[bool]] = None) -> None:
+    def add_spotlight(
+        self,
+        name: str,
+        spotlight: BlenderSpotLight,
+        frames: Optional[List[bool]] = None,
+    ) -> None:
         r"""
         Add a spotlight to the experiment.
 
@@ -1533,16 +1619,16 @@ class BlenderExperiment:
 
         .. seealso::
 
-            - :class:`BlenderSpotLight` for more information on how to define a spotlight.     
+            - :class:`BlenderSpotLight` for more information on how to define a spotlight.
 
         Parameters
         ----------
         name : str
             The name of the spotlight with less than 50 characters.
-        
+
         spotlight : BlenderSpotLight
             The spotlight object to be added.
-        
+
         frames : List[bool], optional
             A list of booleans indicating which frames the spotlight will be active.
             If None, the spotlight will be active for all frames (default is None).
@@ -1573,7 +1659,7 @@ class BlenderExperiment:
         bpy.context.window.scene = self._experiment_scene
 
         # Create the spotlight
-        spotlight_data = bpy.data.lights.new(name=name, type='SPOT')
+        spotlight_data = bpy.data.lights.new(name=name, type="SPOT")
         blender_spotlight = bpy.data.objects.new(name, spotlight_data)
         self._spotlight_objects[name] = [spotlight, None]
 
@@ -1589,8 +1675,9 @@ class BlenderExperiment:
         if self._verbose:
             print(f"[INFO] Spotlight '{name}' added to the experiment.")
 
-    
-    def set_spotlight_frames(self, name: str, frames: Optional[List[bool]] = None) -> None:
+    def set_spotlight_frames(
+        self, name: str, frames: Optional[List[bool]] = None
+    ) -> None:
         r"""
         Set the frames for which the spotlight will be active.
         If None, the spotlight will be active for all frames.
@@ -1600,7 +1687,7 @@ class BlenderExperiment:
         ----------
         name : str
             The name of the spotlight.
-        
+
         frames : List[bool], optional
             A list of booleans indicating which frames the spotlight will be active.
             If None, the spotlight will be active for all frames (default is None).
@@ -1629,7 +1716,7 @@ class BlenderExperiment:
                     raise TypeError("frames must be a list of booleans")
         else:
             frames = [True] * self._end_frame
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1647,21 +1734,20 @@ class BlenderExperiment:
         if self._verbose:
             print(f"[INFO] Spotlight '{name}' frames set in the experiment.")
 
-
     def get_spotlight_frames(self, name: str) -> List[bool]:
         r"""
         Get the frames for which the spotlight is active.
-        
+
         Parameters
         ----------
         name : str
             The name of the spotlight.
-        
+
         Returns
         -------
         List[bool]
             A list of booleans indicating which frames the spotlight is active.
-        
+
         Raises
         -------
         TypeError
@@ -1675,23 +1761,22 @@ class BlenderExperiment:
             raise ValueError(f"Spotlight with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
         # Get the frames for which the spotlight is active
         return self._spotlight_objects[name][1]
-    
 
     def get_spotlight(self, name: str) -> Tuple[BlenderSpotLight, Object]:
         r"""
         Get the spotlight object and its Blender object.
-        
+
         Parameters
         ----------
         name : str
             The name of the spotlight to retrieve.
-        
+
         Returns
         -------
         Tuple[BlenderSpotLight, Object]
@@ -1703,7 +1788,7 @@ class BlenderExperiment:
             raise ValueError(f"Spotlight with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1716,9 +1801,8 @@ class BlenderExperiment:
             raise TypeError("[ERROR] spotlight must be an instance of BlenderSpotLight")
         if not isinstance(blender_spotlight, Object):
             raise TypeError("[ERROR] blender_spotlight must be an instance of Object")
-        
+
         return spotlight, blender_spotlight
-    
 
     def remove_spotlight(self, name: str) -> None:
         r"""
@@ -1742,7 +1826,7 @@ class BlenderExperiment:
             raise ValueError(f"Spotlight with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1754,7 +1838,6 @@ class BlenderExperiment:
         if self._verbose:
             print(f"[INFO] Spotlight '{name}' removed from the experiment.")
 
-    
     def update_spotlight(self, name: str) -> None:
         r"""
         Update the spotlight properties in the Blender scene.
@@ -1771,11 +1854,11 @@ class BlenderExperiment:
             # Update some nodes of the spotlight here
             # ...
             experiment.update_spotlight(name="Spotlight1") # To set active the modifications in the Blender scene
-        
+
         .. warning::
 
             This method does not update the material properties of the spotlight.
-            Only the position and rotation are updated.  
+            Only the position and rotation are updated.
             The number of nodes mustnot be changed.
 
         Parameters
@@ -1789,7 +1872,7 @@ class BlenderExperiment:
             raise ValueError(f"Spotlight with name {name} does not exist.")
         if name not in bpy.data.objects:
             raise ValueError(f"No object with name {name} in Blender data.")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1799,8 +1882,10 @@ class BlenderExperiment:
         # Set the position and rotation of the camera
         rotation, translation = spotlight.get_OpenGL_RT()
         blender_spotlight.location = translation
-        blender_quaternion = rotation.as_quat(scalar_first=True) # blender convention [qw, qx, qy, qz]
-        blender_spotlight.rotation_mode = 'QUATERNION'
+        blender_quaternion = rotation.as_quat(
+            scalar_first=True
+        )  # blender convention [qw, qx, qy, qz]
+        blender_spotlight.rotation_mode = "QUATERNION"
         blender_spotlight.rotation_quaternion = blender_quaternion
 
         # Set the spotlight properties
@@ -1814,14 +1899,12 @@ class BlenderExperiment:
         if self._verbose:
             print(f"[INFO] Spotlight '{name}' updated in the experiment.")
 
-
-
     # =======================================================
     # Blender Scene Management (DEFAULT)
     # =======================================================
     def set_default_background(self) -> None:
-        r""" 
-        Set the default background for the experiment scene. 
+        r"""
+        Set the default background for the experiment scene.
         """
         bpy.ops.world.new()
         bpy.context.scene.world = bpy.data.worlds["World"]
@@ -1846,7 +1929,7 @@ class BlenderExperiment:
 
         # Update the scene
         bpy.ops.ptcache.free_bake_all()
-        bpy.ops.ptcache.bake_all()       
+        bpy.ops.ptcache.bake_all()
         bpy.context.view_layer.update()
         bpy.context.view_layer.depsgraph.update()
 
@@ -1861,7 +1944,7 @@ class BlenderExperiment:
         ----------
         frame : int
             The frame number to set.
-        
+
         Raises
         -------
         TypeError
@@ -1873,7 +1956,7 @@ class BlenderExperiment:
             raise TypeError("frame must be an integer")
         if frame < 1 or frame > self._end_frame:
             raise ValueError(f"frame must be between 1 and {self._end_frame}")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
@@ -1882,9 +1965,9 @@ class BlenderExperiment:
         self._active_frame = int(frame)
 
         if self._verbose:
-            print(f"[INFO] Active frame set to {self._active_frame} in the experiment scene.")
-
-
+            print(
+                f"[INFO] Active frame set to {self._active_frame} in the experiment scene."
+            )
 
     # =======================================================
     # Blender Scene RENDER
@@ -1896,8 +1979,8 @@ class BlenderExperiment:
         color_mode: str = "BW",
         color_depth: str = "8",
         N_samples: int = 200,
-        default: bool = True
-        ) -> None:
+        default: bool = True,
+    ) -> None:
         r"""
         Render the experiment scene.
 
@@ -1908,13 +1991,13 @@ class BlenderExperiment:
 
         output_format : str, optional
             The output format of the rendered image (default is "TIFF").
-        
+
         color_mode : str, optional
             The color mode of the rendered image (default is "BW").
 
         color_depth : str, optional
             The color depth of the rendered image (default is "8").
-        
+
         N_samples : int, optional
             The number of samples for rendering (default is 200).
 
@@ -1931,20 +2014,26 @@ class BlenderExperiment:
         """
         if not isinstance(output_path, str):
             raise TypeError("output_path must be a string")
-        
+
         # Ensure the experiment scene is active
         bpy.context.window.scene = self._experiment_scene
 
         # Set the current frame and camera
         if self._active_frame is None:
-            raise ValueError("No active frame set. Use set_active_frame() to set the current frame.")
-        
+            raise ValueError(
+                "No active frame set. Use set_active_frame() to set the current frame."
+            )
+
         if self._active_camera is None:
-            raise ValueError("No active camera set. Use set_active_camera() to set the current camera.")
-        
+            raise ValueError(
+                "No active camera set. Use set_active_camera() to set the current camera."
+            )
+
         camera_frames = self.get_camera_frames(self._active_camera)
         if camera_frames[self._active_frame - 1] is False:
-            raise ValueError(f"BlenderCamera {self._active_camera} is not active for frame {self._active_frame}.")
+            raise ValueError(
+                f"BlenderCamera {self._active_camera} is not active for frame {self._active_frame}."
+            )
 
         # Set the render settings
         bpy.context.scene.render.image_settings.file_format = output_format
@@ -1956,8 +2045,8 @@ class BlenderExperiment:
         # If default is True, set the default render settings
         if default:
             self._set_default_rendering_settings()
-            bpy.context.scene.render.engine = 'CYCLES'
-  
+            bpy.context.scene.render.engine = "CYCLES"
+
         # Perform the rendering
         bpy.ops.render.render(write_still=True)
         print(f"Rendered image saved to {output_path}")
