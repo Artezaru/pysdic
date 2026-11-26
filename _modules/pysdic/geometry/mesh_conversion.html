@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.geometry.mesh_conversion &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/mesh_conversion';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.geometry.mesh_conversion</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.geometry.mesh_conversion</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_choice</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.connectivity</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connectivity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.point_cloud</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointCloud</span>
+
+
+<span class="c1"># For each diagonal, the vertices (v0, v1, v2, v3) of a quadrangle used by its two triangles</span>
+<span class="n">_QUADRANGLE_SPLITS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"first"</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>   <span class="c1"># diagonal v0 - v2</span>
+    <span class="s2">"second"</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>  <span class="c1"># diagonal v1 - v3</span>
+<span class="p">}</span>
+
+<span class="c1"># Local edges (corner a, corner b) of the linear elements, in the order of their mid-edge</span>
+<span class="c1"># nodes in the quadratic elements (triangle_6: 3, 4, 5 / quadrangle_8: 4, 5, 6, 7)</span>
+<span class="n">_LINEAR_EDGES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"triangle_3"</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+    <span class="s2">"quadrangle_4"</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+<span class="p">}</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_mid_edge_nodes</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span>
+    <span class="n">linear_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">quadratic_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">propagate_vertices_properties</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">propagate_elements_properties</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+    <span class="c1"># Quadratic mesh with one new vertex at the middle of each edge (shared by the elements of the edge)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'mesh' must be a Mesh. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span> <span class="o">!=</span> <span class="n">linear_type</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'mesh' must have the element type </span><span class="si">{</span><span class="n">linear_type</span><span class="si">!r}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span><span class="si">!r}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">propagate_vertices_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_vertices_properties</span><span class="p">,</span> <span class="s2">"propagate_vertices_properties"</span><span class="p">)</span>
+    <span class="n">propagate_elements_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_elements_properties</span><span class="p">,</span> <span class="s2">"propagate_elements_properties"</span><span class="p">)</span>
+    <span class="n">N_v</span><span class="p">,</span> <span class="n">N_e</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span>
+    <span class="n">local_edges</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_LINEAR_EDGES</span><span class="p">[</span><span class="n">linear_type</span><span class="p">])</span>  <span class="c1"># (N_c, 2)</span>
+    <span class="n">N_c</span> <span class="o">=</span> <span class="n">local_edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Edges of the elements (N_e, N_c, 2) and unique edges (N_m, 2), sorted by their vertices</span>
+    <span class="n">element_edges</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">elements</span><span class="p">[:,</span> <span class="n">local_edges</span><span class="p">]</span>
+    <span class="n">edges</span><span class="p">,</span> <span class="n">edge_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">element_edges</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">elements</span><span class="p">,</span> <span class="n">N_v</span> <span class="o">+</span> <span class="n">edge_indices</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_e</span><span class="p">,</span> <span class="n">N_c</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Mid-edge vertices at the middle of the straight edges, with the mean of the vertex properties</span>
+    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[</span><span class="n">edges</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vertex_properties</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">propagate_vertices_properties</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"The vertex property </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> (dtype </span><span class="si">{</span><span class="n">values</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">) cannot be interpolated at the "</span>
+                    <span class="s2">"mid-edge vertices: only floating point properties can be propagated. Remove it or "</span>
+                    <span class="s2">"use propagate_vertices_properties=False."</span>
+                <span class="p">)</span>
+            <span class="n">vertex_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="n">edges</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Element properties copied, the UV map interpolated in each element (the seams are respected)</span>
+    <span class="n">element_properties</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">propagate_elements_properties</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"uvmap"</span><span class="p">:</span>
+                <span class="n">uv</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_e</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># (N_e, N_c, 2): (u, v) of the corners</span>
+                <span class="n">mid_uv</span> <span class="o">=</span> <span class="n">uv</span><span class="p">[:,</span> <span class="n">local_edges</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># (N_e, N_c, 2)</span>
+                <span class="n">element_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">uv</span><span class="p">,</span> <span class="n">mid_uv</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_e</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">element_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">PointCloud</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="o">=</span><span class="n">mesh</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">vertex_properties</span><span class="p">)</span>
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">Connectivity</span><span class="p">(</span><span class="n">elements</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">element_properties</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="n">quadratic_type</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">_from_owned</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="quadrangle_4_to_triangle_3">
+<a class="viewcode-back" href="../../../api/geometry/quadrangle_4_to_triangle_3.html#pysdic.quadrangle_4_to_triangle_3">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">quadrangle_4_to_triangle_3</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span>
+    <span class="n">diagonal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"first"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">propagate_vertices_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">propagate_elements_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Convert a ``quadrangle_4`` mesh to a ``triangle_3`` mesh by splitting each</span>
+<span class="sd">    quadrangle into two triangles.</span>
+
+<span class="sd">    The quadrangle :math:`q` with vertices :math:`(v_0, v_1, v_2, v_3)` gives the</span>
+<span class="sd">    triangles :math:`2q` and :math:`2q + 1`, along one of its diagonals:</span>
+
+<span class="sd">    - ``"first"``: diagonal :math:`v_0 - v_2`, triangles :math:`(v_0, v_1, v_2)` and</span>
+<span class="sd">      :math:`(v_0, v_2, v_3)`.</span>
+<span class="sd">    - ``"second"``: diagonal :math:`v_1 - v_3`, triangles :math:`(v_0, v_1, v_3)` and</span>
+<span class="sd">      :math:`(v_1, v_2, v_3)`.</span>
+<span class="sd">    - ``"alternate"``: ``"first"`` for the even quadrangles and ``"second"`` for the odd</span>
+<span class="sd">      ones.</span>
+<span class="sd">    - ``"random"``: a random diagonal for each quadrangle (see ``seed``).</span>
+
+<span class="sd">    The triangles keep the orientation of the quadrangles. The vertices are unchanged</span>
+<span class="sd">    (same order).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mesh: :class:`pysdic.Mesh`</span>
+<span class="sd">        A mesh with element type ``"quadrangle_4"``.</span>
+
+<span class="sd">    diagonal: str, optional (default: ``"first"``)</span>
+<span class="sd">        The diagonal used to split the quadrangles: ``"first"``, ``"second"``,</span>
+<span class="sd">        ``"alternate"`` or ``"random"``.</span>
+
+<span class="sd">    seed: Optional[Union[Integral, numpy.random.Generator]], optional (default: ``None``)</span>
+<span class="sd">        The seed (or the random generator) of ``diagonal="random"``, for reproducible</span>
+<span class="sd">        results. Ignored for the other diagonals.</span>
+
+<span class="sd">    propagate_vertices_properties: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the vertex properties are copied to the triangle mesh.</span>
+
+<span class="sd">    propagate_elements_properties: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the element properties are copied to both triangles of each</span>
+<span class="sd">        quadrangle. The UV map (element property ``"uvmap"``) is split with the</span>
+<span class="sd">        quadrangles.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`pysdic.Mesh`</span>
+<span class="sd">        The ``triangle_3`` mesh, with :math:`2 N_e` elements.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        from pysdic import Mesh, quadrangle_4_to_triangle_3</span>
+
+<span class="sd">        mesh = Mesh([[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]], [[0, 1, 2, 3]], element_type="quadrangle_4")</span>
+<span class="sd">        triangle_mesh = quadrangle_4_to_triangle_3(mesh, "second")</span>
+<span class="sd">        print(triangle_mesh.elements)  # [[0 1 3] [1 2 3]]</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'mesh' must be a Mesh. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span> <span class="o">!=</span> <span class="s2">"quadrangle_4"</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'mesh' must have the element type 'quadrangle_4'. Got </span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span><span class="si">!r}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">diagonal</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">diagonal</span><span class="p">,</span> <span class="s2">"diagonal"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"first"</span><span class="p">,</span> <span class="s2">"second"</span><span class="p">,</span> <span class="s2">"alternate"</span><span class="p">,</span> <span class="s2">"random"</span><span class="p">))</span>
+    <span class="n">propagate_vertices_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_vertices_properties</span><span class="p">,</span> <span class="s2">"propagate_vertices_properties"</span><span class="p">)</span>
+    <span class="n">propagate_elements_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_elements_properties</span><span class="p">,</span> <span class="s2">"propagate_elements_properties"</span><span class="p">)</span>
+    <span class="n">N_e</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span>
+
+    <span class="c1"># Diagonal of each quadrangle: True for "first", False for "second"</span>
+    <span class="k">if</span> <span class="n">diagonal</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"first"</span><span class="p">,</span> <span class="s2">"second"</span><span class="p">):</span>
+        <span class="n">use_first</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N_e</span><span class="p">,</span> <span class="n">diagonal</span> <span class="o">==</span> <span class="s2">"first"</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">diagonal</span> <span class="o">==</span> <span class="s2">"alternate"</span><span class="p">:</span>
+        <span class="n">use_first</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_e</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="p">(</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">))):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'seed' must be None, an integer or a numpy.random.Generator. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="n">use_first</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">N_e</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="c1"># Local indices (0..3) of the vertices of the two triangles of each quadrangle: (N_e, 2, 3)</span>
+    <span class="n">local</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">use_first</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_QUADRANGLE_SPLITS</span><span class="p">[</span><span class="s2">"first"</span><span class="p">]),</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_QUADRANGLE_SPLITS</span><span class="p">[</span><span class="s2">"second"</span><span class="p">]),</span>
+    <span class="p">)</span>
+    <span class="n">quadrangles</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">_elements</span>  <span class="c1"># (N_e, 4)</span>
+    <span class="n">triangles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span>
+        <span class="n">quadrangles</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="n">local</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N_e</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># Triangles 2q and 2q + 1 of the quadrangle q</span>
+
+    <span class="n">element_properties</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">propagate_elements_properties</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"uvmap"</span><span class="p">:</span>
+                <span class="n">uv</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_e</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># (u_i, v_i) of the 4 vertices</span>
+                <span class="n">uv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">uv</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">local</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">element_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">uv</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N_e</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">element_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">copy_properties</span><span class="o">=</span><span class="n">propagate_vertices_properties</span><span class="p">)</span>
+    <span class="n">connectivity</span> <span class="o">=</span> <span class="n">Connectivity</span><span class="p">(</span><span class="n">triangles</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">element_properties</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="s2">"triangle_3"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">_from_owned</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">connectivity</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="triangle_3_to_triangle_6">
+<a class="viewcode-back" href="../../../api/geometry/triangle_3_to_triangle_6.html#pysdic.triangle_3_to_triangle_6">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">triangle_3_to_triangle_6</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">propagate_vertices_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">propagate_elements_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Convert a ``triangle_3`` mesh to a ``triangle_6`` mesh by adding a vertex at the middle</span>
+<span class="sd">    of each edge.</span>
+
+<span class="sd">    The triangle :math:`(v_0, v_1, v_2)` gives the element</span>
+<span class="sd">    :math:`(v_0, v_1, v_2, m_{01}, m_{12}, m_{20})`, where :math:`m_{ab}` is the mid-edge</span>
+<span class="sd">    vertex of the edge :math:`v_a - v_b`. A mid-edge vertex is shared by the two elements of</span>
+<span class="sd">    its edge, so the mesh stays conforming.</span>
+
+<span class="sd">    The original vertices are unchanged (same order, indices :math:`0` to :math:`N_v - 1`).</span>
+<span class="sd">    The mid-edge vertices are added after them, one per edge, in the lexicographic order of</span>
+<span class="sd">    the (sorted) indices of the vertices of their edge. They are at the middle of the</span>
+<span class="sd">    straight edges: the geometry of the mesh is unchanged, curved edges can be obtained by</span>
+<span class="sd">    moving them afterwards.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mesh: :class:`pysdic.Mesh`</span>
+<span class="sd">        A mesh with element type ``"triangle_3"``.</span>
+
+<span class="sd">    propagate_vertices_properties: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the vertex properties are copied to the original vertices and interpolated</span>
+<span class="sd">        (mean of the two vertices of the edge) at the mid-edge vertices. Only floating point</span>
+<span class="sd">        properties can be interpolated.</span>
+
+<span class="sd">    propagate_elements_properties: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the element properties are copied (same elements). The UV map (element</span>
+<span class="sd">        property ``"uvmap"``) is interpolated at the mid-edge vertices in each element, so</span>
+<span class="sd">        the seams of the UV map are respected.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`pysdic.Mesh`</span>
+<span class="sd">        The ``triangle_6`` mesh, with the same :math:`N_e` elements and</span>
+<span class="sd">        :math:`N_v + N_{edges}` vertices.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If ``mesh`` is not a :class:`pysdic.Mesh`.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If the element type is not ``"triangle_3"``, or if a vertex property to propagate is</span>
+<span class="sd">        not a floating point property.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        from pysdic import Mesh, triangle_3_to_triangle_6</span>
+
+<span class="sd">        mesh = Mesh([[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 1, 2], [1, 3, 2]], element_type="triangle_3")</span>
+<span class="sd">        quadratic_mesh = triangle_3_to_triangle_6(mesh)</span>
+<span class="sd">        print(quadratic_mesh.n_vertices)  # 9: 4 corners and 5 edges</span>
+<span class="sd">        print(quadratic_mesh.elements)  # [[0 1 2 4 6 5] [1 3 2 7 8 6]]</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">_add_mid_edge_nodes</span><span class="p">(</span>
+        <span class="n">mesh</span><span class="p">,</span> <span class="s2">"triangle_3"</span><span class="p">,</span> <span class="s2">"triangle_6"</span><span class="p">,</span> <span class="n">propagate_vertices_properties</span><span class="p">,</span> <span class="n">propagate_elements_properties</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="quadrangle_4_to_quadrangle_8">
+<a class="viewcode-back" href="../../../api/geometry/quadrangle_4_to_quadrangle_8.html#pysdic.quadrangle_4_to_quadrangle_8">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">quadrangle_4_to_quadrangle_8</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">propagate_vertices_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">propagate_elements_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Convert a ``quadrangle_4`` mesh to a ``quadrangle_8`` mesh by adding a vertex at the</span>
+<span class="sd">    middle of each edge.</span>
+
+<span class="sd">    The quadrangle :math:`(v_0, v_1, v_2, v_3)` gives the element</span>
+<span class="sd">    :math:`(v_0, v_1, v_2, v_3, m_{01}, m_{12}, m_{23}, m_{30})`, where :math:`m_{ab}` is the</span>
+<span class="sd">    mid-edge vertex of the edge :math:`v_a - v_b`. A mid-edge vertex is shared by the two</span>
+<span class="sd">    elements of its edge, so the mesh stays conforming.</span>
+
+<span class="sd">    The original vertices are unchanged (same order, indices :math:`0` to :math:`N_v - 1`).</span>
+<span class="sd">    The mid-edge vertices are added after them, one per edge, in the lexicographic order of</span>
+<span class="sd">    the (sorted) indices of the vertices of their edge. They are at the middle of the</span>
+<span class="sd">    straight edges: the geometry of the mesh is unchanged, curved edges can be obtained by</span>
+<span class="sd">    moving them afterwards.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mesh: :class:`pysdic.Mesh`</span>
+<span class="sd">        A mesh with element type ``"quadrangle_4"``.</span>
+
+<span class="sd">    propagate_vertices_properties: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the vertex properties are copied to the original vertices and interpolated</span>
+<span class="sd">        (mean of the two vertices of the edge) at the mid-edge vertices. Only floating point</span>
+<span class="sd">        properties can be interpolated.</span>
+
+<span class="sd">    propagate_elements_properties: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the element properties are copied (same elements). The UV map (element</span>
+<span class="sd">        property ``"uvmap"``) is interpolated at the mid-edge vertices in each element, so</span>
+<span class="sd">        the seams of the UV map are respected.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`pysdic.Mesh`</span>
+<span class="sd">        The ``quadrangle_8`` mesh, with the same :math:`N_e` elements and</span>
+<span class="sd">        :math:`N_v + N_{edges}` vertices.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If ``mesh`` is not a :class:`pysdic.Mesh`.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If the element type is not ``"quadrangle_4"``, or if a vertex property to propagate</span>
+<span class="sd">        is not a floating point property.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        from pysdic import Mesh, quadrangle_4_to_quadrangle_8</span>
+
+<span class="sd">        mesh = Mesh([[0, 0], [1, 0], [1, 1], [0, 1]], [[0, 1, 2, 3]], element_type="quadrangle_4")</span>
+<span class="sd">        quadratic_mesh = quadrangle_4_to_quadrangle_8(mesh)</span>
+<span class="sd">        print(quadratic_mesh.elements)  # [[0 1 2 3 4 6 7 5]]</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">_add_mid_edge_nodes</span><span class="p">(</span>
+        <span class="n">mesh</span><span class="p">,</span> <span class="s2">"quadrangle_4"</span><span class="p">,</span> <span class="s2">"quadrangle_8"</span><span class="p">,</span> <span class="n">propagate_vertices_properties</span><span class="p">,</span> <span class="n">propagate_elements_properties</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

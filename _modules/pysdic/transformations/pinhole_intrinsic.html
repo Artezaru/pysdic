@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.transformations.pinhole_intrinsic &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/transformations/pinhole_intrinsic';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.transformations.pinhole_intrinsic</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.transformations.pinhole_intrinsic</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transformation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_real</span><span class="p">,</span> <span class="n">_as_array</span>
+
+
+<span class="n">_SET_HINT</span> <span class="o">=</span> <span class="s2">"with the 'parameters' attribute or the 'from_components' class method"</span>
+
+
+<div class="viewcode-block" id="PinholeIntrinsic">
+<a class="viewcode-back" href="../../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PinholeIntrinsic</span><span class="p">(</span><span class="n">Transformation</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    A subclass of :class:`pysdic.Transformation` that represents the OpenCV pinhole</span>
+<span class="sd">    intrinsic camera model using the standard intrinsic matrix. To enable the skew parameter</span>
+<span class="sd">    of the intrinsic matrix, set ``use_skew`` to True when instantiating the class.</span>
+
+<span class="sd">    This class represents an **intrinsic transformation**, which is typically the</span>
+<span class="sd">    last step in the camera projection pipeline:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        world_points → normalized_points → distorted_points → image_points</span>
+
+<span class="sd">    Let :math:`\vec{x}_d = (x_d, y_d)` be a **distorted normalized point**.</span>
+<span class="sd">    The corresponding **image point** :math:`\vec{x}_i = (x_i, y_i)` is obtained using</span>
+<span class="sd">    the intrinsic matrix :math:`K` in homogeneous coordinates:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \begin{bmatrix} x_i \\ y_i \\ 1 \end{bmatrix} = K \begin{bmatrix} x_d \\ y_d \\ 1 \end{bmatrix}</span>
+
+<span class="sd">    where the intrinsic matrix is defined as</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        K =</span>
+<span class="sd">        \begin{bmatrix}</span>
+<span class="sd">        f_x &amp; s &amp; c_x \\</span>
+<span class="sd">        0 &amp; f_y &amp; c_y \\</span>
+<span class="sd">        0 &amp; 0 &amp; 1</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    with</span>
+
+<span class="sd">    - :math:`f_x, f_y` the focal lengths expressed in pixels,</span>
+<span class="sd">    - :math:`c_x, c_y` the principal point coordinates in pixels,</span>
+<span class="sd">    - :math:`s` the skew parameter, only enabled when ``use_skew=True`` (otherwise :math:`s = 0`).</span>
+
+<span class="sd">    The transformation is parameterized by **4 to 5 parameters**:</span>
+
+<span class="sd">    +-----------------------------------------------------+--------------------------+----------------------------------------------+</span>
+<span class="sd">    | Class arguments                                     | :math:`N` parameters     | parameters                                   |</span>
+<span class="sd">    +=====================================================+==========================+==============================================+</span>
+<span class="sd">    | Default configuration                               | 4                        | :math:`(f_x,f_y,c_x,c_y)`                    |</span>
+<span class="sd">    +-----------------------------------------------------+--------------------------+----------------------------------------------+</span>
+<span class="sd">    | ``use_skew == True``                                | 5                        | :math:`(f_x,f_y,c_x,c_y,s)`                  |</span>
+<span class="sd">    +-----------------------------------------------------+--------------------------+----------------------------------------------+</span>
+
+<span class="sd">    The transformation is invertible since the focal lengths are non-zero, and all the</span>
+<span class="sd">    Jacobians are available for ``apply`` and ``invert``.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The class can be instantiated in four ways:</span>
+
+<span class="sd">        - providing the parameters directly as a numpy array of shape ``(4,)``</span>
+<span class="sd">          containing :math:`(f_x, f_y, c_x, c_y)`, or ``(5,)`` if</span>
+<span class="sd">          ``use_skew=True``.</span>
+<span class="sd">        - using the :meth:`from_matrix` class method to initialize the</span>
+<span class="sd">          transformation from an intrinsic matrix.</span>
+<span class="sd">        - using the :meth:`from_vector` class method to initialize the</span>
+<span class="sd">          transformation from an intrinsic vector.</span>
+<span class="sd">        - setting the parameters individually using the :meth:`from_components` class method.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The focal lengths must be non-zero. If ``allow_negative_focal=False`` (default),</span>
+<span class="sd">        they must also be strictly positive.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parameters : Optional[ArrayLike], optional (default: ``None``)</span>
+<span class="sd">        Intrinsic parameters of shape ``(4,)`` ordered as</span>
+<span class="sd">        :math:`(f_x, f_y, c_x, c_y)`, or shape ``(5,)`` ordered as</span>
+<span class="sd">        :math:`(f_x, f_y, c_x, c_y, s)` if ``use_skew=True``.</span>
+
+<span class="sd">    use_skew : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, the skew parameter is enabled and the transformation is parameterized</span>
+<span class="sd">        by 5 parameters. If ``False``, the skew parameter is disabled and the transformation</span>
+<span class="sd">        is parameterized by 4 parameters.</span>
+
+<span class="sd">    allow_negative_focal : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, focal lengths can be negative. If</span>
+<span class="sd">        ``False``, the focal lengths are constrained to remain strictly positive.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create an intrinsic transformation and project a distorted normalized point:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        intrinsic = PinholeIntrinsic.from_components(fx=1000.0, fy=1000.0, cx=320.0, cy=240.0)</span>
+
+<span class="sd">        intrinsic.apply([[0.1, -0.2]]).x      # array([[420., 40.]])</span>
+<span class="sd">        intrinsic.invert([[420.0, 40.0]]).x   # array([[ 0.1, -0.2]])</span>
+<span class="sd">        intrinsic.K                           # 3x3 intrinsic matrix</span>
+
+<span class="sd">    """</span>
+
+    <span class="n">_has_apply</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_apply_dx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_apply_dp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert_dx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert_dp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_is_left_invertible</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_is_right_invertible</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">use_skew</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">allow_negative_focal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">use_skew</span><span class="p">,</span> <span class="s2">"use_skew"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_negative_focal</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">allow_negative_focal</span><span class="p">,</span> <span class="s2">"allow_negative_focal"</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Properties inherited from Transformation Class</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the number of parameters of the intrinsic transformation: 4, or 5 if ``use_skew=True``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of parameters of the intrinsic transformation.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">5</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span> <span class="k">else</span> <span class="mi">4</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">input_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the input dimension of the intrinsic transformation (2D distorted normalized points).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The input dimension of the intrinsic transformation.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">output_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the output dimension of the intrinsic transformation (2D image points).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The output dimension of the intrinsic transformation.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># I/O Methods for Transformation Class</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"use_skew"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">,</span>
+            <span class="s2">"allow_negative_focal"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_negative_focal</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">PinholeIntrinsic</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"parameters"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">use_skew</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"use_skew"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">allow_negative_focal</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"allow_negative_focal"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PinholeIntrinsic</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">use_skew</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">,</span>
+            <span class="n">allow_negative_focal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_allow_negative_focal</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Parameters</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_parameters</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">override_lock</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Set the parameters of the intrinsic transformation, with an option to override the lock.</span>
+
+<span class="sd">        In addition to the checks of :meth:`pysdic.Transformation.set_parameters`, the parameters</span>
+<span class="sd">        must be finite and the focal lengths must be non-zero (and strictly positive if</span>
+<span class="sd">        ``allow_negative_focal=False``).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : Optional[ArrayLike]</span>
+<span class="sd">            The parameters of shape ``(4,)`` ordered as :math:`(f_x, f_y, c_x, c_y)`, or shape ``(5,)``</span>
+<span class="sd">            ordered as :math:`(f_x, f_y, c_x, c_y, s)` if ``use_skew=True``, or None to unset the parameters.</span>
+
+<span class="sd">        override_lock : bool, optional (default: ``False``)</span>
+<span class="sd">            Whether to override the lock and allow setting parameters even if they are locked.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the parameters do not have the correct shape, are not finite or if the focal</span>
+<span class="sd">            lengths are not valid.</span>
+
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the parameters are locked and ``override_lock`` is False.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_parameters</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># Shape (n_p,) and finite</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_focal</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"x"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_focal</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"y"</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">override_lock</span><span class="o">=</span><span class="n">override_lock</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_focal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">focal</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># The focal lengths must be non-zero for the transformation to be invertible</span>
+        <span class="k">if</span> <span class="n">focal</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Focal length in pixels in </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2"> direction must be non-zero."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_negative_focal</span> <span class="ow">and</span> <span class="n">focal</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Focal length in pixels in </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2"> direction must be greater than 0, "</span>
+                <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="n">focal</span><span class="si">}</span><span class="s2">. Use allow_negative_focal=True to allow negative focal lengths."</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="c1"># Return one component of the parameters, or None if the parameters are not set</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameter_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the names of the parameters of the intrinsic transformation :</span>
+<span class="sd">        ``["fx", "fy", "cx", "cy"]`` or ``["fx", "fy", "cx", "cy", "s"]`` if ``use_skew=True``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            The names of the parameters of the intrinsic transformation.</span>
+<span class="sd">        """</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"fx"</span><span class="p">,</span> <span class="s2">"fy"</span><span class="p">,</span> <span class="s2">"cx"</span><span class="p">,</span> <span class="s2">"cy"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"s"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">names</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Constants</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">use_skew</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] whether the skew parameter is enabled in the intrinsic transformation.</span>
+
+<span class="sd">        If True, the skew parameter is enabled and the transformation is parameterized</span>
+<span class="sd">        by 5 parameters. If False, the skew parameter is disabled and the transformation</span>
+<span class="sd">        is parameterized by 4 parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Whether the skew parameter is enabled in the intrinsic transformation.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">allow_negative_focal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] whether the focal lengths can be negative in the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Whether the focal lengths can be negative in the model.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_negative_focal</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Focal length</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">focal_length_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the focal length :math:`f_x` of the intrinsic transformation.</span>
+
+<span class="sd">        The focal length is a float representing the focal length of the camera in pixels in x direction.</span>
+
+<span class="sd">        This parameter is the component ``K[0, 0]`` of the intrinsic matrix K of the camera.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``focal_length_x`` is ``fx``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The component can only be set if all the parameters are already set.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`focal_length_y` or ``fy`` to set the focal length in pixels in y direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The focal length of the camera in pixels in x direction. (or None if not set)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_component</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="nd">@focal_length_x</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">focal_length_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fx</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="s2">"focal_length_x"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_x</span>
+
+    <span class="nd">@fx</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fx</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_x</span> <span class="o">=</span> <span class="n">fx</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">focal_length_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the focal length :math:`f_y` of the intrinsic transformation.</span>
+
+<span class="sd">        The focal length is a float representing the focal length of the camera in pixels in y direction.</span>
+
+<span class="sd">        This parameter is the component ``K[1, 1]`` of the intrinsic matrix K of the camera.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``focal_length_y`` is ``fy``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The component can only be set if all the parameters are already set.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`focal_length_x` or ``fx`` to set the focal length in pixels in x direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The focal length of the camera in pixels in y direction. (or None if not set)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_component</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@focal_length_y</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">focal_length_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">"focal_length_y"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_y</span>
+
+    <span class="nd">@fy</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fy</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">focal_length_y</span> <span class="o">=</span> <span class="n">fy</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Principal point</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">principal_point_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the principal point :math:`c_x` of the intrinsic transformation.</span>
+
+<span class="sd">        The principal point is a float representing the principal point of the camera in pixels in x direction.</span>
+
+<span class="sd">        This parameter is the component ``K[0, 2]`` of the intrinsic matrix K of the camera.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``principal_point_x`` is ``cx``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The component can only be set if all the parameters are already set.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`principal_point_y` or ``cy`` to set the principal point in pixels in y direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The principal point of the camera in pixels in x direction. (or None if not set)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_component</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@principal_point_x</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">principal_point_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="s2">"principal_point_x"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_x</span>
+
+    <span class="nd">@cx</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_x</span> <span class="o">=</span> <span class="n">cx</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">principal_point_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the principal point :math:`c_y` of the intrinsic transformation.</span>
+
+<span class="sd">        The principal point is a float representing the principal point of the camera in pixels in y direction.</span>
+
+<span class="sd">        This parameter is the component ``K[1, 2]`` of the intrinsic matrix K of the camera.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``principal_point_y`` is ``cy``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The component can only be set if all the parameters are already set.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`principal_point_x` or ``cx`` to set the principal point in pixels in x direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The principal point of the camera in pixels in y direction. (or None if not set)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_component</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="nd">@principal_point_y</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">principal_point_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cy</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="s2">"principal_point_y"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_y</span>
+
+    <span class="nd">@cy</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cy</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">principal_point_y</span> <span class="o">=</span> <span class="n">cy</span>
+
+    <span class="c1"># ============================================</span>
+    <span class="c1"># Skew parameter</span>
+    <span class="c1"># ============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">skew</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the skew parameter :math:`s` of the intrinsic transformation.</span>
+
+<span class="sd">        The skew parameter is a float representing the skew of the camera. It is only enabled if ``use_skew=True``.</span>
+
+<span class="sd">        This parameter is the component ``K[0, 1]`` of the intrinsic matrix K of the camera.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``skew`` is ``s``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The component can only be set if all the parameters are already set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The skew parameter of the camera. (or None if not set)</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            If the skew parameter is not enabled (``use_skew=False``).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s2">"Skew parameter is not enabled. Set use_skew=True to enable it."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_component</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="nd">@skew</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">skew</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s2">"Skew parameter is not enabled. Set use_skew=True to enable it."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="s2">"skew"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">s</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">skew</span>
+
+    <span class="nd">@s</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">s</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skew</span> <span class="o">=</span> <span class="n">s</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Intrinsic matrix</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intrinsic_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the intrinsic matrix :math:`K` of the intrinsic transformation.</span>
+
+<span class="sd">        The intrinsic matrix is a 3x3 matrix representing the intrinsic parameters of the camera.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            K = \begin{bmatrix}</span>
+<span class="sd">            f_x &amp; s &amp; c_x \\</span>
+<span class="sd">            0 &amp; f_y &amp; c_y \\</span>
+<span class="sd">            0 &amp; 0 &amp; 1</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``intrinsic_matrix`` is ``K``.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`intrinsic_vector` or ``k`` to get the intrinsic vector of the camera.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        intrinsic_matrix : Optional[ArrayLike]</span>
+<span class="sd">            The intrinsic matrix :math:`K` of the camera with shape (3, 3), or None to unset the parameters.</span>
+<span class="sd">            If ``use_skew=False``, the component ``K[0, 1]`` must be zero.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The intrinsic matrix :math:`K` of the camera with shape (3, 3). (or None if the parameters are not set)</span>
+<span class="sd">        """</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="n">fx</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">cx</span><span class="p">],</span>
+                <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cy</span><span class="p">],</span>
+                <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+            <span class="p">],</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@intrinsic_matrix</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intrinsic_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intrinsic_matrix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">intrinsic_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span>
+        <span class="n">intrinsic_matrix</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">intrinsic_matrix</span><span class="p">,</span> <span class="s2">"intrinsic_matrix"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Skew value K[0, 1] is not supported by PinholeIntrinsic if use_skew is False."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
+            <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
+            <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
+            <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"The intrinsic matrix must have the form [[fx, s, cx], [0, fy, cy], [0, 0, 1]]."</span>
+            <span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intrinsic_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">K</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">intrinsic_matrix</span>
+
+    <span class="nd">@K</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">K</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intrinsic_matrix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intrinsic_matrix</span> <span class="o">=</span> <span class="n">intrinsic_matrix</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Intrinsic vector</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intrinsic_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the intrinsic vector :math:`k` of the intrinsic transformation.</span>
+
+<span class="sd">        The intrinsic vector is the vector of the parameters of the transformation, of shape</span>
+<span class="sd">        (4,) or (5,) if the skew is used:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            k = \begin{bmatrix}</span>
+<span class="sd">            f_x &amp; f_y &amp; c_x &amp; c_y &amp; (s)</span>
+<span class="sd">            \end{bmatrix}^T</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``intrinsic_vector`` is ``k``. It is equivalent to ``parameters``.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            - :meth:`intrinsic_matrix` or ``K`` to set the intrinsic matrix of the camera.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        intrinsic_vector : Optional[ArrayLike]</span>
+<span class="sd">            The intrinsic vector of the camera with shape (4,) or (5,) ordered as</span>
+<span class="sd">            :math:`(f_x, f_y, c_x, c_y)` or :math:`(f_x, f_y, c_x, c_y, s)` if ``use_skew=True``.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The intrinsic vector of the camera. (or None if the parameters are not set)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+
+    <span class="nd">@intrinsic_vector</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">intrinsic_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intrinsic_vector</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">intrinsic_vector</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">k</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">intrinsic_vector</span>
+
+    <span class="nd">@k</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">k</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intrinsic_vector</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intrinsic_vector</span> <span class="o">=</span> <span class="n">intrinsic_vector</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Instantiation methods</span>
+    <span class="c1"># =============================================</span>
+<div class="viewcode-block" id="PinholeIntrinsic.from_matrix">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PinholeIntrinsic.from_matrix.html#pysdic.PinholeIntrinsic.from_matrix">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PinholeIntrinsic</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Class method to create a :class:`pysdic.PinholeIntrinsic` object from an intrinsic</span>
+<span class="sd">        matrix :math:`K`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        matrix : ArrayLike</span>
+<span class="sd">            The intrinsic matrix :math:`K` of the camera with shape (3, 3).</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional keyword arguments for the class initialisation (``use_skew``, ``allow_negative_focal``).</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.PinholeIntrinsic`</span>
+<span class="sd">            A new instance of the :class:`pysdic.PinholeIntrinsic` class with the specified intrinsic matrix.</span>
+
+<span class="sd">        """</span>
+        <span class="n">intrinsic</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">intrinsic</span><span class="o">.</span><span class="n">intrinsic_matrix</span> <span class="o">=</span> <span class="n">matrix</span>
+        <span class="k">return</span> <span class="n">intrinsic</span></div>
+
+
+<div class="viewcode-block" id="PinholeIntrinsic.from_vector">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PinholeIntrinsic.from_vector.html#pysdic.PinholeIntrinsic.from_vector">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_vector</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">vector</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PinholeIntrinsic</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Class method to create a :class:`pysdic.PinholeIntrinsic` object from an intrinsic vector :math:`k`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        vector : ArrayLike</span>
+<span class="sd">            The intrinsic vector of the camera with shape (4,) ordered as :math:`(f_x, f_y, c_x, c_y)`</span>
+<span class="sd">            or shape (5,) ordered as :math:`(f_x, f_y, c_x, c_y, s)` if ``use_skew=True``.</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional keyword arguments for the class initialisation (``use_skew``, ``allow_negative_focal``).</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.PinholeIntrinsic`</span>
+<span class="sd">            A new instance of the :class:`pysdic.PinholeIntrinsic` class with the specified intrinsic vector.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">vector</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PinholeIntrinsic.from_components">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PinholeIntrinsic.from_components.html#pysdic.PinholeIntrinsic.from_components">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_components</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">fx</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">fy</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">cx</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">cy</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PinholeIntrinsic</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Class method to create a :class:`pysdic.PinholeIntrinsic` object from the individual</span>
+<span class="sd">        components of the intrinsic parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fx : Real</span>
+<span class="sd">            The focal length of the camera in pixels in x direction.</span>
+
+<span class="sd">        fy : Real</span>
+<span class="sd">            The focal length of the camera in pixels in y direction.</span>
+
+<span class="sd">        cx : Real</span>
+<span class="sd">            The principal point of the camera in pixels in x direction.</span>
+
+<span class="sd">        cy : Real</span>
+<span class="sd">            The principal point of the camera in pixels in y direction.</span>
+
+<span class="sd">        s : Optional[Real], optional (default: ``None``)</span>
+<span class="sd">            The skew parameter of the camera. Only allowed if ``use_skew=True``,</span>
+<span class="sd">            in which case None means a zero skew.</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            Additional keyword arguments for the class initialisation (``use_skew``, ``allow_negative_focal``).</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.PinholeIntrinsic`</span>
+<span class="sd">            A new instance of the :class:`pysdic.PinholeIntrinsic` class with the specified intrinsic parameters.</span>
+
+<span class="sd">        """</span>
+        <span class="n">use_skew</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"use_skew"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="s2">"use_skew"</span><span class="p">)</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">"fx"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">fy</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">fy</span><span class="p">,</span> <span class="s2">"fy"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cx</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="s2">"cx"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span> <span class="s2">"cy"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">"s"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_skew</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Skew parameter is not supported by PinholeIntrinsic if use_skew is False."</span>
+            <span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">use_skew</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Transform methods</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_linear_part</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Upper-left 2x2 block A of K, such that x_i = A x_d + c</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">fx</span><span class="p">,</span> <span class="n">s</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fy</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PinholeIntrinsic._apply">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PinholeIntrinsic._apply.html#pysdic.PinholeIntrinsic._apply">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">distorted_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Apply the intrinsic projection from distorted normalized coordinates</span>
+<span class="sd">        to image coordinates.</span>
+
+<span class="sd">        Let :math:`\vec{x}_d = (x_d, y_d)` be a point in distorted normalized</span>
+<span class="sd">        camera coordinates. The corresponding image point</span>
+<span class="sd">        :math:`\vec{x}_i = (x_i, y_i)` is obtained using the intrinsic parameters:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            x_i = f_x \cdot x_d + s \cdot y_d + c_x</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y_i = f_y \cdot y_d + c_y</span>
+
+<span class="sd">        The Jacobian with respect to the distorted points is constant:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_i}{\partial \vec{x}_d} =</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            f_x &amp; s \\</span>
+<span class="sd">            0 &amp; f_y</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        The Jacobian with respect to the intrinsic parameters :math:`(f_x, f_y, c_x, c_y, s)` is:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_i}{\partial (f_x, f_y, c_x, c_y, s)} =</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            x_d &amp; 0 &amp; 1 &amp; 0 &amp; y_d \\</span>
+<span class="sd">            0 &amp; y_d &amp; 0 &amp; 1 &amp; 0</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        where the last column only exists if ``use_skew=True``.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distorted_points : numpy.ndarray</span>
+<span class="sd">            Distorted normalized camera coordinates.</span>
+<span class="sd">            Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        dx : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the input points.</span>
+
+<span class="sd">        dp : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the intrinsic</span>
+<span class="sd">            parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        image_points : numpy.ndarray</span>
+<span class="sd">            Image coordinates computed from the intrinsic projection.</span>
+<span class="sd">            Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        jacobian_dx : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian of the image points with respect to the distorted points.</span>
+<span class="sd">            Shape ``(n_points, 2, 2)`` if ``dx=True``, otherwise ``None``.</span>
+
+<span class="sd">        jacobian_dp : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian of the image points with respect to the intrinsic</span>
+<span class="sd">            parameters.</span>
+<span class="sd">            Shape ``(n_points, 2, n_parameters)`` if ``dp=True``, otherwise ``None``.</span>
+<span class="sd">        """</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">distorted_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_part</span><span class="p">()</span>  <span class="c1"># (2, 2)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># (2,)</span>
+
+        <span class="n">image_points</span> <span class="o">=</span> <span class="n">distorted_points</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">c</span>  <span class="c1"># (n_points, 2)</span>
+
+        <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dx</span><span class="p">:</span>
+            <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># (n_points, 2, 2)</span>
+
+        <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">x_d</span> <span class="o">=</span> <span class="n">distorted_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">y_d</span> <span class="o">=</span> <span class="n">distorted_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+            <span class="p">)</span>  <span class="c1"># (n_points, 2, n_parameters)</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_d</span>  <span class="c1"># d x_i / d fx</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_d</span>  <span class="c1"># d y_i / d fy</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># d x_i / d cx</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># d y_i / d cy</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">:</span>
+                <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_d</span>  <span class="c1"># d x_i / d s</span>
+
+        <span class="k">return</span> <span class="n">image_points</span><span class="p">,</span> <span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">jacobian_dp</span></div>
+
+
+<div class="viewcode-block" id="PinholeIntrinsic._invert">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PinholeIntrinsic._invert.html#pysdic.PinholeIntrinsic._invert">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invert</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">image_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Apply the inverse of the intrinsic projection from image coordinates</span>
+<span class="sd">        to distorted normalized coordinates.</span>
+
+<span class="sd">        Let :math:`\vec{x}_i = (x_i, y_i)` be a point in image coordinates. The</span>
+<span class="sd">        corresponding distorted normalized camera point :math:`\vec{x}_d` is</span>
+<span class="sd">        obtained using the intrinsic parameters:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y_d = \frac{y_i - c_y}{f_y}</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            x_d = \frac{x_i - s \cdot y_d - c_x}{f_x}</span>
+
+<span class="sd">        The Jacobian with respect to the image points is constant:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_d}{\partial \vec{x}_i} =</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            \frac{1}{f_x} &amp; -\frac{s}{f_x f_y} \\</span>
+<span class="sd">            0 &amp; \frac{1}{f_y}</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        The Jacobian with respect to the intrinsic parameters :math:`(f_x, f_y, c_x, c_y, s)` is:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_d}{\partial (f_x, f_y, c_x, c_y, s)} =</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            -\frac{x_d}{f_x} &amp; \frac{s \, y_d}{f_x f_y} &amp; -\frac{1}{f_x} &amp; \frac{s}{f_x f_y} &amp; -\frac{y_d}{f_x} \\</span>
+<span class="sd">            0 &amp; -\frac{y_d}{f_y} &amp; 0 &amp; -\frac{1}{f_y} &amp; 0</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        where the last column only exists if ``use_skew=True`` (and :math:`s = 0` otherwise).</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        image_points : numpy.ndarray</span>
+<span class="sd">            Image coordinates.</span>
+<span class="sd">            Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        dx : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the image points.</span>
+
+<span class="sd">        dp : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the intrinsic</span>
+<span class="sd">            parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        distorted_points : numpy.ndarray</span>
+<span class="sd">            Distorted normalized camera coordinates.</span>
+<span class="sd">            Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        jacobian_dx : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian of the distorted points with respect to the image points.</span>
+<span class="sd">            Shape ``(n_points, 2, 2)`` if ``dx=True``, otherwise ``None``.</span>
+
+<span class="sd">        jacobian_dp : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian of the distorted points with respect to the intrinsic</span>
+<span class="sd">            parameters.</span>
+<span class="sd">            Shape ``(n_points, 2, n_parameters)`` if ``dp=True``, otherwise ``None``.</span>
+<span class="sd">        """</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">image_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+        <span class="n">y_d</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cy</span><span class="p">)</span> <span class="o">/</span> <span class="n">fy</span>
+        <span class="n">x_d</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">s</span> <span class="o">*</span> <span class="n">y_d</span> <span class="o">-</span> <span class="n">cx</span><span class="p">)</span> <span class="o">/</span> <span class="n">fx</span>
+        <span class="n">distorted_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x_d</span><span class="p">,</span> <span class="n">y_d</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_points, 2)</span>
+
+        <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dx</span><span class="p">:</span>
+            <span class="n">A_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[[</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">fx</span><span class="p">,</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span> <span class="p">(</span><span class="n">fx</span> <span class="o">*</span> <span class="n">fy</span><span class="p">)],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fy</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+            <span class="p">)</span>
+            <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">A_inv</span><span class="p">,</span> <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># (n_points, 2, 2)</span>
+
+        <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+            <span class="p">)</span>  <span class="c1"># (n_points, 2, n_parameters)</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">x_d</span> <span class="o">/</span> <span class="n">fx</span>  <span class="c1"># d x_d / d fx</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">y_d</span> <span class="o">/</span> <span class="p">(</span><span class="n">fx</span> <span class="o">*</span> <span class="n">fy</span><span class="p">)</span>  <span class="c1"># d x_d / d fy</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">fx</span>  <span class="c1"># d x_d / d cx</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="p">(</span><span class="n">fx</span> <span class="o">*</span> <span class="n">fy</span><span class="p">)</span>  <span class="c1"># d x_d / d cy</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">y_d</span> <span class="o">/</span> <span class="n">fy</span>  <span class="c1"># d y_d / d fy</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">fy</span>  <span class="c1"># d y_d / d cy</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_skew</span><span class="p">:</span>
+                <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">y_d</span> <span class="o">/</span> <span class="n">fx</span>  <span class="c1"># d x_d / d s</span>
+
+        <span class="k">return</span> <span class="n">distorted_points</span><span class="p">,</span> <span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">jacobian_dp</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

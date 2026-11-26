@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.workflows.displacement_tools &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/workflows/displacement_tools';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.workflows.displacement_tools</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.workflows.displacement_tools</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="c1"># Tools on the displacements of an analysis: interpolation in time of the missing frames and</span>
+<span class="c1"># median filter in space.</span>
+<span class="c1">#</span>
+<span class="c1"># These functions do not modify the analysis: they return the new displacements, to write with</span>
+<span class="c1"># SDICAnalysis.set_displacement.</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">CubicSpline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">cKDTree</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_choice</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..sdic.sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICAnalysis</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_frames</span><span class="p">(</span><span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="c1"># Distinct frames of the analysis</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">_validate_integer</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"frame of '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' contains duplicated frames: </span><span class="si">{</span><span class="n">frames</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">outside</span> <span class="o">=</span> <span class="p">[</span><span class="n">frame</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span> <span class="k">if</span> <span class="n">frame</span> <span class="o">&gt;=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">n_frames</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">outside</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The frames </span><span class="si">{</span><span class="n">outside</span><span class="si">}</span><span class="s2"> of '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' are not in the analysis (</span><span class="si">{</span><span class="n">analysis</span><span class="o">.</span><span class="n">n_frames</span><span class="si">}</span><span class="s2"> frames)."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">frames</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_require_displacements</span><span class="p">(</span><span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">frame</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">analysis</span><span class="o">.</span><span class="n">has_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The displacements of the frames </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2"> of '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' are not set."</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_radius_neighborhood</span><span class="p">(</span><span class="n">coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+    <span class="c1"># Boolean (N_v, N_v) neighborhood of the vertices within a Euclidean distance (each vertex</span>
+    <span class="c1"># included in its own neighborhood)</span>
+    <span class="n">N_v</span> <span class="o">=</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span><span class="o">.</span><span class="n">query_pairs</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="s2">"ndarray"</span><span class="p">)</span>  <span class="c1"># (n, 2), i &lt; j</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pairs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_v</span><span class="p">)))</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pairs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_v</span><span class="p">)))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">rows</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N_v</span><span class="p">,</span> <span class="n">N_v</span><span class="p">))</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Interpolation in time</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="compute_interpolated_displacements">
+<a class="viewcode-back" href="../../../api/workflows/compute_interpolated_displacements.html#pysdic.workflows.compute_interpolated_displacements">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_interpolated_displacements</span><span class="p">(</span>
+    <span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span>
+    <span class="n">frames</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span>
+    <span class="n">known_frames</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"linear"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Interpolate in time the displacements of frames from the displacements of known frames.</span>
+
+<span class="sd">    The known displacements :math:`U(t_k)` are interpolated at the times :math:`t_f` of the</span>
+<span class="sd">    frames (see :attr:`pysdic.SDICAnalysis.times`), vertex by vertex and component by</span>
+<span class="sd">    component:</span>
+
+<span class="sd">    - ``"linear"``: piecewise linear interpolation between the two closest known frames;</span>
+<span class="sd">    - ``"cubic"``: cubic spline through the known frames (``scipy.interpolate.CubicSpline``,</span>
+<span class="sd">      not-a-knot conditions), smoother for a regular motion.</span>
+
+<span class="sd">    Before the first known time and after the last one, the displacement is constant (the</span>
+<span class="sd">    displacement of the first or last known frame): a spline is never extrapolated.</span>
+
+<span class="sd">    Typical use: the frames without views (no image, broken calibration) between measured</span>
+<span class="sd">    frames. Do not put a reference frame outside the time series in ``known_frames`` (e.g. a</span>
+<span class="sd">    frame 0 placed at :math:`t = 0` by convention).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analysis : :class:`pysdic.SDICAnalysis`</span>
+<span class="sd">        The analysis, with times and the displacements of ``known_frames`` set.</span>
+
+<span class="sd">    frames : Sequence[Integral]</span>
+<span class="sd">        The frames to interpolate (not in ``known_frames``).</span>
+
+<span class="sd">    known_frames : Sequence[Integral]</span>
+<span class="sd">        The frames giving the displacements, with distinct times (any order).</span>
+
+<span class="sd">    method : str, optional (default: ``"linear"``)</span>
+<span class="sd">        ``"linear"`` or ``"cubic"``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[int, numpy.ndarray]</span>
+<span class="sd">        For each frame of ``frames``, its interpolated displacement :math:`(N_v, E)`.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the analysis has no times, a known displacement is not set, two known frames have</span>
+<span class="sd">        the same time, or a frame is in both inputs.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        from pysdic.workflows import compute_interpolated_displacements</span>
+
+<span class="sd">        measured = [frame for frame in range(1, analysis.n_frames) if analysis.n_views(frame) &gt; 0]</span>
+<span class="sd">        missing = [frame for frame in range(1, analysis.n_frames) if analysis.n_views(frame) == 0]</span>
+
+<span class="sd">        for frame, displacement in compute_interpolated_displacements(analysis, missing, measured).items():</span>
+<span class="sd">            analysis.set_displacement(frame, displacement)</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">analysis</span><span class="o">.</span><span class="n">times</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The analysis has no times: create it with 'times' (or use 'with_times')."</span><span class="p">)</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s2">"method"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"linear"</span><span class="p">,</span> <span class="s2">"cubic"</span><span class="p">))</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="n">_validate_frames</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="s2">"frames"</span><span class="p">)</span>
+    <span class="n">known_frames</span> <span class="o">=</span> <span class="n">_validate_frames</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">known_frames</span><span class="p">,</span> <span class="s2">"known_frames"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">known_frames</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'known_frames' must contain at least one frame."</span><span class="p">)</span>
+    <span class="n">common</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">known_frames</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">common</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The frames </span><span class="si">{</span><span class="n">common</span><span class="si">}</span><span class="s2"> are in both 'frames' and 'known_frames'."</span><span class="p">)</span>
+    <span class="n">_require_displacements</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">known_frames</span><span class="p">,</span> <span class="s2">"known_frames"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">frames</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="n">times</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">analysis</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">known_frames</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"stable"</span><span class="p">)</span>
+    <span class="n">known_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">known_frames</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">order</span><span class="p">]</span>
+    <span class="n">known_times</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="n">known_frames</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">known_times</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The known frames must have distinct times. Got </span><span class="si">{</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">known_frames</span><span class="p">,</span><span class="w"> </span><span class="n">known_times</span><span class="p">))</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">known</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">known_frames</span><span class="p">])</span>  <span class="c1"># (n_k, N_v, E)</span>
+
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">frames</span><span class="p">],</span> <span class="n">known_times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">known_times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Constant outside</span>
+    <span class="k">if</span> <span class="n">known_times</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">known</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"cubic"</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">CubicSpline</span><span class="p">(</span><span class="n">known_times</span><span class="p">,</span> <span class="n">known</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span><span class="n">targets</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">after</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">known_times</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">"right"</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">known_times</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">targets</span> <span class="o">-</span> <span class="n">known_times</span><span class="p">[</span><span class="n">after</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">known_times</span><span class="p">[</span><span class="n">after</span><span class="p">]</span> <span class="o">-</span> <span class="n">known_times</span><span class="p">[</span><span class="n">after</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">known</span><span class="p">[</span><span class="n">after</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">known</span><span class="p">[</span><span class="n">after</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">frame</span><span class="p">:</span> <span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">frames</span><span class="p">)}</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Median filter in space</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="compute_median_filtered_displacements">
+<a class="viewcode-back" href="../../../api/workflows/compute_median_filtered_displacements.html#pysdic.workflows.compute_median_filtered_displacements">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_median_filtered_displacements</span><span class="p">(</span>
+    <span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span>
+    <span class="n">frames</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">],</span>
+    <span class="n">neighborhood</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">radius</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Apply a median filter to the displacements of frames: the displacement of each vertex is</span>
+<span class="sd">    replaced, component by component, by the median of the displacements of its neighborhood.</span>
+
+<span class="sd">    The neighborhood is given in one of three ways (at most one input):</span>
+
+<span class="sd">    - ``neighborhood``: a boolean sparse matrix :math:`(N_v, N_v)`, the neighborhood of the</span>
+<span class="sd">      vertex :math:`i` being ``neighborhood[i].indices`` (e.g. from</span>
+<span class="sd">      :meth:`pysdic.Mesh.compute_vertices_neighborhood`);</span>
+<span class="sd">    - ``max_distance``: the vertices within a topological distance (two vertices are at</span>
+<span class="sd">      distance 1 if they share an element), see :meth:`pysdic.Mesh.compute_vertices_neighborhood`;</span>
+<span class="sd">    - ``radius``: the vertices within a Euclidean distance on the reference vertices of the</span>
+<span class="sd">      mesh (in the unit of the mesh), independent of the size of the elements.</span>
+
+<span class="sd">    By default, ``max_distance=1``. Each vertex is in its own neighborhood with ``max_distance``</span>
+<span class="sd">    and ``radius``.</span>
+
+<span class="sd">    The median removes the isolated outliers (a vertex badly measured, e.g. on a reflection)</span>
+<span class="sd">    while keeping the steps of the displacement, unlike a mean.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analysis : :class:`pysdic.SDICAnalysis`</span>
+<span class="sd">        The analysis, with the displacements of ``frames`` set.</span>
+
+<span class="sd">    frames : Sequence[Integral]</span>
+<span class="sd">        The frames to filter.</span>
+
+<span class="sd">    neighborhood : Optional[scipy.sparse.spmatrix], optional</span>
+<span class="sd">        The neighborhood of the vertices.</span>
+
+<span class="sd">    max_distance : Optional[Integral], optional</span>
+<span class="sd">        The topological distance of the neighborhood (at least 1).</span>
+
+<span class="sd">    radius : Optional[Real], optional</span>
+<span class="sd">        The Euclidean distance of the neighborhood (strictly positive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[int, numpy.ndarray]</span>
+<span class="sd">        For each frame, its filtered displacement :math:`(N_v, E)`.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If several neighborhoods are given, the neighborhood has a wrong shape, or a</span>
+<span class="sd">        displacement is not set.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        from pysdic.workflows import compute_median_filtered_displacements</span>
+
+<span class="sd">        filtered = compute_median_filtered_displacements(analysis, [3, 4, 5], radius=5.0)  # 5 mm</span>
+<span class="sd">        for frame, displacement in filtered.items():</span>
+<span class="sd">            analysis.set_displacement(frame, displacement)</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="n">_validate_frames</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="s2">"frames"</span><span class="p">)</span>
+    <span class="n">_require_displacements</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="s2">"frames"</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">mesh</span>
+    <span class="n">given</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"neighborhood"</span><span class="p">,</span> <span class="n">neighborhood</span><span class="p">),</span> <span class="p">(</span><span class="s2">"max_distance"</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">),</span> <span class="p">(</span><span class="s2">"radius"</span><span class="p">,</span> <span class="n">radius</span><span class="p">))</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">given</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Give at most one of 'neighborhood', 'max_distance' and 'radius'. Got </span><span class="si">{</span><span class="n">given</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">neighborhood</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'neighborhood' must be a scipy sparse matrix. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'neighborhood' must have the shape </span><span class="si">{</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span><span class="w"> </span><span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">)</span><span class="si">}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">_radius_neighborhood</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">max_distance</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="s2">"max_distance"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">compute_vertices_neighborhood</span><span class="p">(</span><span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">fem</span><span class="o">.</span><span class="n">compute_neighborhood_statistics</span><span class="p">(</span><span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">),</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="s2">"median"</span><span class="p">)[</span><span class="s2">"median"</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

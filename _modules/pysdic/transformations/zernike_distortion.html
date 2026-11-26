@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.transformations.zernike_distortion &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/transformations/zernike_distortion';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.transformations.zernike_distortion</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.transformations.zernike_distortion</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transformation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._optionals</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_validate_bool</span><span class="p">,</span>
+    <span class="n">_validate_integer</span><span class="p">,</span>
+    <span class="n">_validate_real</span><span class="p">,</span>
+    <span class="n">_validate_choice</span><span class="p">,</span>
+    <span class="n">_validate_kwargs</span><span class="p">,</span>
+    <span class="n">_as_array</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyzernike</span>
+
+
+<span class="n">_SET_HINT</span> <span class="o">=</span> <span class="s2">"or use 'set_zero' to initialize them with zeros"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_n_polynomials</span><span class="p">(</span><span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="c1"># Number of Zernike polynomials up to the order N_zer (OSA/ANSI indices j &lt; (N+1)(N+2)/2)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_CacheEntry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># One entry of a ZernikePolynomialsCache: the polynomials (and derivatives) at a set of points</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ellipse"</span><span class="p">,</span> <span class="s2">"digest"</span><span class="p">,</span> <span class="s2">"points"</span><span class="p">,</span> <span class="s2">"order"</span><span class="p">,</span> <span class="s2">"derivatives"</span><span class="p">,</span> <span class="s2">"polynomials"</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ellipse</span><span class="p">,</span> <span class="n">digest</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">,</span> <span class="n">polynomials</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ellipse</span> <span class="o">=</span> <span class="n">ellipse</span>  <span class="c1"># (Rx, Ry, x0, y0)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">digest</span> <span class="o">=</span> <span class="n">digest</span>  <span class="c1"># Hash of the points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>  <span class="c1"># Read-only copy of the points (n_points, 2), for the exact comparison</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>  <span class="c1"># Maximum order N_zer of the polynomials</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span> <span class="o">=</span> <span class="n">derivatives</span>  <span class="c1"># Whether d/dx and d/dy are stored</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">polynomials</span> <span class="o">=</span> <span class="n">polynomials</span>  <span class="c1"># Read-only (D, P, n_points), D = 3 with derivatives (value, d/dx, d/dy), 1 otherwise</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nbytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">nbytes</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">polynomials</span><span class="o">.</span><span class="n">nbytes</span>
+
+
+<div class="viewcode-block" id="ZernikePolynomialsCache">
+<a class="viewcode-back" href="../../../api/morphisms/ZernikePolynomialsCache.html#pysdic.ZernikePolynomialsCache">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZernikePolynomialsCache</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    A cache of the values (and derivatives) of the Zernike polynomials at sets of points, to</span>
+<span class="sd">    share between :class:`pysdic.ZernikeDistortion` objects (see their ``polynomials_cache``).</span>
+
+<span class="sd">    The Zernike polynomials :math:`Z_{n,m}(\rho, \theta)` only depend on the points and on the</span>
+<span class="sd">    ellipse of definition :math:`(R_x, R_y, x_0, y_0)`, not on the coefficients of the</span>
+<span class="sd">    distortion. When a distortion is applied several times to the same points (e.g. the</span>
+<span class="sd">    iterations of a calibration where only the distortion is optimized), the polynomials are</span>
+<span class="sd">    computed once and reused. Several distortions can share the same cache, for example the</span>
+<span class="sd">    distortions of different orders evaluated at the same points.</span>
+
+<span class="sd">    An entry is identified by the points (hash and exact comparison with a copy of the points)</span>
+<span class="sd">    and the ellipse (exact comparison of :math:`R_x, R_y, x_0, y_0`):</span>
+
+<span class="sd">    - The polynomials are stored up to the highest order computed: an entry of order</span>
+<span class="sd">      :math:`N` also serves the orders :math:`N' \leq N` (the first polynomials in the</span>
+<span class="sd">      OSA/ANSI order).</span>
+<span class="sd">    - The derivatives :math:`\partial Z / \partial x` and :math:`\partial Z / \partial y` are</span>
+<span class="sd">      stored only when they are requested (Jacobian ``dx`` of the distortion): an entry</span>
+<span class="sd">      without derivatives is computed again (and replaced) when they are needed.</span>
+<span class="sd">    - The entries are kept in the order of their last use: when the cache is full, the least</span>
+<span class="sd">      recently used entry is removed.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The cache is only used by :meth:`pysdic.ZernikeDistortion.apply`. The undistortion</span>
+<span class="sd">        (``invert``) evaluates the polynomials at points that change at each Newton iteration:</span>
+<span class="sd">        it never uses the cache.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The memory of an entry is about :math:`8 N_p (2 + D P)` bytes for :math:`N_p` points and</span>
+<span class="sd">        :math:`P` polynomials, with :math:`D = 1` (values) or :math:`D = 3` (with derivatives),</span>
+<span class="sd">        e.g. about 115 MB for 627 264 points and :math:`P = 21` (order 5) without derivatives.</span>
+<span class="sd">        Call :meth:`clear` (or remove the cache from the distortions) to free it.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    max_entries : Integral, optional (default: ``2``)</span>
+<span class="sd">        The maximum number of entries (sets of points) kept, at least 1. For a stereo pair whose</span>
+<span class="sd">        two views share the same distortion, use at least 2 (one entry per view).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        from pysdic import ZernikeDistortion, ZernikePolynomialsCache</span>
+
+<span class="sd">        cache = ZernikePolynomialsCache(max_entries=2)</span>
+<span class="sd">        distortion = ZernikeDistortion(n_zernike=5, radius_x=1.5, polynomials_cache=cache)</span>
+<span class="sd">        distortion.set_zero()</span>
+
+<span class="sd">        distortion.apply(points)  # The polynomials are computed and stored</span>
+<span class="sd">        distortion.parameters = new_parameters</span>
+<span class="sd">        distortion.apply(points)  # The polynomials are reused</span>
+
+<span class="sd">        distortion.polynomials_cache = None  # No cache anymore</span>
+<span class="sd">        cache.clear()  # Free the memory</span>
+
+<span class="sd">    """</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"_max_entries"</span><span class="p">,</span> <span class="s2">"_entries"</span><span class="p">,</span> <span class="s2">"_hits"</span><span class="p">,</span> <span class="s2">"_misses"</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_entries</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_entries</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">max_entries</span><span class="p">,</span> <span class="s2">"max_entries"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_CacheEntry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Most recently used first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_misses</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># ------------------------------------------------------------------ Properties</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The maximum number of entries (at least 1). Reducing it removes the least</span>
+<span class="sd">        recently used entries.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The maximum number of entries.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_entries</span>
+
+    <span class="nd">@max_entries</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Integral</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_entries</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"max_entries"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_entries</span> <span class="p">:]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of entries in the cache.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of stored sets of points.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nbytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The memory used by the entries, in bytes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of bytes of the stored points and polynomials.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">nbytes</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of evaluations served by the cache since its creation (or the last</span>
+<span class="sd">        :meth:`clear`).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of hits.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hits</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">misses</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of evaluations that computed the polynomials since its creation (or</span>
+<span class="sd">        the last :meth:`clear`).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of misses.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_misses</span>
+
+<div class="viewcode-block" id="ZernikePolynomialsCache.clear">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikePolynomialsCache.clear.html#pysdic.ZernikePolynomialsCache.clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Remove all the entries (and reset the numbers of hits and misses).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_misses</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"ZernikePolynomialsCache(max_entries=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_entries</span><span class="si">}</span><span class="s2">, n_entries=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_entries</span><span class="si">}</span><span class="s2">, "</span>
+            <span class="sa">f</span><span class="s2">"nbytes=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nbytes</span><span class="si">}</span><span class="s2">, hits=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_hits</span><span class="si">}</span><span class="s2">, misses=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_misses</span><span class="si">}</span><span class="s2">)"</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------ Evaluation</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">radius_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">radius_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">center</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">derivatives</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Get the Zernike polynomials up to ``order`` at the points, from the cache or computed</span>
+<span class="sd">        with ``pyzernike`` (and stored).</span>
+
+<span class="sd">        .. important::</span>
+
+<span class="sd">            Internal use (called by :class:`pysdic.ZernikeDistortion`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        points : numpy.ndarray</span>
+<span class="sd">            The points :math:`(x, y)`, shape :math:`(N_p, 2)`.</span>
+
+<span class="sd">        order : int</span>
+<span class="sd">            The maximum order :math:`N_{zer}` of the polynomials.</span>
+
+<span class="sd">        radius_x, radius_y : float</span>
+<span class="sd">            The radii of the ellipse of definition.</span>
+
+<span class="sd">        center : numpy.ndarray</span>
+<span class="sd">            The center :math:`(x_0, y_0)` of the ellipse of definition.</span>
+
+<span class="sd">        derivatives : bool</span>
+<span class="sd">            Whether the derivatives :math:`\partial Z / \partial x` and</span>
+<span class="sd">            :math:`\partial Z / \partial y` are needed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A read-only array of shape :math:`(D, P, N_p)` with :math:`P` the number of</span>
+<span class="sd">            polynomials up to ``order``: :math:`D = 3` (values, d/dx, d/dy) if ``derivatives``,</span>
+<span class="sd">            :math:`D = 1` (values) otherwise. NaN outside the ellipse.</span>
+<span class="sd">        """</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">ellipse</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">radius_x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius_y</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">blake2b</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">digest_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">_n_polynomials</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="mi">3</span> <span class="k">if</span> <span class="n">derivatives</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">ellipse</span> <span class="o">!=</span> <span class="n">ellipse</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">digest</span> <span class="o">!=</span> <span class="n">digest</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">order</span> <span class="o">&gt;=</span> <span class="n">order</span> <span class="ow">and</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">derivatives</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">derivatives</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>  <span class="c1"># Most recently used</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hits</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">polynomials</span><span class="p">[:</span><span class="n">D</span><span class="p">,</span> <span class="p">:</span><span class="n">P</span><span class="p">]</span>
+            <span class="c1"># Same points: computed again with the highest order and the derivatives needed</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+            <span class="n">derivatives</span> <span class="o">=</span> <span class="n">derivatives</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">derivatives</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_misses</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">polynomials</span> <span class="o">=</span> <span class="n">_compute_polynomials</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">ellipse</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">)</span>
+        <span class="n">stored_points</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stored_points</span><span class="p">,</span> <span class="n">polynomials</span><span class="p">):</span>
+            <span class="n">array</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_CacheEntry</span><span class="p">(</span><span class="n">ellipse</span><span class="p">,</span> <span class="n">digest</span><span class="p">,</span> <span class="n">stored_points</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">,</span> <span class="n">polynomials</span><span class="p">))</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_entries</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="n">polynomials</span><span class="p">[:</span><span class="n">D</span><span class="p">,</span> <span class="p">:</span><span class="n">P</span><span class="p">]</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_polynomials</span><span class="p">(</span>
+    <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ellipse</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">derivatives</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Zernike polynomials up to the order (and d/dx, d/dy) at the points, shape (D, P, n_points)</span>
+    <span class="n">pyzernike</span> <span class="o">=</span> <span class="n">import_optional</span><span class="p">(</span><span class="s2">"pyzernike"</span><span class="p">,</span> <span class="s2">"ZernikeDistortion"</span><span class="p">)</span>  <span class="c1"># Cached (required by the class)</span>
+    <span class="n">radius_x</span><span class="p">,</span> <span class="n">radius_y</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">ellipse</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="n">pyzernike</span><span class="o">.</span><span class="n">xy_zernike_polynomial_up_to_order</span><span class="p">(</span>
+            <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+            <span class="n">Rx</span><span class="o">=</span><span class="n">radius_x</span><span class="p">,</span>
+            <span class="n">Ry</span><span class="o">=</span><span class="n">radius_y</span><span class="p">,</span>
+            <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+            <span class="n">y0</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span>
+            <span class="n">x_derivative</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">derivatives</span> <span class="k">else</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">y_derivative</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">derivatives</span> <span class="k">else</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">to_list</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="ZernikeDistortion">
+<a class="viewcode-back" href="../../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZernikeDistortion</span><span class="p">(</span><span class="n">Transformation</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Subclass of :class:`pysdic.Transformation` that represents a distortion transformation</span>
+<span class="sd">    based on Zernike polynomials.</span>
+
+<span class="sd">    This class represents a **distortion transformation**, which is typically the</span>
+<span class="sd">    middle step in the camera projection pipeline:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        world_points → normalized_points → distorted_points → image_points</span>
+
+<span class="sd">    Let :math:`\vec{x}_n = (x_n, y_n)` be a **normalized point**.</span>
+<span class="sd">    The corresponding **distorted point** :math:`\vec{x}_d = (x_d, y_d)` is obtained</span>
+<span class="sd">    by adding a displacement field expanded on the Zernike polynomials :math:`Z_{n,m}`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        x_{d} = x_{n} + \sum_{n=0}^{N_{zer}} \sum_{m} C^{x}_{n,m} Z_{n,m}(\rho, \theta)</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        y_{d} = y_{n} + \sum_{n=0}^{N_{zer}} \sum_{m} C^{y}_{n,m} Z_{n,m}(\rho, \theta)</span>
+
+<span class="sd">    where :math:`m \in [-n, n]` with :math:`n - m` even, :math:`C^{x}_{n,m}` and :math:`C^{y}_{n,m}`</span>
+<span class="sd">    are the Zernike coefficients for the x and y coordinates, and :math:`\rho` and :math:`\theta`</span>
+<span class="sd">    are the polar coordinates of the normalized points in the ellipse of definition with</span>
+<span class="sd">    radii :math:`(R_x, R_y)` and center :math:`(x_0, y_0)`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \rho = \sqrt{\left(\frac{x_{n} - x_{0}}{R_x}\right)^2 + \left(\frac{y_{n} - y_{0}}{R_y}\right)^2},</span>
+<span class="sd">        \qquad</span>
+<span class="sd">        \theta = \arctan2\left(\frac{y_{n} - y_{0}}{R_y}, \frac{x_{n} - x_{0}}{R_x}\right)</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The Zernike polynomials are only defined inside the ellipse (:math:`\rho \leq 1`).</span>
+<span class="sd">        The points outside the ellipse are distorted to NaN, so the ellipse must contain the</span>
+<span class="sd">        whole field of view of the camera.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        Package ``pyzernike`` (https://github.com/Artezaru/pyzernike) for the</span>
+<span class="sd">        implementation of the Zernike polynomials and their derivatives.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        This class requires ``pyzernike``: an ``ImportError`` is raised at the instantiation</span>
+<span class="sd">        if it is missing (``ZernikeDistortion.is_available()`` returns False).</span>
+
+<span class="sd">    The transformation is parameterized by the Zernike coefficients :math:`C^{x}_{n,m}` and</span>
+<span class="sd">    :math:`C^{y}_{n,m}` for :math:`n \leq N_{zer}`, and depends on 4 **constants**: the radii</span>
+<span class="sd">    :math:`(R_x, R_y)` and the center :math:`(x_0, y_0)` of the ellipse.</span>
+
+<span class="sd">    The coefficients are stored in the ``parameters`` with the OSA/ANSI standard indices</span>
+<span class="sd">    :math:`j = \frac{n(n+2) + m}{2}`, alternating the x and y coordinates:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        parameters[2j]     = C^x_{n,m}</span>
+<span class="sd">        parameters[2j + 1] = C^y_{n,m}</span>
+
+<span class="sd">    i.e. :math:`(C^x_{0,0}, C^y_{0,0}, C^x_{1,-1}, C^y_{1,-1}, C^x_{1,1}, C^y_{1,1}, C^x_{2,-2}, \dots)`.</span>
+<span class="sd">    The number of parameters is:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        N_{params} = (N_{zer}+1)(N_{zer}+2)</span>
+
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+<span class="sd">    | Order ``n_zernike``            | Parameters for X or Y           | Parameters of the model ``n_parameters``|</span>
+<span class="sd">    +================================+=================================+=========================================+</span>
+<span class="sd">    | None                           | 0                               | 0                                       |</span>
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+<span class="sd">    | 0                              | 1                               | 2                                       |</span>
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+<span class="sd">    | 1                              | 3                               | 6                                       |</span>
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+<span class="sd">    | 2                              | 6                               | 12                                      |</span>
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+<span class="sd">    | 3                              | 10                              | 20                                      |</span>
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+<span class="sd">    | 4                              | 15                              | 30                                      |</span>
+<span class="sd">    +--------------------------------+---------------------------------+-----------------------------------------+</span>
+
+<span class="sd">    The inverse transformation (undistortion) has no closed form and is computed with</span>
+<span class="sd">    Newton iterations (see :meth:`_invert`). It is available with its Jacobians, and it is</span>
+<span class="sd">    both a left and a right inverse of the distortion in the domain where the distortion is</span>
+<span class="sd">    bijective (i.e. for reasonable distortions and points inside the ellipse).</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        During instantiation:</span>
+
+<span class="sd">        - If both ``parameters`` and (``n_parameters`` or ``n_zernike``) are provided, the length of</span>
+<span class="sd">          ``parameters`` must match ``n_parameters`` (see table above).</span>
+<span class="sd">        - If only ``n_parameters`` or ``n_zernike`` is provided, the parameters are not set and must</span>
+<span class="sd">          be set before use (see :meth:`set_zero`).</span>
+<span class="sd">        - If only ``parameters`` is provided, the number of parameters is</span>
+<span class="sd">          inferred from the length of the array.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parameters : Optional[ArrayLike], optional (default: ``None``)</span>
+<span class="sd">        Distortion parameters of shape ``(n_parameters,)`` ordered as described above.</span>
+<span class="sd">        If None, the parameters can be set later.</span>
+
+<span class="sd">    n_parameters : Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        Number of parameters of the distortion model, in ``[0, 2, 6, 12, 20, 30, ...]``.</span>
+<span class="sd">        If not specified, it is inferred from ``n_zernike`` or from the length of ``parameters``.</span>
+
+<span class="sd">    n_zernike : Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        Maximum order :math:`N_{zer}` of the Zernike polynomials. If not specified, it is inferred</span>
+<span class="sd">        from ``n_parameters`` or from the length of ``parameters``.</span>
+
+<span class="sd">    radius_x : Real, optional (default: ``1.0``)</span>
+<span class="sd">        The radius :math:`R_x` of the ellipse of definition along x (strictly positive).</span>
+
+<span class="sd">    radius_y : Optional[Real], optional (default: ``None``)</span>
+<span class="sd">        The radius :math:`R_y` of the ellipse of definition along y (strictly positive).</span>
+<span class="sd">        If None, it is equal to ``radius_x`` (circle).</span>
+
+<span class="sd">    center : ArrayLike, optional (default: ``(0.0, 0.0)``)</span>
+<span class="sd">        The center :math:`(x_0, y_0)` of the ellipse of definition.</span>
+
+<span class="sd">    polynomials_cache : Optional[ZernikePolynomialsCache], optional (default: ``None``)</span>
+<span class="sd">        A cache of the Zernike polynomials used by :meth:`apply`, possibly shared with other</span>
+<span class="sd">        distortions (see :class:`ZernikePolynomialsCache`). By default, no cache: the</span>
+<span class="sd">        polynomials are computed at each call. It can be set or removed (``None``) at any time</span>
+<span class="sd">        with the property ``polynomials_cache``. It is not serialized and not copied, and it</span>
+<span class="sd">        never changes the results.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    A Zernike distortion up to the order 2 defined on the disk of radius 1.5:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        distortion = ZernikeDistortion(n_zernike=2, radius_x=1.5)</span>
+<span class="sd">        distortion.set_zero()</span>
+<span class="sd">        distortion.set_Cx(2, 0, 0.01)   # Defocus-like term along x</span>
+
+<span class="sd">        distorted = distortion.apply([[0.1, 0.2]]).x</span>
+<span class="sd">        distortion.invert(distorted).x    # array([[0.1, 0.2]])</span>
+
+<span class="sd">    """</span>
+
+    <span class="n">_required_optionals</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"pyzernike"</span><span class="p">,)</span>  <span class="c1"># ImportError at the instantiation if missing</span>
+
+    <span class="n">_has_apply</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_apply_dx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_apply_dp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert_dx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert_dp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_is_left_invertible</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_is_right_invertible</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">n_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_zernike</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">radius_x</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">radius_y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">center</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">polynomials_cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ZernikePolynomialsCache</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">polynomials_cache</span> <span class="o">=</span> <span class="n">polynomials_cache</span>  <span class="c1"># Validated by the setter</span>
+
+        <span class="c1"># Number of parameters</span>
+        <span class="n">n_zernike</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n_zernike</span><span class="p">,</span> <span class="s2">"n_zernike"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">n_parameters</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span>
+            <span class="n">n_parameters</span><span class="p">,</span> <span class="s2">"n_parameters"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_zernike</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_from_order</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_zernike</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_zernike</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_parameters</span> <span class="o">!=</span> <span class="n">n_from_order</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"n_parameters (</span><span class="si">{</span><span class="n">n_parameters</span><span class="si">}</span><span class="s2">) and n_zernike (</span><span class="si">{</span><span class="n">n_zernike</span><span class="si">}</span><span class="s2">) are not consistent: "</span>
+                    <span class="sa">f</span><span class="s2">"expected n_parameters = </span><span class="si">{</span><span class="n">n_from_order</span><span class="si">}</span><span class="s2">."</span>
+                <span class="p">)</span>
+            <span class="n">n_parameters</span> <span class="o">=</span> <span class="n">n_from_order</span>
+        <span class="k">if</span> <span class="n">n_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">"At least one of parameters, n_parameters or n_zernike must be provided."</span>
+                <span class="p">)</span>
+            <span class="c1"># Only to infer the number of parameters: they are validated by set_parameters</span>
+            <span class="n">n_parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+                <span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+                <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(n_parameters,)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order_from_n_parameters</span><span class="p">(</span><span class="n">n_parameters</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_distortion_parameters</span> <span class="o">=</span> <span class="n">n_parameters</span>
+
+        <span class="c1"># Constants of the ellipse of definition</span>
+        <span class="n">radius_x</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">radius_x</span><span class="p">,</span> <span class="s2">"radius_x"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">radius_y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">radius_y</span> <span class="o">=</span> <span class="n">radius_x</span>
+        <span class="n">radius_y</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">radius_y</span><span class="p">,</span> <span class="s2">"radius_y"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="s2">"center"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">center</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span> <span class="o">=</span> <span class="n">radius_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span> <span class="o">=</span> <span class="n">radius_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_center</span> <span class="o">=</span> <span class="n">center</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_order_from_n_parameters</span><span class="p">(</span><span class="n">n_parameters</span><span class="p">:</span> <span class="n">Integral</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># Return the order N_zer such that n_parameters = (N_zer + 1)(N_zer + 2), or None for 0</span>
+        <span class="n">n_parameters</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n_parameters</span><span class="p">,</span> <span class="s2">"n_parameters"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_parameters</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n_parameters</span><span class="p">:</span>
+            <span class="n">order</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_parameters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"n_parameters must be in [0, 2, 6, 12, 20, 30, ...], got </span><span class="si">{</span><span class="n">n_parameters</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">order</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Properties inherited from Transformation Class</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the number of parameters of the distortion model :math:`N_{params} = (N_{zer}+1)(N_{zer}+2)`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of parameters of the distortion model.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_distortion_parameters</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">input_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the input dimension of the distortion (2D normalized points).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The input dimension of the distortion.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">output_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the output dimension of the distortion (2D distorted points).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The output dimension of the distortion.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># I/O Methods for Transformation Class</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"n_parameters"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_distortion_parameters</span><span class="p">,</span>
+            <span class="s2">"radius_x"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span><span class="p">,</span>
+            <span class="s2">"radius_y"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span><span class="p">,</span>
+            <span class="s2">"center"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ZernikeDistortion</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"parameters"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">n_parameters</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"n_parameters"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">radius_x</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"radius_x"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">radius_y</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"radius_y"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">center</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"center"</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZernikeDistortion</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">n_parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_distortion_parameters</span><span class="p">,</span>
+            <span class="n">radius_x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span><span class="p">,</span>
+            <span class="n">radius_y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span><span class="p">,</span>
+            <span class="n">center</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Constants</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_zernike</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the maximum order :math:`N_{zer}` of the Zernike polynomials, such that</span>
+<span class="sd">        :math:`N_{params} = (N_{zer}+1)(N_{zer}+2)`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[int]</span>
+<span class="sd">            The maximum order of the Zernike polynomials, or None if the model has no parameters.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the radius :math:`R_x` of the ellipse of definition along x.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``radius_x`` is ``rx``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The radius of the ellipse along x.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the radius :math:`R_y` of the ellipse of definition along y.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``radius_y`` is ``ry``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The radius of the ellipse along y.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_y</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the radius :math:`R = R_x = R_y` of the disk of definition.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The radius of the disk.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the domain of definition is an ellipse (:math:`R_x \neq R_y`).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"The domain of definition is an ellipse (radius_x != radius_y), "</span>
+                <span class="s2">"use radius_x and radius_y instead."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the center :math:`(x_0, y_0)` of the ellipse of definition.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The returned array is read-only.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            The center of the ellipse with shape (2,).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">center_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the x coordinate :math:`x_0` of the center of the ellipse. An alias is ``x0``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The x coordinate of the center of the ellipse.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">x0</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">center_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the y coordinate :math:`y_0` of the center of the ellipse. An alias is ``y0``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The y coordinate of the center of the ellipse.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">y0</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_y</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Cache of the polynomials</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">polynomials_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ZernikePolynomialsCache</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The cache of the Zernike polynomials used by :meth:`apply`, or None (default)</span>
+<span class="sd">        for no cache (see :class:`ZernikePolynomialsCache`).</span>
+
+<span class="sd">        The cache can be shared with other distortions, and set or removed (``None``) at any</span>
+<span class="sd">        time, also when the parameters are locked: it never changes the results. It is not</span>
+<span class="sd">        serialized and not copied (a copy has no cache).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[ZernikePolynomialsCache]</span>
+<span class="sd">            The cache, or None.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_polynomials_cache</span>
+
+    <span class="nd">@polynomials_cache</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">polynomials_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ZernikePolynomialsCache</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ZernikePolynomialsCache</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'polynomials_cache' must be a ZernikePolynomialsCache or None. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_polynomials_cache</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Parameters</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameter_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the names of the parameters of the distortion model :</span>
+<span class="sd">        ``["Cx(0, 0)", "Cy(0, 0)", "Cx(1, -1)", "Cy(1, -1)", "Cx(1, 1)", "Cy(1, 1)", ...]``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            The names of the parameters of the distortion model.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">name</span>
+            <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter_x_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_y_names</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">pair</span>
+        <span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameter_x_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the names of the parameters along the x-axis : ``["Cx(0, 0)", "Cx(1, -1)", "Cx(1, 1)", ...]``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            The names of the parameters along the x-axis.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"Cx(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">)"</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orders</span><span class="p">()]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameter_y_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the names of the parameters along the y-axis : ``["Cy(0, 0)", "Cy(1, -1)", "Cy(1, 1)", ...]``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            The names of the parameters along the y-axis.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"Cy(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">)"</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orders</span><span class="p">()]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="c1"># Orders (n, m) of the Zernike polynomials of the model in the OSA/ANSI order</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="ZernikeDistortion.get_index">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion.get_index.html#pysdic.ZernikeDistortion.get_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Get the index in the ``parameters`` of the Zernike coefficient :math:`C^{x}_{n,m}` or</span>
+<span class="sd">        :math:`C^{y}_{n,m}`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \text{index} = n(n+2) + m + (0 \text{ if } coord = 'x' \text{ else } 1)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : Integral</span>
+<span class="sd">            The order of the Zernike polynomial.</span>
+
+<span class="sd">        m : Integral</span>
+<span class="sd">            The azimuthal frequency of the Zernike polynomial (:math:`|m| \leq n`, :math:`n - m` even).</span>
+
+<span class="sd">        coord : str</span>
+<span class="sd">            The coordinate ('x' or 'y').</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The index of the Zernike coefficient in the parameters.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If :math:`(n, m)` is not a valid Zernike polynomial or is not in the model.</span>
+<span class="sd">        """</span>
+        <span class="n">coord</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="s2">"coord"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">))</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">"m"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="ow">or</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"(n=</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, m=</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">) is not a valid Zernike polynomial."</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">coord</span> <span class="o">==</span> <span class="s2">"y"</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"(n=</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, m=</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">) is not in the model with n_zernike=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">index</span></div>
+
+
+<div class="viewcode-block" id="ZernikeDistortion.get_Cx">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion.get_Cx.html#pysdic.ZernikeDistortion.get_Cx">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_Cx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Integral</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Get the Zernike coefficient :math:`C^{x}_{n,m}` for the x coordinate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : Integral</span>
+<span class="sd">            The order of the Zernike polynomial.</span>
+
+<span class="sd">        m : Integral</span>
+<span class="sd">            The azimuthal frequency of the Zernike polynomial.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The value of the Zernike coefficient, or None if the parameters are not set.</span>
+<span class="sd">        """</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">index</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ZernikeDistortion.set_Cx">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion.set_Cx.html#pysdic.ZernikeDistortion.set_Cx">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_Cx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Set the Zernike coefficient :math:`C^{x}_{n,m}` for the x coordinate.</span>
+
+<span class="sd">        The parameters must already be set (see :meth:`set_zero`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : Integral</span>
+<span class="sd">            The order of the Zernike polynomial.</span>
+
+<span class="sd">        m : Integral</span>
+<span class="sd">            The azimuthal frequency of the Zernike polynomial.</span>
+
+<span class="sd">        value : Real</span>
+<span class="sd">            The value of the Zernike coefficient.</span>
+<span class="sd">        """</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Cx(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZernikeDistortion.get_Cy">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion.get_Cy.html#pysdic.ZernikeDistortion.get_Cy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_Cy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Integral</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Get the Zernike coefficient :math:`C^{y}_{n,m}` for the y coordinate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : Integral</span>
+<span class="sd">            The order of the Zernike polynomial.</span>
+
+<span class="sd">        m : Integral</span>
+<span class="sd">            The azimuthal frequency of the Zernike polynomial.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[float]</span>
+<span class="sd">            The value of the Zernike coefficient, or None if the parameters are not set.</span>
+<span class="sd">        """</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">index</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ZernikeDistortion.set_Cy">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion.set_Cy.html#pysdic.ZernikeDistortion.set_Cy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_Cy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Set the Zernike coefficient :math:`C^{y}_{n,m}` for the y coordinate.</span>
+
+<span class="sd">        The parameters must already be set (see :meth:`set_zero`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : Integral</span>
+<span class="sd">            The order of the Zernike polynomial.</span>
+
+<span class="sd">        m : Integral</span>
+<span class="sd">            The azimuthal frequency of the Zernike polynomial.</span>
+
+<span class="sd">        value : Real</span>
+<span class="sd">            The value of the Zernike coefficient.</span>
+<span class="sd">        """</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Cy(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameters_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the Zernike coefficients :math:`C^{x}_{n,m}` for the x coordinate in the OSA/ANSI</span>
+<span class="sd">        order, with shape ``(n_parameters // 2,)``.</span>
+
+<span class="sd">        The coefficients can only be set if the parameters are already set (see :meth:`set_zero`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : ArrayLike</span>
+<span class="sd">            The Zernike coefficients for the x coordinate with shape ``(n_parameters // 2,)``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The Zernike coefficients for the x coordinate, or None if the parameters are not set.</span>
+<span class="sd">        """</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="nd">@parameters_x</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameters_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_coordinate_parameters</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">"parameters_x"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameters_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the Zernike coefficients :math:`C^{y}_{n,m}` for the y coordinate in the OSA/ANSI</span>
+<span class="sd">        order, with shape ``(n_parameters // 2,)``.</span>
+
+<span class="sd">        The coefficients can only be set if the parameters are already set (see :meth:`set_zero`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : ArrayLike</span>
+<span class="sd">            The Zernike coefficients for the y coordinate with shape ``(n_parameters // 2,)``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The Zernike coefficients for the y coordinate, or None if the parameters are not set.</span>
+<span class="sd">        """</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="nd">@parameters_y</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameters_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_coordinate_parameters</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">"parameters_y"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_coordinate_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Set the coefficients of one coordinate (start=0 for x, 1 for y), the lock is respected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">_SET_HINT</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ZernikeDistortion.set_zero">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion.set_zero.html#pysdic.ZernikeDistortion.set_zero">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Set all the Zernike coefficients to zero (no distortion).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Transform methods</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_distort</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+        <span class="c1"># Internal implementation of the distortion (see _apply for the equations). With</span>
+        <span class="c1"># use_cache=True (only from _apply), the polynomials come from the polynomials_cache if set.</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">distorted</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">dx</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">))</span> <span class="k">if</span> <span class="n">dp</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">distorted</span><span class="p">,</span> <span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">jacobian_dp</span>
+
+        <span class="c1"># Zernike polynomials and their derivatives with shape (D, P, n_points)</span>
+        <span class="n">ellipse</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">use_cache</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_polynomials_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">zernike</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_polynomials_cache</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+                <span class="n">points</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radius_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">,</span> <span class="n">dx</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">zernike</span> <span class="o">=</span> <span class="n">_compute_polynomials</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_zernike</span><span class="p">,</span> <span class="n">ellipse</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># (P, 2) with columns (Cx, Cy)</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="n">zernike</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># (n_points, P)</span>
+        <span class="n">distorted</span> <span class="o">+=</span> <span class="n">values</span> <span class="o">@</span> <span class="n">coefficients</span>  <span class="c1"># (n_points, 2)</span>
+
+        <span class="k">if</span> <span class="n">dx</span><span class="p">:</span>
+            <span class="n">jacobian_dx</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">zernike</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">coefficients</span>  <span class="c1"># d/dx_n</span>
+            <span class="n">jacobian_dx</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">zernike</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">coefficients</span>  <span class="c1"># d/dy_n</span>
+
+        <span class="k">if</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>  <span class="c1"># d x_d / d Cx</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>  <span class="c1"># d y_d / d Cy</span>
+
+        <span class="k">return</span> <span class="n">distorted</span><span class="p">,</span> <span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">jacobian_dp</span>
+
+<div class="viewcode-block" id="ZernikeDistortion._apply">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion._apply.html#pysdic.ZernikeDistortion._apply">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">normalized_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Compute the transformation from the **normalized points** to the **distorted points**.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \vec{x}_d = \vec{x}_n + \sum_{n, m} \vec{C}_{n,m} Z_{n,m}(\rho, \theta)</span>
+<span class="sd">            \qquad \text{with} \qquad</span>
+<span class="sd">            \vec{C}_{n,m} = \begin{bmatrix} C^{x}_{n,m} \\ C^{y}_{n,m} \end{bmatrix}</span>
+
+<span class="sd">        The Jacobian with respect to the normalized points is:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_d}{\partial \vec{x}_n} = I_2 + \sum_{n, m} \vec{C}_{n,m}</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            \frac{\partial Z_{n,m}}{\partial x_n} &amp; \frac{\partial Z_{n,m}}{\partial y_n}</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        where the derivatives of the Zernike polynomials with respect to the cartesian coordinates</span>
+<span class="sd">        are given by ``pyzernike``. The Jacobian with respect to the coefficients is:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial x_d}{\partial C^{x}_{n,m}} = \frac{\partial y_d}{\partial C^{y}_{n,m}} = Z_{n,m}(\rho, \theta),</span>
+<span class="sd">            \qquad</span>
+<span class="sd">            \frac{\partial x_d}{\partial C^{y}_{n,m}} = \frac{\partial y_d}{\partial C^{x}_{n,m}} = 0</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The points outside the ellipse of definition are distorted to NaN.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            With a ``polynomials_cache``, the polynomials at the same points (and the same</span>
+<span class="sd">            ellipse) are computed once and reused (see :class:`ZernikePolynomialsCache`).</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        normalized_points : numpy.ndarray</span>
+<span class="sd">            The normalized points. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        dx : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, the Jacobian with respect to the normalized points is computed.</span>
+
+<span class="sd">        dp : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, the Jacobian with respect to the distortion parameters is computed.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        distorted_points : numpy.ndarray</span>
+<span class="sd">            The distorted points. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        jacobian_dx : Optional[numpy.ndarray]</span>
+<span class="sd">            The Jacobian of the distorted points with respect to the normalized points.</span>
+<span class="sd">            Shape ``(n_points, 2, 2)`` if ``dx=True``, otherwise ``None``.</span>
+
+<span class="sd">        jacobian_dp : Optional[numpy.ndarray]</span>
+<span class="sd">            The Jacobian of the distorted points with respect to the distortion parameters.</span>
+<span class="sd">            Shape ``(n_points, 2, n_parameters)`` if ``dp=True``, otherwise ``None``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distort</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dp</span><span class="p">,</span> <span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZernikeDistortion._invert">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.ZernikeDistortion._invert.html#pysdic.ZernikeDistortion._invert">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invert</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">distorted_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">max_iteration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-14</span><span class="p">,</span>
+        <span class="n">pysolvegn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">solve_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Compute the inverse transformation from the **distorted points** to the **normalized points**.</span>
+
+<span class="sd">        The normalized points :math:`\vec{x}_n` are the solutions of :math:`D(\vec{x}_n) = \vec{x}_d`,</span>
+<span class="sd">        where :math:`D` is the distortion. They are computed with Newton iterations, starting from</span>
+<span class="sd">        :math:`\vec{x}_n^{(0)} = 2 \vec{x}_d - D(\vec{x}_d)`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \vec{x}_n^{(k+1)} = \vec{x}_n^{(k)} - \left(\frac{\partial D}{\partial \vec{x}_n}(\vec{x}_n^{(k)})\right)^{-1}</span>
+<span class="sd">            \left( D(\vec{x}_n^{(k)}) - \vec{x}_d \right)</span>
+
+<span class="sd">        until the update of every point is below ``tolerance`` (relatively to the magnitude of the point).</span>
+
+<span class="sd">        The Jacobians are obtained by differentiating the identity :math:`D(D^{-1}(\vec{x}_d; \vec{p}); \vec{p}) = \vec{x}_d`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial D^{-1}}{\partial \vec{x}_d} = \left( \frac{\partial D}{\partial \vec{x}_n}(\vec{x}_n) \right)^{-1},</span>
+<span class="sd">            \qquad</span>
+<span class="sd">            \frac{\partial D^{-1}}{\partial \vec{p}} = - \frac{\partial D^{-1}}{\partial \vec{x}_d} \cdot \frac{\partial D}{\partial \vec{p}}(\vec{x}_n)</span>
+
+<span class="sd">        To solve the undistortion with ``pysolvegn`` (for example with a Levenberg-Marquardt damping),</span>
+<span class="sd">        set ``pysolvegn=True`` and give the options of the solver with ``solve_kwargs``.</span>
+<span class="sd">        In this case, the Jacobians are not available.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            A ``RuntimeWarning`` is emitted if some points do not converge within ``max_iteration``</span>
+<span class="sd">            iterations, which usually means that the points are outside the ellipse of definition or</span>
+<span class="sd">            outside the domain where the distortion is bijective.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distorted_points : numpy.ndarray</span>
+<span class="sd">            The distorted points. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        dx : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, the Jacobian with respect to the distorted points is computed.</span>
+
+<span class="sd">        dp : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, the Jacobian with respect to the distortion parameters is computed.</span>
+
+<span class="sd">        max_iteration : int, optional (default: ``50``)</span>
+<span class="sd">            The maximum number of Newton iterations.</span>
+
+<span class="sd">        tolerance : float, optional (default: ``1e-14``)</span>
+<span class="sd">            The relative tolerance on the update of the points to stop the iterations.</span>
+
+<span class="sd">        pysolvegn : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, the undistortion is computed with :func:`pysdic.optimize_transformation_input_points`</span>
+<span class="sd">            (``pysolvegn.solve_batch``) instead of the Newton iterations, starting from the same initial guess.</span>
+<span class="sd">            In this case, the Jacobians are not available.</span>
+
+<span class="sd">        solve_kwargs : Optional[Dict[str, Any]], optional (default: ``None``)</span>
+<span class="sd">            Only with ``pysolvegn=True``: additional keyword arguments passed to ``pysolvegn.solve_batch``</span>
+<span class="sd">            (``damping``, ``verbosity``, ...) or to :func:`pysdic.optimize_transformation_input_points`</span>
+<span class="sd">            (``mode``, ``loss``, ``loss_scale``). By default, ``max_iteration=max_iteration`` and ``xtol=tolerance``.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        normalized_points : numpy.ndarray</span>
+<span class="sd">            The normalized points. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        jacobian_dx : Optional[numpy.ndarray]</span>
+<span class="sd">            The Jacobian of the normalized points with respect to the distorted points.</span>
+<span class="sd">            Shape ``(n_points, 2, 2)`` if ``dx=True``, otherwise ``None``.</span>
+
+<span class="sd">        jacobian_dp : Optional[numpy.ndarray]</span>
+<span class="sd">            The Jacobian of the normalized points with respect to the distortion parameters.</span>
+<span class="sd">            Shape ``(n_points, 2, n_parameters)`` if ``dp=True``, otherwise ``None``.</span>
+<span class="sd">        """</span>
+        <span class="n">pysolvegn</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">pysolvegn</span><span class="p">,</span> <span class="s2">"pysolvegn"</span><span class="p">)</span>
+        <span class="n">max_iteration</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">max_iteration</span><span class="p">,</span> <span class="s2">"max_iteration"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">tolerance</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">tolerance</span><span class="p">,</span> <span class="s2">"tolerance"</span><span class="p">,</span> <span class="n">non_negative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pysolvegn</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">dp</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">"The Jacobians of the undistortion cannot be computed with pysolvegn."</span>
+                <span class="p">)</span>
+            <span class="n">guess</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">distorted_points</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distort</span><span class="p">(</span><span class="n">distorted_points</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invert_pysolvegn</span><span class="p">(</span><span class="n">distorted_points</span><span class="p">,</span> <span class="n">guess</span><span class="p">,</span> <span class="n">max_iteration</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">solve_kwargs</span><span class="p">),</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">normalized_points</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">distorted_points</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distort</span><span class="p">(</span>
+            <span class="n">distorted_points</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Initial guess (n_points, 2)</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iteration</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">active</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">values</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distort</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">[</span><span class="n">active</span><span class="p">],</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">residuals</span> <span class="o">=</span> <span class="n">values</span> <span class="o">-</span> <span class="n">distorted_points</span><span class="p">[</span><span class="n">active</span><span class="p">]</span>  <span class="c1"># (n_active, 2)</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">residuals</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+            <span class="n">steps</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">jacobian</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">residuals</span><span class="p">[</span><span class="n">valid</span><span class="p">][:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">normalized_points</span><span class="p">[</span><span class="n">active</span><span class="p">]</span> <span class="o">-=</span> <span class="n">steps</span>
+            <span class="n">converged</span> <span class="o">=</span> <span class="n">valid</span> <span class="o">&amp;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span>
+                <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tolerance</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">[</span><span class="n">active</span><span class="p">])),</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">normalized_points</span><span class="p">[</span><span class="n">active</span><span class="p">[</span><span class="o">~</span><span class="n">valid</span><span class="p">]]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># Left the ellipse of definition</span>
+            <span class="n">active</span> <span class="o">=</span> <span class="n">active</span><span class="p">[</span><span class="o">~</span><span class="n">converged</span> <span class="o">&amp;</span> <span class="n">valid</span><span class="p">]</span>
+
+        <span class="n">n_failed</span> <span class="o">=</span> <span class="n">active</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">n_failed</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The undistortion did not converge for </span><span class="si">{</span><span class="n">n_failed</span><span class="si">}</span><span class="s2"> point(s). The points may be "</span>
+                <span class="sa">f</span><span class="s2">"outside the ellipse of definition or outside the domain where the distortion "</span>
+                <span class="sa">f</span><span class="s2">"is bijective."</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">jacobian_apply_dx</span><span class="p">,</span> <span class="n">jacobian_apply_dp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distort</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+            <span class="n">jacobian_inverse_dx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">normalized_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="n">finite</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">jacobian_apply_dx</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">jacobian_inverse_dx</span><span class="p">[</span><span class="n">finite</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">jacobian_apply_dx</span><span class="p">[</span><span class="n">finite</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">dx</span><span class="p">:</span>
+                <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="n">jacobian_inverse_dx</span>
+            <span class="k">if</span> <span class="n">dp</span><span class="p">:</span>
+                <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="o">-</span><span class="n">jacobian_inverse_dx</span> <span class="o">@</span> <span class="n">jacobian_apply_dp</span>  <span class="c1"># (n_points, 2, n_parameters)</span>
+
+        <span class="k">return</span> <span class="n">normalized_points</span><span class="p">,</span> <span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">jacobian_dp</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invert_pysolvegn</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">distorted_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">guess</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">max_iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">solve_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Undistortion with pysolvegn: D(x_n) = x_d solved as an optimization of the input points of D</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..transformation_optimizations.optimize_transformation_input_points</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+            <span class="n">optimize_transformation_input_points</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">solve_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"max_iteration"</span><span class="p">:</span> <span class="n">max_iteration</span><span class="p">,</span>
+            <span class="s2">"xtol"</span><span class="p">:</span> <span class="n">tolerance</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">_validate_kwargs</span><span class="p">(</span><span class="n">solve_kwargs</span><span class="p">,</span> <span class="s2">"solve_kwargs"</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="n">normalized_points</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">optimize_transformation_input_points</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">distorted_points</span><span class="p">,</span> <span class="n">guess</span><span class="p">,</span> <span class="o">**</span><span class="n">solve_kwargs</span>
+        <span class="p">)</span>
+        <span class="c1"># The points outside the ellipse of definition are set to NaN, as for the Newton iterations</span>
+        <span class="n">outside</span> <span class="o">=</span> <span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_distort</span><span class="p">(</span><span class="n">normalized_points</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">normalized_points</span><span class="p">[</span><span class="n">outside</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">n_failed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">n_failed</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The undistortion with pysolvegn did not converge for </span><span class="si">{</span><span class="n">n_failed</span><span class="si">}</span><span class="s2"> point(s). The points may "</span>
+                <span class="sa">f</span><span class="s2">"be outside the ellipse of definition or outside the domain where the distortion is bijective."</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">normalized_points</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

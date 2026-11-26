@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.transformations.planar_homographic_extrinsic &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/transformations/planar_homographic_extrinsic';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.transformations.planar_homographic_extrinsic</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.transformations.planar_homographic_extrinsic</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transformation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coefficient_property</span><span class="p">(</span><span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">col</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">property</span><span class="p">:</span>
+    <span class="c1"># Build the [Get/Set] property of one coefficient H[row, col] of the homography matrix</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"h</span><span class="si">{</span><span class="n">row</span><span class="si">}{</span><span class="n">col</span><span class="si">}</span><span class="s2">"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_component</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_parameters_at</span><span class="p">(</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="s2">"with the 'parameters' attribute or the 'from_hmat' class method"</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">getter</span><span class="p">,</span>
+        <span class="n">setter</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"[Get/Set] the coefficient :math:`h_</span><span class="se">{{</span><span class="si">{</span><span class="n">row</span><span class="si">}{</span><span class="n">col</span><span class="si">}</span><span class="se">}}</span><span class="s2">` of the homography matrix "</span>
+            <span class="sa">f</span><span class="s2">"(component ``H[</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">]``), or None if the parameters are not set.</span><span class="se">\n\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"The coefficient can only be set if all the parameters are already set."</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="PlanarHomographicExtrinsic">
+<a class="viewcode-back" href="../../../api/morphisms/PlanarHomographicExtrinsic.html#pysdic.PlanarHomographicExtrinsic">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlanarHomographicExtrinsic</span><span class="p">(</span><span class="n">Transformation</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Subclass of :class:`pysdic.Transformation` implementing a **planar homography**</span>
+<span class="sd">    (projective transformation of the plane).</span>
+
+<span class="sd">    This class represents an **extrinsic transformation in 2D**, used to run the camera</span>
+<span class="sd">    algorithms on planar problems. It applies a projective transformation to transform</span>
+<span class="sd">    2D world points into 2D normalized points:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        world_points → normalized_points → distorted_points → image_points</span>
+
+<span class="sd">    Given a **world point** :math:`\vec{x}_w = (x_w, y_w)`, the corresponding point</span>
+<span class="sd">    :math:`\vec{x}_n = (x_n, y_n)` in the normalized coordinate system is obtained</span>
+<span class="sd">    using homogeneous coordinates:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \begin{bmatrix}</span>
+<span class="sd">        u \\</span>
+<span class="sd">        v \\</span>
+<span class="sd">        w</span>
+<span class="sd">        \end{bmatrix}</span>
+<span class="sd">        =</span>
+<span class="sd">        H</span>
+<span class="sd">        \begin{bmatrix}</span>
+<span class="sd">        x_w \\</span>
+<span class="sd">        y_w \\</span>
+<span class="sd">        1</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    followed by the projective normalization:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        x_n = \frac{u}{w},</span>
+<span class="sd">        \qquad</span>
+<span class="sd">        y_n = \frac{v}{w}</span>
+
+<span class="sd">    The homography matrix is parameterized with **8 parameters** by fixing</span>
+<span class="sd">    its bottom-right element to one:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        H =</span>
+<span class="sd">        \begin{bmatrix}</span>
+<span class="sd">        h_{00} &amp; h_{01} &amp; h_{02} \\</span>
+<span class="sd">        h_{10} &amp; h_{11} &amp; h_{12} \\</span>
+<span class="sd">        h_{20} &amp; h_{21} &amp; 1</span>
+<span class="sd">        \end{bmatrix}</span>
+
+<span class="sd">    The homography matrix must be invertible. The inverse transformation is the homography</span>
+<span class="sd">    of matrix :math:`H^{-1}`, so the transformation is both left and right invertible,</span>
+<span class="sd">    and all the Jacobians are available for ``apply`` and ``invert``.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Class :class:`pysdic.PlanarRigidExtrinsic` for the rigid motions of the plane.</span>
+<span class="sd">        - Class :class:`pysdic.WorldPlanePerspectiveExtrinsic` for the homographies induced by a</span>
+<span class="sd">          perspective camera with a 3D pose observing the plane :math:`Z_w = 0`</span>
+<span class="sd">          (6 parameters :math:`(\vec{r}, T)` instead of 8 free coefficients).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        A homography is defined only up to an arbitrary non-zero scale.</span>
+<span class="sd">        The matrix is always normalized so that ``H[2, 2] = 1``, which excludes the</span>
+<span class="sd">        homographies with a zero bottom-right element.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The transformation is only defined for points for which the projective denominator</span>
+<span class="sd">        :math:`w` is non-zero (points not sent to infinity). A ``ValueError`` is raised otherwise.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The class can be instantiated in three ways:</span>
+
+<span class="sd">        - providing the parameters directly as a numpy array of shape ``(8,)``.</span>
+<span class="sd">        - using the :meth:`from_hmat` class method to initialize the transformation</span>
+<span class="sd">          from a homography matrix (normalized so that ``H[2, 2] = 1``).</span>
+<span class="sd">        - using the :meth:`from_eye` class method to initialize the identity transformation.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parameters : Optional[ArrayLike], optional (default: ``None``)</span>
+<span class="sd">        The homography parameters as a 1D array of shape ``(8,)``.</span>
+<span class="sd">        The parameters are ordered as :math:`(h_{00}, h_{01}, h_{02}, h_{10}, h_{11}, h_{12}, h_{20}, h_{21})`.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    A homography combining a scaling, a translation and a small perspective effect:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        extrinsic = PlanarHomographicExtrinsic.from_hmat(</span>
+<span class="sd">            [[2.0, 0.0, 1.0],</span>
+<span class="sd">             [0.0, 2.0, 0.0],</span>
+<span class="sd">             [0.1, 0.0, 1.0]]</span>
+<span class="sd">        )</span>
+
+<span class="sd">        extrinsic.apply([[1.0, 1.0]]).x     # array([[2.72727273, 1.81818182]])</span>
+<span class="sd">        extrinsic.invert([[2.72727273, 1.81818182]]).x   # array([[1., 1.]])</span>
+
+<span class="sd">    """</span>
+
+    <span class="n">_has_apply</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_apply_dx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_apply_dp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert_dx</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_has_invert_dp</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_is_left_invertible</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_is_right_invertible</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Properties inherited from Transformation</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the number of parameters of the homography (always 8).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of parameters of the homography.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">8</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">input_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the input dimension of the homography (2D world points).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The input dimension of the homography.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">output_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the output dimension of the homography (2D normalized points).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The output dimension of the homography.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># I/O Methods</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{}</span>  <span class="c1"># No constants, the parameters are serialized by the base class</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">PlanarHomographicExtrinsic</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"parameters"</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlanarHomographicExtrinsic</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Parameters</span>
+    <span class="c1"># =============================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_parameters</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">override_lock</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Set the parameters of the homography, with an option to override the lock.</span>
+
+<span class="sd">        In addition to the checks of :meth:`pysdic.Transformation.set_parameters`, the parameters</span>
+<span class="sd">        must be finite and the homography matrix must be invertible.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : Optional[ArrayLike]</span>
+<span class="sd">            The parameters of shape ``(8,)`` ordered as</span>
+<span class="sd">            :math:`(h_{00}, h_{01}, h_{02}, h_{10}, h_{11}, h_{12}, h_{20}, h_{21})`,</span>
+<span class="sd">            or None to unset the parameters.</span>
+
+<span class="sd">        override_lock : bool, optional (default: ``False``)</span>
+<span class="sd">            Whether to override the lock and allow setting parameters even if they are locked.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the parameters do not have the correct shape, are not finite or if the</span>
+<span class="sd">            homography matrix is singular.</span>
+
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the parameters are locked and ``override_lock`` is False.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_parameters</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># Shape (8,) and finite</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_matrix_from_parameters</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">"The homography matrix is singular, it must be invertible."</span>
+                <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">override_lock</span><span class="o">=</span><span class="n">override_lock</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_matrix_from_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Build the 3x3 homography matrix with H[2, 2] = 1</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="c1"># Return one component of the parameters, or None if the parameters are not set</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parameter_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] the names of the parameters of the homography :</span>
+<span class="sd">        ``["h00", "h01", "h02", "h10", "h11", "h12", "h20", "h21"]``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            The names of the parameters of the homography.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">"h00"</span><span class="p">,</span> <span class="s2">"h01"</span><span class="p">,</span> <span class="s2">"h02"</span><span class="p">,</span> <span class="s2">"h10"</span><span class="p">,</span> <span class="s2">"h11"</span><span class="p">,</span> <span class="s2">"h12"</span><span class="p">,</span> <span class="s2">"h20"</span><span class="p">,</span> <span class="s2">"h21"</span><span class="p">]</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Homography matrix</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">homography_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] the 3x3 homogeneous homography matrix :math:`H`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            H =</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            h_{00} &amp; h_{01} &amp; h_{02} \\</span>
+<span class="sd">            h_{10} &amp; h_{11} &amp; h_{12} \\</span>
+<span class="sd">            h_{20} &amp; h_{21} &amp; 1</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        When the matrix is set, it is normalized so that ``H[2, 2] = 1``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            An alias for ``homography_matrix`` is ``hmat``.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        homography_matrix : Optional[ArrayLike]</span>
+<span class="sd">            The homography matrix with shape ``(3, 3)`` and a non-zero bottom-right element,</span>
+<span class="sd">            or None to unset the parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[numpy.ndarray]</span>
+<span class="sd">            The homography matrix with shape ``(3, 3)``. (or None if the parameters are not set)</span>
+<span class="sd">        """</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_from_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="nd">@homography_matrix</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">homography_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hmat</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">hmat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span>
+        <span class="n">hmat</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">hmat</span><span class="p">,</span> <span class="s2">"homography_matrix"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hmat</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Homography matrix must have a non-zero bottom-right element."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">hmat</span> <span class="o">/</span> <span class="n">hmat</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[:</span><span class="mi">8</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hmat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">homography_matrix</span>
+
+    <span class="nd">@hmat</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">homography_matrix</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Individual matrix coefficients</span>
+    <span class="c1"># =============================================</span>
+    <span class="n">h00</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">h01</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">h02</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">h10</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">h11</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">h12</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">h20</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">h21</span> <span class="o">=</span> <span class="n">_coefficient_property</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Instantiation methods</span>
+    <span class="c1"># =============================================</span>
+<div class="viewcode-block" id="PlanarHomographicExtrinsic.from_hmat">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PlanarHomographicExtrinsic.from_hmat.html#pysdic.PlanarHomographicExtrinsic.from_hmat">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_hmat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">hmat</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlanarHomographicExtrinsic</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a :class:`pysdic.PlanarHomographicExtrinsic` from a 3x3 homography matrix.</span>
+
+<span class="sd">        The matrix is normalized so that ``H[2, 2] = 1``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hmat : ArrayLike</span>
+<span class="sd">            The homography matrix with shape ``(3, 3)``.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.PlanarHomographicExtrinsic`</span>
+<span class="sd">            A new homography transformation.</span>
+<span class="sd">        """</span>
+        <span class="n">extrinsic</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">extrinsic</span><span class="o">.</span><span class="n">homography_matrix</span> <span class="o">=</span> <span class="n">hmat</span>
+        <span class="k">return</span> <span class="n">extrinsic</span></div>
+
+
+<div class="viewcode-block" id="PlanarHomographicExtrinsic.from_eye">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PlanarHomographicExtrinsic.from_eye.html#pysdic.PlanarHomographicExtrinsic.from_eye">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_eye</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlanarHomographicExtrinsic</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a :class:`pysdic.PlanarHomographicExtrinsic` representing the identity</span>
+<span class="sd">        transformation (:math:`H = I_3`).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.PlanarHomographicExtrinsic`</span>
+<span class="sd">            A new homography transformation with the identity matrix.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_hmat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span></div>
+
+
+    <span class="c1"># =============================================</span>
+    <span class="c1"># Transform methods</span>
+    <span class="c1"># =============================================</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_projective_map</span><span class="p">(</span>
+        <span class="n">matrix</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="c1"># Apply the projective map of a 3x3 matrix to (n_points, 2) points.</span>
+        <span class="c1"># Return the projected points (n_points, 2) and the denominators (n_points,)</span>
+        <span class="n">homogeneous</span> <span class="o">=</span> <span class="n">points</span> <span class="o">@</span> <span class="n">matrix</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">matrix</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># (n_points, 3)</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">homogeneous</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">denominator</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Homography projection is undefined for at least one input point "</span>
+                <span class="s2">"(zero projective denominator)."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">homogeneous</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">denominator</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_projective_jacobian_dx</span><span class="p">(</span>
+        <span class="n">matrix</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">projected</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">denominator</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Jacobian of the projective map with respect to the points: (M[:2, :2] - p M[2, :2]) / w</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">projected</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">matrix</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># (n_points, 2, 2)</span>
+        <span class="k">return</span> <span class="n">jacobian</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+<div class="viewcode-block" id="PlanarHomographicExtrinsic._apply">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PlanarHomographicExtrinsic._apply.html#pysdic.PlanarHomographicExtrinsic._apply">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">world_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Compute the transformation from 2D **world points** to 2D **normalized points**.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            x_n = \frac{h_{00} x_w + h_{01} y_w + h_{02}}{w},</span>
+<span class="sd">            \qquad</span>
+<span class="sd">            y_n = \frac{h_{10} x_w + h_{11} y_w + h_{12}}{w},</span>
+<span class="sd">            \qquad</span>
+<span class="sd">            w = h_{20} x_w + h_{21} y_w + 1</span>
+
+<span class="sd">        The Jacobian with respect to the world points is:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_n}{\partial \vec{x}_w} = \frac{1}{w}</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            h_{00} - x_n h_{20} &amp; h_{01} - x_n h_{21} \\</span>
+<span class="sd">            h_{10} - y_n h_{20} &amp; h_{11} - y_n h_{21}</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        The Jacobian with respect to the parameters</span>
+<span class="sd">        :math:`(h_{00}, h_{01}, h_{02}, h_{10}, h_{11}, h_{12}, h_{20}, h_{21})` is:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_n}{\partial \vec{p}} = \frac{1}{w}</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            x_w &amp; y_w &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; -x_n x_w &amp; -x_n y_w \\</span>
+<span class="sd">            0 &amp; 0 &amp; 0 &amp; x_w &amp; y_w &amp; 1 &amp; -y_n x_w &amp; -y_n y_w</span>
+<span class="sd">            \end{bmatrix}</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        world_points : numpy.ndarray</span>
+<span class="sd">            Input 2D points in world coordinates. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        dx : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the input world points.</span>
+
+<span class="sd">        dp : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the homography parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        normalized_points : numpy.ndarray</span>
+<span class="sd">            Transformed 2D points in the normalized coordinate system.</span>
+<span class="sd">            Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        jacobian_dx : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian with respect to world points. Shape</span>
+<span class="sd">            ``(n_points, 2, 2)`` if ``dx=True``, otherwise ``None``.</span>
+
+<span class="sd">        jacobian_dp : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian with respect to the homography parameters. Shape</span>
+<span class="sd">            ``(n_points, 2, 8)`` if ``dp=True``, otherwise ``None``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the projective denominator :math:`w` is zero for at least one point.</span>
+<span class="sd">        """</span>
+        <span class="n">hmat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_from_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">)</span>
+        <span class="n">normalized_points</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_projective_map</span><span class="p">(</span><span class="n">hmat</span><span class="p">,</span> <span class="n">world_points</span><span class="p">)</span>
+
+        <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dx</span><span class="p">:</span>
+            <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_projective_jacobian_dx</span><span class="p">(</span>
+                <span class="n">hmat</span><span class="p">,</span> <span class="n">normalized_points</span><span class="p">,</span> <span class="n">w</span>
+            <span class="p">)</span>  <span class="c1"># (n_points, 2, 2)</span>
+
+        <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">n_points</span> <span class="o">=</span> <span class="n">world_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x_w</span> <span class="o">=</span> <span class="n">world_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">y_w</span> <span class="o">=</span> <span class="n">world_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">x_n</span> <span class="o">=</span> <span class="n">normalized_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">y_n</span> <span class="o">=</span> <span class="n">normalized_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># (n_points, 2, 8)</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">x_n</span> <span class="o">*</span> <span class="n">x_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">x_n</span> <span class="o">*</span> <span class="n">y_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">y_n</span> <span class="o">*</span> <span class="n">x_w</span>
+            <span class="n">jacobian_dp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">y_n</span> <span class="o">*</span> <span class="n">y_w</span>
+            <span class="n">jacobian_dp</span> <span class="o">/=</span> <span class="n">w</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">normalized_points</span><span class="p">,</span> <span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">jacobian_dp</span></div>
+
+
+<div class="viewcode-block" id="PlanarHomographicExtrinsic._invert">
+<a class="viewcode-back" href="../../../api/morphisms/_generated/pysdic.PlanarHomographicExtrinsic._invert.html#pysdic.PlanarHomographicExtrinsic._invert">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invert</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">normalized_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">dp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Compute the inverse transformation from 2D **normalized points**</span>
+<span class="sd">        to 2D **world points**.</span>
+
+<span class="sd">        The inverse transformation is the homography of matrix :math:`G = H^{-1}`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            a \\</span>
+<span class="sd">            b \\</span>
+<span class="sd">            d</span>
+<span class="sd">            \end{bmatrix}</span>
+<span class="sd">            =</span>
+<span class="sd">            G</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            x_n \\</span>
+<span class="sd">            y_n \\</span>
+<span class="sd">            1</span>
+<span class="sd">            \end{bmatrix},</span>
+<span class="sd">            \qquad</span>
+<span class="sd">            x_w = \frac{a}{d},</span>
+<span class="sd">            \qquad</span>
+<span class="sd">            y_w = \frac{b}{d}</span>
+
+<span class="sd">        The Jacobian with respect to the normalized points has the same form as for ``apply``</span>
+<span class="sd">        with the coefficients of :math:`G` and the denominator :math:`d`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial \vec{x}_w}{\partial \vec{x}_n} = \frac{1}{d}</span>
+<span class="sd">            \begin{bmatrix}</span>
+<span class="sd">            g_{00} - x_w g_{20} &amp; g_{01} - x_w g_{21} \\</span>
+<span class="sd">            g_{10} - y_w g_{20} &amp; g_{11} - y_w g_{21}</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        The Jacobian with respect to the parameters is obtained by differentiating the identity</span>
+<span class="sd">        :math:`T(T^{-1}(\vec{x}_n; \vec{p}); \vec{p}) = \vec{x}_n` with respect to :math:`\vec{p}`:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \frac{\partial T^{-1}}{\partial \vec{p}}(\vec{x}_n) =</span>
+<span class="sd">            - \frac{\partial \vec{x}_w}{\partial \vec{x}_n} \cdot \frac{\partial T}{\partial \vec{p}}(\vec{x}_w)</span>
+
+<span class="sd">        where :math:`\frac{\partial T}{\partial \vec{p}}` is the Jacobian of ``apply`` with respect to</span>
+<span class="sd">        the parameters evaluated at the world points :math:`\vec{x}_w`.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        normalized_points : numpy.ndarray</span>
+<span class="sd">            Input 2D points in normalized coordinates. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        dx : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the input normalized points.</span>
+
+<span class="sd">        dp : bool, optional (default: ``False``)</span>
+<span class="sd">            If True, compute the Jacobian with respect to the homography parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        world_points : numpy.ndarray</span>
+<span class="sd">            Inverse-transformed points in world coordinates. Shape ``(n_points, 2)``.</span>
+
+<span class="sd">        jacobian_dx : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian with respect to normalized points.</span>
+<span class="sd">            Shape ``(n_points, 2, 2)`` if ``dx=True``, otherwise ``None``.</span>
+
+<span class="sd">        jacobian_dp : Optional[numpy.ndarray]</span>
+<span class="sd">            Jacobian with respect to the homography parameters.</span>
+<span class="sd">            Shape ``(n_points, 2, 8)`` if ``dp=True``, otherwise ``None``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the projective denominator :math:`d` is zero for at least one point.</span>
+<span class="sd">        """</span>
+        <span class="n">hmat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_from_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">)</span>
+        <span class="n">hmat_inv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">hmat</span><span class="p">)</span>  <span class="c1"># Invertible by construction (checked when set)</span>
+        <span class="n">world_points</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_projective_map</span><span class="p">(</span><span class="n">hmat_inv</span><span class="p">,</span> <span class="n">normalized_points</span><span class="p">)</span>
+
+        <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">jacobian_dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_projective_jacobian_dx</span><span class="p">(</span>
+                <span class="n">hmat_inv</span><span class="p">,</span> <span class="n">world_points</span><span class="p">,</span> <span class="n">d</span>
+            <span class="p">)</span>  <span class="c1"># (n_points, 2, 2)</span>
+
+        <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dp</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">jacobian_apply_dp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="n">world_points</span><span class="p">,</span> <span class="n">dp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># (n_points, 2, 8)</span>
+            <span class="n">jacobian_dp</span> <span class="o">=</span> <span class="o">-</span><span class="n">jacobian_dx</span> <span class="o">@</span> <span class="n">jacobian_apply_dp</span>  <span class="c1"># (n_points, 2, 8)</span>
+
+        <span class="k">return</span> <span class="n">world_points</span><span class="p">,</span> <span class="p">(</span><span class="n">jacobian_dx</span> <span class="k">if</span> <span class="n">dx</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span> <span class="n">jacobian_dp</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

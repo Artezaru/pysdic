@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.fem.locate_points &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/fem/locate_points';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.fem.locate_points</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.fem.locate_points</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">Location of points in 2D surface meshes (:math:`K = 2`, :math:`E = 2`): inverse of the</span>
+<span class="sd">mapping :math:`X(\Xi)` of the elements.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._implemented_element_type</span><span class="w"> </span><span class="kn">import</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_connectivity</span><span class="p">,</span> <span class="n">_validate_element_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cast_rays</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DEFAULT_SUBDIVISIONS</span><span class="p">,</span> <span class="n">_clamp_to_reference_element</span><span class="p">,</span> <span class="n">_subdivide_reference_element</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shape_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_shape_functions</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"locate_points"</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1"># Relative enlargement of the bounding boxes of the elements: the curved edges of the</span>
+<span class="c1"># quadratic elements can go slightly beyond the bounding box of their vertices</span>
+<span class="n">_BOX_MARGIN</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"triangle_3"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">"quadrangle_4"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">"triangle_6"</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="s2">"quadrangle_8"</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Center of the reference elements: initial guess of the Newton iterations</span>
+<span class="n">_REFERENCE_CENTER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"triangle_6"</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">),</span>
+    <span class="s2">"quadrangle_4"</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">"quadrangle_8"</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># Number of points processed at once (bounds the memory of the candidate pairs)</span>
+<span class="n">_CHUNK_SIZE</span> <span class="o">=</span> <span class="mi">100_000</span>
+
+<span class="c1"># Natural coordinates beyond which the Newton iterations are stopped (diverging point,</span>
+<span class="c1"># far outside the element)</span>
+<span class="n">_DIVERGENCE_LIMIT</span> <span class="o">=</span> <span class="mf">10.0</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_ElementGrid</span><span class="p">:</span>
+    <span class="c1"># Uniform grid of cells registering the elements whose bounding box overlaps them,</span>
+    <span class="c1"># to find the candidate elements of a point (the elements whose box contains it)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boxes</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># boxes: (N_e, 2, 2) with [min, max] of each element</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boxes</span> <span class="o">=</span> <span class="n">boxes</span>
+        <span class="n">sizes</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">boxes</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">boxes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">positive</span> <span class="o">=</span> <span class="n">sizes</span><span class="p">[</span><span class="n">sizes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">positive</span><span class="p">))</span> <span class="k">if</span> <span class="n">positive</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">boxes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">boxes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">boxes</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">=</span> <span class="n">high</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># (n_x, n_y)</span>
+
+        <span class="c1"># All the (cell, element) pairs, sorted by cell</span>
+        <span class="n">spans</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># (N_e, 2)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">spans</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">spans</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">boxes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">local</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">elements</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">-</span> <span class="n">counts</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">cell_x</span> <span class="o">=</span> <span class="n">low</span><span class="p">[</span><span class="n">elements</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">local</span> <span class="o">%</span> <span class="n">spans</span><span class="p">[</span><span class="n">elements</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">cell_y</span> <span class="o">=</span> <span class="n">low</span><span class="p">[</span><span class="n">elements</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">local</span> <span class="o">//</span> <span class="n">spans</span><span class="p">[</span><span class="n">elements</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">cell_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell_y</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"stable"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">[</span><span class="n">order</span><span class="p">],</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">candidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="c1"># The pairs (point index, element index) such that the box of the element contains</span>
+        <span class="c1"># the point. Non-finite points have no candidate.</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">points</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">cell</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">valid</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">((</span><span class="n">cell</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">point_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+        <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">cell</span><span class="p">[</span><span class="n">valid</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span><span class="p">[</span><span class="n">valid</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="n">cell_ids</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">==</span> <span class="n">cell_ids</span>
+        <span class="n">point_indices</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">point_indices</span><span class="p">[</span><span class="n">found</span><span class="p">],</span> <span class="n">position</span><span class="p">[</span><span class="n">found</span><span class="p">]</span>
+
+        <span class="n">counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">position</span><span class="p">]</span>
+        <span class="n">pair_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">point_indices</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">local</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pair_points</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="o">-</span> <span class="n">counts</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">pair_elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">[</span><span class="n">position</span><span class="p">],</span> <span class="n">counts</span><span class="p">)</span> <span class="o">+</span> <span class="n">local</span><span class="p">]</span>
+
+        <span class="n">box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">pair_elements</span><span class="p">]</span>  <span class="c1"># (M, 2, 2)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">pair_points</span><span class="p">]</span>
+        <span class="n">inside</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">box</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pair_points</span><span class="p">[</span><span class="n">inside</span><span class="p">],</span> <span class="n">pair_elements</span><span class="p">[</span><span class="n">inside</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_inside</span><span class="p">(</span><span class="n">xi</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Mask of the natural coordinates (M, 2) inside the reference element enlarged by the</span>
+    <span class="c1"># tolerance (False for NaN)</span>
+    <span class="n">shape_functions</span> <span class="o">=</span> <span class="n">compute_shape_functions</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">shape_functions</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_first_element</span><span class="p">(</span><span class="n">pair_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pair_elements</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># For each located point, the pair with the element of lowest index. Returns the</span>
+    <span class="c1"># selected pairs and the corresponding points.</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">lexsort</span><span class="p">((</span><span class="n">pair_elements</span><span class="p">,</span> <span class="n">pair_points</span><span class="p">))</span>
+    <span class="n">located</span><span class="p">,</span> <span class="n">first</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">pair_points</span><span class="p">[</span><span class="n">order</span><span class="p">],</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">order</span><span class="p">[</span><span class="n">first</span><span class="p">],</span> <span class="n">located</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_locate_in_triangles</span><span class="p">(</span>
+    <span class="n">triangles</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># Exact location of the points (N_p, 2) in linear triangles (N_t, 3, 2), with the</span>
+    <span class="c1"># natural coordinates xi such that X = X_0 + [X_1 - X_0, X_2 - X_0] xi. Returns xi</span>
+    <span class="c1"># (N_p, 2) (NaN for the unlocated points) and the triangle indices (N_p,) (-1).</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="mf">1e-9</span> <span class="o">*</span> <span class="n">scale</span>  <span class="c1"># Rounding errors on the boxes</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">_ElementGrid</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">triangles</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">triangles</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">margin</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_p</span><span class="p">,</span> <span class="n">_CHUNK_SIZE</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">_CHUNK_SIZE</span><span class="p">]</span>
+        <span class="n">pair_points</span><span class="p">,</span> <span class="n">pair_triangles</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">candidates</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pair_points</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">[</span><span class="n">pair_triangles</span><span class="p">]</span>  <span class="c1"># (M, 3, 2)</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[</span><span class="n">pair_points</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">determinant</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">):</span>  <span class="c1"># Degenerated triangles: NaN</span>
+            <span class="n">xi</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">determinant</span>
+            <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">determinant</span>
+        <span class="n">inside</span> <span class="o">=</span> <span class="p">(</span><span class="n">xi</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">eta</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">xi</span> <span class="o">+</span> <span class="n">eta</span> <span class="o">&lt;=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">)</span>
+        <span class="n">pair_points</span><span class="p">,</span> <span class="n">pair_triangles</span> <span class="o">=</span> <span class="n">pair_points</span><span class="p">[</span><span class="n">inside</span><span class="p">],</span> <span class="n">pair_triangles</span><span class="p">[</span><span class="n">inside</span><span class="p">]</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">xi</span><span class="p">[</span><span class="n">inside</span><span class="p">],</span> <span class="n">eta</span><span class="p">[</span><span class="n">inside</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">selected</span><span class="p">,</span> <span class="n">located</span> <span class="o">=</span> <span class="n">_first_element</span><span class="p">(</span><span class="n">pair_points</span><span class="p">,</span> <span class="n">pair_triangles</span><span class="p">)</span>
+        <span class="n">natural_coordinates</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">located</span><span class="p">]</span> <span class="o">=</span> <span class="n">xi</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">located</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair_triangles</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">indices</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_solve_newton</span><span class="p">(</span>
+    <span class="n">element_vertices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">element_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">xi0</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">max_iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># Natural coordinates of the points x (M, 2) in the elements (M, N_vpe, 2) by Newton</span>
+    <span class="c1"># iterations on X(xi) - x = 0 from xi0 (M, 2). Returns xi (M, 2) and the converged mask (M,).</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">converged</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iteration</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">active</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">idx</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">dN</span> <span class="o">=</span> <span class="n">compute_shape_functions</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">return_derivatives</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"mv,mvc-&gt;mc"</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">element_vertices</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>  <span class="c1"># (m, 2)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"mvk,mvc-&gt;mck"</span><span class="p">,</span> <span class="n">dN</span><span class="p">,</span> <span class="n">element_vertices</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>  <span class="c1"># (m, 2, 2)</span>
+
+        <span class="n">singular</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">active</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">singular</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Degenerated element at this point: not converged</span>
+        <span class="n">regular</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="o">~</span><span class="n">singular</span><span class="p">]</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">J</span><span class="p">[</span><span class="o">~</span><span class="n">singular</span><span class="p">],</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">regular</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">singular</span><span class="p">])[</span><span class="o">...</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">xi</span><span class="p">[</span><span class="n">regular</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delta</span>
+
+        <span class="n">done</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tolerance</span>
+        <span class="n">converged</span><span class="p">[</span><span class="n">regular</span><span class="p">[</span><span class="n">done</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">active</span><span class="p">[</span><span class="n">regular</span><span class="p">[</span><span class="n">done</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">diverged</span> <span class="o">=</span> <span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">regular</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">_DIVERGENCE_LIMIT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">active</span><span class="p">[</span><span class="n">regular</span><span class="p">[</span><span class="n">diverged</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">done</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">xi</span><span class="p">,</span> <span class="n">converged</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Location</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="locate_points">
+<a class="viewcode-back" href="../../../api/fem/locate_points.html#pysdic.fem.locate_points">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">locate_points</span><span class="p">(</span>
+    <span class="n">vertices_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">element_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n_subdivisions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_iteration</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Locate points in a 2D surface mesh (:math:`K = 2`, :math:`E = 2`): compute the element</span>
+<span class="sd">    containing each point and its natural coordinates :math:`\Xi = (\xi, \eta)` such that</span>
+<span class="sd">    :math:`X(\Xi) = \vec{x}`.</span>
+
+<span class="sd">    - ``triangle_3``: the mapping is affine, the natural coordinates are computed exactly</span>
+<span class="sd">      in the candidate elements (the elements whose bounding box contains the point, found</span>
+<span class="sd">      with a uniform grid).</span>
+<span class="sd">    - Other element types: the mapping :math:`X(\Xi)` is not affine, so the points are</span>
+<span class="sd">      located in three steps:</span>
+
+<span class="sd">      1. Each element is subdivided into triangles (``n_subdivisions`` segments per edge</span>
+<span class="sd">         in the reference element) and the points are located exactly in these</span>
+<span class="sd">         triangles. This gives the element and a first approximation :math:`\Xi_0` of</span>
+<span class="sd">         the natural coordinates.</span>
+<span class="sd">      2. The natural coordinates are refined with Newton iterations on</span>
+<span class="sd">         :math:`X(\Xi) - \vec{x} = 0` from :math:`\Xi_0`.</span>
+<span class="sd">      3. The points not located by the first two steps (points between a curved edge and</span>
+<span class="sd">         its subdivision, or near an edge between two elements) are searched in all the</span>
+<span class="sd">         candidate elements (bounding boxes enlarged for the curved edges), with Newton</span>
+<span class="sd">         iterations from the center of the reference element.</span>
+
+<span class="sd">    A point is located in an element if its natural coordinates are inside the reference</span>
+<span class="sd">    element (enlarged by ``tolerance``).</span>
+
+<span class="sd">    A point is unlocated (element index ``-1``) if it is outside the mesh, not finite, or if</span>
+<span class="sd">    the Newton iterations do not converge. A point on the boundary between several elements</span>
+<span class="sd">    (or in overlapping elements) is located in the element of lowest index.</span>
+
+<span class="sd">    The natural coordinates accepted within the tolerance are moved onto the reference</span>
+<span class="sd">    element, so that they are inside their element for the strict checks of the other</span>
+<span class="sd">    functions.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Inputs ``vertices_coordinates`` and ``points`` will be converted to</span>
+<span class="sd">          ``numpy.float64``.</span>
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - :func:`pysdic.fem.cast_rays` to locate the intersections of rays with a 3D surface</span>
+<span class="sd">          mesh.</span>
+<span class="sd">        - :meth:`pysdic.Mesh.locate_points` to get the result as</span>
+<span class="sd">          :class:`pysdic.IntegrationPoints`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vertices_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_v, 2)` with the finite coordinates of the vertices.</span>
+
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_e, N_{vpe})` with the vertex indices of each</span>
+<span class="sd">        element.</span>
+
+<span class="sd">    element_type: str</span>
+<span class="sd">        The type of the elements (case insensitive), a surface element type</span>
+<span class="sd">        (``triangle_3``, ``triangle_6``, ``quadrangle_4`` or ``quadrangle_8``).</span>
+
+<span class="sd">    points: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_p, 2)` with the coordinates of the points to locate.</span>
+<span class="sd">        Non-finite points are unlocated.</span>
+
+<span class="sd">    n_subdivisions: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The number of segments per edge of the reference element for the first</span>
+<span class="sd">        approximation (:math:`\geq 1`). By default, 1 for ``quadrangle_4`` (2 triangles</span>
+<span class="sd">        per element) and 2 for the quadratic elements. Ignored for ``triangle_3``.</span>
+
+<span class="sd">    max_iteration: Integral, optional (default: ``20``)</span>
+<span class="sd">        The maximum number of Newton iterations (:math:`\geq 1`). Ignored for</span>
+<span class="sd">        ``triangle_3``.</span>
+
+<span class="sd">    tolerance: Real, optional (default: ``1e-10``)</span>
+<span class="sd">        The convergence tolerance of the Newton iterations on the natural coordinates, also</span>
+<span class="sd">        used to check that a point is inside an element (strictly positive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    natural_coordinates: numpy.ndarray</span>
+<span class="sd">        An array of shape :math:`(N_p, 2)` with the natural coordinates :math:`(\xi, \eta)`</span>
+<span class="sd">        of the points (NaN for the unlocated points).</span>
+
+<span class="sd">    element_indices: numpy.ndarray</span>
+<span class="sd">        An array of shape :math:`(N_p,)` with the index of the element containing each</span>
+<span class="sd">        point (``-1`` for the unlocated points).</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If an input has a wrong type.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If the mesh is not a 2D surface mesh or an input has a wrong shape or value.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Locate two points in a mesh made of two triangles.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import locate_points</span>
+
+<span class="sd">        vertices_coordinates = numpy.array([[0, 0], [1, 0], [1, 1], [0, 1]])</span>
+<span class="sd">        connectivity_array = numpy.array([[0, 1, 2], [0, 2, 3]])</span>
+
+<span class="sd">        natural_coordinates, element_indices = locate_points(</span>
+<span class="sd">            vertices_coordinates, connectivity_array, "triangle_3", [[0.75, 0.25], [2.0, 0.5]]</span>
+<span class="sd">        )</span>
+<span class="sd">        print(natural_coordinates, element_indices)</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        [[0.5  0.25]</span>
+<span class="sd">         [ nan  nan]] [ 0 -1]</span>
+
+<span class="sd">    """</span>
+    <span class="n">element_type</span> <span class="o">=</span> <span class="n">_validate_element_type</span><span class="p">(</span><span class="n">element_type</span><span class="p">)</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span><span class="p">[</span><span class="n">element_type</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">properties</span><span class="p">[</span><span class="s2">"expected_K"</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Points can only be located in surface elements (K = 2). Got element type "</span>
+            <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">element_type</span><span class="si">}</span><span class="s2">' with K=</span><span class="si">{</span><span class="n">properties</span><span class="p">[</span><span class="s1">'expected_K'</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">vertices_coordinates</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+        <span class="n">vertices_coordinates</span><span class="p">,</span> <span class="s2">"vertices_coordinates"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_v, 2)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">connectivity_array</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_validate_connectivity</span><span class="p">(</span>
+        <span class="n">connectivity_array</span><span class="p">,</span> <span class="n">vertices_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="n">properties</span><span class="p">[</span><span class="s2">"expected_N_vpe"</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="s2">"points"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_p, 2)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">max_iteration</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">max_iteration</span><span class="p">,</span> <span class="s2">"max_iteration"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">tolerance</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">tolerance</span><span class="p">,</span> <span class="s2">"tolerance"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">n_subdivisions</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n_subdivisions</span><span class="p">,</span> <span class="s2">"n_subdivisions"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_subdivisions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_subdivisions</span> <span class="o">=</span> <span class="n">_DEFAULT_SUBDIVISIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N_p</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N_p</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N_p</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">connectivity_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span>
+    <span class="n">element_vertices</span> <span class="o">=</span> <span class="n">vertices_coordinates</span><span class="p">[</span><span class="n">connectivity_array</span><span class="p">]</span>  <span class="c1"># (N_e, N_vpe, 2)</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">vertices_coordinates</span><span class="p">))),</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">element_type</span> <span class="o">==</span> <span class="s2">"triangle_3"</span><span class="p">:</span>
+        <span class="n">xi</span><span class="p">,</span> <span class="n">elements</span> <span class="o">=</span> <span class="n">_locate_in_triangles</span><span class="p">(</span><span class="n">element_vertices</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="n">located</span> <span class="o">=</span> <span class="n">elements</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+        <span class="n">natural_coordinates</span><span class="p">[</span><span class="n">located</span><span class="p">]</span> <span class="o">=</span> <span class="n">_clamp_to_reference_element</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">located</span><span class="p">],</span> <span class="n">element_type</span><span class="p">)</span>
+        <span class="n">element_indices</span><span class="p">[</span><span class="n">located</span><span class="p">]</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="n">located</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span>
+
+    <span class="c1"># 1. First approximation with the subdivided elements</span>
+    <span class="n">sub_natural</span><span class="p">,</span> <span class="n">sub_triangles</span> <span class="o">=</span> <span class="n">_subdivide_reference_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="n">n_subdivisions</span><span class="p">)</span>
+    <span class="n">S_v</span><span class="p">,</span> <span class="n">S_t</span> <span class="o">=</span> <span class="n">sub_natural</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sub_triangles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">sub_shape_functions</span> <span class="o">=</span> <span class="n">compute_shape_functions</span><span class="p">(</span><span class="n">sub_natural</span><span class="p">,</span> <span class="n">element_type</span><span class="p">)</span>  <span class="c1"># (S_v, N_vpe)</span>
+    <span class="n">sub_vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"sv,evc-&gt;esc"</span><span class="p">,</span> <span class="n">sub_shape_functions</span><span class="p">,</span> <span class="n">element_vertices</span><span class="p">)</span>  <span class="c1"># (N_e, S_v, 2)</span>
+    <span class="n">sub_elements</span> <span class="o">=</span> <span class="n">sub_vertices</span><span class="p">[:,</span> <span class="n">sub_triangles</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># (N_e S_t, 3, 2)</span>
+    <span class="n">sub_xi</span><span class="p">,</span> <span class="n">sub_indices</span> <span class="o">=</span> <span class="n">_locate_in_triangles</span><span class="p">(</span><span class="n">sub_elements</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+
+    <span class="c1"># 2. Newton iterations on the exact element, from the first approximation</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">sub_indices</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="n">sub_indices</span><span class="p">[</span><span class="n">found</span><span class="p">]</span> <span class="o">//</span> <span class="n">S_t</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="n">sub_natural</span><span class="p">[</span><span class="n">sub_triangles</span><span class="p">[</span><span class="n">sub_indices</span><span class="p">[</span><span class="n">found</span><span class="p">]</span> <span class="o">%</span> <span class="n">S_t</span><span class="p">]]</span>  <span class="c1"># (M, 3, 2)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">sub_xi</span><span class="p">[</span><span class="n">found</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">sub_xi</span><span class="p">[</span><span class="n">found</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">xi0</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">u</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">corners</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="n">corners</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="n">corners</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">xi</span><span class="p">,</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">_solve_newton</span><span class="p">(</span><span class="n">element_vertices</span><span class="p">[</span><span class="n">elements</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="n">found</span><span class="p">],</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">xi0</span><span class="p">,</span> <span class="n">max_iteration</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="n">valid</span> <span class="o">&amp;=</span> <span class="n">_inside</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+    <span class="n">natural_coordinates</span><span class="p">[</span><span class="n">found</span><span class="p">[</span><span class="n">valid</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_clamp_to_reference_element</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">element_type</span><span class="p">)</span>
+    <span class="n">element_indices</span><span class="p">[</span><span class="n">found</span><span class="p">[</span><span class="n">valid</span><span class="p">]]</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+
+    <span class="c1"># 3. Remaining points (curved boundaries, points near an edge between two elements):</span>
+    <span class="c1"># Newton iterations in all the candidate elements, from the center of the reference element</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">((</span><span class="n">element_indices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">points</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">remaining</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span>
+    <span class="n">box_min</span><span class="p">,</span> <span class="n">box_max</span> <span class="o">=</span> <span class="n">element_vertices</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">element_vertices</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">box_max</span> <span class="o">-</span> <span class="n">box_min</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="n">_BOX_MARGIN</span><span class="p">[</span><span class="n">element_type</span><span class="p">]</span> <span class="o">*</span> <span class="n">size</span> <span class="o">+</span> <span class="mf">1e-9</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">_ElementGrid</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">box_min</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">box_max</span> <span class="o">+</span> <span class="n">margin</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">remaining</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">_CHUNK_SIZE</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">remaining</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">_CHUNK_SIZE</span><span class="p">]</span>
+        <span class="n">pair_points</span><span class="p">,</span> <span class="n">pair_elements</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">candidates</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">chunk</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">pair_points</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">_REFERENCE_CENTER</span><span class="p">[</span><span class="n">element_type</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="p">(</span><span class="n">pair_points</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">xi</span><span class="p">,</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">_solve_newton</span><span class="p">(</span>
+            <span class="n">element_vertices</span><span class="p">[</span><span class="n">pair_elements</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="n">chunk</span><span class="p">][</span><span class="n">pair_points</span><span class="p">],</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">max_iteration</span><span class="p">,</span> <span class="n">tolerance</span>
+        <span class="p">)</span>
+        <span class="n">valid</span> <span class="o">&amp;=</span> <span class="n">_inside</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+        <span class="n">pair_points</span><span class="p">,</span> <span class="n">pair_elements</span><span class="p">,</span> <span class="n">xi</span> <span class="o">=</span> <span class="n">pair_points</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">pair_elements</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">xi</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+        <span class="n">selected</span><span class="p">,</span> <span class="n">located</span> <span class="o">=</span> <span class="n">_first_element</span><span class="p">(</span><span class="n">pair_points</span><span class="p">,</span> <span class="n">pair_elements</span><span class="p">)</span>
+        <span class="n">natural_coordinates</span><span class="p">[</span><span class="n">chunk</span><span class="p">[</span><span class="n">located</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_clamp_to_reference_element</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">selected</span><span class="p">],</span> <span class="n">element_type</span><span class="p">)</span>
+        <span class="n">element_indices</span><span class="p">[</span><span class="n">chunk</span><span class="p">[</span><span class="n">located</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pair_elements</span><span class="p">[</span><span class="n">selected</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">element_indices</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.transformation_optimizations.optimize_transformation_input_points &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/transformation_optimizations/optimize_transformation_input_points';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.transformation_optimizations.optimize_transformation_input_points</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.transformation_optimizations.optimize_transformation_input_points</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pysolvegn</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..transformations.transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComposedTransformation</span><span class="p">,</span> <span class="n">Transformation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._optionals</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_validate_bool</span><span class="p">,</span>
+    <span class="n">_validate_integer</span><span class="p">,</span>
+    <span class="n">_validate_real</span><span class="p">,</span>
+    <span class="n">_validate_choice</span><span class="p">,</span>
+    <span class="n">_validate_kwargs_sequence</span><span class="p">,</span>
+    <span class="n">_as_array</span><span class="p">,</span>
+    <span class="n">_as_batch_array</span><span class="p">,</span>
+    <span class="n">_as_index_array</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># ======================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># ======================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_batch_operators</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">guess</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">_use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">_cache_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build the batched operators of the least squares problems to optimize the input points of several</span>
+<span class="sd">    chains of transformations.</span>
+
+<span class="sd">    Lets :math:`(T_0, T_1, ..., T_{N_T-1})` be a sequence of :math:`N_T` transformations, and</span>
+<span class="sd">    :math:`(C_0, C_1, ..., C_{N_C-1})` be a sequence of :math:`N_C` chains of transformations.</span>
+<span class="sd">    A chain :math:`C_c` is a sequence of indices of transformations, applied in this order:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        C_0 = (1, 4, 8) -----&gt; C_0(X) = T_8 ∘ T_4 ∘ T_1(X)</span>
+
+<span class="sd">    All the chains share the same input points :math:`X` and each chain :math:`C_c` has its own output</span>
+<span class="sd">    points :math:`Y_c`. The parameters of the transformations are fixed, so each point :math:`k` is an</span>
+<span class="sd">    independent problem with the residuals and Jacobian:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \vec{r}_k(\vec{X}_k) = \begin{bmatrix} C_0(\vec{X}_k) - \vec{Y}_{0,k} \\ \vdots \\ C_{N_C-1}(\vec{X}_k) - \vec{Y}_{N_C-1,k} \end{bmatrix},</span>
+<span class="sd">        \qquad</span>
+<span class="sd">        J_k = \frac{\partial \vec{r}_k}{\partial \vec{X}_k}</span>
+
+<span class="sd">    The operators follow the convention of ``pysolvegn.BatchTerm``: they take the input points of the</span>
+<span class="sd">    :math:`m` problems in processing with shape :math:`(m, n_i)` and their indices with shape :math:`(m,)`.</span>
+<span class="sd">    Two modes are available:</span>
+
+<span class="sd">    - ``"rJ"``: residuals :math:`(m, N_{eq})` and Jacobians :math:`(m, N_{eq}, n_i)`.</span>
+<span class="sd">    - ``"gH"``: gradients :math:`J_k^T \vec{r}_k` :math:`(m, n_i)`, Hessians :math:`J_k^T J_k`</span>
+<span class="sd">      :math:`(m, n_i, n_i)` and costs :math:`\frac{1}{2} \|\vec{r}_k\|^2` :math:`(m,)`.</span>
+
+<span class="sd">    Two evaluation strategies are available with ``_use_cache``:</span>
+
+<span class="sd">    - ``False``: each function computes only what it returns and nothing is kept in memory.</span>
+<span class="sd">      The residuals and the costs are computed without the Jacobians.</span>
+<span class="sd">    - ``True``: the first call for given points computes all the operators of the mode</span>
+<span class="sd">      (residuals and Jacobians in mode ``"rJ"``, gradients, Hessians and costs in mode ``"gH"``)</span>
+<span class="sd">      and keeps them in cache, so the other calls for the same points return the cached operators.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The operators work on **copies** of the transformations: the given transformations are</span>
+<span class="sd">        never modified.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq_transformations : Sequence[Transformation]</span>
+<span class="sd">        The transformations :math:`(T_0, T_1, ..., T_{N_T-1})`. Their parameters must be set and each</span>
+<span class="sd">        chain must support ``apply`` with ``dx``.</span>
+
+<span class="sd">    seq_chains : Sequence[Sequence[Integral]]</span>
+<span class="sd">        The chains, each chain being a non-empty sequence of indices of ``seq_transformations``,</span>
+<span class="sd">        in the order of application.</span>
+
+<span class="sd">    seq_outputs : Sequence[ArrayLike]</span>
+<span class="sd">        The output points :math:`Y_c` of each chain with shape :math:`(\dots, n_{o,c})`,</span>
+<span class="sd">        with the same batch shape as ``guess``.</span>
+
+<span class="sd">    guess : ArrayLike</span>
+<span class="sd">        The initial guess of the input points with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    seq_kwargs : Optional[Sequence[Optional[Dict[str, Any]]]], optional (default: ``None``)</span>
+<span class="sd">        Additional keyword arguments passed to the ``apply`` method of each transformation: one</span>
+<span class="sd">        dictionary (or None) per transformation of ``seq_transformations``.</span>
+
+<span class="sd">    mode : str, optional (default: ``"rJ"``)</span>
+<span class="sd">        The mode of the operators, ``"rJ"`` or ``"gH"``.</span>
+
+<span class="sd">    _use_cache : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, all the operators of the mode are computed together and kept in cache (see above).</span>
+<span class="sd">        If False, each function computes only what it returns, without cache.</span>
+
+<span class="sd">    _cache_length : int, optional (default: ``1``)</span>
+<span class="sd">        The number of previous evaluations kept in cache when ``_use_cache`` is True.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Callable</span>
+<span class="sd">        The residual function (mode ``"rJ"``) or the gradient function (mode ``"gH"``).</span>
+
+<span class="sd">    Callable</span>
+<span class="sd">        The Jacobian function (mode ``"rJ"``) or the Hessian function (mode ``"gH"``).</span>
+
+<span class="sd">    Optional[Callable]</span>
+<span class="sd">        The cost function in mode ``"gH"``, or None in mode ``"rJ"``.</span>
+
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The initial input points with shape :math:`(k, n_i)` where :math:`k` is the number of points.</span>
+
+<span class="sd">    Tuple[int, ...]</span>
+<span class="sd">        The batch shape :math:`(\dots)` of ``guess``.</span>
+
+<span class="sd">    """</span>
+    <span class="c1"># ------------- options -------------</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"rJ"</span><span class="p">,</span> <span class="s2">"gH"</span><span class="p">))</span>
+    <span class="n">_use_cache</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">_use_cache</span><span class="p">,</span> <span class="s2">"_use_cache"</span><span class="p">)</span>
+    <span class="n">_cache_length</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">_cache_length</span><span class="p">,</span> <span class="s2">"_cache_length"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ------------- transformations and chains -------------</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'seq_transformations' must be a sequence of Transformation. "</span>
+            <span class="sa">f</span><span class="s2">"Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'seq_transformations' must contain at least one Transformation."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Transformation</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'seq_transformations[</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">]' must be a Transformation. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">t</span><span class="o">.</span><span class="n">is_setup</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The parameters of seq_transformations[</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">] (</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">) are not set."</span><span class="p">)</span>
+    <span class="n">n_transformations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">)</span>
+    <span class="n">transformations</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">seq_transformations</span><span class="p">]</span>  <span class="c1"># Work on copies</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'seq_chains' must be a sequence of chains. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'seq_chains' must contain at least one chain."</span><span class="p">)</span>
+    <span class="c1"># Indices in [0, N_T) (integers only, no negative index counting from the end)</span>
+    <span class="n">seq_chains</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">_as_index_array</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="n">n_transformations</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"seq_chains[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'seq_chains[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]' must not be empty."</span><span class="p">)</span>
+    <span class="n">n_chains</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span>
+
+    <span class="n">compositions</span> <span class="o">=</span> <span class="p">[</span><span class="n">ComposedTransformation</span><span class="p">([</span><span class="n">transformations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">])</span> <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">seq_chains</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">composition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">compositions</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">composition</span><span class="o">.</span><span class="n">has_apply_dx</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The chain </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2"> cannot compute the Jacobian with respect to the input points "</span>
+                <span class="sa">f</span><span class="s2">"(some transformations do not support dx)."</span>
+            <span class="p">)</span>
+
+    <span class="n">seq_kwargs</span> <span class="o">=</span> <span class="n">_validate_kwargs_sequence</span><span class="p">(</span><span class="n">seq_kwargs</span><span class="p">,</span> <span class="n">n_transformations</span><span class="p">,</span> <span class="s2">"seq_kwargs"</span><span class="p">)</span>
+    <span class="n">chain_kwargs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">seq_kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">]</span> <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">seq_chains</span><span class="p">]</span>  <span class="c1"># kwargs of T_k in each chain</span>
+
+    <span class="c1"># ------------- points -------------</span>
+    <span class="c1"># All the chains share the input points X: same input dimension</span>
+    <span class="n">input_dim</span> <span class="o">=</span> <span class="n">compositions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">input_dim</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">composition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">compositions</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">composition</span><span class="o">.</span><span class="n">input_dim</span> <span class="o">!=</span> <span class="n">input_dim</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"All the chains must have the same input dimension. Got </span><span class="si">{</span><span class="n">input_dim</span><span class="si">}</span><span class="s2"> for the chain 0 "</span>
+                <span class="sa">f</span><span class="s2">"and </span><span class="si">{</span><span class="n">composition</span><span class="o">.</span><span class="n">input_dim</span><span class="si">}</span><span class="s2"> for the chain </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+    <span class="c1"># NaN accepted in the points (e.g. points outside the domain of a transformation)</span>
+    <span class="n">guess</span> <span class="o">=</span> <span class="n">_as_batch_array</span><span class="p">(</span><span class="n">guess</span><span class="p">,</span> <span class="s2">"guess"</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">min_ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">guess</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'guess' must contain at least one point. Got shape </span><span class="si">{</span><span class="n">guess</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">guess</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq_outputs</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'seq_outputs' must be a sequence of arrays. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq_outputs</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_outputs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_chains</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'seq_outputs' must contain one element per chain (</span><span class="si">{</span><span class="n">n_chains</span><span class="si">}</span><span class="s2">). Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">seq_outputs</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="p">(</span><span class="n">composition</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">compositions</span><span class="p">,</span> <span class="n">seq_outputs</span><span class="p">)):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">y</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"seq_outputs[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">composition</span><span class="o">.</span><span class="n">output_dim</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">composition</span><span class="o">.</span><span class="n">output_dim</span><span class="p">))</span>
+
+    <span class="n">output_starts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">([</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">])])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">n_equations</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">output_starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">input_dim</span> <span class="o">&gt;</span> <span class="n">n_equations</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"The problem is under-determined: the input dimension (</span><span class="si">{</span><span class="n">input_dim</span><span class="si">}</span><span class="s2">) is greater than the total "</span>
+            <span class="sa">f</span><span class="s2">"output dimension of the chains (</span><span class="si">{</span><span class="n">n_equations</span><span class="si">}</span><span class="s2">)."</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ------------- evaluation -------------</span>
+    <span class="c1"># Without cache, each function computes only what it returns (the residuals and the cost are computed</span>
+    <span class="c1"># without the Jacobians, for example to test a Levenberg-Marquardt step). With cache, all the operators</span>
+    <span class="c1"># of the mode are computed together at the first call for given points.</span>
+    <span class="n">cached_outputs</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">)</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"g"</span><span class="p">,</span> <span class="s2">"H"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">)</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">assemble</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">requested</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="c1"># Compute only the requested operators among "r", "J", "c", "g" and "H"</span>
+        <span class="n">need_r</span><span class="p">,</span> <span class="n">need_J</span><span class="p">,</span> <span class="n">need_c</span> <span class="o">=</span> <span class="s2">"r"</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">,</span> <span class="s2">"J"</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">,</span> <span class="s2">"c"</span> <span class="ow">in</span> <span class="n">requested</span>
+        <span class="n">need_g</span><span class="p">,</span> <span class="n">need_H</span> <span class="o">=</span> <span class="s2">"g"</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">,</span> <span class="s2">"H"</span> <span class="ow">in</span> <span class="n">requested</span>
+        <span class="n">need_residuals</span> <span class="o">=</span> <span class="n">need_r</span> <span class="ow">or</span> <span class="n">need_c</span> <span class="ow">or</span> <span class="n">need_g</span>
+        <span class="n">derivatives</span> <span class="o">=</span> <span class="n">need_J</span> <span class="ow">or</span> <span class="n">need_g</span> <span class="ow">or</span> <span class="n">need_H</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">n_equations</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">if</span> <span class="n">need_residuals</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">n_equations</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">if</span> <span class="n">derivatives</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">composition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">compositions</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">composition</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">derivatives</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">chain_kwargs</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="n">output_starts</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">output_starts</span><span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">need_residuals</span><span class="p">:</span>
+                <span class="n">residuals</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">outputs</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">indices</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">derivatives</span><span class="p">:</span>
+                <span class="n">jacobian</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">jacobian_dx</span>
+
+        <span class="n">operators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">need_r</span><span class="p">:</span>
+            <span class="n">operators</span><span class="p">[</span><span class="s2">"r"</span><span class="p">]</span> <span class="o">=</span> <span class="n">residuals</span>  <span class="c1"># (m, n_eq)</span>
+        <span class="k">if</span> <span class="n">need_J</span><span class="p">:</span>
+            <span class="n">operators</span><span class="p">[</span><span class="s2">"J"</span><span class="p">]</span> <span class="o">=</span> <span class="n">jacobian</span>  <span class="c1"># (m, n_eq, n_i)</span>
+        <span class="k">if</span> <span class="n">need_c</span><span class="p">:</span>
+            <span class="n">operators</span><span class="p">[</span><span class="s2">"c"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">residuals</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (m,)</span>
+        <span class="k">if</span> <span class="n">need_g</span> <span class="ow">or</span> <span class="n">need_H</span><span class="p">:</span>
+            <span class="n">jacobian_t</span> <span class="o">=</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">need_g</span><span class="p">:</span>
+                <span class="n">operators</span><span class="p">[</span><span class="s2">"g"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">jacobian_t</span> <span class="o">@</span> <span class="n">residuals</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">])[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># (m, n_i)</span>
+            <span class="k">if</span> <span class="n">need_H</span><span class="p">:</span>
+                <span class="n">operators</span><span class="p">[</span><span class="s2">"H"</span><span class="p">]</span> <span class="o">=</span> <span class="n">jacobian_t</span> <span class="o">@</span> <span class="n">jacobian</span>  <span class="c1"># (m, n_i, n_i)</span>
+        <span class="k">return</span> <span class="n">operators</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Return the operator ``output`` for the given points, with or without cache</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="s2">"points"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="s2">"indices"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">intp</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_use_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">assemble</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="p">(</span><span class="n">output</span><span class="p">,))[</span><span class="n">output</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">cached_points</span><span class="p">,</span> <span class="n">cached_indices</span><span class="p">,</span> <span class="n">cached_operators</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">cached_indices</span><span class="p">)</span> <span class="ow">and</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">cached_points</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">cached_operators</span><span class="p">[</span><span class="n">output</span><span class="p">]</span>
+        <span class="n">operators</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">cached_outputs</span><span class="p">)</span>
+        <span class="n">cache</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">indices</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">operators</span><span class="p">))</span>
+        <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">_cache_length</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">operators</span><span class="p">[</span><span class="n">output</span><span class="p">]</span>
+
+    <span class="n">initial_points</span> <span class="o">=</span> <span class="n">guess</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">),</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">initial_points</span><span class="p">,</span>
+            <span class="n">batch_shape</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="s2">"g"</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="s2">"H"</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">),</span>
+        <span class="n">initial_points</span><span class="p">,</span>
+        <span class="n">batch_shape</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_batch_term</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">guess</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]],</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]],</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchTerm</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+    <span class="c1"># Build the BatchTerm, the initial points (k, n_i) and the batch shape of the points</span>
+    <span class="n">loss_scale</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">loss_scale</span><span class="p">,</span> <span class="s2">"loss_scale"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">use_cache</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">use_cache</span><span class="p">,</span> <span class="s2">"use_cache"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"gH"</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loss</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"linear"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">loss_scale</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Only the 'linear' loss (with loss_scale=1.0) is available in mode 'gH', got </span><span class="si">{</span><span class="n">loss</span><span class="si">!r}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"with loss_scale=</span><span class="si">{</span><span class="n">loss_scale</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">func_1</span><span class="p">,</span> <span class="n">func_2</span><span class="p">,</span> <span class="n">cost_func</span><span class="p">,</span> <span class="n">initial_points</span><span class="p">,</span> <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">_build_batch_operators</span><span class="p">(</span>
+        <span class="n">seq_transformations</span><span class="p">,</span> <span class="n">seq_chains</span><span class="p">,</span> <span class="n">seq_outputs</span><span class="p">,</span> <span class="n">guess</span><span class="p">,</span> <span class="n">seq_kwargs</span><span class="o">=</span><span class="n">seq_kwargs</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">_use_cache</span><span class="o">=</span><span class="n">use_cache</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>  <span class="c1"># One weight for all the points (booleans are rejected)</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># One weight per point with the batch shape of the points</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span><span class="p">:</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchTerm</span><span class="o">.</span><span class="n">from_rJ</span><span class="p">(</span>
+            <span class="n">residual_func</span><span class="o">=</span><span class="n">func_1</span><span class="p">,</span>
+            <span class="n">jacobian_func</span><span class="o">=</span><span class="n">func_2</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+            <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchTerm</span><span class="o">.</span><span class="n">from_gH</span><span class="p">(</span>
+            <span class="n">gradient_func</span><span class="o">=</span><span class="n">func_1</span><span class="p">,</span>
+            <span class="n">hessian_func</span><span class="o">=</span><span class="n">func_2</span><span class="p">,</span>
+            <span class="n">cost_func</span><span class="o">=</span><span class="n">cost_func</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">term</span><span class="p">,</span> <span class="n">initial_points</span><span class="p">,</span> <span class="n">batch_shape</span>
+
+
+<span class="c1"># ======================================================================</span>
+<span class="c1"># Terms</span>
+<span class="c1"># ======================================================================</span>
+<div class="viewcode-block" id="build_chains_transformation_input_points_term">
+<a class="viewcode-back" href="../../../api/computer_vision/build_chains_transformation_input_points_term.html#pysdic.build_chains_transformation_input_points_term">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_chains_transformation_input_points_term</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">guess</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchTerm</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build a ``pysolvegn.BatchTerm`` to optimize the input points :math:`X` such that their images by several</span>
+<span class="sd">    chains of transformations match the given output points (for example triangulation of points seen by</span>
+<span class="sd">    several cameras).</span>
+
+<span class="sd">    Lets :math:`(T_0, T_1, ..., T_{N_T-1})` be a sequence of transformations, and :math:`(C_0, C_1, ..., C_{N_C-1})`</span>
+<span class="sd">    a sequence of chains of indices of these transformations, applied in this order:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        C_0 = (1, 4, 8) -----&gt; C_0(X) = T_8 ∘ T_4 ∘ T_1(X)</span>
+
+<span class="sd">    All the chains share the same input points :math:`X` and each chain :math:`C_c` has its own output</span>
+<span class="sd">    points :math:`Y_c`. The parameters of the transformations are fixed, so each point :math:`k` is an</span>
+<span class="sd">    independent problem of the batch:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \min_{\vec{X}_k} \frac{1}{2} \sum_c \sum_j \rho\left( \left( C_c(\vec{X}_k) - \vec{Y}_{c,k} \right)_j^2 \right)</span>
+
+<span class="sd">    The problems are solved together with ``pysolvegn.solve_batch``: each point is removed from the</span>
+<span class="sd">    processing as soon as it satisfies a stopping criterion.</span>
+
+<span class="sd">    The term can be built in two modes:</span>
+
+<span class="sd">    - ``"rJ"``: residuals and Jacobians of each point. Robust losses (``"soft_l1"``, ``"cauchy"``,</span>
+<span class="sd">      ``"huber"``, ...) are available, with a soft threshold ``loss_scale`` in the unit of the output points.</span>
+<span class="sd">    - ``"gH"``: gradients :math:`J_k^T \vec{r}_k` and Hessians :math:`J_k^T J_k` of each point, with its cost</span>
+<span class="sd">      (only the ``"linear"`` loss).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The term works on copies of the transformations: the given transformations are never modified.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        The dimension :math:`n_i` of the input points must be lower than or equal to the total dimension</span>
+<span class="sd">        of the outputs :math:`\sum_c n_{o,c}`, otherwise the problems are under-determined.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_transformation_input_points_term` for a single transformation.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_chains_transformation_input_points` to directly solve the problems.</span>
+<span class="sd">        - Function :func:`pysdic.build_chains_transformation_term` to optimize the parameters instead.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq_transformations : Sequence[Transformation]</span>
+<span class="sd">        The transformations :math:`(T_0, T_1, ..., T_{N_T-1})`. Their parameters must be set.</span>
+
+<span class="sd">    seq_chains : Sequence[Sequence[Integral]]</span>
+<span class="sd">        The chains, each chain being a non-empty sequence of indices of ``seq_transformations``,</span>
+<span class="sd">        in the order of application. The first transformation of each chain must have the</span>
+<span class="sd">        dimension :math:`n_i` of the input points.</span>
+
+<span class="sd">    seq_outputs : Sequence[ArrayLike]</span>
+<span class="sd">        The output points :math:`Y_c` of each chain with shape :math:`(\dots, n_{o,c})`,</span>
+<span class="sd">        with the same batch shape as ``guess``.</span>
+
+<span class="sd">    guess : ArrayLike</span>
+<span class="sd">        The initial guess of the input points with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    seq_kwargs : Optional[Sequence[Optional[Dict[str, Any]]]], optional (default: ``None``)</span>
+<span class="sd">        Additional keyword arguments passed to the ``apply`` method of each transformation: one dictionary</span>
+<span class="sd">        (or None) per transformation of ``seq_transformations``.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            The keyword arguments must not depend on the points, since the solver evaluates only</span>
+<span class="sd">            the points still in processing.</span>
+
+<span class="sd">    mode : str, optional (default: ``"rJ"``)</span>
+<span class="sd">        The mode of the term, ``"rJ"`` or ``"gH"``.</span>
+
+<span class="sd">    weight : Union[Real, ArrayLike], optional (default: ``1.0``)</span>
+<span class="sd">        The weight of the term: a scalar for all the points, or one weight per point with the batch</span>
+<span class="sd">        shape :math:`(\dots)` of ``guess``.</span>
+
+<span class="sd">    loss : Optional[Union[str, Callable]], optional (default: ``None``)</span>
+<span class="sd">        The loss function of the term (see ``pysolvegn.BatchTerm``), only for the mode ``"rJ"``.</span>
+<span class="sd">        ``None`` means ``"linear"``.</span>
+
+<span class="sd">    loss_scale : Real, optional (default: ``1.0``)</span>
+<span class="sd">        The soft threshold :math:`C` of the loss function in the unit of the output points (for example in</span>
+<span class="sd">        pixels). Only for the mode ``"rJ"``, no effect on the ``"linear"`` loss.</span>
+
+<span class="sd">    use_cache : bool, optional (default: ``False``)</span>
+<span class="sd">        The evaluation strategy of the functions of the term:</span>
+
+<span class="sd">        - ``False``: each function computes only what it returns and nothing is kept in memory. The residuals</span>
+<span class="sd">          (``"rJ"``) and the costs (``"gH"``) are computed without the Jacobians, which is efficient when many</span>
+<span class="sd">          evaluated points are trial points whose Jacobians are never required (damped steps of</span>
+<span class="sd">          Levenberg-Marquardt). In mode ``"gH"``, the gradients and the Hessians each compute the Jacobians.</span>
+<span class="sd">        - ``True``: the first call for given points computes all the operators of the mode (residuals and</span>
+<span class="sd">          Jacobians in ``"rJ"``, gradients, Hessians and costs in ``"gH"``) and keeps them in cache, so the</span>
+<span class="sd">          other calls for the same points are free. It is efficient when the Jacobians are required at every</span>
+<span class="sd">          evaluated point (Gauss-Newton without damping).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pysolvegn.BatchTerm</span>
+<span class="sd">        The term to give to ``pysolvegn.solve_batch``.</span>
+
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The initial input points with shape :math:`(k, n_i)`, to use as ``p0``, where :math:`k` is the</span>
+<span class="sd">        number of points (the batch dimensions of ``guess`` are flattened).</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Triangulate 3D points seen by two calibrated cameras:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        seq_transformations = [extrinsic_0, extrinsic_1, distortion, intrinsic]</span>
+<span class="sd">        seq_chains = [(0, 2, 3), (1, 2, 3)]</span>
+
+<span class="sd">        term, p0 = build_chains_transformation_input_points_term(</span>
+<span class="sd">            seq_transformations, seq_chains, [image_points_0, image_points_1], guess</span>
+<span class="sd">        )</span>
+<span class="sd">        result = pysolvegn.solve_batch(term, p0, max_iteration=20, xtol=1e-10)</span>
+<span class="sd">        world_points = result.parameters.reshape(guess.shape)</span>
+
+<span class="sd">    """</span>
+    <span class="n">term</span><span class="p">,</span> <span class="n">initial_points</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_build_batch_term</span><span class="p">(</span>
+        <span class="n">seq_transformations</span><span class="p">,</span>
+        <span class="n">seq_chains</span><span class="p">,</span>
+        <span class="n">seq_outputs</span><span class="p">,</span>
+        <span class="n">guess</span><span class="p">,</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="n">seq_kwargs</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">term</span><span class="p">,</span> <span class="n">initial_points</span></div>
+
+
+
+<div class="viewcode-block" id="build_transformation_input_points_term">
+<a class="viewcode-back" href="../../../api/computer_vision/build_transformation_input_points_term.html#pysdic.build_transformation_input_points_term">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_transformation_input_points_term</span><span class="p">(</span>
+    <span class="n">transformation</span><span class="p">:</span> <span class="n">Transformation</span><span class="p">,</span>
+    <span class="n">output_points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">guess</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchTerm</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build a ``pysolvegn.BatchTerm`` to optimize the input points :math:`X` of a transformation :math:`T`</span>
+<span class="sd">    such that :math:`T(X) \approx Y`. Each point :math:`k` is an independent problem of the batch:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \min_{\vec{X}_k} \frac{1}{2} \sum_j \rho\left( \left( T(\vec{X}_k) - \vec{Y}_k \right)_j^2 \right)</span>
+
+<span class="sd">    It is a numerical inverse of the transformation, for example when ``invert`` is not implemented</span>
+<span class="sd">    or to refine its result.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        The input dimension :math:`n_i` must be lower than or equal to the output dimension :math:`n_o`.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_chains_transformation_input_points_term` for the description of the</span>
+<span class="sd">          modes and arguments.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transformation : Transformation</span>
+<span class="sd">        The transformation. Its parameters must be set.</span>
+
+<span class="sd">    output_points : ArrayLike</span>
+<span class="sd">        The output points :math:`Y` with shape :math:`(\dots, n_o)`.</span>
+
+<span class="sd">    guess : ArrayLike</span>
+<span class="sd">        The initial guess of the input points with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    kwargs : Optional[Dict[str, Any]], optional (default: ``None``)</span>
+<span class="sd">        Additional keyword arguments passed to the ``apply`` method of the transformation</span>
+<span class="sd">        (they must not depend on the points).</span>
+
+<span class="sd">    mode, weight, loss, loss_scale, use_cache</span>
+<span class="sd">        See :func:`pysdic.build_chains_transformation_input_points_term`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pysolvegn.BatchTerm</span>
+<span class="sd">        The term to give to ``pysolvegn.solve_batch``.</span>
+
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The initial input points with shape :math:`(k, n_i)`, to use as ``p0``.</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">build_chains_transformation_input_points_term</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">transformation</span><span class="p">],</span>
+        <span class="p">[(</span><span class="mi">0</span><span class="p">,)],</span>
+        <span class="p">[</span><span class="n">output_points</span><span class="p">],</span>
+        <span class="n">guess</span><span class="p">,</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="p">[</span><span class="n">kwargs</span><span class="p">],</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ======================================================================</span>
+<span class="c1"># Optimization</span>
+<span class="c1"># ======================================================================</span>
+<div class="viewcode-block" id="optimize_chains_transformation_input_points">
+<a class="viewcode-back" href="../../../api/computer_vision/optimize_chains_transformation_input_points.html#pysdic.optimize_chains_transformation_input_points">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_chains_transformation_input_points</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">guess</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchSolveResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Optimize the input points :math:`X` such that their images by several chains of transformations</span>
+<span class="sd">    match the given output points, with ``pysolvegn.solve_batch``.</span>
+
+<span class="sd">    The problems are built with :func:`pysdic.build_chains_transformation_input_points_term` (one independent</span>
+<span class="sd">    problem per point) and the optimized points are returned with the batch shape of ``guess``:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        points, result = optimize_chains_transformation_input_points(seq_transformations, seq_chains, seq_outputs, guess, ...)</span>
+
+<span class="sd">    The ``pysolvegn.BatchSolveResult`` gives the convergence information of each point (``success``,</span>
+<span class="sd">    ``reasons``, ``cost``, ``n_iterations``, ...), with the points flattened along the first dimension:</span>
+<span class="sd">    use ``result.success.reshape(points.shape[:-1])`` to recover the batch shape.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_chains_transformation_input_points_term` for the description of the arguments.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_transformation_input_points` for a single transformation.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_chains_transformation_parameters` to optimize the parameters instead.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq_transformations, seq_chains, seq_outputs, guess, seq_kwargs, mode, loss, loss_scale, use_cache</span>
+<span class="sd">        See :func:`pysdic.build_chains_transformation_input_points_term`.</span>
+
+<span class="sd">    **solve_kwargs</span>
+<span class="sd">        Additional keyword arguments passed to ``pysolvegn.solve_batch`` (``max_iteration``, ``xtol``,</span>
+<span class="sd">        ``ptol``, ``damping``, ``verbosity``, ``history``, ...). The ``parametrization`` argument is not</span>
+<span class="sd">        supported here: build the term with :func:`pysdic.build_chains_transformation_input_points_term`</span>
+<span class="sd">        and call ``pysolvegn.solve_batch``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The optimized input points with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    pysolvegn.BatchSolveResult</span>
+<span class="sd">        The result of ``pysolvegn.solve_batch``.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Triangulate 3D points seen by two calibrated cameras:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        seq_transformations = [extrinsic_0, distortion_0, intrinsic_0, extrinsic_1, distortion_1, intrinsic_1]</span>
+<span class="sd">        seq_chains = [(0, 1, 2), (3, 4, 5)]</span>
+
+<span class="sd">        world_points, result = optimize_chains_transformation_input_points(</span>
+<span class="sd">            seq_transformations, seq_chains, [image_points_0, image_points_1], guess, max_iteration=20, xtol=1e-10</span>
+<span class="sd">        )</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"parametrization"</span> <span class="ow">in</span> <span class="n">solve_kwargs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">"The 'parametrization' argument is not supported by this function. Use "</span>
+            <span class="s2">"build_chains_transformation_input_points_term and pysolvegn.solve_batch."</span>
+        <span class="p">)</span>
+
+    <span class="n">term</span><span class="p">,</span> <span class="n">initial_points</span><span class="p">,</span> <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">_build_batch_term</span><span class="p">(</span>
+        <span class="n">seq_transformations</span><span class="p">,</span>
+        <span class="n">seq_chains</span><span class="p">,</span>
+        <span class="n">seq_outputs</span><span class="p">,</span>
+        <span class="n">guess</span><span class="p">,</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="n">seq_kwargs</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">solve_batch</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">initial_points</span><span class="p">,</span> <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">batch_shape</span><span class="p">,</span> <span class="n">initial_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="optimize_transformation_input_points">
+<a class="viewcode-back" href="../../../api/computer_vision/optimize_transformation_input_points.html#pysdic.optimize_transformation_input_points">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_transformation_input_points</span><span class="p">(</span>
+    <span class="n">transformation</span><span class="p">:</span> <span class="n">Transformation</span><span class="p">,</span>
+    <span class="n">output_points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">guess</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">BatchSolveResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Optimize the input points :math:`X` of a transformation :math:`T` such that :math:`T(X) \approx Y`,</span>
+<span class="sd">    with ``pysolvegn.solve_batch`` (one independent problem per point).</span>
+
+<span class="sd">    It is a numerical inverse of the transformation, for example when ``invert`` is not implemented</span>
+<span class="sd">    or to refine its result.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_transformation_input_points_term` to build only the term.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_chains_transformation_input_points` for several chains.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transformation, output_points, guess, kwargs</span>
+<span class="sd">        See :func:`pysdic.build_transformation_input_points_term`.</span>
+
+<span class="sd">    mode, loss, loss_scale, use_cache</span>
+<span class="sd">        See :func:`pysdic.build_chains_transformation_input_points_term`.</span>
+
+<span class="sd">    **solve_kwargs</span>
+<span class="sd">        Additional keyword arguments passed to ``pysolvegn.solve_batch``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The optimized input points with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    pysolvegn.BatchSolveResult</span>
+<span class="sd">        The result of ``pysolvegn.solve_batch``.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        normalized_points, result = optimize_transformation_input_points(</span>
+<span class="sd">            distortion, distorted_points, guess=distorted_points, max_iteration=20, ptol=1e-12</span>
+<span class="sd">        )</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">optimize_chains_transformation_input_points</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">transformation</span><span class="p">],</span>
+        <span class="p">[(</span><span class="mi">0</span><span class="p">,)],</span>
+        <span class="p">[</span><span class="n">output_points</span><span class="p">],</span>
+        <span class="n">guess</span><span class="p">,</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="p">[</span><span class="n">kwargs</span><span class="p">],</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

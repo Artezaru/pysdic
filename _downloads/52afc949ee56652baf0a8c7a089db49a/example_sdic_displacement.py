@@ -1,0 +1,196 @@
+r"""
+.. _example_sdic_displacement:
+
+Measuring a displacement with the SDIC
+======================================
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 1
+   :backlinks: top
+
+This example measures the 3D displacement of a plate seen by two cameras between two
+frames, with a :class:`pysdic.SDICCorrelationTerm` solved by ``pysolvegn``. The images are
+synthetic, with a change of lighting between the frames compensated by a ZNSSD gray level
+correction.
+
+.. important::
+
+    Requires the optional package ``open3d`` (ray casting of the 3D surface).
+
+"""
+
+# %%
+# Synthetic stereo images
+# -----------------------
+#
+# Two cameras look at a speckled plate from 5 units above. Between the frames 0 and 1, the
+# plate moves with an affine displacement field and the lighting changes (gain 1.3, offset
+# 10). The images are rendered with :func:`pysdic.generate_synthetic_image` (texture of
+# :func:`pysdic.compute_wave_speckle` through the UV map of the plate), then acquired with
+# a Gaussian noise of 1 gray level on 8 bits.
+
+import numpy
+from pysdic import (
+    Camera, Image, PerspectiveExtrinsic, PinholeIntrinsic, add_gaussian_noise, compute_projected_roi,
+    compute_wave_speckle, create_3d_quadrangle_4_heightmap, generate_synthetic_image, quantize_image,
+)
+
+height, width = 180, 240
+cameras = [
+    Camera(
+        height, width,
+        extrinsic=PerspectiveExtrinsic.from_rt(rvec=[numpy.pi, side * 0.15, 0.0], tvec=[side * 0.6, 0.0, 5.0]),
+        intrinsic=PinholeIntrinsic.from_matrix([[300.0, 0.0, 120.0], [0.0, 300.0, 90.0], [0.0, 0.0, 1.0]]),
+    )
+    for side in (1, -1)
+]
+
+# Plate of 5 x 4 units, with a texture of 0.01 unit per texel (first row: v = 1, i.e. y max)
+plate = create_3d_quadrangle_4_heightmap(x_bounds=(-2.5, 2.5), y_bounds=(-2.0, 2.0), n_x=41, n_y=33)
+x = numpy.linspace(-2.5, 2.5, 500)
+y = numpy.linspace(2.0, -2.0, 400)
+texture = compute_wave_speckle(numpy.stack(numpy.meshgrid(x, y), axis=-1), wavelength=0.15)  # Spots of about 4 pixels
+
+
+def true_displacement(points: numpy.ndarray) -> numpy.ndarray:
+    x, y = points[:, 0], points[:, 1]
+    return numpy.stack((0.04 + 0.02 * y, -0.03 + 0.01 * x, 0.05 + 0.02 * x), axis=1)
+
+
+def acquire(camera: Camera, frame: int, seed: int) -> numpy.ndarray:
+    gain, offset = ((1.0, 0.0), (1.3, 10.0))[frame]
+    rendered = generate_synthetic_image(camera, plate, texture, displacement=frame * true_displacement(plate.coordinates), n_samples=2)
+    return quantize_image(add_gaussian_noise(gain * rendered[..., 0] + offset, std=1.0, seed=seed), bit_depth=8)
+
+
+# %%
+# The analysis
+# ------------
+#
+# The measurement mesh covers the center of the plate. The images are interpolated in the
+# ROI of the mesh at their frame (see :func:`pysdic.compute_projected_roi`), and
+# :func:`pysdic.create_bicamera_analysis` builds the analysis: at each frame, the view 0 is the
+# first camera and the view 1 the second one (each camera is shared by all the frames).
+#
+# The frame 0 is the reference (zero displacement). The displacement of the frame 1 is
+# initialized with 70 % of the true displacement, as a previous estimate would be.
+
+from pysdic import create_bicamera_analysis
+
+mesh = create_3d_quadrangle_4_heightmap(x_bounds=(-1.0, 1.0), y_bounds=(-0.6, 0.6), n_x=7, n_y=5)
+truth = true_displacement(mesh.coordinates)
+
+images = [
+    [
+        Image.from_array(acquire(camera, frame, seed=2 * frame + k), roi=compute_projected_roi(mesh, camera, warp_by=frame * truth, margin=10))
+        for frame in range(2)
+    ]
+    for k, camera in enumerate(cameras)
+]
+analysis = create_bicamera_analysis(mesh, cameras[0], cameras[1], images[0], images[1])
+analysis.set_zero_displacement(0)
+analysis.set_displacement(1, 0.7 * truth)
+print(analysis)
+analysis.display_structure("camera")
+
+# %%
+# The images of the first camera at both frames, with the mesh at its current displacement
+# and the ROI of the images.
+
+import matplotlib.pyplot as plt
+from pysdic import ImagePlotter
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+for frame, ax in enumerate(axes):
+    plotter = ImagePlotter(analysis.get_view(frame, 0), ax=ax)
+    plotter.add_image()
+    plotter.add_roi()
+    plotter.add_mesh(mesh, warp_by=analysis.get_displacement(frame), show_faces=False, edge_color="cyan", vertex_size=2)
+    plotter.set_title(f"Frame {frame}, view 0")
+plt.show()
+
+# %%
+# Integration points and safeguards
+# ---------------------------------
+#
+# The material points are a regular grid of :math:`6 \times 6` points per element. Before
+# building the problem, two safeguards check the setup:
+#
+# - :func:`pysdic.compute_projected_elements_areas` gives the number of pixels per element
+#   (here about 200, for 36 points per element);
+# - :func:`pysdic.compute_visibility` checks that the points are seen by each view (in the ROI
+#   of its image and not hidden by the mesh).
+
+from pysdic import IntegrationPoints, compute_projected_elements_areas, compute_visibility
+
+grid = numpy.linspace(-0.9, 0.9, 6)
+natural = numpy.stack(numpy.meshgrid(grid, grid), axis=-1).reshape(-1, 2)  # (36, 2) in the reference quadrangle
+integration_points = IntegrationPoints(
+    numpy.tile(natural, (mesh.n_elements, 1)), numpy.repeat(numpy.arange(mesh.n_elements), natural.shape[0])
+)
+
+for k, camera in enumerate(cameras):
+    areas = compute_projected_elements_areas(mesh, camera)
+    print(f"Camera {k}: {areas.min():.0f} to {areas.max():.0f} pixels² per element")
+for frame in range(2):
+    for index, view in enumerate(analysis.get_views(frame)):
+        visible = compute_visibility(mesh, integration_points, view, warp_by=analysis.get_displacement(frame))
+        print(f"Frame {frame}, view {index}: {visible.sum()} / {visible.size} visible points")
+
+# %%
+# The correlation term
+# --------------------
+#
+# The pairings compare each camera between the frames (temporal pairings) and the two
+# cameras at the frame 1 (stereo pairing, which constrains the out-of-plane displacement).
+# The unknowns (:class:`pysdic.SDICUnknowns`) are the displacement of the frame 1, the
+# cameras are fixed: ``SDICUnknowns([1], [])``. The unknowns only describe what is
+# optimized: the analysis checks them (:meth:`pysdic.SDICAnalysis.validate_unknowns`) and
+# builds the vector of unknowns (:meth:`pysdic.SDICAnalysis.pack_unknowns`). The term is
+# built on the analysis, the unknowns, the integration points and the pairings. The ZNSSD
+# correction normalizes the gray levels of the two views of each pairing (``scale=255`` gives residuals in gray levels), which removes the
+# change of lighting.
+
+import pysolvegn
+from pysdic import Pairing, SDICCorrelationTerm, SDICUnknowns
+
+unknowns = SDICUnknowns([1], [])
+pairings = [Pairing.temporal(0, 0, 1), Pairing.temporal(1, 0, 1), Pairing.stereo(1, 0, 1)]
+correlation = SDICCorrelationTerm(
+    analysis, unknowns, integration_points, pairings, gl_correction={"mode": "ZNSSD", "scale": 255.0}, use_cache=True
+)
+print(unknowns)
+print(correlation)
+
+
+def rms_residuals(correlation: SDICCorrelationTerm) -> str:
+    # RMS of the residuals of each pairing, for the current state of the analysis
+    return ", ".join(f"{numpy.sqrt(numpy.nanmean(r.residuals**2)):.1f}" for r in correlation.compute_residuals())
+
+
+print(f"RMS residuals before: {rms_residuals(correlation)} gray levels")
+
+result = pysolvegn.solve(terms=[correlation.term], p0=analysis.pack_unknowns(unknowns), max_iteration=30)
+analysis.apply_unknowns(unknowns, result.parameters)  # Displacement of the frame 1 written in the analysis
+
+print(f"RMS residuals after:  {rms_residuals(correlation)} gray levels ({result.n_iterations} iterations)")
+print(f"Maximum error on the displacement: {numpy.abs(0.7 * truth - truth).max():.2e} (initial) -> "
+      f"{numpy.abs(analysis.get_displacement(1) - truth).max():.2e} (measured)")
+
+# %%
+# Residual maps
+# -------------
+#
+# :meth:`pysdic.SDICCorrelationTerm.compute_residuals` gives the residuals compared by the
+# term (ZNSSD gray levels), drawn on the two views by :func:`pysdic.display_residual_maps`.
+# With :func:`pysdic.compute_residuals` and no gray level correction, the raw residuals of the
+# temporal pairing keep the change of lighting between the frames.
+
+from pysdic import compute_residuals, display_residual_maps
+
+stereo_residuals = correlation.compute_residuals()[2]
+display_residual_maps(analysis, stereo_residuals, fill_radius=2.0, title="Stereo pairing at the frame 1 (ZNSSD)")
+
+raw_residuals = compute_residuals(analysis, Pairing.temporal(0, 0, 1), integration_points)
+display_residual_maps(analysis, raw_residuals, fill_radius=2.0, title="Temporal pairing of the view 0 without correction")

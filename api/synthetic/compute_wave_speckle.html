@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pysdic.compute_wave_speckle &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/synthetic/compute_wave_speckle';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pysdic.interpolate_texture" href="interpolate_texture.html" />
+    <link rel="prev" title="Synthetic Images" href="../synthetic.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../sdic.html">SDIC Analysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/SDICAnalysis.html">pysdic.SDICAnalysis</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.mesh.html">pysdic.SDICAnalysis.mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.n_frames.html">pysdic.SDICAnalysis.n_frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.times.html">pysdic.SDICAnalysis.times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.with_mesh.html">pysdic.SDICAnalysis.with_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.with_views.html">pysdic.SDICAnalysis.with_views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.with_frame_views.html">pysdic.SDICAnalysis.with_frame_views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.with_times.html">pysdic.SDICAnalysis.with_times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.set_displacement.html">pysdic.SDICAnalysis.set_displacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.set_zero_displacement.html">pysdic.SDICAnalysis.set_zero_displacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.has_displacement.html">pysdic.SDICAnalysis.has_displacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_displacement.html">pysdic.SDICAnalysis.get_displacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_deformed_coordinates.html">pysdic.SDICAnalysis.get_deformed_coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_deformed_mesh.html">pysdic.SDICAnalysis.get_deformed_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_view.html">pysdic.SDICAnalysis.get_view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_views.html">pysdic.SDICAnalysis.get_views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.n_views.html">pysdic.SDICAnalysis.n_views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.validate_pairing.html">pysdic.SDICAnalysis.validate_pairing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.validate_unknowns.html">pysdic.SDICAnalysis.validate_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.n_unknowns.html">pysdic.SDICAnalysis.n_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.pack_unknowns.html">pysdic.SDICAnalysis.pack_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.unpack_unknowns.html">pysdic.SDICAnalysis.unpack_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.apply_unknowns.html">pysdic.SDICAnalysis.apply_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_unknowns_frame_slice.html">pysdic.SDICAnalysis.get_unknowns_frame_slice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_unknowns_transformation_slice.html">pysdic.SDICAnalysis.get_unknowns_transformation_slice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.compute_unknowns_indices.html">pysdic.SDICAnalysis.compute_unknowns_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.compute_structure.html">pysdic.SDICAnalysis.compute_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.display_structure.html">pysdic.SDICAnalysis.display_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_transformation.html">pysdic.SDICAnalysis.get_transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.get_transformation_parameters.html">pysdic.SDICAnalysis.get_transformation_parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.set_transformation_parameters.html">pysdic.SDICAnalysis.set_transformation_parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.check_consistency.html">pysdic.SDICAnalysis.check_consistency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.to_folder.html">pysdic.SDICAnalysis.to_folder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.from_folder.html">pysdic.SDICAnalysis.from_folder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.to_archive.html">pysdic.SDICAnalysis.to_archive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.SDICAnalysis.from_archive.html">pysdic.SDICAnalysis.from_archive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/create_multicamera_analysis.html">pysdic.create_multicamera_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/create_bicamera_analysis.html">pysdic.create_bicamera_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/create_splitscreen_analysis.html">pysdic.create_splitscreen_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/create_cordin_analysis.html">pysdic.create_cordin_analysis</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/SDICUnknowns.html">pysdic.SDICUnknowns</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICUnknowns.optimized_frames.html">pysdic.SDICUnknowns.optimized_frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICUnknowns.optimized_transformations.html">pysdic.SDICUnknowns.optimized_transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICUnknowns.n_frames.html">pysdic.SDICUnknowns.n_frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICUnknowns.n_transformations.html">pysdic.SDICUnknowns.n_transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICUnknowns.is_empty.html">pysdic.SDICUnknowns.is_empty</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/check_same_problem.html">pysdic.check_same_problem</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/Pairing.html">pysdic.Pairing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.stereo.html">pysdic.Pairing.stereo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.temporal.html">pysdic.Pairing.temporal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.frame_index_1.html">pysdic.Pairing.frame_index_1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.view_index_1.html">pysdic.Pairing.view_index_1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.frame_index_2.html">pysdic.Pairing.frame_index_2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.view_index_2.html">pysdic.Pairing.view_index_2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.view_1.html">pysdic.Pairing.view_1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.view_2.html">pysdic.Pairing.view_2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.is_stereo.html">pysdic.Pairing.is_stereo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.Pairing.reversed.html">pysdic.Pairing.reversed</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/SDICCorrelationTerm.html">pysdic.SDICCorrelationTerm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.with_unknowns.html">pysdic.SDICCorrelationTerm.with_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.with_pairings.html">pysdic.SDICCorrelationTerm.with_pairings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.with_integration_points.html">pysdic.SDICCorrelationTerm.with_integration_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.with_options.html">pysdic.SDICCorrelationTerm.with_options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.term.html">pysdic.SDICCorrelationTerm.term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.unknowns.html">pysdic.SDICCorrelationTerm.unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.analysis.html">pysdic.SDICCorrelationTerm.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.n_unknowns.html">pysdic.SDICCorrelationTerm.n_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.pack.html">pysdic.SDICCorrelationTerm.pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.unpack.html">pysdic.SDICCorrelationTerm.unpack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.apply.html">pysdic.SDICCorrelationTerm.apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.compute_residuals.html">pysdic.SDICCorrelationTerm.compute_residuals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.integration_points.html">pysdic.SDICCorrelationTerm.integration_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.pairings.html">pysdic.SDICCorrelationTerm.pairings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.optimized_frames.html">pysdic.SDICCorrelationTerm.optimized_frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.optimized_transformations.html">pysdic.SDICCorrelationTerm.optimized_transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.options.html">pysdic.SDICCorrelationTerm.options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.mode.html">pysdic.SDICCorrelationTerm.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.gl_correction.html">pysdic.SDICCorrelationTerm.gl_correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.gray_level_groups.html">pysdic.SDICCorrelationTerm.gray_level_groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.weight.html">pysdic.SDICCorrelationTerm.weight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.loss.html">pysdic.SDICCorrelationTerm.loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.loss_scale.html">pysdic.SDICCorrelationTerm.loss_scale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.filter_nans.html">pysdic.SDICCorrelationTerm.filter_nans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.sparse.html">pysdic.SDICCorrelationTerm.sparse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICCorrelationTerm.use_cache.html">pysdic.SDICCorrelationTerm.use_cache</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/PairingResiduals.html">pysdic.PairingResiduals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.PairingResiduals.n_points.html">pysdic.PairingResiduals.n_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.PairingResiduals.n_channels.html">pysdic.PairingResiduals.n_channels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdic/_generated/pysdic.PairingResiduals.label.html">pysdic.PairingResiduals.label</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/compute_residuals.html">pysdic.compute_residuals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/compute_pixel_residual_maps.html">pysdic.compute_pixel_residual_maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/display_residual_maps.html">pysdic.display_residual_maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/GrayLevelGroups.html">pysdic.GrayLevelGroups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/compute_gray_level_groups.html">pysdic.compute_gray_level_groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/znssd_correction.html">pysdic.znssd_correction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/znssd_correction_exact.html">pysdic.znssd_correction_exact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/matching_correction.html">pysdic.matching_correction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/matching_correction_exact.html">pysdic.matching_correction_exact</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/SDICTemporalRegularizationTerm.html">pysdic.SDICTemporalRegularizationTerm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.with_unknowns.html">pysdic.SDICTemporalRegularizationTerm.with_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.with_options.html">pysdic.SDICTemporalRegularizationTerm.with_options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.term.html">pysdic.SDICTemporalRegularizationTerm.term</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.unknowns.html">pysdic.SDICTemporalRegularizationTerm.unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.analysis.html">pysdic.SDICTemporalRegularizationTerm.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.pack.html">pysdic.SDICTemporalRegularizationTerm.pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.order.html">pysdic.SDICTemporalRegularizationTerm.order</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.weight.html">pysdic.SDICTemporalRegularizationTerm.weight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.options.html">pysdic.SDICTemporalRegularizationTerm.options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICTemporalRegularizationTerm.evaluated_frames.html">pysdic.SDICTemporalRegularizationTerm.evaluated_frames</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdic/SDICFixedParametrization.html">pysdic.SDICFixedParametrization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.with_unknowns.html">pysdic.SDICFixedParametrization.with_unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.with_options.html">pysdic.SDICFixedParametrization.with_options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.reparametrized_pack.html">pysdic.SDICFixedParametrization.reparametrized_pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.reparametrized_unpack.html">pysdic.SDICFixedParametrization.reparametrized_unpack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.reparametrized_apply.html">pysdic.SDICFixedParametrization.reparametrized_apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.p_func.html">pysdic.SDICFixedParametrization.p_func</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.parametrization.html">pysdic.SDICFixedParametrization.parametrization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.unknowns.html">pysdic.SDICFixedParametrization.unknowns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.analysis.html">pysdic.SDICFixedParametrization.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.indices.html">pysdic.SDICFixedParametrization.indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.n_reparametrized.html">pysdic.SDICFixedParametrization.n_reparametrized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_generated/pysdic.SDICFixedParametrization.sparse.html">pysdic.SDICFixedParametrization.sparse</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/compute_supported_vertices.html">pysdic.compute_supported_vertices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../geometry.html">Geometry (Point Clouds, Meshes and Integration Points)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../geometry/PointCloud.html">pysdic.PointCloud</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_array.html">pysdic.PointCloud.from_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_meshio.html">pysdic.PointCloud.from_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_pyvista.html">pysdic.PointCloud.from_pyvista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_vtk.html">pysdic.PointCloud.from_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_vtk_file.html">pysdic.PointCloud.from_vtk_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.coordinates.html">pysdic.PointCloud.coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.n_dimensions.html">pysdic.PointCloud.n_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.n_points.html">pysdic.PointCloud.n_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.n_properties.html">pysdic.PointCloud.n_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.properties.html">pysdic.PointCloud.properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.shape.html">pysdic.PointCloud.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.concatenate.html">pysdic.PointCloud.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.copy.html">pysdic.PointCloud.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.filter_points.html">pysdic.PointCloud.filter_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.keep_points_by_index.html">pysdic.PointCloud.keep_points_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.remove_points_by_index.html">pysdic.PointCloud.remove_points_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.insert_dimension.html">pysdic.PointCloud.insert_dimension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.remove_dimension.html">pysdic.PointCloud.remove_dimension</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.validate.html">pysdic.PointCloud.validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.all_close.html">pysdic.PointCloud.all_close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.all_finite.html">pysdic.PointCloud.all_finite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.is_finite.html">pysdic.PointCloud.is_finite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.has_nan.html">pysdic.PointCloud.has_nan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.has_inf.html">pysdic.PointCloud.has_inf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.bounding_box.html">pysdic.PointCloud.bounding_box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.bounding_sphere.html">pysdic.PointCloud.bounding_sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.frame_transform.html">pysdic.PointCloud.frame_transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_array.html">pysdic.PointCloud.to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_meshio.html">pysdic.PointCloud.to_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_pyvista.html">pysdic.PointCloud.to_pyvista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_vtk.html">pysdic.PointCloud.to_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_vtk_file.html">pysdic.PointCloud.to_vtk_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.quick_visualize.html">pysdic.PointCloud.quick_visualize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_dict.html">pysdic.PointCloud.to_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_dict.html">pysdic.PointCloud.from_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_json_file.html">pysdic.PointCloud.to_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_json_file.html">pysdic.PointCloud.from_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_hdf5_file.html">pysdic.PointCloud.to_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_hdf5_file.html">pysdic.PointCloud.from_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.to_npz_file.html">pysdic.PointCloud.to_npz_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.PointCloud.from_npz_file.html">pysdic.PointCloud.from_npz_file</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../geometry/Connectivity.html">pysdic.Connectivity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.from_array.html">pysdic.Connectivity.from_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.element_type.html">pysdic.Connectivity.element_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.elements.html">pysdic.Connectivity.elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.n_elements.html">pysdic.Connectivity.n_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.n_properties.html">pysdic.Connectivity.n_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.n_topological_dimensions.html">pysdic.Connectivity.n_topological_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.n_vertices_per_element.html">pysdic.Connectivity.n_vertices_per_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.properties.html">pysdic.Connectivity.properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.shape.html">pysdic.Connectivity.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.concatenate.html">pysdic.Connectivity.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.copy.html">pysdic.Connectivity.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.filter_elements.html">pysdic.Connectivity.filter_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.keep_elements_by_index.html">pysdic.Connectivity.keep_elements_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.remove_elements_by_index.html">pysdic.Connectivity.remove_elements_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.validate.html">pysdic.Connectivity.validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.all_close.html">pysdic.Connectivity.all_close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.all_positive.html">pysdic.Connectivity.all_positive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.all_lower_than.html">pysdic.Connectivity.all_lower_than</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.is_positive.html">pysdic.Connectivity.is_positive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.has_negative.html">pysdic.Connectivity.has_negative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.has_higher_than.html">pysdic.Connectivity.has_higher_than</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.to_array.html">pysdic.Connectivity.to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.to_dict.html">pysdic.Connectivity.to_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.from_dict.html">pysdic.Connectivity.from_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.to_json_file.html">pysdic.Connectivity.to_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.from_json_file.html">pysdic.Connectivity.from_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.to_hdf5_file.html">pysdic.Connectivity.to_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.from_hdf5_file.html">pysdic.Connectivity.from_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.to_npz_file.html">pysdic.Connectivity.to_npz_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Connectivity.from_npz_file.html">pysdic.Connectivity.from_npz_file</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../geometry/Mesh.html">pysdic.Mesh</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_meshio.html">pysdic.Mesh.from_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_pyvista.html">pysdic.Mesh.from_pyvista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_vtk.html">pysdic.Mesh.from_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_vtk_file.html">pysdic.Mesh.from_vtk_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.connectivity.html">pysdic.Mesh.connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.coordinates.html">pysdic.Mesh.coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.element_type.html">pysdic.Mesh.element_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.elements.html">pysdic.Mesh.elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.n_dimensions.html">pysdic.Mesh.n_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.n_elements.html">pysdic.Mesh.n_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.n_topological_dimensions.html">pysdic.Mesh.n_topological_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.n_vertices.html">pysdic.Mesh.n_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.n_vertices_per_element.html">pysdic.Mesh.n_vertices_per_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.uvmap.html">pysdic.Mesh.uvmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.vertices.html">pysdic.Mesh.vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.copy.html">pysdic.Mesh.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.add_connectivity.html">pysdic.Mesh.add_connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.add_vertices.html">pysdic.Mesh.add_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.filter_connectivity.html">pysdic.Mesh.filter_connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.keep_connectivity_by_index.html">pysdic.Mesh.keep_connectivity_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.remove_connectivity_by_index.html">pysdic.Mesh.remove_connectivity_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.filter_vertices.html">pysdic.Mesh.filter_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.keep_vertices_by_index.html">pysdic.Mesh.keep_vertices_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.remove_vertices_by_index.html">pysdic.Mesh.remove_vertices_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.get_used_vertices_mask.html">pysdic.Mesh.get_used_vertices_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.remove_unused_vertices.html">pysdic.Mesh.remove_unused_vertices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.get_degenerated_elements_mask.html">pysdic.Mesh.get_degenerated_elements_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.remove_degenerated_elements.html">pysdic.Mesh.remove_degenerated_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.validate.html">pysdic.Mesh.validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.validate_integration_points.html">pysdic.Mesh.validate_integration_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_shape_functions.html">pysdic.Mesh.compute_shape_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_shape_function_matrix.html">pysdic.Mesh.compute_shape_function_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_jacobian_matrix.html">pysdic.Mesh.compute_jacobian_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_integration_points_coordinates.html">pysdic.Mesh.compute_integration_points_coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_property_interpolation.html">pysdic.Mesh.compute_property_interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_property_derivative.html">pysdic.Mesh.compute_property_derivative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_property_projection.html">pysdic.Mesh.compute_property_projection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_strains.html">pysdic.Mesh.compute_strains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_elements_centers.html">pysdic.Mesh.compute_elements_centers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_elements_areas.html">pysdic.Mesh.compute_elements_areas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_elements_normals.html">pysdic.Mesh.compute_elements_normals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_vertices_normals.html">pysdic.Mesh.compute_vertices_normals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_integration_points_normals.html">pysdic.Mesh.compute_integration_points_normals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.cast_rays.html">pysdic.Mesh.cast_rays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.locate_points.html">pysdic.Mesh.locate_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.assemble_vertices_adjacency_graph.html">pysdic.Mesh.assemble_vertices_adjacency_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.assemble_elements_adjacency_graph.html">pysdic.Mesh.assemble_elements_adjacency_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_vertices_neighborhood.html">pysdic.Mesh.compute_vertices_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_elements_neighborhood.html">pysdic.Mesh.compute_elements_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.compute_integration_points_neighborhood.html">pysdic.Mesh.compute_integration_points_neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_meshio.html">pysdic.Mesh.to_meshio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_pyvista.html">pysdic.Mesh.to_pyvista</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_vtk.html">pysdic.Mesh.to_vtk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_vtk_file.html">pysdic.Mesh.to_vtk_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.quick_visualize.html">pysdic.Mesh.quick_visualize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_dict.html">pysdic.Mesh.to_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_dict.html">pysdic.Mesh.from_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_json_file.html">pysdic.Mesh.to_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_json_file.html">pysdic.Mesh.from_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_hdf5_file.html">pysdic.Mesh.to_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_hdf5_file.html">pysdic.Mesh.from_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.to_npz_file.html">pysdic.Mesh.to_npz_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Mesh.from_npz_file.html">pysdic.Mesh.from_npz_file</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../geometry/IntegrationPoints.html">pysdic.IntegrationPoints</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.from_gauss_points.html">pysdic.IntegrationPoints.from_gauss_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.element_indices.html">pysdic.IntegrationPoints.element_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.n_located.html">pysdic.IntegrationPoints.n_located</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.n_points.html">pysdic.IntegrationPoints.n_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.n_properties.html">pysdic.IntegrationPoints.n_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.n_topological_dimensions.html">pysdic.IntegrationPoints.n_topological_dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.natural_coordinates.html">pysdic.IntegrationPoints.natural_coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.properties.html">pysdic.IntegrationPoints.properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.shape.html">pysdic.IntegrationPoints.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.weights.html">pysdic.IntegrationPoints.weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.concatenate.html">pysdic.IntegrationPoints.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.copy.html">pysdic.IntegrationPoints.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.filter_points.html">pysdic.IntegrationPoints.filter_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.keep_points_by_index.html">pysdic.IntegrationPoints.keep_points_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.remove_points_by_index.html">pysdic.IntegrationPoints.remove_points_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.keep_points_by_element.html">pysdic.IntegrationPoints.keep_points_by_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.remove_points_by_element.html">pysdic.IntegrationPoints.remove_points_by_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.remove_unlocated.html">pysdic.IntegrationPoints.remove_unlocated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.unlocate_points_by_index.html">pysdic.IntegrationPoints.unlocate_points_by_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.unlocate_points_by_element.html">pysdic.IntegrationPoints.unlocate_points_by_element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.filter_elements.html">pysdic.IntegrationPoints.filter_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.keep_elements.html">pysdic.IntegrationPoints.keep_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.remove_elements.html">pysdic.IntegrationPoints.remove_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.validate.html">pysdic.IntegrationPoints.validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.is_located.html">pysdic.IntegrationPoints.is_located</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.to_dict.html">pysdic.IntegrationPoints.to_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.from_dict.html">pysdic.IntegrationPoints.from_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.to_json_file.html">pysdic.IntegrationPoints.to_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.from_json_file.html">pysdic.IntegrationPoints.from_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.to_hdf5_file.html">pysdic.IntegrationPoints.to_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.from_hdf5_file.html">pysdic.IntegrationPoints.from_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.to_npz_file.html">pysdic.IntegrationPoints.to_npz_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.IntegrationPoints.from_npz_file.html">pysdic.IntegrationPoints.from_npz_file</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_uniform_quadrangle_4_mesh.html">pysdic.create_uniform_quadrangle_4_mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_3d_quadrangle_4_heightmap.html">pysdic.create_3d_quadrangle_4_heightmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_3d_triangle_3_heightmap.html">pysdic.create_3d_triangle_3_heightmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_3d_quadrangle_4_cylindrical.html">pysdic.create_3d_quadrangle_4_cylindrical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_3d_triangle_3_cylindrical.html">pysdic.create_3d_triangle_3_cylindrical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_3d_quadrangle_4_spherical.html">pysdic.create_3d_quadrangle_4_spherical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_3d_triangle_3_spherical.html">pysdic.create_3d_triangle_3_spherical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_2d_quadrangle_4_rectangle.html">pysdic.create_2d_quadrangle_4_rectangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_2d_triangle_3_rectangle.html">pysdic.create_2d_triangle_3_rectangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_2d_quadrangle_4_polar.html">pysdic.create_2d_quadrangle_4_polar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/create_2d_triangle_3_polar.html">pysdic.create_2d_triangle_3_polar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/quadrangle_4_to_triangle_3.html">pysdic.quadrangle_4_to_triangle_3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/triangle_3_to_triangle_6.html">pysdic.triangle_3_to_triangle_6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/quadrangle_4_to_quadrangle_8.html">pysdic.quadrangle_4_to_quadrangle_8</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../geometry/Plotter3D.html">pysdic.Plotter3D</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.plotter.html">pysdic.Plotter3D.plotter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.add_point_cloud.html">pysdic.Plotter3D.add_point_cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.add_mesh.html">pysdic.Plotter3D.add_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.add_integration_points.html">pysdic.Plotter3D.add_integration_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.add_scalar_bar.html">pysdic.Plotter3D.add_scalar_bar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.add_axes.html">pysdic.Plotter3D.add_axes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.set_title.html">pysdic.Plotter3D.set_title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.set_bounds.html">pysdic.Plotter3D.set_bounds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.set_camera.html">pysdic.Plotter3D.set_camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.clear.html">pysdic.Plotter3D.clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../geometry/_generated/pysdic.Plotter3D.show.html">pysdic.Plotter3D.show</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../imaging.html">Imaging Model (Cameras, Images and Views)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../imaging/Camera.html">pysdic.Camera</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.from_composition.html">pysdic.Camera.from_composition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.distortion.html">pysdic.Camera.distortion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.extrinsic.html">pysdic.Camera.extrinsic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.intrinsic.html">pysdic.Camera.intrinsic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.sensor_height.html">pysdic.Camera.sensor_height</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.sensor_width.html">pysdic.Camera.sensor_width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.project.html">pysdic.Camera.project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.get_camera_pixel_points.html">pysdic.Camera.get_camera_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.get_camera_normalized_points.html">pysdic.Camera.get_camera_normalized_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.get_camera_rays.html">pysdic.Camera.get_camera_rays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Camera.quick_visualize.html">pysdic.Camera.quick_visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../imaging/Image.html">pysdic.Image</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.from_array.html">pysdic.Image.from_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.from_file.html">pysdic.Image.from_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.default_value.html">pysdic.Image.default_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.dtype.html">pysdic.Image.dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.height.html">pysdic.Image.height</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.image.html">pysdic.Image.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.is_color.html">pysdic.Image.is_color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.is_grayscale.html">pysdic.Image.is_grayscale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.ku.html">pysdic.Image.ku</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.kv.html">pysdic.Image.kv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.n_channels.html">pysdic.Image.n_channels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.ndim.html">pysdic.Image.ndim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.roi.html">pysdic.Image.roi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.shape.html">pysdic.Image.shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.width.html">pysdic.Image.width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.construct_interpolation_functions.html">pysdic.Image.construct_interpolation_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.deconstruct_interpolation_functions.html">pysdic.Image.deconstruct_interpolation_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.evaluate_at_image_points.html">pysdic.Image.evaluate_at_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.evaluate_at_pixel_points.html">pysdic.Image.evaluate_at_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.get_interpolation_function.html">pysdic.Image.get_interpolation_function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.get_image_pixel_points.html">pysdic.Image.get_image_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.get_image_image_points.html">pysdic.Image.get_image_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.pixel_points_to_image_points.html">pysdic.Image.pixel_points_to_image_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.image_points_to_pixel_points.html">pysdic.Image.image_points_to_pixel_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.copy.html">pysdic.Image.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.to_array.html">pysdic.Image.to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.to_file.html">pysdic.Image.to_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.Image.quick_visualize.html">pysdic.Image.quick_visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../imaging/View.html">pysdic.View</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.View.camera.html">pysdic.View.camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.View.image.html">pysdic.View.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.View.image_project.html">pysdic.View.image_project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.View.quick_visualize.html">pysdic.View.quick_visualize</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/ImageProjectionResult.html">pysdic.ImageProjectionResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_projected_bounding_box.html">pysdic.compute_projected_bounding_box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_projected_roi.html">pysdic.compute_projected_roi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_projected_uvmap.html">pysdic.compute_projected_uvmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_projected_mesh_mask.html">pysdic.compute_projected_mesh_mask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_projected_elements_areas.html">pysdic.compute_projected_elements_areas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_visibility.html">pysdic.compute_visibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/compute_pixel_integration_points.html">pysdic.compute_pixel_integration_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/display_projected_bounding_box.html">pysdic.display_projected_bounding_box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/display_projected_roi.html">pysdic.display_projected_roi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/display_projected_mesh_mask.html">pysdic.display_projected_mesh_mask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/display_projected_elements_areas.html">pysdic.display_projected_elements_areas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/display_visibility.html">pysdic.display_visibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/display_pixel_integration_points.html">pysdic.display_pixel_integration_points</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../imaging/ImagePlotter.html">pysdic.ImagePlotter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.ax.html">pysdic.ImagePlotter.ax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.camera.html">pysdic.ImagePlotter.camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.figure.html">pysdic.ImagePlotter.figure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.sensor_height.html">pysdic.ImagePlotter.sensor_height</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.sensor_width.html">pysdic.ImagePlotter.sensor_width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.add_sensor.html">pysdic.ImagePlotter.add_sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.add_image.html">pysdic.ImagePlotter.add_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.add_point_cloud.html">pysdic.ImagePlotter.add_point_cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.add_mesh.html">pysdic.ImagePlotter.add_mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.add_integration_points.html">pysdic.ImagePlotter.add_integration_points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.add_rectangle.html">pysdic.ImagePlotter.add_rectangle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.set_title.html">pysdic.ImagePlotter.set_title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.clear.html">pysdic.ImagePlotter.clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.show.html">pysdic.ImagePlotter.show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../imaging/_generated/pysdic.ImagePlotter.close.html">pysdic.ImagePlotter.close</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../camera_models.html">Computer Vision Cameras Models (Extrinsic, Distortion, Intrinsic)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../morphisms.html">Morphisms (Transformations + Parametrizations)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/Transformation.html">pysdic.Transformation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.input_dim.html">pysdic.Transformation.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.is_locked.html">pysdic.Transformation.is_locked</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.is_setup.html">pysdic.Transformation.is_setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.locked_message.html">pysdic.Transformation.locked_message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.n_parameters.html">pysdic.Transformation.n_parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.output_dim.html">pysdic.Transformation.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.parameters.html">pysdic.Transformation.parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.has_apply.html">pysdic.Transformation.has_apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.has_apply_dx.html">pysdic.Transformation.has_apply_dx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.has_apply_dp.html">pysdic.Transformation.has_apply_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.has_invert.html">pysdic.Transformation.has_invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.has_invert_dx.html">pysdic.Transformation.has_invert_dx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.has_invert_dp.html">pysdic.Transformation.has_invert_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.is_invertible.html">pysdic.Transformation.is_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.is_left_invertible.html">pysdic.Transformation.is_left_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.is_right_invertible.html">pysdic.Transformation.is_right_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.copy.html">pysdic.Transformation.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.set_parameters.html">pysdic.Transformation.set_parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.apply.html">pysdic.Transformation.apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.invert.html">pysdic.Transformation.invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.check_apply_dx.html">pysdic.Transformation.check_apply_dx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.check_apply_dp.html">pysdic.Transformation.check_apply_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.check_invert_dx.html">pysdic.Transformation.check_invert_dx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.check_invert_dp.html">pysdic.Transformation.check_invert_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.check_left_invertible.html">pysdic.Transformation.check_left_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.check_right_invertible.html">pysdic.Transformation.check_right_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.from_dict.html">pysdic.Transformation.from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Transformation.to_dict.html">pysdic.Transformation.to_dict</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../morphisms/TransformationResult.html">pysdic.TransformationResult</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/IdentityTransformation.html">pysdic.IdentityTransformation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.IdentityTransformation.input_dim.html">pysdic.IdentityTransformation.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.IdentityTransformation.output_dim.html">pysdic.IdentityTransformation.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.IdentityTransformation._apply.html">pysdic.IdentityTransformation._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.IdentityTransformation._invert.html">pysdic.IdentityTransformation._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/Parametrization.html">pysdic.Parametrization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.input_dim.html">pysdic.Parametrization.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.output_dim.html">pysdic.Parametrization.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.has_encode.html">pysdic.Parametrization.has_encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.has_encode_dp.html">pysdic.Parametrization.has_encode_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.has_decode.html">pysdic.Parametrization.has_decode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.has_decode_dp.html">pysdic.Parametrization.has_decode_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.is_invertible.html">pysdic.Parametrization.is_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.is_left_invertible.html">pysdic.Parametrization.is_left_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.is_right_invertible.html">pysdic.Parametrization.is_right_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.copy.html">pysdic.Parametrization.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.encode.html">pysdic.Parametrization.encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.decode.html">pysdic.Parametrization.decode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.check_encode_dp.html">pysdic.Parametrization.check_encode_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.check_decode_dp.html">pysdic.Parametrization.check_decode_dp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.check_left_invertible.html">pysdic.Parametrization.check_left_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.check_right_invertible.html">pysdic.Parametrization.check_right_invertible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.from_dict.html">pysdic.Parametrization.from_dict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.Parametrization.to_dict.html">pysdic.Parametrization.to_dict</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../morphisms/ParametrizationResult.html">pysdic.ParametrizationResult</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/ComposedTransformation.html">pysdic.ComposedTransformation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.input_dim.html">pysdic.ComposedTransformation.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.n_parameters.html">pysdic.ComposedTransformation.n_parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.n_transformations.html">pysdic.ComposedTransformation.n_transformations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.output_dim.html">pysdic.ComposedTransformation.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.parameters.html">pysdic.ComposedTransformation.parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.transformations.html">pysdic.ComposedTransformation.transformations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation.set_parameters.html">pysdic.ComposedTransformation.set_parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation._apply.html">pysdic.ComposedTransformation._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedTransformation._invert.html">pysdic.ComposedTransformation._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/ComposedParametrization.html">pysdic.ComposedParametrization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedParametrization.input_dim.html">pysdic.ComposedParametrization.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedParametrization.n_parametrizations.html">pysdic.ComposedParametrization.n_parametrizations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedParametrization.output_dim.html">pysdic.ComposedParametrization.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedParametrization.parametrizations.html">pysdic.ComposedParametrization.parametrizations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedParametrization._encode.html">pysdic.ComposedParametrization._encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ComposedParametrization._decode.html">pysdic.ComposedParametrization._decode</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/ReparametrizedTransformation.html">pysdic.ReparametrizedTransformation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation.input_dim.html">pysdic.ReparametrizedTransformation.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation.n_parameters.html">pysdic.ReparametrizedTransformation.n_parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation.output_dim.html">pysdic.ReparametrizedTransformation.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation.parametrization.html">pysdic.ReparametrizedTransformation.parametrization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation.transformation.html">pysdic.ReparametrizedTransformation.transformation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation.set_parameters.html">pysdic.ReparametrizedTransformation.set_parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation._apply.html">pysdic.ReparametrizedTransformation._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ReparametrizedTransformation._invert.html">pysdic.ReparametrizedTransformation._invert</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../implemented_extrinsic.html">Implemented Extrinsic Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/NoExtrinsic.html">pysdic.NoExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoExtrinsic._apply.html">pysdic.NoExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoExtrinsic._invert.html">pysdic.NoExtrinsic._invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoExtrinsic.compute_rays.html">pysdic.NoExtrinsic.compute_rays</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/PerspectiveExtrinsic.html">pysdic.PerspectiveExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.from_frame.html">pysdic.PerspectiveExtrinsic.from_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.from_rt.html">pysdic.PerspectiveExtrinsic.from_rt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.from_tmatrix.html">pysdic.PerspectiveExtrinsic.from_tmatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.frame.html">pysdic.PerspectiveExtrinsic.frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.rotation_matrix.html">pysdic.PerspectiveExtrinsic.rotation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.rotation_vector.html">pysdic.PerspectiveExtrinsic.rotation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.transformation_matrix.html">pysdic.PerspectiveExtrinsic.transformation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.translation_vector.html">pysdic.PerspectiveExtrinsic.translation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic._apply.html">pysdic.PerspectiveExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic._invert.html">pysdic.PerspectiveExtrinsic._invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PerspectiveExtrinsic.compute_rays.html">pysdic.PerspectiveExtrinsic.compute_rays</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/OrthographicExtrinsic.html">pysdic.OrthographicExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.from_frame.html">pysdic.OrthographicExtrinsic.from_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.from_rt.html">pysdic.OrthographicExtrinsic.from_rt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.from_tmatrix.html">pysdic.OrthographicExtrinsic.from_tmatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.frame.html">pysdic.OrthographicExtrinsic.frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.rotation_matrix.html">pysdic.OrthographicExtrinsic.rotation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.rotation_vector.html">pysdic.OrthographicExtrinsic.rotation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.transformation_matrix.html">pysdic.OrthographicExtrinsic.transformation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.translation_vector.html">pysdic.OrthographicExtrinsic.translation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic._apply.html">pysdic.OrthographicExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic._invert.html">pysdic.OrthographicExtrinsic._invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.OrthographicExtrinsic.compute_rays.html">pysdic.OrthographicExtrinsic.compute_rays</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../morphisms/RigidExtrinsic.html">pysdic.RigidExtrinsic</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/WorldPlanePerspectiveExtrinsic.html">pysdic.WorldPlanePerspectiveExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.from_frame.html">pysdic.WorldPlanePerspectiveExtrinsic.from_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.from_rt.html">pysdic.WorldPlanePerspectiveExtrinsic.from_rt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.from_tmatrix.html">pysdic.WorldPlanePerspectiveExtrinsic.from_tmatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.frame.html">pysdic.WorldPlanePerspectiveExtrinsic.frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.homography_matrix.html">pysdic.WorldPlanePerspectiveExtrinsic.homography_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.rotation_matrix.html">pysdic.WorldPlanePerspectiveExtrinsic.rotation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.rotation_vector.html">pysdic.WorldPlanePerspectiveExtrinsic.rotation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.transformation_matrix.html">pysdic.WorldPlanePerspectiveExtrinsic.transformation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.translation_vector.html">pysdic.WorldPlanePerspectiveExtrinsic.translation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic._apply.html">pysdic.WorldPlanePerspectiveExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic._invert.html">pysdic.WorldPlanePerspectiveExtrinsic._invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlanePerspectiveExtrinsic.compute_rays.html">pysdic.WorldPlanePerspectiveExtrinsic.compute_rays</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/WorldPlaneOrthographicExtrinsic.html">pysdic.WorldPlaneOrthographicExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.from_frame.html">pysdic.WorldPlaneOrthographicExtrinsic.from_frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.from_rt.html">pysdic.WorldPlaneOrthographicExtrinsic.from_rt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.from_tmatrix.html">pysdic.WorldPlaneOrthographicExtrinsic.from_tmatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.affine_matrix.html">pysdic.WorldPlaneOrthographicExtrinsic.affine_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.frame.html">pysdic.WorldPlaneOrthographicExtrinsic.frame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.rotation_matrix.html">pysdic.WorldPlaneOrthographicExtrinsic.rotation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.rotation_vector.html">pysdic.WorldPlaneOrthographicExtrinsic.rotation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.transformation_matrix.html">pysdic.WorldPlaneOrthographicExtrinsic.transformation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.translation_vector.html">pysdic.WorldPlaneOrthographicExtrinsic.translation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic._apply.html">pysdic.WorldPlaneOrthographicExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic._invert.html">pysdic.WorldPlaneOrthographicExtrinsic._invert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.WorldPlaneOrthographicExtrinsic.compute_rays.html">pysdic.WorldPlaneOrthographicExtrinsic.compute_rays</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/PlanarRigidExtrinsic.html">pysdic.PlanarRigidExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic.from_rt.html">pysdic.PlanarRigidExtrinsic.from_rt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic.from_tmatrix.html">pysdic.PlanarRigidExtrinsic.from_tmatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic.rotation_angle.html">pysdic.PlanarRigidExtrinsic.rotation_angle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic.rotation_matrix.html">pysdic.PlanarRigidExtrinsic.rotation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic.transformation_matrix.html">pysdic.PlanarRigidExtrinsic.transformation_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic.translation_vector.html">pysdic.PlanarRigidExtrinsic.translation_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic._apply.html">pysdic.PlanarRigidExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarRigidExtrinsic._invert.html">pysdic.PlanarRigidExtrinsic._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/PlanarHomographicExtrinsic.html">pysdic.PlanarHomographicExtrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.from_eye.html">pysdic.PlanarHomographicExtrinsic.from_eye</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.from_hmat.html">pysdic.PlanarHomographicExtrinsic.from_hmat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h00.html">pysdic.PlanarHomographicExtrinsic.h00</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h01.html">pysdic.PlanarHomographicExtrinsic.h01</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h02.html">pysdic.PlanarHomographicExtrinsic.h02</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h10.html">pysdic.PlanarHomographicExtrinsic.h10</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h11.html">pysdic.PlanarHomographicExtrinsic.h11</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h12.html">pysdic.PlanarHomographicExtrinsic.h12</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h20.html">pysdic.PlanarHomographicExtrinsic.h20</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.h21.html">pysdic.PlanarHomographicExtrinsic.h21</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic.homography_matrix.html">pysdic.PlanarHomographicExtrinsic.homography_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic._apply.html">pysdic.PlanarHomographicExtrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PlanarHomographicExtrinsic._invert.html">pysdic.PlanarHomographicExtrinsic._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../morphisms/Rays.html">pysdic.Rays</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../implemented_distortion.html">Implemented Distortion Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/NoDistortion.html">pysdic.NoDistortion</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoDistortion._apply.html">pysdic.NoDistortion._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoDistortion._invert.html">pysdic.NoDistortion._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/BrownDistortion.html">pysdic.BrownDistortion</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.set_zero.html">pysdic.BrownDistortion.set_zero</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.k1.html">pysdic.BrownDistortion.k1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.k2.html">pysdic.BrownDistortion.k2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.k3.html">pysdic.BrownDistortion.k3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.k4.html">pysdic.BrownDistortion.k4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.k5.html">pysdic.BrownDistortion.k5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.k6.html">pysdic.BrownDistortion.k6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.p1.html">pysdic.BrownDistortion.p1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.p2.html">pysdic.BrownDistortion.p2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.s1.html">pysdic.BrownDistortion.s1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.s2.html">pysdic.BrownDistortion.s2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.s3.html">pysdic.BrownDistortion.s3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.s4.html">pysdic.BrownDistortion.s4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.tau_x.html">pysdic.BrownDistortion.tau_x</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion.tau_y.html">pysdic.BrownDistortion.tau_y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion._apply.html">pysdic.BrownDistortion._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.BrownDistortion._invert.html">pysdic.BrownDistortion._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/ZernikeDistortion.html">pysdic.ZernikeDistortion</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.set_zero.html">pysdic.ZernikeDistortion.set_zero</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.center.html">pysdic.ZernikeDistortion.center</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.center_x.html">pysdic.ZernikeDistortion.center_x</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.center_y.html">pysdic.ZernikeDistortion.center_y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.n_zernike.html">pysdic.ZernikeDistortion.n_zernike</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.parameter_x_names.html">pysdic.ZernikeDistortion.parameter_x_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.parameter_y_names.html">pysdic.ZernikeDistortion.parameter_y_names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.parameters_x.html">pysdic.ZernikeDistortion.parameters_x</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.parameters_y.html">pysdic.ZernikeDistortion.parameters_y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.polynomials_cache.html">pysdic.ZernikeDistortion.polynomials_cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.radius.html">pysdic.ZernikeDistortion.radius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.radius_x.html">pysdic.ZernikeDistortion.radius_x</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.radius_y.html">pysdic.ZernikeDistortion.radius_y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.get_index.html">pysdic.ZernikeDistortion.get_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.get_Cx.html">pysdic.ZernikeDistortion.get_Cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.get_Cy.html">pysdic.ZernikeDistortion.get_Cy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.set_Cx.html">pysdic.ZernikeDistortion.set_Cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion.set_Cy.html">pysdic.ZernikeDistortion.set_Cy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion._apply.html">pysdic.ZernikeDistortion._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikeDistortion._invert.html">pysdic.ZernikeDistortion._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/ZernikePolynomialsCache.html">pysdic.ZernikePolynomialsCache</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikePolynomialsCache.max_entries.html">pysdic.ZernikePolynomialsCache.max_entries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikePolynomialsCache.n_entries.html">pysdic.ZernikePolynomialsCache.n_entries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikePolynomialsCache.nbytes.html">pysdic.ZernikePolynomialsCache.nbytes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikePolynomialsCache.hits.html">pysdic.ZernikePolynomialsCache.hits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikePolynomialsCache.misses.html">pysdic.ZernikePolynomialsCache.misses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.ZernikePolynomialsCache.clear.html">pysdic.ZernikePolynomialsCache.clear</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../implemented_intrinsic.html">Implemented Intrinsic Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/NoIntrinsic.html">pysdic.NoIntrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoIntrinsic._apply.html">pysdic.NoIntrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.NoIntrinsic._invert.html">pysdic.NoIntrinsic._invert</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/PinholeIntrinsic.html">pysdic.PinholeIntrinsic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.from_matrix.html">pysdic.PinholeIntrinsic.from_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.from_vector.html">pysdic.PinholeIntrinsic.from_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.from_components.html">pysdic.PinholeIntrinsic.from_components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.allow_negative_focal.html">pysdic.PinholeIntrinsic.allow_negative_focal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.focal_length_x.html">pysdic.PinholeIntrinsic.focal_length_x</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.focal_length_y.html">pysdic.PinholeIntrinsic.focal_length_y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.intrinsic_matrix.html">pysdic.PinholeIntrinsic.intrinsic_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.intrinsic_vector.html">pysdic.PinholeIntrinsic.intrinsic_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.principal_point_x.html">pysdic.PinholeIntrinsic.principal_point_x</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.principal_point_y.html">pysdic.PinholeIntrinsic.principal_point_y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.skew.html">pysdic.PinholeIntrinsic.skew</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic.use_skew.html">pysdic.PinholeIntrinsic.use_skew</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic._apply.html">pysdic.PinholeIntrinsic._apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.PinholeIntrinsic._invert.html">pysdic.PinholeIntrinsic._invert</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../implemented_parametrization.html">Implemented Parametrizations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/SubsetParametrization.html">pysdic.SubsetParametrization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization.fixed_values.html">pysdic.SubsetParametrization.fixed_values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization.indices.html">pysdic.SubsetParametrization.indices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization.input_dim.html">pysdic.SubsetParametrization.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization.mask.html">pysdic.SubsetParametrization.mask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization.output_dim.html">pysdic.SubsetParametrization.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization._encode.html">pysdic.SubsetParametrization._encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.SubsetParametrization._decode.html">pysdic.SubsetParametrization._decode</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../morphisms/AffineParametrization.html">pysdic.AffineParametrization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.AffineParametrization.input_dim.html">pysdic.AffineParametrization.input_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.AffineParametrization.modes.html">pysdic.AffineParametrization.modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.AffineParametrization.offset.html">pysdic.AffineParametrization.offset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.AffineParametrization.output_dim.html">pysdic.AffineParametrization.output_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.AffineParametrization._encode.html">pysdic.AffineParametrization._encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphisms/_generated/pysdic.AffineParametrization._decode.html">pysdic.AffineParametrization._decode</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/project_points.html">pysdic.project_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/compose_projection.html">pysdic.compose_projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/ProjectionResult.html">pysdic.ProjectionResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/distort_points.html">pysdic.distort_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/undistort_points.html">pysdic.undistort_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/DistortionResult.html">pysdic.DistortionResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/distort_image.html">pysdic.distort_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/undistort_image.html">pysdic.undistort_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/display_distortion_field.html">pysdic.display_distortion_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/compute_rays.html">pysdic.compute_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/intersect_rays.html">pysdic.intersect_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/compute_optical_flow.html">pysdic.compute_optical_flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/display_optical_flow.html">pysdic.display_optical_flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/display_optical_flow_quiver.html">pysdic.display_optical_flow_quiver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/optimize_transformation_parameters.html">pysdic.optimize_transformation_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/optimize_chains_transformation_parameters.html">pysdic.optimize_chains_transformation_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/build_transformation_term.html">pysdic.build_transformation_term</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/build_chains_transformation_term.html">pysdic.build_chains_transformation_term</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/optimize_transformation_input_points.html">pysdic.optimize_transformation_input_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/optimize_chains_transformation_input_points.html">pysdic.optimize_chains_transformation_input_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/build_transformation_input_points_term.html">pysdic.build_transformation_input_points_term</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computer_vision/build_chains_transformation_input_points_term.html">pysdic.build_chains_transformation_input_points_term</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../fem.html">Finite Element Tools (<code class="docutils literal notranslate"><span class="pre">pysdic.fem</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_shape_functions.html">pysdic.fem.compute_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_segment_2_shape_functions.html">pysdic.fem.compute_segment_2_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_segment_3_shape_functions.html">pysdic.fem.compute_segment_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_triangle_3_shape_functions.html">pysdic.fem.compute_triangle_3_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_triangle_6_shape_functions.html">pysdic.fem.compute_triangle_6_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_quadrangle_4_shape_functions.html">pysdic.fem.compute_quadrangle_4_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_quadrangle_8_shape_functions.html">pysdic.fem.compute_quadrangle_8_shape_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_gauss_points.html">pysdic.fem.get_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_segment_2_gauss_points.html">pysdic.fem.get_segment_2_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_segment_3_gauss_points.html">pysdic.fem.get_segment_3_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_triangle_3_gauss_points.html">pysdic.fem.get_triangle_3_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_triangle_6_gauss_points.html">pysdic.fem.get_triangle_6_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_quadrangle_4_gauss_points.html">pysdic.fem.get_quadrangle_4_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/get_quadrangle_8_gauss_points.html">pysdic.fem.get_quadrangle_8_gauss_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_shape_function_matrix.html">pysdic.fem.assemble_shape_function_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_shape_function_matrix.html">pysdic.fem.compute_shape_function_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/remap_vertices_coordinates.html">pysdic.fem.remap_vertices_coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_jacobian_matrix.html">pysdic.fem.assemble_jacobian_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_jacobian_matrix.html">pysdic.fem.compute_jacobian_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_property_interpolation.html">pysdic.fem.assemble_property_interpolation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_property_interpolation.html">pysdic.fem.compute_property_interpolation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_property_derivative.html">pysdic.fem.assemble_property_derivative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_property_derivative.html">pysdic.fem.compute_property_derivative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_property_projection.html">pysdic.fem.assemble_property_projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_property_projection.html">pysdic.fem.compute_property_projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_displacement_jacobian_matrix.html">pysdic.fem.assemble_displacement_jacobian_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_elements_centers.html">pysdic.fem.compute_elements_centers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_elements_areas.html">pysdic.fem.compute_elements_areas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_integration_points_normals.html">pysdic.fem.compute_integration_points_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_elements_normals.html">pysdic.fem.compute_elements_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_vertices_normals.html">pysdic.fem.compute_vertices_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_strains.html">pysdic.fem.compute_strains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/locate_points.html">pysdic.fem.locate_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/cast_rays.html">pysdic.fem.cast_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/triangle_3_cast_rays.html">pysdic.fem.triangle_3_cast_rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_vertices_adjacency_graph.html">pysdic.fem.assemble_vertices_adjacency_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/assemble_elements_adjacency_graph.html">pysdic.fem.assemble_elements_adjacency_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/bfs_distance.html">pysdic.fem.bfs_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_distance_matrix.html">pysdic.fem.compute_distance_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_vertices_distance_matrix.html">pysdic.fem.compute_vertices_distance_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_elements_distance_matrix.html">pysdic.fem.compute_elements_distance_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/bfs_neighborhood.html">pysdic.fem.bfs_neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_neighborhood.html">pysdic.fem.compute_neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_vertices_neighborhood.html">pysdic.fem.compute_vertices_neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_elements_neighborhood.html">pysdic.fem.compute_elements_neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/remap_integration_points_neighborhood.html">pysdic.fem.remap_integration_points_neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_integration_points_neighborhood.html">pysdic.fem.compute_integration_points_neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fem/compute_neighborhood_statistics.html">pysdic.fem.compute_neighborhood_statistics</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../workflows.html">Workflows (<code class="docutils literal notranslate"><span class="pre">pysdic.workflows</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/create_grid_integration_points.html">pysdic.workflows.create_grid_integration_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/compute_grid_size.html">pysdic.workflows.compute_grid_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/select_visible_integration_points.html">pysdic.workflows.select_visible_integration_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/VisibleIntegrationPointsResult.html">pysdic.workflows.VisibleIntegrationPointsResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/compute_optical_flow_displacement.html">pysdic.workflows.compute_optical_flow_displacement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/OpticalFlowDisplacementResult.html">pysdic.workflows.OpticalFlowDisplacementResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/measure_reference_shape.html">pysdic.workflows.measure_reference_shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/ReferenceShapeResult.html">pysdic.workflows.ReferenceShapeResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/compute_interpolated_displacements.html">pysdic.workflows.compute_interpolated_displacements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/compute_median_filtered_displacements.html">pysdic.workflows.compute_median_filtered_displacements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/compute_elements_residual_rms.html">pysdic.workflows.compute_elements_residual_rms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/ElementsResidualRMSResult.html">pysdic.workflows.ElementsResidualRMSResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/compute_uncertainty.html">pysdic.workflows.compute_uncertainty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/UncertaintyResult.html">pysdic.workflows.UncertaintyResult</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../synthetic.html">Synthetic Images</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">pysdic.compute_wave_speckle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interpolate_texture.html">pysdic.interpolate_texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_lena_image.html">pysdic.get_lena_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_synthetic_image.html">pysdic.generate_synthetic_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="add_gaussian_blur.html">pysdic.add_gaussian_blur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="add_gaussian_noise.html">pysdic.add_gaussian_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="add_poisson_noise.html">pysdic.add_poisson_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="add_salt_and_pepper_noise.html">pysdic.add_salt_and_pepper_noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantize_image.html">pysdic.quantize_image</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../blender.html">Blender Rendering (<code class="docutils literal notranslate"><span class="pre">pysdic-blender</span></code>)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../core.html">Core Tools (internal classes)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../core/PropertyContainer.html">pysdic.core.property_container.PropertyContainer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.from_dict.html">pysdic.core.property_container.PropertyContainer.from_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.N.html">pysdic.core.property_container.PropertyContainer.N</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.force_2d.html">pysdic.core.property_container.PropertyContainer.force_2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.n_properties.html">pysdic.core.property_container.PropertyContainer.n_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.get.html">pysdic.core.property_container.PropertyContainer.get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.set.html">pysdic.core.property_container.PropertyContainer.set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.delete.html">pysdic.core.property_container.PropertyContainer.delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.clear.html">pysdic.core.property_container.PropertyContainer.clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.has.html">pysdic.core.property_container.PropertyContainer.has</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.keys.html">pysdic.core.property_container.PropertyContainer.keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.items.html">pysdic.core.property_container.PropertyContainer.items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.values.html">pysdic.core.property_container.PropertyContainer.values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.get_dtype.html">pysdic.core.property_container.PropertyContainer.get_dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.get_shape.html">pysdic.core.property_container.PropertyContainer.get_shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.get_ndim.html">pysdic.core.property_container.PropertyContainer.get_ndim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.check.html">pysdic.core.property_container.PropertyContainer.check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.validate.html">pysdic.core.property_container.PropertyContainer.validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.flatten.html">pysdic.core.property_container.PropertyContainer.flatten</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.reshape.html">pysdic.core.property_container.PropertyContainer.reshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.copy.html">pysdic.core.property_container.PropertyContainer.copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.concatenate.html">pysdic.core.property_container.PropertyContainer.concatenate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.update.html">pysdic.core.property_container.PropertyContainer.update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.filter.html">pysdic.core.property_container.PropertyContainer.filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.to_dict.html">pysdic.core.property_container.PropertyContainer.to_dict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.to_json_file.html">pysdic.core.property_container.PropertyContainer.to_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.from_json_file.html">pysdic.core.property_container.PropertyContainer.from_json_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.to_hdf5_file.html">pysdic.core.property_container.PropertyContainer.to_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.from_hdf5_file.html">pysdic.core.property_container.PropertyContainer.from_hdf5_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.to_npz_file.html">pysdic.core.property_container.PropertyContainer.to_npz_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../core/_generated/pysdic.core.property_container.PropertyContainer.from_npz_file.html">pysdic.core.property_container.PropertyContainer.from_npz_file</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../core/DisflowConfig.html">pysdic.DisflowConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core/SerializerMixin.html">pysdic.core.serialization.SerializerMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core/JsonSerializerMixin.html">pysdic.core.serialization.JsonSerializerMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core/Hdf5SerializerMixin.html">pysdic.core.serialization.Hdf5SerializerMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core/NpzSerializerMixin.html">pysdic.core.serialization.NpzSerializerMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core/LockableMixin.html">LockableMixin</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../numeric.html">Numerical Tools (<code class="docutils literal notranslate"><span class="pre">pysdic.numeric</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/compute_finite_difference_coefficients.html">pysdic.numeric.compute_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/compute_forward_finite_difference_coefficients.html">pysdic.numeric.compute_forward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/compute_backward_finite_difference_coefficients.html">pysdic.numeric.compute_backward_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/compute_central_finite_difference_coefficients.html">pysdic.numeric.compute_central_finite_difference_coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/assemble_finite_difference_matrix.html">pysdic.numeric.assemble_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/assemble_forward_finite_difference_matrix.html">pysdic.numeric.assemble_forward_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/assemble_backward_finite_difference_matrix.html">pysdic.numeric.assemble_backward_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/assemble_central_finite_difference_matrix.html">pysdic.numeric.assemble_central_finite_difference_matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/apply_forward_finite_difference.html">pysdic.numeric.apply_forward_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/apply_backward_finite_difference.html">pysdic.numeric.apply_backward_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/apply_central_finite_difference.html">pysdic.numeric.apply_central_finite_difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/fit_polynomial.html">pysdic.numeric.fit_polynomial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/evaluate_polynomial.html">pysdic.numeric.evaluate_polynomial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../numeric/polynomial_predict.html">pysdic.numeric.polynomial_predict</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cordin.html">CORDIN Captures (<code class="docutils literal notranslate"><span class="pre">pysdic.cordin</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cordin/CORDIN.html">pysdic.cordin.CORDIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cordin/load_capture_info.html">pysdic.cordin.load_capture_info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cordin/get_capture_parameters.html">pysdic.cordin.get_capture_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cordin/get_camera_details.html">pysdic.cordin.get_camera_details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cordin/get_frames.html">pysdic.cordin.get_frames</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../synthetic.html" class="nav-link">Synthetic Images</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.compute_wave_speckle</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pysdic-compute-wave-speckle">
+<h1>pysdic.compute_wave_speckle<a class="headerlink" href="#pysdic-compute-wave-speckle" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysdic.compute_wave_speckle">
+<span class="sig-name descname"><span class="pre">compute_wave_speckle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_waves</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gray_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20.0,</span> <span class="pre">235.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pysdic/synthetic/speckle.html#compute_wave_speckle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.compute_wave_speckle" title="Link to this definition">#</a></dt>
+<dd><p>Compute the gray levels of a synthetic speckle pattern at given points.</p>
+<p>The pattern is a sum of <span class="math notranslate nohighlight">\(M\)</span> plane waves of the same wavelength
+<span class="math notranslate nohighlight">\(\lambda\)</span>, random directions and random phases, saturated by a hyperbolic
+tangent to give dark and bright spots:</p>
+<div class="math notranslate nohighlight">
+\[S(\vec{x}) = \sum_{j=1}^{M} \cos\bigl(\vec{k}_j \cdot \vec{x} + \varphi_j\bigr),
+\qquad \|\vec{k}_j\| = \frac{2\pi}{\lambda}\]</div>
+<div class="math notranslate nohighlight">
+\[g(\vec{x}) = \frac{g_{min} + g_{max}}{2}
++ \frac{g_{max} - g_{min}}{2} \tanh\left(\frac{S(\vec{x})}{\sqrt{M}}\right)\]</div>
+<p>The division by <span class="math notranslate nohighlight">\(\sqrt{M}\)</span> keeps the standard deviation of <span class="math notranslate nohighlight">\(S\)</span> close to
+1 whatever the number of waves. The gray levels stay strictly between
+<span class="math notranslate nohighlight">\(g_{min}\)</span> and <span class="math notranslate nohighlight">\(g_{max}\)</span>.</p>
+<p>The pattern is a smooth function of the coordinates: evaluated at the reference
+coordinates of material points, it gives a texture attached to the material that
+can be rendered in any camera (synthetic images for DIC tests).</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">gradient=True</span></code>, the exact gradient of the gray levels is also returned (e.g.
+as a reference to check the interpolation of an image):</p>
+<div class="math notranslate nohighlight">
+\[\nabla g(\vec{x}) = -\frac{g_{max} - g_{min}}{2 \sqrt{M}}
+\left(1 - \tanh^2\left(\frac{S(\vec{x})}{\sqrt{M}}\right)\right)
+\sum_{j=1}^{M} \sin\bigl(\vec{k}_j \cdot \vec{x} + \varphi_j\bigr) \, \vec{k}_j\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The speckle spots have a size of about <span class="math notranslate nohighlight">\(\lambda / 2\)</span>. For DIC, aim at 3 to 5
+pixels per spot in the images, i.e. a wavelength of about 6 to 10 pixels once
+projected: with points in material units seen with a magnification of <span class="math notranslate nohighlight">\(m\)</span>
+pixels per unit, choose <span class="math notranslate nohighlight">\(\lambda \approx 6 / m\)</span> to <span class="math notranslate nohighlight">\(10 / m\)</span>. Smaller
+spots are aliased by the pixels (see the <code class="docutils literal notranslate"><span class="pre">n_samples</span></code> of
+<a class="reference internal" href="generate_synthetic_image.html#pysdic.generate_synthetic_image" title="pysdic.generate_synthetic_image"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.generate_synthetic_image()</span></code></a>), larger spots reduce the spatial
+resolution of the measurement.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The waves are drawn from <code class="docutils literal notranslate"><span class="pre">seed</span></code> at each call: the same <code class="docutils literal notranslate"><span class="pre">seed</span></code>, <code class="docutils literal notranslate"><span class="pre">n_waves</span></code>
+and point dimension <span class="math notranslate nohighlight">\(D\)</span> always give the same pattern. Use <code class="docutils literal notranslate"><span class="pre">seed=None</span></code>
+for a different pattern at each call.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The directions of the waves are isotropic in <span class="math notranslate nohighlight">\(\mathbb{R}^D\)</span>. For a
+surface lying in a plane <span class="math notranslate nohighlight">\(z = c\)</span>, give only the in-plane coordinates
+(<code class="docutils literal notranslate"><span class="pre">points[...,</span> <span class="pre">:2]</span></code>): with 3D points, the waves with a component along
+<span class="math notranslate nohighlight">\(z\)</span> have a longer apparent wavelength in the plane.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>ArrayLike</em>) – Coordinates of the points, an array of shape <span class="math notranslate nohighlight">\((\dots, D)\)</span> with
+<span class="math notranslate nohighlight">\(D \in \{1, 2, 3\}\)</span>. The values must be finite.</p></li>
+<li><p><strong>wavelength</strong> (Real, optional (default: <code class="docutils literal notranslate"><span class="pre">0.25</span></code>)) – Wavelength <span class="math notranslate nohighlight">\(\lambda\)</span> of the waves, in the unit of <code class="docutils literal notranslate"><span class="pre">points</span></code>. It sets the
+size of the speckle spots (about <span class="math notranslate nohighlight">\(\lambda / 2\)</span>). Must be finite and
+positive.</p></li>
+<li><p><strong>n_waves</strong> (Integral, optional (default: <code class="docutils literal notranslate"><span class="pre">40</span></code>)) – Number of waves <span class="math notranslate nohighlight">\(M\)</span>, at least 1. More waves give a more irregular
+pattern.</p></li>
+<li><p><strong>gray_levels</strong> (Tuple[Real, Real], optional (default: <code class="docutils literal notranslate"><span class="pre">(20.0,</span> <span class="pre">235.0)</span></code>)) – Bounds <span class="math notranslate nohighlight">\((g_{min}, g_{max})\)</span> of the gray levels, finite with
+<span class="math notranslate nohighlight">\(g_{min} &lt; g_{max}\)</span>.</p></li>
+<li><p><strong>seed</strong> (Integral, optional (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>)) – Seed of the random generator (<code class="docutils literal notranslate"><span class="pre">numpy.random.default_rng</span></code>). If None, the
+pattern is different at each call.</p></li>
+<li><p><strong>gradient</strong> (bool, optional (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>)) – Whether to also return the gradient of the gray levels with respect to the
+coordinates of the points.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>gray_levels</strong> (<em>numpy.ndarray</em>) – The gray levels, a float array of shape <span class="math notranslate nohighlight">\((\dots)\)</span>.</p></li>
+<li><p><strong>gradient</strong> (<em>numpy.ndarray</em>) – Only with <code class="docutils literal notranslate"><span class="pre">gradient=True</span></code>: the gradient of the gray levels, a float array of
+shape <span class="math notranslate nohighlight">\((\dots, D)\)</span> (in gray levels per unit of <code class="docutils literal notranslate"><span class="pre">points</span></code>).</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.15)"><strong>TypeError</strong></a> – If an input has a wrong type.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">points</span></code> has a wrong shape or non-finite values, or if a parameter has
+    a wrong value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><em>Tuple</em></a>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Texture attached to the reference coordinates of the vertices of a plane mesh:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_wave_speckle</span>
+
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">compute_wave_speckle</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">image</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># (200, 200)</span>
+
+<span class="n">image</span><span class="p">,</span> <span class="n">image_gradient</span> <span class="o">=</span> <span class="n">compute_wave_speckle</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">image_gradient</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># (200, 200, 2), derivatives along x and y</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../synthetic.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Synthetic Images</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="interpolate_texture.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pysdic.interpolate_texture</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysdic.compute_wave_speckle"><code class="docutils literal notranslate"><span class="pre">compute_wave_speckle()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/api/synthetic/compute_wave_speckle.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

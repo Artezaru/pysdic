@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.geometry.connectivity &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/connectivity';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.geometry.connectivity</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.geometry.connectivity</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.property_container</span><span class="w"> </span><span class="kn">import</span> <span class="n">PropertyContainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.lockable</span><span class="w"> </span><span class="kn">import</span> <span class="n">LockableMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">JsonSerializerMixin</span><span class="p">,</span>
+    <span class="n">NpzSerializerMixin</span><span class="p">,</span>
+    <span class="n">Hdf5SerializerMixin</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_validate_bool</span><span class="p">,</span>
+    <span class="n">_validate_real</span><span class="p">,</span>
+    <span class="n">_validate_integer</span><span class="p">,</span>
+    <span class="n">_validate_tolerances</span><span class="p">,</span>
+    <span class="n">_as_array</span><span class="p">,</span>
+    <span class="n">_as_integer_array</span><span class="p">,</span>
+    <span class="n">_as_bool_mask</span><span class="p">,</span>
+    <span class="n">_as_index_array</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..fem._implemented_element_type</span><span class="w"> </span><span class="kn">import</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..fem._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_element_type</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_element_type</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Read an element type stored by a serializer: a ``str``, ``bytes`` or a numpy array</span>
+<span class="sd">    with one string (0-d or 1-element, as written by NPZ or HDF5).</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        Internal use only.</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"U"</span><span class="p">,</span> <span class="s2">"S"</span><span class="p">,</span> <span class="s2">"O"</span><span class="p">}:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The 'element_type' entry must be a string or an array with one string. "</span>
+                <span class="sa">f</span><span class="s2">"Got an array with dtype </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2"> and shape </span><span class="si">{</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bytes_</span><span class="p">)):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"The 'element_type' entry must be a string. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="Connectivity">
+<a class="viewcode-back" href="../../../api/geometry/Connectivity.html#pysdic.Connectivity">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Connectivity</span><span class="p">(</span><span class="n">LockableMixin</span><span class="p">,</span> <span class="n">JsonSerializerMixin</span><span class="p">,</span> <span class="n">NpzSerializerMixin</span><span class="p">,</span> <span class="n">Hdf5SerializerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    The connectivity of a mesh: :math:`N_e` elements, each defined by the indices of</span>
+<span class="sd">    its :math:`N_{vpe}` vertices.</span>
+
+<span class="sd">    Each element can carry additional properties (material, labels, ...) stored in a</span>
+<span class="sd">    :class:`pysdic.core.property_container.PropertyContainer`, accessible through the ``properties`` attribute</span>
+<span class="sd">    or directly with ``connectivity[name]``.</span>
+
+<span class="sd">    If ``element_type`` is given, the connectivity is associated with one of the</span>
+<span class="sd">    element types implemented in :mod:`pysdic.fem` (shape functions, Gauss points,</span>
+<span class="sd">    VTK export, ...):</span>
+
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | Element Type        | Description                                                       |</span>
+<span class="sd">    +=====================+===================================================================+</span>
+<span class="sd">    | "segment_2"         | 2-node line element                                               |</span>
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | "segment_3"         | 3-node line element                                               |</span>
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | "triangle_3"        | 3-node triangular element                                         |</span>
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | "triangle_6"        | 6-node triangular element                                         |</span>
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | "quadrangle_4"      | 4-node quadrilateral element                                      |</span>
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | "quadrangle_8"      | 8-node quadrilateral element                                      |</span>
+<span class="sd">    +---------------------+-------------------------------------------------------------------+</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Only the number of vertices per element is checked against ``element_type``:</span>
+<span class="sd">        the ordering of the vertices inside each element is the responsibility of the</span>
+<span class="sd">        user.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The vertex indices are copied when they are set and stored as a</span>
+<span class="sd">        ``numpy.int64`` array. The ``elements`` attribute returns a read-only view: to</span>
+<span class="sd">        change the elements, assign a new array.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The properties are stored in a :class:`pysdic.core.property_container.PropertyContainer` with</span>
+<span class="sd">        ``force_2d=True``, i.e. with shape :math:`(N_e, P)`. A container given by the</span>
+<span class="sd">        user with other settings is accepted, but some operations (like VTK export) may</span>
+<span class="sd">        behave unexpectedly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elements: ArrayLike</span>
+<span class="sd">        An integer array of shape :math:`(N_e, N_{vpe})` with the non-negative vertex</span>
+<span class="sd">        indices of each element. Floats are accepted only if they are integral (no</span>
+<span class="sd">        truncation). A 1D array of shape :math:`(N_e,)` is accepted if</span>
+<span class="sd">        ``n_vertices_per_element=1``.</span>
+
+<span class="sd">    n_vertices_per_element: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The number of vertices per element :math:`N_{vpe}`. By default, it is inferred</span>
+<span class="sd">        from the shape of ``elements``. If given, it must match this shape.</span>
+
+<span class="sd">    properties: Optional[Union[Dict[str, ArrayLike], PropertyContainer]], optional</span>
+<span class="sd">        The properties of the elements:</span>
+
+<span class="sd">        - a dictionary mapping names to arrays of shape :math:`(N_e, \dots)`, which</span>
+<span class="sd">          are copied into a new :class:`pysdic.core.property_container.PropertyContainer`,</span>
+<span class="sd">        - or a :class:`pysdic.core.property_container.PropertyContainer` with :math:`N = N_e`, which is</span>
+<span class="sd">          **shared** (not copied).</span>
+
+<span class="sd">    element_type: Optional[str], optional (default: ``None``)</span>
+<span class="sd">        The type of the elements (case insensitive, see the table above). Its number</span>
+<span class="sd">        of vertices must match :math:`N_{vpe}`.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``len(connectivity)`` gives the number of elements :math:`N_e`, while</span>
+<span class="sd">    ``connectivity[name]``, ``name in connectivity`` and ``iter(connectivity)`` refer</span>
+<span class="sd">    to the properties.</span>
+
+<span class="sd">    The methods never modify the connectivity in place: the methods that change the</span>
+<span class="sd">    elements (:meth:`filter_elements`, :meth:`keep_elements_by_index`, ...) return a new</span>
+<span class="sd">    connectivity. Only the ``elements`` and ``element_type`` setters (same number of</span>
+<span class="sd">    elements) and the properties modify an existing connectivity.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        A connectivity can be locked by an object of the package that owns it (for example the</span>
+<span class="sd">        mesh of an SDIC analysis, see :class:`pysdic.core.lockable.LockableMixin`): the</span>
+<span class="sd">        setters of ``elements`` and ``element_type`` then raise a :class:`RuntimeError` explaining why. The</span>
+<span class="sd">        properties can always be modified. A copy (``copy``) is always unlocked.</span>
+
+<span class="sd">    """</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"_element_type"</span><span class="p">,</span> <span class="s2">"_elements"</span><span class="p">,</span> <span class="s2">"_properties"</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">elements</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">n_vertices_per_element</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">PropertyContainer</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">element_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_vertices_per_element</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span>
+            <span class="n">n_vertices_per_element</span><span class="p">,</span> <span class="s2">"n_vertices_per_element"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_elements</span><span class="p">(</span><span class="n">elements</span><span class="p">,</span> <span class="n">n_vertices_per_element</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">properties</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">PropertyContainer</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">force_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">PropertyContainer</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">N</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"The number of entities in 'properties' must match the number of "</span>
+                    <span class="sa">f</span><span class="s2">"elements. Got N=</span><span class="si">{</span><span class="n">properties</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2"> for properties and N_e=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2"> for elements."</span>
+                <span class="p">)</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">properties</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">PropertyContainer</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span> <span class="n">force_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'properties' must be None, a dictionary of arrays or a "</span>
+                <span class="sa">f</span><span class="s2">"PropertyContainer. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span> <span class="o">=</span> <span class="n">props</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element_type</span> <span class="o">=</span> <span class="n">element_type</span>  <span class="c1"># setter: validation and N_vpe consistency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_elements</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">n_vertices_per_element</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Copy the input to a (N_e, N_vpe) int64 array of non-negative indices.</span>
+        <span class="c1"># 1D input is only accepted for N_vpe = 1.</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">_as_integer_array</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span> <span class="s2">"elements"</span><span class="p">,</span>
+            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_vertices_per_element</span><span class="p">),</span>
+            <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_e, N_vpe)"</span> <span class="k">if</span> <span class="n">n_vertices_per_element</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"(N_e, </span><span class="si">{</span><span class="n">n_vertices_per_element</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+            <span class="n">accept_1d_as_column</span><span class="o">=</span><span class="p">(</span><span class="n">n_vertices_per_element</span> <span class="o">==</span> <span class="mi">1</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'elements' must have at least one vertex per element."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">elements</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">elements</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'elements' must contain non-negative vertex indices. "</span>
+                <span class="sa">f</span><span class="s2">"Got a minimum index of </span><span class="si">{</span><span class="n">elements</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">elements</span>
+
+<div class="viewcode-block" id="Connectivity.validate">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.validate.html#pysdic.Connectivity.validate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Validate the integrity of the connectivity.</span>
+
+<span class="sd">        The following conditions are checked:</span>
+
+<span class="sd">        - The elements are a ``numpy.int64`` array of shape :math:`(N_e, N_{vpe})` with</span>
+<span class="sd">          :math:`N_{vpe} \geq 1` and non-negative indices.</span>
+<span class="sd">        - If ``element_type`` is set, it is an implemented type with :math:`N_{vpe}`</span>
+<span class="sd">          vertices.</span>
+<span class="sd">        - The properties are a :class:`pysdic.core.property_container.PropertyContainer` with</span>
+<span class="sd">          :math:`N = N_e`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recursive: bool, optional (default: ``True``)</span>
+<span class="sd">            If True, the property container is also validated (see</span>
+<span class="sd">            :meth:`pysdic.core.property_container.PropertyContainer.validate`).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If an attribute has a wrong type.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If an attribute has a wrong shape or value.</span>
+
+<span class="sd">        """</span>
+        <span class="n">recursive</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">recursive</span><span class="p">,</span> <span class="s2">"recursive"</span><span class="p">)</span>
+
+        <span class="c1"># --- elements must be a 2D int64 array of shape (Ne, Nvpe) with indices &gt;= 0 ---</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"[Connectivity validate] elements should be a numpy ndarray."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[Connectivity validate] elements should be a 2D array of shape (Ne, Nvpe) "</span>
+                <span class="sa">f</span><span class="s2">"with Nvpe &gt;= 1. Got shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[Connectivity validate] elements should have dtype int64. "</span>
+                <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[Connectivity validate] elements contain negative vertex indices. "</span>
+                <span class="sa">f</span><span class="s2">"Minimum index found: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+        <span class="c1"># --- element type consistency ---</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"[Connectivity validate] Element type '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="si">}</span><span class="s2">' is not "</span>
+                    <span class="sa">f</span><span class="s2">"implemented. Supported types are: "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">."</span>
+                <span class="p">)</span>
+            <span class="n">expected_N_vpe</span> <span class="o">=</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="p">][</span><span class="s2">"expected_N_vpe"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span> <span class="o">!=</span> <span class="n">expected_N_vpe</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"[Connectivity validate] Current elements have "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="si">}</span><span class="s2"> vertices per element, which does not "</span>
+                    <span class="sa">f</span><span class="s2">"match the expected </span><span class="si">{</span><span class="n">expected_N_vpe</span><span class="si">}</span><span class="s2"> for element type "</span>
+                    <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="si">}</span><span class="s2">'."</span>
+                <span class="p">)</span>
+
+        <span class="c1"># --- properties must be a PropertyContainer with the same number of elements ---</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">,</span> <span class="n">PropertyContainer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"[Connectivity validate] properties should be a PropertyContainer."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">N</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[Connectivity validate] The number of entities in properties should "</span>
+                <span class="sa">f</span><span class="s2">"match the number of elements. Got N=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2"> for properties "</span>
+                <span class="sa">f</span><span class="s2">"and N_e=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2"> for elements."</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span></div>
+
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># API interface</span>
+    <span class="c1"># ==========================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The vertex indices of the elements, an array of shape</span>
+<span class="sd">        :math:`(N_e, N_{vpe})`.</span>
+
+<span class="sd">        The getter returns a read-only view. The setter copies the given array, whose</span>
+<span class="sd">        shape must be :math:`(N_e, N_{vpe})`: to change the number of elements, use</span>
+<span class="sd">        :meth:`filter_elements` or :meth:`concatenate` (which return a new connectivity).</span>
+<span class="sd">        The setter is refused if the connectivity is locked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(N_e, N_{vpe})` with non-negative</span>
+<span class="sd">            indices. A 1D array of shape :math:`(N_e,)` is accepted if</span>
+<span class="sd">            :math:`N_{vpe} = 1`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A read-only view of shape :math:`(N_e, N_{vpe})` on the elements.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the input does not contain integers.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If the shape of the input is not :math:`(N_e, N_{vpe})` or if it contains</span>
+<span class="sd">            negative indices.</span>
+
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the connectivity is locked (see ``locked_message``).</span>
+
+<span class="sd">        """</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="nd">@elements</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_unlocked</span><span class="p">(</span><span class="s2">"set the elements"</span><span class="p">)</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_elements</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'elements' must keep the number of elements N_e=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="n">elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> elements. Consider using the filter/concatenate "</span>
+                <span class="sa">f</span><span class="s2">"methods to change the number of elements."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">=</span> <span class="n">elements</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of elements :math:`N_e`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of elements.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Return the number of elements :math:`N_e`."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_vertices_per_element</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of vertices per element :math:`N_{vpe}`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of vertices per element.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">element_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The type of the elements (see the table in</span>
+<span class="sd">        :class:`pysdic.Connectivity`), or ``None`` if no type is associated.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: Optional[str]</span>
+<span class="sd">            An implemented element type (case insensitive) with :math:`N_{vpe}`</span>
+<span class="sd">            vertices, or ``None``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[str]</span>
+<span class="sd">            The element type in lower case, or ``None``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the value is not a string or ``None``.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If the type is not implemented or if its number of vertices does not match</span>
+<span class="sd">            :math:`N_{vpe}`.</span>
+
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the connectivity is locked (see ``locked_message``).</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span>
+
+    <span class="nd">@element_type</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">element_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_unlocked</span><span class="p">(</span><span class="s2">"set the element type"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">_validate_element_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">expected_N_vpe</span> <span class="o">=</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span><span class="p">[</span><span class="n">value</span><span class="p">][</span><span class="s2">"expected_N_vpe"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span> <span class="o">!=</span> <span class="n">expected_N_vpe</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Current elements have </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="si">}</span><span class="s2"> vertices per "</span>
+                    <span class="sa">f</span><span class="s2">"element, which does not match the expected </span><span class="si">{</span><span class="n">expected_N_vpe</span><span class="si">}</span><span class="s2"> for "</span>
+                    <span class="sa">f</span><span class="s2">"element type '</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">'."</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_element_type_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="c1"># Property of the element type in the fem mapping, or None if no type is set</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">_MAPPING_ELEMENT_TYPE_TO_PROPERTIES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="p">][</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_topological_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The topological dimension :math:`K` of the elements (1 for segments, 2</span>
+<span class="sd">        for triangles and quadrangles), or ``None`` if ``element_type`` is not set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[int]</span>
+<span class="sd">            The topological dimension of the elements.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type_property</span><span class="p">(</span><span class="s2">"expected_K"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The shape :math:`(N_e, N_{vpe})` of the elements.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[int, int]</span>
+<span class="sd">            The number of elements and the number of vertices per element.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PropertyContainer</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The properties of the elements.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.core.property_container.PropertyContainer`</span>
+<span class="sd">            The property container (not a copy).</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``connectivity.properties[key]``."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``connectivity.properties[key] = value``."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``del connectivity.properties[key]``."""</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``key in connectivity.properties``."""</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``iter(connectivity.properties)`` (iterates over the names)."""</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of properties of the elements.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of properties.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">n_properties</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_meshio_cell_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># meshio cell type of the elements, or None if element_type is not set</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type_property</span><span class="p">(</span><span class="s2">"meshio_cell_type"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_vtk_cell_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># VTK cell type of the elements, or None if element_type is not set</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type_property</span><span class="p">(</span><span class="s2">"vtk_cell_type"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_expected_N_vpe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># Number of vertices of the element type, or None if element_type is not set</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type_property</span><span class="p">(</span><span class="s2">"expected_N_vpe"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_expected_K</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># Same as n_topological_dimensions (kept for internal callers)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type_property</span><span class="p">(</span><span class="s2">"expected_K"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Connectivity(n_elements=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2">, "</span>
+            <span class="sa">f</span><span class="s2">"n_vertices_per_element=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="si">}</span><span class="s2">)"</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  - Element Type: '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="si">}</span><span class="s2">'"</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  - Property: '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">' with shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">get_shape</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># I/O Methods</span>
+    <span class="c1"># ==========================</span>
+<div class="viewcode-block" id="Connectivity.from_array">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.from_array.html#pysdic.Connectivity.from_array">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_array</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">elements</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">PropertyContainer</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">element_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a connectivity from an array of elements.</span>
+
+<span class="sd">        Equivalent to ``Connectivity(elements, properties=properties,</span>
+<span class="sd">        element_type=element_type)``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        elements: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(N_e, N_{vpe})` with the vertex indices.</span>
+
+<span class="sd">        properties: Optional[Union[Dict[str, ArrayLike], PropertyContainer]], optional</span>
+<span class="sd">            The properties of the elements (see :class:`pysdic.Connectivity`).</span>
+
+<span class="sd">        element_type: Optional[str], optional (default: ``None``)</span>
+<span class="sd">            The type of the elements.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            The new connectivity.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">elements</span><span class="o">=</span><span class="n">elements</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="n">element_type</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.to_array">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.to_array.html#pysdic.Connectivity.to_array">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_array</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Return a copy of the elements.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A writable array of shape :math:`(N_e, N_{vpe})`.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.from_dict">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.from_dict.html#pysdic.Connectivity.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">load_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">element_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a connectivity from a dictionary.</span>
+
+<span class="sd">        The dictionary must contain the key ``"elements"`` with an array of shape</span>
+<span class="sd">        :math:`(N_e, N_{vpe})`. The properties are read from the keys</span>
+<span class="sd">        ``"_property/{property_name}"``, and the element type from the optional key</span>
+<span class="sd">        ``"element_type"`` (a string, or an array with one string as written by the NPZ</span>
+<span class="sd">        and HDF5 serializers).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The dictionary is flat (one level), as required by the NPZ format. See</span>
+<span class="sd">            :class:`pysdic.core.serialization.NpzSerializerMixin`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: Dict[str, Any]</span>
+<span class="sd">            The dictionary to read.</span>
+
+<span class="sd">        load_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the properties are ignored.</span>
+
+<span class="sd">        element_type: Optional[str], optional (default: ``None``)</span>
+<span class="sd">            The expected element type. If the dictionary also defines one, both must</span>
+<span class="sd">            be the same.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            The new connectivity.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'data' must be a dictionary. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"elements"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Input dictionary must contain a key 'elements' with shape (N_e, N_vpe)."</span>
+            <span class="p">)</span>
+        <span class="n">load_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">load_properties</span><span class="p">,</span> <span class="s2">"load_properties"</span><span class="p">)</span>
+
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">load_properties</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s2">"_property/"</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+                    <span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">element_type</span> <span class="o">=</span> <span class="n">_validate_element_type</span><span class="p">(</span><span class="n">element_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"element_type"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">read_element_type</span> <span class="o">=</span> <span class="n">_validate_element_type</span><span class="p">(</span><span class="n">_read_element_type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"element_type"</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">read_element_type</span> <span class="o">!=</span> <span class="n">element_type</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"The provided element_type '</span><span class="si">{</span><span class="n">element_type</span><span class="si">}</span><span class="s2">' does not match the "</span>
+                    <span class="sa">f</span><span class="s2">"element_type '</span><span class="si">{</span><span class="n">read_element_type</span><span class="si">}</span><span class="s2">' in the input dictionary."</span>
+                <span class="p">)</span>
+            <span class="n">element_type</span> <span class="o">=</span> <span class="n">read_element_type</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">elements</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"elements"</span><span class="p">],</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="n">element_type</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.to_dict">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.to_dict.html#pysdic.Connectivity.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">save_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Convert the connectivity to a flat dictionary.</span>
+
+<span class="sd">        The elements are stored under the key ``"elements"``, the properties under the</span>
+<span class="sd">        keys ``"_property/{property_name}"`` and the element type (if set) under the key</span>
+<span class="sd">        ``"element_type"``. All the arrays are copies.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The dictionary is flat (one level), as required by the NPZ format. See</span>
+<span class="sd">            :class:`pysdic.core.serialization.NpzSerializerMixin`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        save_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the properties are not included.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The dictionary representation of the connectivity.</span>
+
+<span class="sd">        """</span>
+        <span class="n">save_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">save_properties</span><span class="p">,</span> <span class="s2">"save_properties"</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"elements"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">copy</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="n">save_properties</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">"_property/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"element_type"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Structure Methods</span>
+    <span class="c1"># =======================</span>
+<div class="viewcode-block" id="Connectivity.concatenate">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.concatenate.html#pysdic.Connectivity.concatenate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Connectivity</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Concatenate two connectivities (the elements of ``other`` come after).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The vertex indices are not shifted: both connectivities must refer to the</span>
+<span class="sd">            same set of vertices.</span>
+
+<span class="sd">        The element type of the result is the common element type of both</span>
+<span class="sd">        connectivities, or ``None`` if one of them has no type.</span>
+
+<span class="sd">        The properties are concatenated with :meth:`pysdic.core.property_container.PropertyContainer.concatenate`:</span>
+<span class="sd">        a property present in only one connectivity is completed with ``numpy.nan``</span>
+<span class="sd">        for the elements of the other one (integer and boolean properties are then</span>
+<span class="sd">        promoted to float).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: :class:`pysdic.Connectivity`</span>
+<span class="sd">            The connectivity to append, with the same :math:`N_{vpe}`.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new connectivity has no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            A new connectivity with :math:`N_e + N_e^{other}` elements.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the numbers of vertices per element differ, or if both connectivities</span>
+<span class="sd">            have different element types.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Connectivity</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'other' must be a Connectivity. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">propagate_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_properties</span><span class="p">,</span> <span class="s2">"propagate_properties"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Connectivity instances must have the same number of vertices per "</span>
+                <span class="sa">f</span><span class="s2">"element to be concatenated. Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="si">}</span><span class="s2"> and "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">_element_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">_element_type</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Connectivity instances with different element types cannot be "</span>
+                <span class="sa">f</span><span class="s2">"concatenated. Got '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="si">}</span><span class="s2">' and '</span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">_element_type</span><span class="si">}</span><span class="s2">'."</span>
+            <span class="p">)</span>
+        <span class="n">element_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_element_type</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="n">concatenated_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">propagate_properties</span><span class="p">:</span>
+            <span class="n">concatenated_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                <span class="n">other</span><span class="o">.</span><span class="n">_properties</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">elements</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_elements</span><span class="p">)),</span>
+            <span class="n">n_vertices_per_element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">concatenated_properties</span><span class="p">,</span>
+            <span class="n">element_type</span><span class="o">=</span><span class="n">element_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.copy">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.copy.html#pysdic.Connectivity.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">copy_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a copy of the connectivity (with the same element type). The copy is</span>
+<span class="sd">        always unlocked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        copy_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the copy has no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            A new connectivity with copies of the elements and properties.</span>
+
+<span class="sd">        """</span>
+        <span class="n">copy_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">copy_properties</span><span class="p">,</span> <span class="s2">"copy_properties"</span><span class="p">)</span>
+
+        <span class="n">copied_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">copy_properties</span><span class="p">:</span>
+            <span class="n">copied_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">elements</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">,</span>  <span class="c1"># copied by the constructor</span>
+            <span class="n">n_vertices_per_element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">copied_properties</span><span class="p">,</span>
+            <span class="n">element_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.filter_elements">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.filter_elements.html#pysdic.Connectivity.filter_elements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_elements</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mask</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Keep only the elements selected by a boolean mask (the element type is kept).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask: ArrayLike</span>
+<span class="sd">            A boolean array of shape :math:`(N_e,)`. The elements with a True value</span>
+<span class="sd">            are kept. A mask with only False values gives an empty connectivity.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new connectivity has no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            The filtered connectivity.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the mask is not a boolean array (an integer array is rejected: use</span>
+<span class="sd">            :meth:`keep_elements_by_index` for indices).</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If the mask does not have the shape :math:`(N_e,)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">_as_bool_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">)</span>
+        <span class="n">propagate_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_properties</span><span class="p">,</span> <span class="s2">"propagate_properties"</span><span class="p">)</span>
+
+        <span class="n">new_elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>  <span class="c1"># advanced indexing: copy</span>
+
+        <span class="n">new_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">propagate_properties</span><span class="p">:</span>
+            <span class="n">new_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">elements</span><span class="o">=</span><span class="n">new_elements</span><span class="p">,</span>
+            <span class="n">n_vertices_per_element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vertices_per_element</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">new_properties</span><span class="p">,</span>
+            <span class="n">element_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.remove_elements_by_index">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.remove_elements_by_index.html#pysdic.Connectivity.remove_elements_by_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_elements_by_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Remove the elements with the given indices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the elements to</span>
+<span class="sd">            remove, in :math:`[0, N_e)`. Duplicates are allowed.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new connectivity has no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            The connectivity without the given elements.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the indices are not integers.</span>
+
+<span class="sd">        IndexError</span>
+<span class="sd">            If an index is out of :math:`[0, N_e)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_elements</span><span class="p">(</span>
+            <span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.keep_elements_by_index">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.keep_elements_by_index.html#pysdic.Connectivity.keep_elements_by_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_elements_by_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Connectivity</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Keep only the elements with the given indices.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The elements keep their original order and duplicated indices are ignored:</span>
+<span class="sd">            ``keep_elements_by_index([2, 0])`` returns the elements 0 and 2, in this</span>
+<span class="sd">            order.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the elements to</span>
+<span class="sd">            keep, in :math:`[0, N_e)`.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new connectivity has no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.Connectivity`</span>
+<span class="sd">            The connectivity with only the given elements.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the indices are not integers.</span>
+
+<span class="sd">        IndexError</span>
+<span class="sd">            If an index is out of :math:`[0, N_e)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_elements</span><span class="p">(</span>
+            <span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># Comparison and checks</span>
+    <span class="c1"># ==========================</span>
+<div class="viewcode-block" id="Connectivity.all_close">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.all_close.html#pysdic.Connectivity.all_close">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">all_close</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Connectivity</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">rtol</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1e-05</span><span class="p">,</span>
+        <span class="n">atol</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1e-08</span><span class="p">,</span>
+        <span class="n">equal_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">ordered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check if the elements are equal to the elements of another connectivity (see</span>
+<span class="sd">        ``numpy.allclose``).</span>
+
+<span class="sd">        Connectivities with different shapes are never close. The element types and</span>
+<span class="sd">        the properties are not compared.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            With ``ordered=False``, the elements (rows) are sorted before the</span>
+<span class="sd">            comparison, but the order of the vertices inside each element still</span>
+<span class="sd">            matters: ``[0, 1, 2]`` and ``[1, 2, 0]`` are different elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: Union[:class:`pysdic.Connectivity`, ArrayLike]</span>
+<span class="sd">            Another connectivity or an array of shape :math:`(N_e, N_{vpe})`.</span>
+
+<span class="sd">        rtol: Real, optional (default: ``1e-05``)</span>
+<span class="sd">            The relative tolerance (non-negative and finite).</span>
+
+<span class="sd">        atol: Real, optional (default: ``1e-08``)</span>
+<span class="sd">            The absolute tolerance (non-negative and finite).</span>
+
+<span class="sd">        equal_nan: bool, optional (default: ``True``)</span>
+<span class="sd">            If True, NaN values are considered equal (only relevant for a float array</span>
+<span class="sd">            ``other``).</span>
+
+<span class="sd">        ordered: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the order of the elements is ignored (see the note above).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if all the elements are close, False otherwise.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            :linenos:</span>
+
+<span class="sd">            import numpy</span>
+<span class="sd">            from pysdic import Connectivity</span>
+
+<span class="sd">            connectivity = Connectivity([[0, 1, 2], [1, 3, 2]])</span>
+
+<span class="sd">            print(connectivity.all_close([[1, 3, 2], [0, 1, 2]]))                 # False</span>
+<span class="sd">            print(connectivity.all_close([[1, 3, 2], [0, 1, 2]], ordered=False))  # True</span>
+
+<span class="sd">        """</span>
+        <span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span> <span class="o">=</span> <span class="n">_validate_tolerances</span><span class="p">(</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="p">)</span>
+        <span class="n">equal_nan</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">equal_nan</span><span class="p">,</span> <span class="s2">"equal_nan"</span><span class="p">)</span>
+        <span class="n">ordered</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">ordered</span><span class="p">,</span> <span class="s2">"ordered"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Connectivity</span><span class="p">):</span>
+            <span class="n">other_elements</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">_elements</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">other_elements</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+                <span class="n">other</span><span class="p">,</span> <span class="s2">"other"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_e, N_vpe)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">other_elements</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">self_elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ordered</span><span class="p">:</span>
+            <span class="c1"># lexsort uses the last key as the primary one</span>
+            <span class="n">self_elements</span> <span class="o">=</span> <span class="n">self_elements</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">lexsort</span><span class="p">(</span><span class="n">self_elements</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="n">other_elements</span> <span class="o">=</span> <span class="n">other_elements</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">lexsort</span><span class="p">(</span><span class="n">other_elements</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                <span class="n">self_elements</span><span class="p">,</span> <span class="n">other_elements</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">,</span> <span class="n">equal_nan</span><span class="o">=</span><span class="n">equal_nan</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.all_positive">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.all_positive.html#pysdic.Connectivity.all_positive">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">all_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check if all the vertex indices are non-negative (:math:`\geq 0`).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Always True for a valid connectivity, since negative indices are rejected.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if all the indices are non-negative.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.all_lower_than">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.all_lower_than.html#pysdic.Connectivity.all_lower_than">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">all_lower_than</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check if all the vertex indices are strictly lower than ``value``.</span>
+
+<span class="sd">        For example, ``connectivity.all_lower_than(n_vertices)`` checks that all the</span>
+<span class="sd">        indices refer to existing vertices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: Real</span>
+<span class="sd">            The threshold.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if all the indices are :math:`&lt;` ``value``.</span>
+
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">&lt;</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.is_positive">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.is_positive.html#pysdic.Connectivity.is_positive">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check which elements have only non-negative vertex indices (:math:`\geq 0`).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Always True for a valid connectivity, since negative indices are rejected.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A boolean array of shape :math:`(N_e,)`.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.has_negative">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.has_negative.html#pysdic.Connectivity.has_negative">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_negative</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check which elements have at least one negative vertex index (:math:`&lt; 0`).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Always False for a valid connectivity, since negative indices are rejected.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A boolean array of shape :math:`(N_e,)`.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connectivity.has_higher_than">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.Connectivity.has_higher_than.html#pysdic.Connectivity.has_higher_than">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_higher_than</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check which elements have at least one vertex index strictly higher than</span>
+<span class="sd">        ``value``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            To find the elements referring to missing vertices, use</span>
+<span class="sd">            ``connectivity.has_higher_than(n_vertices - 1)``: an index equal to</span>
+<span class="sd">            ``n_vertices`` is already invalid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: Real</span>
+<span class="sd">            The threshold.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A boolean array of shape :math:`(N_e,)`, True for the elements with an</span>
+<span class="sd">            index :math:`&gt;` ``value``.</span>
+
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elements</span> <span class="o">&gt;</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

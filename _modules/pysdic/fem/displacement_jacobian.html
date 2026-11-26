@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.fem.displacement_jacobian &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/fem/displacement_jacobian';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.fem.displacement_jacobian</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.fem.displacement_jacobian</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_as_array</span><span class="p">,</span>
+    <span class="n">_check_matching_size</span><span class="p">,</span>
+    <span class="n">_validate_bool</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_check_finite_rows</span><span class="p">,</span>
+    <span class="n">_validate_connectivity</span><span class="p">,</span>
+    <span class="n">_validate_element_indices</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Largest index of a sparse matrix stored with numpy.int32 indices</span>
+<span class="n">_INT32_MAX</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_assemble_displacement_jacobian_matrix_impl</span><span class="p">(</span>
+    <span class="n">property_gradients</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">shape_functions</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">located_mask</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Assemble the displacement Jacobian matrix :math:`(M \cdot P, N_{v} \cdot E)` without</span>
+<span class="sd">    any validation (see :func:`assemble_displacement_jacobian_matrix`).</span>
+
+<span class="sd">    The structure of the sparse matrix only depends on the connectivity and on the</span>
+<span class="sd">    element indices of the points:</span>
+
+<span class="sd">    - the row :math:`p M + m` of a located point has :math:`E \cdot N_{vpe}` entries, at the</span>
+<span class="sd">      columns :math:`e N_{v} + v` for :math:`e = 0..E-1` and the vertices :math:`v` of its</span>
+<span class="sd">      element sorted in increasing order (sorted column indices, no duplicates since the</span>
+<span class="sd">      vertices of an element are distinct);</span>
+<span class="sd">    - the entries of a located point with non-finite gradients are explicit zeros (stored</span>
+<span class="sd">      entries of value 0);</span>
+<span class="sd">    - the rows of a point not located (``located_mask`` False) have no entry.</span>
+
+<span class="sd">    The sparse matrix is built directly in the CSR format, with ``numpy.int32`` indices when</span>
+<span class="sd">    possible.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        Internal use only. All the inputs are assumed to be validated:</span>
+<span class="sd">        ``property_gradients`` float64 :math:`(M, P, E)`, ``shape_functions`` float64</span>
+<span class="sd">        :math:`(M, N_{vpe})` finite for the located points, ``connectivity_array``</span>
+<span class="sd">        :math:`(N_{e}, N_{vpe})` with distinct vertices in each element,</span>
+<span class="sd">        ``element_indices`` :math:`(M,)` valid for the located points.</span>
+
+<span class="sd">    """</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">property_gradients</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">N_vpe</span> <span class="o">=</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">N_v</span> <span class="o">=</span> <span class="n">n_vertices</span>
+
+    <span class="c1"># Located points (all of them in general: no copy by fancy indexing)</span>
+    <span class="n">all_located</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">located_mask</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="k">if</span> <span class="n">all_located</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">located_mask</span><span class="p">)</span>  <span class="c1"># (N_loc,)</span>
+    <span class="n">N_loc</span> <span class="o">=</span> <span class="n">rows</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">gradients</span> <span class="o">=</span> <span class="n">property_gradients</span> <span class="k">if</span> <span class="n">all_located</span> <span class="k">else</span> <span class="n">property_gradients</span><span class="p">[</span><span class="n">rows</span><span class="p">]</span>  <span class="c1"># (N_loc, P, E)</span>
+    <span class="n">point_elements</span> <span class="o">=</span> <span class="n">element_indices</span> <span class="k">if</span> <span class="n">all_located</span> <span class="k">else</span> <span class="n">element_indices</span><span class="p">[</span><span class="n">rows</span><span class="p">]</span>
+    <span class="n">point_shape_functions</span> <span class="o">=</span> <span class="n">shape_functions</span> <span class="k">if</span> <span class="n">all_located</span> <span class="k">else</span> <span class="n">shape_functions</span><span class="p">[</span><span class="n">rows</span><span class="p">]</span>
+
+    <span class="c1"># Non-finite gradients (e.g. a point outside the image): explicit zero entries</span>
+    <span class="n">finite</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">gradients</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">finite</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">gradients</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">finite</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">gradients</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="c1"># Vertices of the element of each point sorted (and the shape functions with them)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">connectivity_array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (N_e, N_vpe), once per element</span>
+    <span class="n">sorted_connectivity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">connectivity_array</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">sorted_connectivity</span><span class="p">[</span><span class="n">point_elements</span><span class="p">]</span>  <span class="c1"># (N_loc, N_vpe)</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">point_shape_functions</span><span class="p">,</span> <span class="n">order</span><span class="p">[</span><span class="n">point_elements</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (N_loc, N_vpe)</span>
+
+    <span class="c1"># J[p*M + m, e*N_v + v] = dI_p/dx_e(m) * N_v(m), ordered by (p, m) then (e, v)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"mpe,mv-&gt;pmev"</span><span class="p">,</span> <span class="n">gradients</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>  <span class="c1"># (P, N_loc, E, N_vpe)</span>
+
+    <span class="n">nnz</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="n">N_loc</span> <span class="o">*</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span>
+    <span class="n">index_dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int32</span> <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">nnz</span><span class="p">,</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">_INT32_MAX</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int64</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">index_dtype</span><span class="p">)[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">N_v</span>
+        <span class="o">+</span> <span class="n">vertices</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">index_dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="p">)</span>  <span class="c1"># (N_loc, E, N_vpe)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">P</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_v</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">point_rows</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">P</span><span class="p">)[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span> <span class="o">+</span> <span class="n">rows</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># (P, N_loc)</span>
+        <span class="n">jacobian</span><span class="p">[</span>
+            <span class="n">point_rows</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span>
+            <span class="n">columns</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N_loc</span><span class="p">,</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span><span class="p">)[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">N_loc</span><span class="p">,</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jacobian</span>
+
+    <span class="c1"># Number of entries of each row: E * N_vpe for the located points, 0 otherwise (same for each p)</span>
+    <span class="k">if</span> <span class="n">all_located</span><span class="p">:</span>
+        <span class="n">indptr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">index_dtype</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">P</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">index_dtype</span><span class="p">)</span>
+        <span class="n">counts</span><span class="p">[:,</span> <span class="n">rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span>
+        <span class="n">indptr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">index_dtype</span><span class="p">)</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">out</span><span class="o">=</span><span class="n">indptr</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N_loc</span> <span class="o">*</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span><span class="p">),</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">N_loc</span> <span class="o">*</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_vpe</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># Same columns for each component p</span>
+
+    <span class="n">jacobian</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">E</span> <span class="o">*</span> <span class="n">N_v</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">jacobian</span><span class="o">.</span><span class="n">has_sorted_indices</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Sorted by construction (no sort by scipy)</span>
+    <span class="k">return</span> <span class="n">jacobian</span>
+
+
+<div class="viewcode-block" id="assemble_displacement_jacobian_matrix">
+<a class="viewcode-back" href="../../../api/fem/assemble_displacement_jacobian_matrix.html#pysdic.fem.assemble_displacement_jacobian_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_displacement_jacobian_matrix</span><span class="p">(</span>
+    <span class="n">property_gradients</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">shape_functions</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">allow_unlocated_points</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Assemble the displacement Jacobian matrix that maps nodal displacements to the</span>
+<span class="sd">    variations of a property (e.g. gray levels) at integration points.</span>
+
+<span class="sd">    In a space of dimension :math:`E` with a mesh constituted of :math:`N_{e}` elements</span>
+<span class="sd">    and :math:`N_{v}` vertices, the mesh is composed of :math:`K`-dimensional elements</span>
+<span class="sd">    (with :math:`K \leq E`) defined by :math:`N_{vpe}` vertices for each element.</span>
+
+<span class="sd">    Lets consider :math:`M` integration points located within elements and a property</span>
+<span class="sd">    with :math:`P` components (e.g. :math:`P = 1` for gray levels, :math:`P = 3` for</span>
+<span class="sd">    RGB images). The gradients of the property with respect to the global coordinates</span>
+<span class="sd">    at the integration points are given as an array of shape :math:`(M, P, E)`.</span>
+
+<span class="sd">    The objective is to build the Jacobian operator</span>
+<span class="sd">    :math:`\mathbf{J} \in \mathbb{R}^{(M \cdot P) \times (N_{v} \cdot E)}` such that:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathbf{J} \, dU = dR</span>
+
+<span class="sd">    where :math:`dU \in \mathbb{R}^{N_{v} \cdot E}` is the vector of nodal displacements</span>
+<span class="sd">    and :math:`dR \in \mathbb{R}^{M \cdot P}` is the resulting variation of the</span>
+<span class="sd">    property (residual) at the integration points.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        For (:math:`P \neq 1`), the lines are grouped by property first (i.e., all</span>
+<span class="sd">        integration points for property 1, followed by all integration points for</span>
+<span class="sd">        property 2, etc.).</span>
+<span class="sd">        Thus the residual :math:`R` associated with the output must be constructed</span>
+<span class="sd">        accordingly.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            R = \begin{bmatrix}</span>
+<span class="sd">            R_{1}^{1} \\</span>
+<span class="sd">            R_{2}^{1} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            R_{M}^{1} \\</span>
+<span class="sd">            R_{1}^{2} \\</span>
+<span class="sd">            R_{2}^{2} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            R_{M}^{2} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            R_{1}^{P} \\</span>
+<span class="sd">            R_{2}^{P} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            R_{M}^{P}</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        where :math:`R_{i}^{j}` represents the residual at integration point</span>
+<span class="sd">        :math:`i` for property :math:`j`.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            residual = numpy.random.rand(M, P)</span>
+<span class="sd">            residual_vector = residual.flatten(order='F')  # Column-major flattening</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The columns of the operator correspond to the nodal displacements organized</span>
+<span class="sd">        by direction first (i.e., all vertices for direction 1, followed by all</span>
+<span class="sd">        vertices for direction 2, etc.).</span>
+<span class="sd">        Thus the displacement vector :math:`dU` must be constructed accordingly.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            dU = \begin{bmatrix}</span>
+<span class="sd">            dU_{1}^{x} \\</span>
+<span class="sd">            dU_{2}^{x} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            dU_{N_{v}}^{x} \\</span>
+<span class="sd">            dU_{1}^{y} \\</span>
+<span class="sd">            dU_{2}^{y} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            dU_{N_{v}}^{y} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            dU_{1}^{E} \\</span>
+<span class="sd">            dU_{2}^{E} \\</span>
+<span class="sd">            \vdots \\</span>
+<span class="sd">            dU_{N_{v}}^{E}</span>
+<span class="sd">            \end{bmatrix}</span>
+
+<span class="sd">        where :math:`dU_{i}^{j}` represents the displacement of vertex :math:`i` in</span>
+<span class="sd">        direction :math:`j`.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            displacement_vector = numpy.random.rand(N_v * E) # resulting vector of size N_v * E</span>
+<span class="sd">            displacement = displacement_vector.reshape((N_v, E), order='F')  # Column-major reshaping</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Inputs ``property_gradients`` and ``shape_functions`` will be converted</span>
+<span class="sd">          to ``numpy.float64``.</span>
+<span class="sd">        - Inputs ``connectivity_array`` and ``element_indices`` will be</span>
+<span class="sd">          converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The connectivity is validated (non-negative vertex indices lower than the</span>
+<span class="sd">        number of vertices, distinct vertices in each element) and the element indices</span>
+<span class="sd">        are checked against the number of elements.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The :math:`P` rows of a point are zeros, i.e. the point has a zero weight:</span>
+
+<span class="sd">        - if its property gradients are not finite (e.g. a point outside the image): in</span>
+<span class="sd">          the sparse matrix, its entries are kept as explicit zeros, so that the structure</span>
+<span class="sd">          of the matrix only depends on the connectivity and on the element indices (the</span>
+<span class="sd">          same for all the gradients);</span>
+<span class="sd">        - if its element index is ``-1`` (only accepted with</span>
+<span class="sd">          ``allow_unlocated_points=True``): its rows have no entry in the sparse matrix.</span>
+
+<span class="sd">        A non-finite shape function value of a located point raises a ``ValueError``.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    property_gradients: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(M, P, E)` containing the gradients of the property</span>
+<span class="sd">        with respect to the global coordinates :math:`(x, y, z, ...)` at the :math:`M`</span>
+<span class="sd">        integration points. If a 2D-array of shape :math:`(M, E)` is provided, it will</span>
+<span class="sd">        be treated as a single-component property of shape :math:`(M, 1, E)`.</span>
+
+<span class="sd">    shape_functions: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(M, N_{vpe})` containing the shape function values</span>
+<span class="sd">        evaluated at the :math:`M` points for the :math:`N_{vpe}` vertices of the</span>
+<span class="sd">        element.</span>
+
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    element_indices: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(M,)` containing the indices of each element</span>
+<span class="sd">        corresponding to the :math:`M` integration points.</span>
+
+<span class="sd">    n_vertices: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The total number of vertices :math:`N_{v}` in the mesh.</span>
+<span class="sd">        If not provided, it will be inferred as the maximum vertex index in</span>
+<span class="sd">        ``connectivity_array`` plus one.</span>
+
+<span class="sd">    sparse: bool, optional (default: ``False``)</span>
+<span class="sd">        If set to True, the function will return a ``scipy.sparse.csr_matrix``</span>
+<span class="sd">        representation of the operator, built directly in the CSR format (sorted</span>
+<span class="sd">        column indices, no duplicates, ``numpy.int32`` indices when possible).</span>
+
+<span class="sd">    allow_unlocated_points: bool, optional (default: ``False``)</span>
+<span class="sd">        If False (default), any negative element index raises an ``IndexError``.</span>
+<span class="sd">        If True, the element index ``-1`` marks a point not located in any element</span>
+<span class="sd">        of the mesh, and such a point is treated as invalid (see above). Other</span>
+<span class="sd">        negative indices always raise an ``IndexError``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    displacement_jacobian_matrix: Union[numpy.ndarray, scipy.sparse.csr_matrix]</span>
+<span class="sd">        The displacement Jacobian operator of shape :math:`(M \cdot P, N_{v} \cdot E)`</span>
+<span class="sd">        mapping nodal displacements to property variations at integration points.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The displacement of a point :math:`m` of the element is interpolated from the</span>
+<span class="sd">    nodal displacements with the shape functions:</span>
+<span class="sd">    :math:`u(m) = \sum_{v} N_{v}(m) \, U_{v}`.</span>
+<span class="sd">    At first order, the variation of the component :math:`p` of the property at this</span>
+<span class="sd">    point is:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        dR_{m}^{p} = \nabla_X I_{p}(m) \cdot u(m) = \sum_{e=1}^{E} \sum_{v=1}^{N_{v}} \frac{\partial I_{p}}{\partial x_{e}}(m) \, N_{v}(m) \, dU_{v}^{e}</span>
+
+<span class="sd">    So the coefficient of the operator at row :math:`p \cdot M + m` and column</span>
+<span class="sd">    :math:`e \cdot N_{v} + v` is:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathbf{J}[p \cdot M + m, \; e \cdot N_{v} + v] = \frac{\partial I_{p}}{\partial x_{e}}(m) \, N_{v}(m)</span>
+
+<span class="sd">    In other words, the operator is made of :math:`P \times E` blocks, each block being</span>
+<span class="sd">    the shape function matrix :math:`\mathcal{N}` (see</span>
+<span class="sd">    :func:`pysdic.fem.assemble_shape_function_matrix`) scaled row by row by one</span>
+<span class="sd">    component of the gradients:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathbf{J} = \begin{bmatrix}</span>
+<span class="sd">        \text{diag}(\partial_{x_1} I_{1}) \, \mathcal{N} &amp; \cdots &amp; \text{diag}(\partial_{x_E} I_{1}) \, \mathcal{N} \\</span>
+<span class="sd">        \vdots &amp; \ddots &amp; \vdots \\</span>
+<span class="sd">        \text{diag}(\partial_{x_1} I_{P}) \, \mathcal{N} &amp; \cdots &amp; \text{diag}(\partial_{x_E} I_{P}) \, \mathcal{N}</span>
+<span class="sd">        \end{bmatrix}</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.assemble_shape_function_matrix:</span>
+<span class="sd">        To assemble the shape function matrix :math:`\mathcal{N}` used to build each</span>
+<span class="sd">        block of the operator.</span>
+
+<span class="sd">    pysdic.fem.compute_shape_functions:</span>
+<span class="sd">        To compute the shape functions at given natural coordinates within elements.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Lets construct a simple 2D mesh with 3 integration points, a 2-components property,</span>
+<span class="sd">    and check that the operator maps a nodal displacement to the expected variation of</span>
+<span class="sd">    the property.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import (</span>
+<span class="sd">            assemble_displacement_jacobian_matrix,</span>
+<span class="sd">            compute_triangle_3_shape_functions,</span>
+<span class="sd">        )</span>
+
+<span class="sd">        connectivity_array = numpy.array(</span>
+<span class="sd">            [[0, 1, 2],</span>
+<span class="sd">             [0, 2, 3]]</span>
+<span class="sd">        )</span>
+<span class="sd">        N_v, E = 4, 2</span>
+
+<span class="sd">        natural_coordinates = numpy.array(</span>
+<span class="sd">            [[0.2, 0.3],</span>
+<span class="sd">             [0.6, 0.2],</span>
+<span class="sd">             [0.0, 0.0]]</span>
+<span class="sd">        )</span>
+<span class="sd">        element_indices = numpy.array([0, 1, -1])  # Last point outside the mesh</span>
+<span class="sd">        shape_functions = compute_triangle_3_shape_functions(natural_coordinates)</span>
+
+<span class="sd">        # Gradients of a 2-components property, shape (M, P, E) = (3, 2, 2)</span>
+<span class="sd">        property_gradients = numpy.array(</span>
+<span class="sd">            [[[1.0, 0.0], [0.0, 2.0]],</span>
+<span class="sd">             [[1.0, 1.0], [3.0, 0.0]],</span>
+<span class="sd">             [[5.0, 5.0], [5.0, 5.0]]]</span>
+<span class="sd">        )</span>
+
+<span class="sd">        jacobian = assemble_displacement_jacobian_matrix(</span>
+<span class="sd">            property_gradients=property_gradients,</span>
+<span class="sd">            shape_functions=shape_functions,</span>
+<span class="sd">            connectivity_array=connectivity_array,</span>
+<span class="sd">            element_indices=element_indices,</span>
+<span class="sd">            n_vertices=N_v,</span>
+<span class="sd">            allow_unlocated_points=True,  # Accept the -1 of the last point</span>
+<span class="sd">        )</span>
+<span class="sd">        print(f"jacobian (shape={jacobian.shape}):")</span>
+<span class="sd">        print(jacobian)</span>
+
+<span class="sd">        # Uniform translation (1, 0) of all the vertices</span>
+<span class="sd">        displacement = numpy.zeros((N_v, E))</span>
+<span class="sd">        displacement[:, 0] = 1.0</span>
+<span class="sd">        variation = jacobian @ displacement.flatten(order='F')  # (M * P,)</span>
+<span class="sd">        print("variation (M, P):")</span>
+<span class="sd">        print(variation.reshape((3, 2), order='F'))</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        jacobian (shape=(6, 8)):</span>
+<span class="sd">        [[0.5 0.2 0.3 0.  0.  0.  0.  0. ]</span>
+<span class="sd">         [0.2 0.  0.6 0.2 0.2 0.  0.6 0.2]</span>
+<span class="sd">         [0.  0.  0.  0.  0.  0.  0.  0. ]</span>
+<span class="sd">         [0.  0.  0.  0.  1.  0.4 0.6 0. ]</span>
+<span class="sd">         [0.6 0.  1.8 0.6 0.  0.  0.  0. ]</span>
+<span class="sd">         [0.  0.  0.  0.  0.  0.  0.  0. ]]</span>
+<span class="sd">        variation (M, P):</span>
+<span class="sd">        [[1. 0.]</span>
+<span class="sd">         [1. 3.]</span>
+<span class="sd">         [0. 0.]]</span>
+
+<span class="sd">    For a uniform translation, the variation is the :math:`x`-component of the gradients</span>
+<span class="sd">    at each valid point, and zero at the invalid point.</span>
+
+<span class="sd">    """</span>
+    <span class="c1"># Input validation and conversion</span>
+    <span class="c1"># (M, E) is accepted as a single-component property (M, 1, E).</span>
+    <span class="c1"># Non-finite gradients are accepted (the point gets a zero weight, see above).</span>
+    <span class="n">property_gradients</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">property_gradients</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">property_gradients</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">property_gradients</span> <span class="o">=</span> <span class="n">property_gradients</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">property_gradients</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+        <span class="n">property_gradients</span><span class="p">,</span> <span class="s2">"property_gradients"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(M, E) or (M, P, E)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">shape_functions</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+        <span class="n">shape_functions</span><span class="p">,</span> <span class="s2">"shape_functions"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(M, N_vpe)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># Finite values checked for the located points only</span>
+    <span class="n">connectivity_array</span><span class="p">,</span> <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">_validate_connectivity</span><span class="p">(</span>
+        <span class="n">connectivity_array</span><span class="p">,</span> <span class="n">n_vertices</span>
+    <span class="p">)</span>
+    <span class="n">element_indices</span><span class="p">,</span> <span class="n">located_mask</span> <span class="o">=</span> <span class="n">_validate_element_indices</span><span class="p">(</span>
+        <span class="n">element_indices</span><span class="p">,</span> <span class="n">connectivity_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">allow_unlocated_points</span>
+    <span class="p">)</span>
+    <span class="n">_check_matching_size</span><span class="p">(</span>
+        <span class="n">property_gradients</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">"property_gradients"</span><span class="p">,</span> <span class="s2">"shape_functions"</span><span class="p">,</span> <span class="s2">"M"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_check_matching_size</span><span class="p">(</span>
+        <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">"element_indices"</span><span class="p">,</span> <span class="s2">"shape_functions"</span><span class="p">,</span> <span class="s2">"M"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_check_matching_size</span><span class="p">(</span>
+        <span class="n">shape_functions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">connectivity_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">"shape_functions"</span><span class="p">,</span> <span class="s2">"connectivity_array"</span><span class="p">,</span> <span class="s2">"N_vpe"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sparse</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">)</span>
+    <span class="n">_check_finite_rows</span><span class="p">(</span><span class="n">shape_functions</span><span class="p">,</span> <span class="n">located_mask</span><span class="p">,</span> <span class="s2">"shape_functions"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_assemble_displacement_jacobian_matrix_impl</span><span class="p">(</span>
+        <span class="n">property_gradients</span><span class="p">,</span> <span class="n">shape_functions</span><span class="p">,</span> <span class="n">connectivity_array</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">,</span>
+        <span class="n">located_mask</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">,</span> <span class="n">sparse</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

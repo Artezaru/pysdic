@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.fem.adjacency &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/fem/adjacency';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.fem.adjacency</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.fem.adjacency</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse.csgraph</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_as_integer_array</span><span class="p">,</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_n_vertices</span><span class="p">,</span> <span class="n">_valid_points_mask</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Convert an adjacency graph (sparse or dense square matrix) to a boolean</span>
+<span class="sd">    ``scipy.sparse.csr_matrix`` with sorted indices.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        Internal use only.</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Boolean dtype: same meaning as the conversion below, without a float copy of a</span>
+        <span class="c1"># dense (N, N) matrix</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span> <span class="s2">"graph"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N, N)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">graph</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'graph' must be a square matrix of shape (N, N). "</span>
+            <span class="sa">f</span><span class="s2">"Got shape </span><span class="si">{</span><span class="n">graph</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">eliminate_zeros</span><span class="p">()</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">graph</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_start</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Check that ``start`` is a valid node index of a graph with ``n_nodes`` nodes.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        Internal use only.</span>
+
+<span class="sd">    """</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s2">"start"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">n_nodes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'start' must be an integer between 0 and </span><span class="si">{</span><span class="n">n_nodes</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">start</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reachability</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the boolean reachability matrix :math:`(I + A)^{d}` of a graph, i.e. the</span>
+<span class="sd">    nodes reachable from each node in at most :math:`d` steps (the diagonal included).</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        Internal use only. ``graph`` is a validated boolean csr matrix.</span>
+
+<span class="sd">    """</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">one_step</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">)</span> <span class="o">+</span> <span class="n">graph</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>  <span class="c1"># (I + A), boolean</span>
+    <span class="n">reachable</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_distance</span><span class="p">):</span>
+        <span class="n">new_reachable</span> <span class="o">=</span> <span class="p">(</span><span class="n">reachable</span> <span class="o">@</span> <span class="n">one_step</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>  <span class="c1"># Boolean product = logical OR</span>
+        <span class="k">if</span> <span class="n">new_reachable</span><span class="o">.</span><span class="n">nnz</span> <span class="o">==</span> <span class="n">reachable</span><span class="o">.</span><span class="n">nnz</span><span class="p">:</span>
+            <span class="k">break</span>  <span class="c1"># Converged: all reachable nodes already found</span>
+        <span class="n">reachable</span> <span class="o">=</span> <span class="n">new_reachable</span>
+    <span class="n">reachable</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">reachable</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Single source searches</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="bfs_distance">
+<a class="viewcode-back" href="../../../api/fem/bfs_distance.html#pysdic.fem.bfs_distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bfs_distance</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">],</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the shortest path distances from a starting node to all the nodes of an</span>
+<span class="sd">    adjacency graph.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The search is performed with ``scipy.sparse.csgraph.dijkstra`` on the unweighted</span>
+<span class="sd">        graph, which is equivalent to a breadth-first search (BFS).</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph</span>
+<span class="sd">        is not symmetric, ...). The behavior of the function is undefined if the input</span>
+<span class="sd">        graph is not valid.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph: Union[ArrayLike, scipy.sparse.spmatrix]</span>
+<span class="sd">        The adjacency graph as a square matrix of shape :math:`(N, N)` (sparse or</span>
+<span class="sd">        dense), where a non-zero entry at :math:`(i, j)` means that nodes :math:`i`</span>
+<span class="sd">        and :math:`j` are neighbors. See</span>
+<span class="sd">        :func:`pysdic.fem.assemble_vertices_adjacency_graph` and</span>
+<span class="sd">        :func:`pysdic.fem.assemble_elements_adjacency_graph`.</span>
+
+<span class="sd">    start: Integral</span>
+<span class="sd">        The index of the starting node.</span>
+
+<span class="sd">    max_distance: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The maximum distance of the search. If None, all the reachable nodes are</span>
+<span class="sd">        considered. Otherwise, the nodes farther than ``max_distance`` get a distance</span>
+<span class="sd">        of -1.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distances: numpy.ndarray</span>
+<span class="sd">        An integer array of shape :math:`(N,)` containing the shortest path distances</span>
+<span class="sd">        from ``start`` to all the nodes of the graph (-1 for unreachable nodes).</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The distance from node :math:`A` to node :math:`T` is defined as follows:</span>
+
+<span class="sd">    - :math:`\text{dist}(A, T) = 0` if node :math:`T` is the same as node :math:`A`.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = 1` if node :math:`T` is a neighbor of node :math:`A`.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = d \geq 1` if the shortest path from node :math:`A`</span>
+<span class="sd">      to node :math:`T` has length :math:`d`.</span>
+<span class="sd">    - :math:`\text{dist}(A, T) = -1` if node :math:`T` is not reachable from node</span>
+<span class="sd">      :math:`A`, or not reachable within the specified ``max_distance``.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.bfs_neighborhood:</span>
+<span class="sd">        Neighborhood of a single node within a given distance.</span>
+
+<span class="sd">    pysdic.fem.compute_distance_matrix:</span>
+<span class="sd">        Distances between all the pairs of nodes of a graph.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 nodes and compute the shortest path</span>
+<span class="sd">    distances from node 0 to all the other nodes.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+
+<span class="sd">       Disconnected graph with 7 nodes for BFS example. Distance from node 0 to</span>
+<span class="sd">       node 4 is 3 (0 -&gt; 2 -&gt; 3 -&gt; 4).</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import bfs_distance</span>
+
+<span class="sd">        edges = numpy.array([[0, 1], [0, 2], [1, 2], [2, 3], [3, 4], [5, 6]])</span>
+<span class="sd">        graph = numpy.zeros((7, 7), dtype=bool)</span>
+<span class="sd">        graph[edges[:, 0], edges[:, 1]] = True</span>
+<span class="sd">        graph[edges[:, 1], edges[:, 0]] = True</span>
+
+<span class="sd">        distances = bfs_distance(graph, start=0)</span>
+<span class="sd">        print(distances)</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        [ 0  1  1  2  3 -1 -1]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">_as_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">_validate_start</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">max_distance</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span>
+        <span class="n">max_distance</span><span class="p">,</span> <span class="s2">"max_distance"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csgraph</span><span class="o">.</span><span class="n">dijkstra</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span>
+        <span class="n">unweighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">indices</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span> <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_distance</span><span class="p">),</span>
+    <span class="p">)</span>  <span class="c1"># (N,), inf for unreachable nodes</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">distances</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="bfs_neighborhood">
+<a class="viewcode-back" href="../../../api/fem/bfs_neighborhood.html#pysdic.fem.bfs_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bfs_neighborhood</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">],</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the neighborhood of a starting node in an adjacency graph, i.e. the nodes</span>
+<span class="sd">    within a given distance from the starting node.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The search is performed with ``scipy.sparse.csgraph.dijkstra`` on the unweighted</span>
+<span class="sd">        graph, which is equivalent to a breadth-first search (BFS).</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph</span>
+<span class="sd">        is not symmetric, ...). The behavior of the function is undefined if the input</span>
+<span class="sd">        graph is not valid.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph: Union[ArrayLike, scipy.sparse.spmatrix]</span>
+<span class="sd">        The adjacency graph as a square matrix of shape :math:`(N, N)` (sparse or</span>
+<span class="sd">        dense), where a non-zero entry at :math:`(i, j)` means that nodes :math:`i`</span>
+<span class="sd">        and :math:`j` are neighbors.</span>
+
+<span class="sd">    start: Integral</span>
+<span class="sd">        The index of the starting node.</span>
+
+<span class="sd">    max_distance: Integral, optional (default: ``1``)</span>
+<span class="sd">        The maximum distance from ``start`` of the nodes in the neighborhood.</span>
+
+<span class="sd">    self_neighborhood: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the neighborhood includes the starting node itself.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neighborhood: numpy.ndarray</span>
+<span class="sd">        A sorted integer array containing the indices of the nodes in the neighborhood.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.bfs_distance:</span>
+<span class="sd">        Distances from a single node to all the nodes of a graph.</span>
+
+<span class="sd">    pysdic.fem.compute_neighborhood:</span>
+<span class="sd">        Neighborhoods of all the nodes of a graph.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 nodes and compute the neighborhood of</span>
+<span class="sd">    node 0 within a distance of 2.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+
+<span class="sd">       Disconnected graph with 7 nodes for BFS example. Nodes 0, 1, 2 and 3 are</span>
+<span class="sd">       the only nodes in the neighborhood of node 0 for max_distance = 2.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import bfs_neighborhood</span>
+
+<span class="sd">        edges = numpy.array([[0, 1], [0, 2], [1, 2], [2, 3], [3, 4], [5, 6]])</span>
+<span class="sd">        graph = numpy.zeros((7, 7), dtype=bool)</span>
+<span class="sd">        graph[edges[:, 0], edges[:, 1]] = True</span>
+<span class="sd">        graph[edges[:, 1], edges[:, 0]] = True</span>
+
+<span class="sd">        neighborhood = bfs_neighborhood(graph, start=0, max_distance=2)</span>
+<span class="sd">        print(neighborhood)</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        [0 1 2 3]</span>
+
+<span class="sd">    """</span>
+    <span class="n">max_distance</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="s2">"max_distance"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">self_neighborhood</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">self_neighborhood</span><span class="p">,</span> <span class="s2">"self_neighborhood"</span><span class="p">)</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">bfs_distance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">)</span>
+    <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">distances</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">self_neighborhood</span><span class="p">:</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="p">[</span><span class="n">neighborhood</span> <span class="o">!=</span> <span class="n">start</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">neighborhood</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Adjacency graphs</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="assemble_vertices_adjacency_graph">
+<a class="viewcode-back" href="../../../api/fem/assemble_vertices_adjacency_graph.html#pysdic.fem.assemble_vertices_adjacency_graph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_vertices_adjacency_graph</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Assemble the vertices adjacency graph of a mesh, where two vertices are neighbors</span>
+<span class="sd">    if they belong to the same element.</span>
+
+<span class="sd">    The function is independent of the geometry of the elements: all the vertices of an</span>
+<span class="sd">    element are neighbors of each other (e.g. the diagonal vertices of a quadrangle,</span>
+<span class="sd">    or the corner and mid-edge vertices of a 6-node triangle).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input connectivity is valid</span>
+<span class="sd">        (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        The behavior of the function is undefined in that case.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    n_vertices: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The total number of vertices :math:`N_{v}` in the mesh. If not provided, it</span>
+<span class="sd">        will be inferred as the maximum vertex index in ``connectivity_array`` plus one.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    graph: scipy.sparse.csr_matrix</span>
+<span class="sd">        A symmetric boolean sparse matrix of shape :math:`(N_{v}, N_{v})` with an empty</span>
+<span class="sd">        diagonal, where ``graph[i, j]`` is True if vertices :math:`i` and :math:`j`</span>
+<span class="sd">        are neighbors. The neighbors of vertex :math:`i` are ``graph[i].indices``.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.assemble_elements_adjacency_graph:</span>
+<span class="sd">        Elements adjacency graph of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements and assemble</span>
+<span class="sd">    the vertices adjacency graph.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh. The neighboring vertices of vertex 1 are vertices 0, 2,</span>
+<span class="sd">        4, 5 and 6 since they are part of the same elements in the mesh</span>
+<span class="sd">        (elements 0 and 1).</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import assemble_vertices_adjacency_graph</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        graph = assemble_vertices_adjacency_graph(connectivity_array)</span>
+
+<span class="sd">        print(f"vertices adjacency graph (shape={graph.shape})")</span>
+<span class="sd">        print(f"neighbors of vertex 1: {graph[1].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        vertices adjacency graph (shape=(10, 10))</span>
+<span class="sd">        neighbors of vertex 1: [0 2 4 5 6]</span>
+
+<span class="sd">    """</span>
+    <span class="n">connectivity_array</span> <span class="o">=</span> <span class="n">_as_integer_array</span><span class="p">(</span>
+        <span class="n">connectivity_array</span><span class="p">,</span> <span class="s2">"connectivity_array"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_e, N_vpe)"</span>
+    <span class="p">)</span>
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">_validate_n_vertices</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">connectivity_array</span><span class="p">)</span>
+
+    <span class="c1"># All the pairs (u, v) of vertices of each element, in both directions</span>
+    <span class="n">N_vpe</span> <span class="o">=</span> <span class="n">connectivity_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">first</span><span class="p">,</span> <span class="n">second</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">N_vpe</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">connectivity_array</span><span class="p">[:,</span> <span class="n">first</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">connectivity_array</span><span class="p">[:,</span> <span class="n">second</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">])</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">])</span>
+    <span class="n">not_loop</span> <span class="o">=</span> <span class="n">rows</span> <span class="o">!=</span> <span class="n">columns</span>  <span class="c1"># Degenerated elements with repeated vertices</span>
+
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">not_loop</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+         <span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="n">not_loop</span><span class="p">],</span> <span class="n">columns</span><span class="p">[</span><span class="n">not_loop</span><span class="p">])),</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>  <span class="c1"># Duplicates are merged (logical OR)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">graph</span></div>
+
+
+
+<div class="viewcode-block" id="assemble_elements_adjacency_graph">
+<a class="viewcode-back" href="../../../api/fem/assemble_elements_adjacency_graph.html#pysdic.fem.assemble_elements_adjacency_graph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_elements_adjacency_graph</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Assemble the elements adjacency graph of a mesh, where two elements are neighbors</span>
+<span class="sd">    if they share at least one vertex.</span>
+
+<span class="sd">    The function is independent of the geometry of the elements: two elements sharing</span>
+<span class="sd">    only a corner vertex are neighbors.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input connectivity is valid</span>
+<span class="sd">        (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        The behavior of the function is undefined in that case.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    graph: scipy.sparse.csr_matrix</span>
+<span class="sd">        A symmetric boolean sparse matrix of shape :math:`(N_{e}, N_{e})` with an empty</span>
+<span class="sd">        diagonal, where ``graph[i, j]`` is True if elements :math:`i` and :math:`j`</span>
+<span class="sd">        are neighbors. The neighbors of element :math:`i` are ``graph[i].indices``.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Let :math:`B \in \{0, 1\}^{N_{e} \times N_{v}}` be the incidence matrix of the mesh</span>
+<span class="sd">    (:math:`B_{e,v} = 1` if vertex :math:`v` belongs to element :math:`e`). The</span>
+<span class="sd">    elements :math:`i \neq j` are neighbors if :math:`(B B^{T})_{i,j} &gt; 0`.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.assemble_vertices_adjacency_graph:</span>
+<span class="sd">        Vertices adjacency graph of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements and assemble</span>
+<span class="sd">    the elements adjacency graph.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh. The neighboring elements of element 3 are elements 1</span>
+<span class="sd">        and 2 since they share at least one vertex in the mesh.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import assemble_elements_adjacency_graph</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        graph = assemble_elements_adjacency_graph(connectivity_array)</span>
+
+<span class="sd">        print(f"elements adjacency graph (shape={graph.shape})")</span>
+<span class="sd">        print(f"neighbors of element 3: {graph[3].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        elements adjacency graph (shape=(4, 4))</span>
+<span class="sd">        neighbors of element 3: [1 2]</span>
+
+<span class="sd">    """</span>
+    <span class="n">connectivity_array</span> <span class="o">=</span> <span class="n">_as_integer_array</span><span class="p">(</span>
+        <span class="n">connectivity_array</span><span class="p">,</span> <span class="s2">"connectivity_array"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_e, N_vpe)"</span>
+    <span class="p">)</span>
+    <span class="n">N_e</span><span class="p">,</span> <span class="n">N_vpe</span> <span class="o">=</span> <span class="n">connectivity_array</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">_validate_n_vertices</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">connectivity_array</span><span class="p">)</span>
+
+    <span class="c1"># Incidence matrix B (N_e, N_v)</span>
+    <span class="n">incidence</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N_e</span> <span class="o">*</span> <span class="n">N_vpe</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+         <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_e</span><span class="p">),</span> <span class="n">N_vpe</span><span class="p">),</span> <span class="n">connectivity_array</span><span class="o">.</span><span class="n">ravel</span><span class="p">())),</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N_e</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+
+    <span class="c1"># Elements sharing a vertex: B B^T without the diagonal</span>
+    <span class="n">shared</span> <span class="o">=</span> <span class="p">(</span><span class="n">incidence</span> <span class="o">@</span> <span class="n">incidence</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+    <span class="n">not_loop</span> <span class="o">=</span> <span class="n">shared</span><span class="o">.</span><span class="n">row</span> <span class="o">!=</span> <span class="n">shared</span><span class="o">.</span><span class="n">col</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">shared</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">not_loop</span><span class="p">],</span> <span class="p">(</span><span class="n">shared</span><span class="o">.</span><span class="n">row</span><span class="p">[</span><span class="n">not_loop</span><span class="p">],</span> <span class="n">shared</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="n">not_loop</span><span class="p">])),</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N_e</span><span class="p">,</span> <span class="n">N_e</span><span class="p">),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">graph</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Distance matrices</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="compute_distance_matrix">
+<a class="viewcode-back" href="../../../api/fem/compute_distance_matrix.html#pysdic.fem.compute_distance_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_distance_matrix</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the shortest path distances between all the pairs of nodes of an adjacency</span>
+<span class="sd">    graph.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        The dense output has shape :math:`(N, N)` and its memory grows quadratically</span>
+<span class="sd">        with the number of nodes (about 800 MB for :math:`N = 10^4`). For large graphs,</span>
+<span class="sd">        use ``sparse=True`` with a small ``max_distance``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph</span>
+<span class="sd">        is not symmetric, ...). The behavior of the function is undefined if the input</span>
+<span class="sd">        graph is not valid.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph: Union[ArrayLike, scipy.sparse.spmatrix]</span>
+<span class="sd">        The adjacency graph as a square matrix of shape :math:`(N, N)` (sparse or</span>
+<span class="sd">        dense), where a non-zero entry at :math:`(i, j)` means that nodes :math:`i`</span>
+<span class="sd">        and :math:`j` are neighbors.</span>
+
+<span class="sd">    max_distance: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The maximum distance to compute. Pairs of nodes farther than ``max_distance``</span>
+<span class="sd">        are considered unreachable. If None, all the distances are computed.</span>
+
+<span class="sd">    sparse: bool, optional (default: ``False``)</span>
+<span class="sd">        If True, a sparse matrix storing only the distances between distinct reachable</span>
+<span class="sd">        nodes is returned (see below).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distance_matrix: Union[numpy.ndarray, scipy.sparse.csr_matrix]</span>
+<span class="sd">        A symmetric matrix of shape :math:`(N, N)` where the entry :math:`(i, j)` is the</span>
+<span class="sd">        distance between nodes :math:`i` and :math:`j`.</span>
+
+<span class="sd">        - Dense output: an integer array with 0 on the diagonal and -1 for unreachable</span>
+<span class="sd">          pairs.</span>
+<span class="sd">        - Sparse output: an integer ``csr_matrix`` storing only the distances</span>
+<span class="sd">          :math:`\geq 1`. The diagonal (distance 0) and the unreachable pairs are not</span>
+<span class="sd">          stored, so ``distance_matrix[i].indices`` are the nodes reachable from</span>
+<span class="sd">          :math:`i` (excluding :math:`i`).</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The distance between nodes :math:`i` and :math:`j` is the number of edges of the</span>
+<span class="sd">    shortest path between them (see :func:`pysdic.fem.bfs_distance`).</span>
+
+<span class="sd">    The dense output is computed with ``scipy.sparse.csgraph.dijkstra`` on the unweighted</span>
+<span class="sd">    graph. The sparse output is computed level by level with boolean sparse products:</span>
+<span class="sd">    the nodes at distance :math:`k` are the nodes reachable in :math:`k` steps</span>
+<span class="sd">    (:math:`(I + A)^{k}`) but not in :math:`k - 1` steps, so the memory only depends</span>
+<span class="sd">    on the size of the neighborhoods.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.bfs_distance:</span>
+<span class="sd">        Distances from a single node to all the nodes of a graph.</span>
+
+<span class="sd">    pysdic.fem.compute_vertices_distance_matrix:</span>
+<span class="sd">        Distance matrix of the vertices of a mesh.</span>
+
+<span class="sd">    pysdic.fem.compute_elements_distance_matrix:</span>
+<span class="sd">        Distance matrix of the elements of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 nodes and compute the distance matrix.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+
+<span class="sd">       Disconnected graph with 7 nodes for distance matrix example.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_distance_matrix</span>
+
+<span class="sd">        edges = numpy.array([[0, 1], [0, 2], [1, 2], [2, 3], [3, 4], [5, 6]])</span>
+<span class="sd">        graph = numpy.zeros((7, 7), dtype=bool)</span>
+<span class="sd">        graph[edges[:, 0], edges[:, 1]] = True</span>
+<span class="sd">        graph[edges[:, 1], edges[:, 0]] = True</span>
+
+<span class="sd">        distance_matrix = compute_distance_matrix(graph)</span>
+<span class="sd">        print(f"distance matrix (shape={distance_matrix.shape}):")</span>
+<span class="sd">        print(distance_matrix)</span>
+
+<span class="sd">        sparse_distance_matrix = compute_distance_matrix(graph, max_distance=2, sparse=True)</span>
+<span class="sd">        print(f"nodes within a distance of 2 from node 0: {sparse_distance_matrix[0].indices}")</span>
+<span class="sd">        print(f"their distances: {sparse_distance_matrix[0].data}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        distance matrix (shape=(7, 7)):</span>
+<span class="sd">        [[ 0  1  1  2  3 -1 -1]</span>
+<span class="sd">         [ 1  0  1  2  3 -1 -1]</span>
+<span class="sd">         [ 1  1  0  1  2 -1 -1]</span>
+<span class="sd">         [ 2  2  1  0  1 -1 -1]</span>
+<span class="sd">         [ 3  3  2  1  0 -1 -1]</span>
+<span class="sd">         [-1 -1 -1 -1 -1  0  1]</span>
+<span class="sd">         [-1 -1 -1 -1 -1  1  0]]</span>
+<span class="sd">        nodes within a distance of 2 from node 0: [1 2 3]</span>
+<span class="sd">        their distances: [1 1 2]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">_as_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">max_distance</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span>
+        <span class="n">max_distance</span><span class="p">,</span> <span class="s2">"max_distance"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">sparse</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">)</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Dense output with csgraph</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csgraph</span><span class="o">.</span><span class="n">dijkstra</span><span class="p">(</span>
+            <span class="n">graph</span><span class="p">,</span>
+            <span class="n">unweighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">limit</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span> <span class="k">if</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_distance</span><span class="p">),</span>
+        <span class="p">)</span>  <span class="c1"># (N, N), inf for unreachable pairs</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">distances</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="c1"># Sparse output, level by level</span>
+    <span class="n">one_step</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">)</span> <span class="o">+</span> <span class="n">graph</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="n">reachable</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"csr"</span><span class="p">)</span>
+    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">max_distance</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="n">max_distance</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">new_reachable</span> <span class="o">=</span> <span class="p">(</span><span class="n">reachable</span> <span class="o">@</span> <span class="n">one_step</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">new_reachable</span><span class="o">.</span><span class="n">nnz</span> <span class="o">==</span> <span class="n">reachable</span><span class="o">.</span><span class="n">nnz</span><span class="p">:</span>
+            <span class="k">break</span>  <span class="c1"># Converged: all reachable nodes already found</span>
+        <span class="n">new_level</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_reachable</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">-</span> <span class="n">reachable</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">))</span>
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">distance_matrix</span> <span class="o">+</span> <span class="n">level</span> <span class="o">*</span> <span class="n">new_level</span>  <span class="c1"># Entries at distance level</span>
+        <span class="n">reachable</span> <span class="o">=</span> <span class="n">new_reachable</span>
+
+    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">distance_matrix</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="n">distance_matrix</span><span class="o">.</span><span class="n">eliminate_zeros</span><span class="p">()</span>
+    <span class="n">distance_matrix</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">distance_matrix</span></div>
+
+
+
+<div class="viewcode-block" id="compute_vertices_distance_matrix">
+<a class="viewcode-back" href="../../../api/fem/compute_vertices_distance_matrix.html#pysdic.fem.compute_vertices_distance_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_vertices_distance_matrix</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the shortest path distances between all the pairs of vertices of a mesh,</span>
+<span class="sd">    where two vertices are neighbors (distance 1) if they belong to the same element.</span>
+
+<span class="sd">    Convenience function that combines :func:`pysdic.fem.assemble_vertices_adjacency_graph`</span>
+<span class="sd">    and :func:`pysdic.fem.compute_distance_matrix`.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        The dense output has shape :math:`(N_{v}, N_{v})`. For large meshes, use</span>
+<span class="sd">        ``sparse=True`` with a small ``max_distance``.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    n_vertices: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The total number of vertices :math:`N_{v}` in the mesh. If not provided, it</span>
+<span class="sd">        will be inferred as the maximum vertex index in ``connectivity_array`` plus one.</span>
+
+<span class="sd">    max_distance: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The maximum distance to compute. Pairs of vertices farther than</span>
+<span class="sd">        ``max_distance`` are considered unreachable. If None, all the distances are</span>
+<span class="sd">        computed.</span>
+
+<span class="sd">    sparse: bool, optional (default: ``False``)</span>
+<span class="sd">        If True, a sparse matrix storing only the distances between distinct reachable</span>
+<span class="sd">        vertices is returned (see :func:`pysdic.fem.compute_distance_matrix`).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distance_matrix: Union[numpy.ndarray, scipy.sparse.csr_matrix]</span>
+<span class="sd">        A symmetric matrix of shape :math:`(N_{v}, N_{v})` containing the distances</span>
+<span class="sd">        between the vertices (see :func:`pysdic.fem.compute_distance_matrix` for the</span>
+<span class="sd">        dense and sparse conventions).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.compute_distance_matrix:</span>
+<span class="sd">        Distance matrix of an adjacency graph.</span>
+
+<span class="sd">    pysdic.fem.assemble_vertices_adjacency_graph:</span>
+<span class="sd">        Vertices adjacency graph of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements and compute</span>
+<span class="sd">    the vertices distance matrix.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_vertices_distance_matrix</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        distance_matrix = compute_vertices_distance_matrix(connectivity_array)</span>
+
+<span class="sd">        print(f"vertices distance matrix (shape={distance_matrix.shape})")</span>
+<span class="sd">        print(f"distances from vertex 1: {distance_matrix[1]}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        vertices distance matrix (shape=(10, 10))</span>
+<span class="sd">        distances from vertex 1: [1 0 1 2 1 1 1 2 2 2]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">assemble_vertices_adjacency_graph</span><span class="p">(</span><span class="n">connectivity_array</span><span class="p">,</span> <span class="n">n_vertices</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compute_elements_distance_matrix">
+<a class="viewcode-back" href="../../../api/fem/compute_elements_distance_matrix.html#pysdic.fem.compute_elements_distance_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_elements_distance_matrix</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the shortest path distances between all the pairs of elements of a mesh,</span>
+<span class="sd">    where two elements are neighbors (distance 1) if they share at least one vertex.</span>
+
+<span class="sd">    Convenience function that combines :func:`pysdic.fem.assemble_elements_adjacency_graph`</span>
+<span class="sd">    and :func:`pysdic.fem.compute_distance_matrix`.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        The dense output has shape :math:`(N_{e}, N_{e})`. For large meshes, use</span>
+<span class="sd">        ``sparse=True`` with a small ``max_distance``.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    max_distance: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The maximum distance to compute. Pairs of elements farther than</span>
+<span class="sd">        ``max_distance`` are considered unreachable. If None, all the distances are</span>
+<span class="sd">        computed.</span>
+
+<span class="sd">    sparse: bool, optional (default: ``False``)</span>
+<span class="sd">        If True, a sparse matrix storing only the distances between distinct reachable</span>
+<span class="sd">        elements is returned (see :func:`pysdic.fem.compute_distance_matrix`).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distance_matrix: Union[numpy.ndarray, scipy.sparse.csr_matrix]</span>
+<span class="sd">        A symmetric matrix of shape :math:`(N_{e}, N_{e})` containing the distances</span>
+<span class="sd">        between the elements (see :func:`pysdic.fem.compute_distance_matrix` for the</span>
+<span class="sd">        dense and sparse conventions).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.compute_distance_matrix:</span>
+<span class="sd">        Distance matrix of an adjacency graph.</span>
+
+<span class="sd">    pysdic.fem.assemble_elements_adjacency_graph:</span>
+<span class="sd">        Elements adjacency graph of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements and compute</span>
+<span class="sd">    the elements distance matrix.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_elements_distance_matrix</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        distance_matrix = compute_elements_distance_matrix(connectivity_array)</span>
+
+<span class="sd">        print(f"elements distance matrix (shape={distance_matrix.shape}):")</span>
+<span class="sd">        print(distance_matrix)</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        elements distance matrix (shape=(4, 4)):</span>
+<span class="sd">        [[0 1 2 2]</span>
+<span class="sd">         [1 0 1 1]</span>
+<span class="sd">         [2 1 0 1]</span>
+<span class="sd">         [2 1 1 0]]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">assemble_elements_adjacency_graph</span><span class="p">(</span><span class="n">connectivity_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Neighborhoods</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="compute_neighborhood">
+<a class="viewcode-back" href="../../../api/fem/compute_neighborhood.html#pysdic.fem.compute_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_neighborhood</span><span class="p">(</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the neighborhood of each node of an adjacency graph, i.e. the nodes within</span>
+<span class="sd">    a given distance from each node.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input graph is valid (e.g., if the graph</span>
+<span class="sd">        is not symmetric, ...). The behavior of the function is undefined if the input</span>
+<span class="sd">        graph is not valid.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph: Union[ArrayLike, scipy.sparse.spmatrix]</span>
+<span class="sd">        The adjacency graph as a square matrix of shape :math:`(N, N)` (sparse or</span>
+<span class="sd">        dense), where a non-zero entry at :math:`(i, j)` means that nodes :math:`i`</span>
+<span class="sd">        and :math:`j` are neighbors.</span>
+
+<span class="sd">    max_distance: Integral, optional (default: ``1``)</span>
+<span class="sd">        The maximum distance of the nodes in the neighborhood. With 1, only the directly</span>
+<span class="sd">        adjacent nodes are included.</span>
+
+<span class="sd">    self_neighborhood: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the neighborhood of each node includes the node itself.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neighborhood: scipy.sparse.csr_matrix</span>
+<span class="sd">        A symmetric boolean sparse matrix of shape :math:`(N, N)`, where</span>
+<span class="sd">        ``neighborhood[i, j]`` is True if node :math:`j` is in the neighborhood of node</span>
+<span class="sd">        :math:`i`. The neighborhood of node :math:`i` is ``neighborhood[i].indices``</span>
+<span class="sd">        (sorted).</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The neighborhood of node :math:`i` contains all the nodes :math:`j` such that</span>
+<span class="sd">    :math:`\text{dist}(i, j) \leq d` with :math:`d` the ``max_distance``. It is</span>
+<span class="sd">    computed with boolean sparse products as the reachability matrix</span>
+<span class="sd">    :math:`(I + A)^{d}`, where :math:`A` is the adjacency matrix of the graph.</span>
+
+<span class="sd">    - For :math:`d = 0`, the neighborhood of each node is the node itself (or empty if</span>
+<span class="sd">      ``self_neighborhood`` is False).</span>
+<span class="sd">    - For :math:`d = 1`, the neighborhood is :math:`I + A` (or :math:`A` if</span>
+<span class="sd">      ``self_neighborhood`` is False).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.bfs_neighborhood:</span>
+<span class="sd">        Neighborhood of a single node.</span>
+
+<span class="sd">    pysdic.fem.compute_vertices_neighborhood:</span>
+<span class="sd">        Neighborhood of each vertex of a mesh.</span>
+
+<span class="sd">    pysdic.fem.compute_elements_neighborhood:</span>
+<span class="sd">        Neighborhood of each element of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple disconnected graph of 7 nodes and compute the neighborhood of</span>
+<span class="sd">    each node within a distance of 2.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+
+<span class="sd">       Disconnected graph with 7 nodes for BFS example. Neighborhood of node 0</span>
+<span class="sd">       with max_distance=2 includes nodes 0, 1, 2 and 3.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_neighborhood</span>
+
+<span class="sd">        edges = numpy.array([[0, 1], [0, 2], [1, 2], [2, 3], [3, 4], [5, 6]])</span>
+<span class="sd">        graph = numpy.zeros((7, 7), dtype=bool)</span>
+<span class="sd">        graph[edges[:, 0], edges[:, 1]] = True</span>
+<span class="sd">        graph[edges[:, 1], edges[:, 0]] = True</span>
+
+<span class="sd">        neighborhood = compute_neighborhood(graph, max_distance=2)</span>
+
+<span class="sd">        print(f"neighborhood (shape={neighborhood.shape})")</span>
+<span class="sd">        print(f"neighborhood of node 0: {neighborhood[0].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        neighborhood (shape=(7, 7))</span>
+<span class="sd">        neighborhood of node 0: [0 1 2 3]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">_as_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">max_distance</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">max_distance</span><span class="p">,</span> <span class="s2">"max_distance"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">self_neighborhood</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">self_neighborhood</span><span class="p">,</span> <span class="s2">"self_neighborhood"</span><span class="p">)</span>
+
+    <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">_reachability</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">)</span>  <span class="c1"># (N, N), diagonal included</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">self_neighborhood</span><span class="p">:</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+        <span class="n">not_self</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">row</span> <span class="o">!=</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">col</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">not_self</span><span class="p">],</span>
+             <span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">row</span><span class="p">[</span><span class="n">not_self</span><span class="p">],</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="n">not_self</span><span class="p">])),</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="n">neighborhood</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">neighborhood</span></div>
+
+
+
+<div class="viewcode-block" id="compute_vertices_neighborhood">
+<a class="viewcode-back" href="../../../api/fem/compute_vertices_neighborhood.html#pysdic.fem.compute_vertices_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_vertices_neighborhood</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n_vertices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the neighborhood of each vertex of a mesh, i.e. the vertices within a given</span>
+<span class="sd">    distance, where two vertices are neighbors (distance 1) if they belong to the same</span>
+<span class="sd">    element.</span>
+
+<span class="sd">    Convenience function that combines :func:`pysdic.fem.assemble_vertices_adjacency_graph`</span>
+<span class="sd">    and :func:`pysdic.fem.compute_neighborhood`.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input connectivity is valid</span>
+<span class="sd">        (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        The behavior of the function is undefined in that case.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    n_vertices: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The total number of vertices :math:`N_{v}` in the mesh. If not provided, it</span>
+<span class="sd">        will be inferred as the maximum vertex index in ``connectivity_array`` plus one.</span>
+
+<span class="sd">    max_distance: Integral, optional (default: ``1``)</span>
+<span class="sd">        The maximum distance of the vertices in the neighborhood. With 1, only the</span>
+<span class="sd">        vertices sharing an element are included.</span>
+
+<span class="sd">    self_neighborhood: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the neighborhood of each vertex includes the vertex itself.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neighborhood: scipy.sparse.csr_matrix</span>
+<span class="sd">        A symmetric boolean sparse matrix of shape :math:`(N_{v}, N_{v})`, where the</span>
+<span class="sd">        neighborhood of vertex :math:`i` is ``neighborhood[i].indices`` (sorted).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.compute_neighborhood:</span>
+<span class="sd">        Neighborhood of each node of an adjacency graph.</span>
+
+<span class="sd">    pysdic.fem.assemble_vertices_adjacency_graph:</span>
+<span class="sd">        Vertices adjacency graph of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements and compute</span>
+<span class="sd">    the neighborhood of each vertex.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh. The neighborhood of vertex 1 with max_distance=1</span>
+<span class="sd">        contains vertices 0, 1, 2, 4, 5 and 6.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_vertices_neighborhood</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        neighborhood = compute_vertices_neighborhood(connectivity_array, max_distance=1)</span>
+
+<span class="sd">        print(f"vertices neighborhood (shape={neighborhood.shape})")</span>
+<span class="sd">        print(f"neighborhood of vertex 1: {neighborhood[1].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        vertices neighborhood (shape=(10, 10))</span>
+<span class="sd">        neighborhood of vertex 1: [0 1 2 4 5 6]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">assemble_vertices_adjacency_graph</span><span class="p">(</span><span class="n">connectivity_array</span><span class="p">,</span> <span class="n">n_vertices</span><span class="o">=</span><span class="n">n_vertices</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compute_neighborhood</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="n">self_neighborhood</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compute_elements_neighborhood">
+<a class="viewcode-back" href="../../../api/fem/compute_elements_neighborhood.html#pysdic.fem.compute_elements_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_elements_neighborhood</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute the neighborhood of each element of a mesh, i.e. the elements within a</span>
+<span class="sd">    given distance, where two elements are neighbors (distance 1) if they share at</span>
+<span class="sd">    least one vertex.</span>
+
+<span class="sd">    Convenience function that combines :func:`pysdic.fem.assemble_elements_adjacency_graph`</span>
+<span class="sd">    and :func:`pysdic.fem.compute_neighborhood`.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``connectivity_array`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        No tests are performed to check if the input connectivity is valid</span>
+<span class="sd">        (e.g., if the connectivity contains invalid vertex indices, ...).</span>
+<span class="sd">        The behavior of the function is undefined in that case.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    max_distance: Integral, optional (default: ``1``)</span>
+<span class="sd">        The maximum distance of the elements in the neighborhood. With 1, only the</span>
+<span class="sd">        elements sharing a vertex are included.</span>
+
+<span class="sd">    self_neighborhood: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the neighborhood of each element includes the element itself.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neighborhood: scipy.sparse.csr_matrix</span>
+<span class="sd">        A symmetric boolean sparse matrix of shape :math:`(N_{e}, N_{e})`, where the</span>
+<span class="sd">        neighborhood of element :math:`i` is ``neighborhood[i].indices`` (sorted).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.compute_neighborhood:</span>
+<span class="sd">        Neighborhood of each node of an adjacency graph.</span>
+
+<span class="sd">    pysdic.fem.assemble_elements_adjacency_graph:</span>
+<span class="sd">        Elements adjacency graph of a mesh.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements and compute</span>
+<span class="sd">    the neighborhood of each element.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh. The neighborhood of element 0 with max_distance=1</span>
+<span class="sd">        contains elements 0 and 1.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_elements_neighborhood</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        neighborhood = compute_elements_neighborhood(connectivity_array, max_distance=1)</span>
+
+<span class="sd">        print(f"elements neighborhood (shape={neighborhood.shape})")</span>
+<span class="sd">        print(f"neighborhood of element 0: {neighborhood[0].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        elements neighborhood (shape=(4, 4))</span>
+<span class="sd">        neighborhood of element 0: [0 1]</span>
+
+<span class="sd">    """</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">assemble_elements_adjacency_graph</span><span class="p">(</span><span class="n">connectivity_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compute_neighborhood</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">self_neighborhood</span><span class="o">=</span><span class="n">self_neighborhood</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Integration points neighborhoods</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="remap_integration_points_neighborhood">
+<a class="viewcode-back" href="../../../api/fem/remap_integration_points_neighborhood.html#pysdic.fem.remap_integration_points_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">remap_integration_points_neighborhood</span><span class="p">(</span>
+    <span class="n">elements_neighborhood</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">],</span>
+    <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">skip_m1</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Remap a neighborhood of the elements of a mesh to the integration points: for each</span>
+<span class="sd">    element, get the integration points located in the elements of its neighborhood.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``element_indices`` will be converted to ``numpy.int64``.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        With ``skip_m1=True``, the points with element index ``-1`` (outside the mesh)</span>
+<span class="sd">        belong to no neighborhood. With ``skip_m1=False``, negative element indices raise</span>
+<span class="sd">        an ``IndexError``.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elements_neighborhood: Union[ArrayLike, scipy.sparse.spmatrix]</span>
+<span class="sd">        The neighborhood of the elements as a square matrix of shape</span>
+<span class="sd">        :math:`(N_{e}, N_{e})` (sparse or dense), where a non-zero entry at</span>
+<span class="sd">        :math:`(i, j)` means that element :math:`j` is in the neighborhood of element</span>
+<span class="sd">        :math:`i` (see :func:`pysdic.fem.compute_elements_neighborhood`).</span>
+
+<span class="sd">    element_indices: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of the element of each</span>
+<span class="sd">        of the :math:`N_{p}` integration points.</span>
+
+<span class="sd">    skip_m1: bool, optional (default: ``True``)</span>
+<span class="sd">        If set to True, the points with element index ``-1`` are ignored.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    points_neighborhood: scipy.sparse.csr_matrix</span>
+<span class="sd">        A boolean sparse matrix of shape :math:`(N_{e}, N_{p})`, where the integration</span>
+<span class="sd">        points in the neighborhood of element :math:`i` are</span>
+<span class="sd">        ``points_neighborhood[i].indices`` (sorted).</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Let :math:`\mathcal{V} \in \{0, 1\}^{N_{e} \times N_{e}}` be the elements</span>
+<span class="sd">    neighborhood and :math:`C \in \{0, 1\}^{N_{e} \times N_{p}}` the matrix such that</span>
+<span class="sd">    :math:`C_{e,p} = 1` if point :math:`p` is located in element :math:`e`. The points</span>
+<span class="sd">    neighborhood is the boolean product :math:`\mathcal{V} C`.</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.compute_elements_neighborhood:</span>
+<span class="sd">        Neighborhood of each element of a mesh.</span>
+
+<span class="sd">    pysdic.fem.compute_integration_points_neighborhood:</span>
+<span class="sd">        Neighborhood of integration points directly from the mesh connectivity.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements, with two</span>
+<span class="sd">    integration points per element and one point outside the mesh, and remap the</span>
+<span class="sd">    neighborhood of the elements to the integration points.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import (</span>
+<span class="sd">            compute_elements_neighborhood,</span>
+<span class="sd">            remap_integration_points_neighborhood,</span>
+<span class="sd">        )</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        element_indices = numpy.array([0, 0, 1, 1, 2, 2, 3, 3, -1])</span>
+
+<span class="sd">        elements_neighborhood = compute_elements_neighborhood(connectivity_array)</span>
+<span class="sd">        points_neighborhood = remap_integration_points_neighborhood(</span>
+<span class="sd">            elements_neighborhood, element_indices</span>
+<span class="sd">        )</span>
+
+<span class="sd">        print(f"points neighborhood (shape={points_neighborhood.shape})")</span>
+<span class="sd">        for element in range(points_neighborhood.shape[0]):</span>
+<span class="sd">            print(f"element {element}: points {points_neighborhood[element].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        points neighborhood (shape=(4, 9))</span>
+<span class="sd">        element 0: points [0 1 2 3]</span>
+<span class="sd">        element 1: points [0 1 2 3 4 5 6 7]</span>
+<span class="sd">        element 2: points [2 3 4 5 6 7]</span>
+<span class="sd">        element 3: points [2 3 4 5 6 7]</span>
+
+<span class="sd">    """</span>
+    <span class="n">elements_neighborhood</span> <span class="o">=</span> <span class="n">_as_graph</span><span class="p">(</span><span class="n">elements_neighborhood</span><span class="p">)</span>
+    <span class="n">element_indices</span> <span class="o">=</span> <span class="n">_as_integer_array</span><span class="p">(</span>
+        <span class="n">element_indices</span><span class="p">,</span> <span class="s2">"element_indices"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_p,)"</span>
+    <span class="p">)</span>
+    <span class="n">skip_m1</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">skip_m1</span><span class="p">,</span> <span class="s2">"skip_m1"</span><span class="p">)</span>
+
+    <span class="n">N_e</span> <span class="o">=</span> <span class="n">elements_neighborhood</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_p</span> <span class="o">=</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">_valid_points_mask</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">skip_m1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">element_indices</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">N_e</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'element_indices' contains indices greater than the number of "</span>
+            <span class="sa">f</span><span class="s2">"elements (</span><span class="si">{</span><span class="n">N_e</span><span class="si">}</span><span class="s2">) of 'elements_neighborhood'."</span>
+        <span class="p">)</span>
+
+    <span class="c1"># C[e, p] = True if point p is located in element e</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">valid_mask</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span> <span class="p">(</span><span class="n">element_indices</span><span class="p">[</span><span class="n">points</span><span class="p">],</span> <span class="n">points</span><span class="p">)),</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N_e</span><span class="p">,</span> <span class="n">N_p</span><span class="p">),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+
+    <span class="n">points_neighborhood</span> <span class="o">=</span> <span class="p">(</span><span class="n">elements_neighborhood</span> <span class="o">@</span> <span class="n">location</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>  <span class="c1"># (N_e, N_p)</span>
+    <span class="n">points_neighborhood</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">points_neighborhood</span></div>
+
+
+
+<div class="viewcode-block" id="compute_integration_points_neighborhood">
+<a class="viewcode-back" href="../../../api/fem/compute_integration_points_neighborhood.html#pysdic.fem.compute_integration_points_neighborhood">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_integration_points_neighborhood</span><span class="p">(</span>
+    <span class="n">connectivity_array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">self_neighborhood</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">skip_m1</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute, for each element of a mesh, the integration points located in the elements</span>
+<span class="sd">    of its neighborhood.</span>
+
+<span class="sd">    Convenience function that combines :func:`pysdic.fem.compute_elements_neighborhood`</span>
+<span class="sd">    and :func:`pysdic.fem.remap_integration_points_neighborhood`.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Inputs ``connectivity_array`` and ``element_indices`` will be converted to</span>
+<span class="sd">          ``numpy.int64``.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        With ``skip_m1=True``, the points with element index ``-1`` (outside the mesh)</span>
+<span class="sd">        belong to no neighborhood. With ``skip_m1=False``, negative element indices raise</span>
+<span class="sd">        an ``IndexError``.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connectivity_array: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{e}, N_{vpe})` defining the connectivity of the</span>
+<span class="sd">        elements in the mesh, where each row contains the indices of the vertices that</span>
+<span class="sd">        form an element.</span>
+
+<span class="sd">    element_indices: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_{p},)` containing the indices of the element of each</span>
+<span class="sd">        of the :math:`N_{p}` integration points.</span>
+
+<span class="sd">    max_distance: Integral, optional (default: ``1``)</span>
+<span class="sd">        The maximum distance of the elements in the neighborhood. With 1, only the</span>
+<span class="sd">        elements sharing a vertex are included.</span>
+
+<span class="sd">    self_neighborhood: bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the neighborhood of each element includes the element itself (and so</span>
+<span class="sd">        its own integration points).</span>
+
+<span class="sd">    skip_m1: bool, optional (default: ``True``)</span>
+<span class="sd">        If set to True, the points with element index ``-1`` are ignored.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    points_neighborhood: scipy.sparse.csr_matrix</span>
+<span class="sd">        A boolean sparse matrix of shape :math:`(N_{e}, N_{p})`, where the integration</span>
+<span class="sd">        points in the neighborhood of element :math:`i` are</span>
+<span class="sd">        ``points_neighborhood[i].indices`` (sorted).</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    pysdic.fem.compute_elements_neighborhood:</span>
+<span class="sd">        Neighborhood of each element of a mesh.</span>
+
+<span class="sd">    pysdic.fem.remap_integration_points_neighborhood:</span>
+<span class="sd">        Remap a neighborhood of the elements to the integration points.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Create a simple ``'quadrangle_4'`` mesh with 10 vertices and 4 elements, with two</span>
+<span class="sd">    integration points per element, and compute the integration points in the</span>
+<span class="sd">    neighborhood of each element.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_mesh.png</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :width: 50%</span>
+
+<span class="sd">        ``'quadrangle_4'`` mesh.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        from pysdic.fem import compute_integration_points_neighborhood</span>
+
+<span class="sd">        connectivity_array = numpy.array([</span>
+<span class="sd">            [0, 1, 4, 5],</span>
+<span class="sd">            [1, 2, 5, 6],</span>
+<span class="sd">            [2, 3, 6, 7],</span>
+<span class="sd">            [6, 7, 8, 9]])</span>
+
+<span class="sd">        element_indices = numpy.array([0, 0, 1, 1, 2, 2, 3, 3])</span>
+
+<span class="sd">        points_neighborhood = compute_integration_points_neighborhood(</span>
+<span class="sd">            connectivity_array, element_indices, max_distance=1</span>
+<span class="sd">        )</span>
+
+<span class="sd">        print(f"points neighborhood (shape={points_neighborhood.shape})")</span>
+<span class="sd">        for element in range(points_neighborhood.shape[0]):</span>
+<span class="sd">            print(f"element {element}: points {points_neighborhood[element].indices}")</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        points neighborhood (shape=(4, 8))</span>
+<span class="sd">        element 0: points [0 1 2 3]</span>
+<span class="sd">        element 1: points [0 1 2 3 4 5 6 7]</span>
+<span class="sd">        element 2: points [2 3 4 5 6 7]</span>
+<span class="sd">        element 3: points [2 3 4 5 6 7]</span>
+
+<span class="sd">    """</span>
+    <span class="n">elements_neighborhood</span> <span class="o">=</span> <span class="n">compute_elements_neighborhood</span><span class="p">(</span>
+        <span class="n">connectivity_array</span><span class="p">,</span>
+        <span class="n">max_distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span>
+        <span class="n">self_neighborhood</span><span class="o">=</span><span class="n">self_neighborhood</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">remap_integration_points_neighborhood</span><span class="p">(</span>
+        <span class="n">elements_neighborhood</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">,</span> <span class="n">skip_m1</span><span class="o">=</span><span class="n">skip_m1</span>
+    <span class="p">)</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Neighborhood statistics</span>
+<span class="c1"># =============================================================================</span>
+<span class="n">_NEIGHBORHOOD_STATISTICS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"median"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">,</span> <span class="s2">"var"</span><span class="p">,</span> <span class="s2">"Q1"</span><span class="p">,</span> <span class="s2">"Q3"</span><span class="p">,</span> <span class="s2">"IQR"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="compute_neighborhood_statistics">
+<a class="viewcode-back" href="../../../api/fem/compute_neighborhood_statistics.html#pysdic.fem.compute_neighborhood_statistics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_neighborhood_statistics</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">neighborhood</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">],</span>
+    <span class="n">statistics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Compute statistics of values over the neighborhood of each node of a graph (vertices,</span>
+<span class="sd">    elements, ...).</span>
+
+<span class="sd">    The neighborhood is a matrix of shape :math:`(N, M)` whose row :math:`i` lists the</span>
+<span class="sd">    indices of the values used for the node :math:`i` (its non-zero columns), as returned by</span>
+<span class="sd">    :func:`pysdic.fem.compute_neighborhood`, :func:`pysdic.fem.compute_vertices_neighborhood`</span>
+<span class="sd">    or :func:`pysdic.fem.compute_elements_neighborhood` (:math:`M = N`), or by</span>
+<span class="sd">    :func:`pysdic.fem.compute_integration_points_neighborhood` (values defined at :math:`M`</span>
+<span class="sd">    integration points, statistics computed for each element).</span>
+
+<span class="sd">    Implemented statistics:</span>
+
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | Statistic  | Description                                                       |</span>
+<span class="sd">    +============+===================================================================+</span>
+<span class="sd">    | ``mean``   | Mean of the values of the neighborhood.                           |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``median`` | Median of the values of the neighborhood.                         |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``min``    | Minimum of the values of the neighborhood.                        |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``max``    | Maximum of the values of the neighborhood.                        |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``std``    | Standard deviation (population, ``ddof=0``) of the values.        |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``var``    | Variance (population, ``ddof=0``) of the values.                  |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``Q1``     | First quartile (25th percentile) of the values.                   |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``Q3``     | Third quartile (75th percentile) of the values.                   |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+<span class="sd">    | ``IQR``    | Interquartile range ``Q3 - Q1``.                                  |</span>
+<span class="sd">    +------------+-------------------------------------------------------------------+</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        - Input ``values`` will be converted to ``numpy.float64``. A 1D array of shape</span>
+<span class="sd">          :math:`(M,)` is treated as :math:`(M, 1)`. The statistics are computed</span>
+<span class="sd">          independently for each of the :math:`P` components.</span>
+<span class="sd">        - The non-finite values are not ignored: a NaN in a neighborhood gives NaN</span>
+<span class="sd">          statistics for this node (``numpy`` semantics).</span>
+<span class="sd">        - A node with an empty neighborhood gets NaN statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    values: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(M,)` or :math:`(M, P)` with the values.</span>
+
+<span class="sd">    neighborhood: Union[ArrayLike, scipy.sparse.spmatrix]</span>
+<span class="sd">        A matrix of shape :math:`(N, M)`, the non-zero entries of the row :math:`i` being</span>
+<span class="sd">        the indices of the values in the neighborhood of the node :math:`i`.</span>
+
+<span class="sd">    statistics: Union[str, Sequence[str]]</span>
+<span class="sd">        The name of the statistics to compute, or a sequence of names.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, numpy.ndarray]</span>
+<span class="sd">        For each requested statistic, an array of shape :math:`(N, P)`.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If ``statistics`` is not a string or a sequence of strings.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If a statistic is not implemented, or if the shapes are not consistent.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Statistics of a temperature defined at the 7 vertices of a disconnected graph, over</span>
+<span class="sd">    the vertices within a distance 2.</span>
+
+<span class="sd">    .. figure:: /_static/adjacency/graph_bfs.png</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       :width: 50%</span>
+
+<span class="sd">       Disconnected graph with 7 vertices.</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        import numpy</span>
+<span class="sd">        import scipy.sparse</span>
+<span class="sd">        from pysdic.fem import compute_neighborhood, compute_neighborhood_statistics</span>
+
+<span class="sd">        edges = [(0, 1), (0, 2), (1, 2), (2, 3), (3, 4), (5, 6)]</span>
+<span class="sd">        rows, columns = numpy.array(edges).T</span>
+<span class="sd">        graph = scipy.sparse.coo_matrix((numpy.ones(len(edges)), (rows, columns)), shape=(7, 7))</span>
+<span class="sd">        graph = graph + graph.T</span>
+
+<span class="sd">        neighborhood = compute_neighborhood(graph, max_distance=2, self_neighborhood=True)</span>
+<span class="sd">        temperature = [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0]</span>
+
+<span class="sd">        statistics = compute_neighborhood_statistics(temperature, neighborhood, ["min", "max", "mean"])</span>
+<span class="sd">        print(statistics["min"].ravel())</span>
+<span class="sd">        print(statistics["max"].ravel())</span>
+<span class="sd">        print(statistics["mean"].ravel())</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        [10. 10. 10. 10. 30. 60. 60.]</span>
+<span class="sd">        [40. 40. 50. 50. 50. 70. 70.]</span>
+<span class="sd">        [25. 25. 30. 30. 40. 65. 65.]</span>
+
+<span class="sd">    """</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="s2">"values"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">accept_1d_as_column</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">):</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="s2">"neighborhood"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">neighborhood</span><span class="o">.</span><span class="n">eliminate_zeros</span><span class="p">()</span>
+    <span class="n">neighborhood</span><span class="o">.</span><span class="n">sort_indices</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'neighborhood' must have one column per value (</span><span class="si">{</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">). "</span>
+            <span class="sa">f</span><span class="s2">"Got shape </span><span class="si">{</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">statistics</span> <span class="o">=</span> <span class="p">[</span><span class="n">statistics</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'statistics' must be a string or a sequence of strings. Got </span><span class="si">{</span><span class="n">statistics</span><span class="si">!r}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">for</span> <span class="n">statistic</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">statistic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_NEIGHBORHOOD_STATISTICS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Unsupported statistic </span><span class="si">{</span><span class="n">statistic</span><span class="si">!r}</span><span class="s2">. Supported statistics: </span><span class="si">{</span><span class="n">_NEIGHBORHOOD_STATISTICS</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+    <span class="n">N</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">functions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"mean"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"median"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"min"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"max"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"std"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"var"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"Q1"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"Q3"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"IQR"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="n">statistic</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">statistic</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="p">:</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">indptr</span><span class="p">[</span><span class="n">node</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">indices</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>  <span class="c1"># Empty neighborhood: NaN</span>
+        <span class="n">neighbor_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">statistic</span> <span class="ow">in</span> <span class="n">statistics</span><span class="p">:</span>
+            <span class="n">output</span><span class="p">[</span><span class="n">statistic</span><span class="p">][</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">functions</span><span class="p">[</span><span class="n">statistic</span><span class="p">](</span><span class="n">neighbor_values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

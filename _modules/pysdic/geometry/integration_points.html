@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.geometry.integration_points &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/geometry/integration_points';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.geometry.integration_points</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.geometry.integration_points</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.property_container</span><span class="w"> </span><span class="kn">import</span> <span class="n">PropertyContainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.lockable</span><span class="w"> </span><span class="kn">import</span> <span class="n">LockableMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">JsonSerializerMixin</span><span class="p">,</span>
+    <span class="n">NpzSerializerMixin</span><span class="p">,</span>
+    <span class="n">Hdf5SerializerMixin</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_validate_bool</span><span class="p">,</span>
+    <span class="n">_validate_integer</span><span class="p">,</span>
+    <span class="n">_as_array</span><span class="p">,</span>
+    <span class="n">_as_integer_array</span><span class="p">,</span>
+    <span class="n">_as_bool_mask</span><span class="p">,</span>
+    <span class="n">_as_index_array</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..fem._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_element_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..fem.gauss_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_gauss_points</span>
+
+
+<div class="viewcode-block" id="IntegrationPoints">
+<a class="viewcode-back" href="../../../api/geometry/IntegrationPoints.html#pysdic.IntegrationPoints">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">IntegrationPoints</span><span class="p">(</span><span class="n">LockableMixin</span><span class="p">,</span> <span class="n">JsonSerializerMixin</span><span class="p">,</span> <span class="n">NpzSerializerMixin</span><span class="p">,</span> <span class="n">Hdf5SerializerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    A set of :math:`N_p` integration points located in the elements of a mesh.</span>
+
+<span class="sd">    Each point is defined by the index of its element and its natural coordinates</span>
+<span class="sd">    :math:`\Xi = (\xi, \eta, ...)` in the reference element. There are :math:`K`</span>
+<span class="sd">    natural coordinates, the topological dimension of the elements (1 for segments, 2</span>
+<span class="sd">    for triangles and quadrangles). Each point also has a weight (e.g. a Gauss</span>
+<span class="sd">    quadrature weight).</span>
+
+<span class="sd">    Each point can carry additional properties stored in a</span>
+<span class="sd">    :class:`pysdic.core.property_container.PropertyContainer`, accessible through the ``properties`` attribute</span>
+<span class="sd">    or directly with ``integration_points[name]``.</span>
+
+<span class="sd">    A point outside the mesh is **unlocated**: its element index is ``-1``. Only the</span>
+<span class="sd">    element index defines the location: the natural coordinates of an unlocated point</span>
+<span class="sd">    are ignored by the :mod:`pysdic.fem` functions (the methods of this class set them</span>
+<span class="sd">    to ``numpy.nan``).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The arrays are copied when they are set and stored as ``numpy.float64``</span>
+<span class="sd">        (natural coordinates, weights) and ``numpy.int64`` (element indices) arrays.</span>
+<span class="sd">        The attributes return read-only views: to change the values, assign a new</span>
+<span class="sd">        array.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The integration points do not know their mesh: use</span>
+<span class="sd">        :meth:`pysdic.Mesh.validate_integration_points` to check that they are</span>
+<span class="sd">        consistent with a mesh (topological dimension and element indices).</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The properties are stored in a :class:`pysdic.core.property_container.PropertyContainer` with</span>
+<span class="sd">        ``force_2d=True``, i.e. with shape :math:`(N_p, P)`. A container given by the</span>
+<span class="sd">        user with other settings is accepted, but some operations may behave</span>
+<span class="sd">        unexpectedly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    natural_coordinates: ArrayLike</span>
+<span class="sd">        An array of shape :math:`(N_p, K)` with the natural coordinates of the points.</span>
+<span class="sd">        A 1D array of shape :math:`(N_p,)` is accepted if ``n_topological_dimensions=1``.</span>
+
+<span class="sd">    element_indices: ArrayLike</span>
+<span class="sd">        An integer array of shape :math:`(N_p,)` with the index of the element of each</span>
+<span class="sd">        point, or ``-1`` for an unlocated point. Floats are accepted only if they are</span>
+<span class="sd">        integral (no truncation).</span>
+
+<span class="sd">    weights: Optional[ArrayLike], optional (default: ``None``)</span>
+<span class="sd">        An array of shape :math:`(N_p,)` with the finite and non-negative weights of</span>
+<span class="sd">        the points. By default, all the weights are 1.</span>
+
+<span class="sd">    n_topological_dimensions: Optional[Integral], optional (default: ``None``)</span>
+<span class="sd">        The topological dimension :math:`K`. By default, it is inferred from the shape</span>
+<span class="sd">        of ``natural_coordinates``. If given, it must match this shape.</span>
+
+<span class="sd">    properties: Optional[Union[Dict[str, ArrayLike], PropertyContainer]], optional</span>
+<span class="sd">        The properties of the points:</span>
+
+<span class="sd">        - a dictionary mapping names to arrays of shape :math:`(N_p, \dots)`, which</span>
+<span class="sd">          are copied into a new :class:`pysdic.core.property_container.PropertyContainer`,</span>
+<span class="sd">        - or a :class:`pysdic.core.property_container.PropertyContainer` with :math:`N = N_p`, which is</span>
+<span class="sd">          **shared** (not copied).</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``len(integration_points)`` gives the number of points :math:`N_p`, while</span>
+<span class="sd">    ``integration_points[name]``, ``name in integration_points`` and</span>
+<span class="sd">    ``iter(integration_points)`` refer to the properties.</span>
+
+<span class="sd">    The methods never modify the integration points in place: the methods that change</span>
+<span class="sd">    the points (:meth:`filter_points`, :meth:`filter_elements`, :meth:`unlocate_points_by_index`,</span>
+<span class="sd">    ...) return new integration points. Only the setters (same number of points) and the</span>
+<span class="sd">    properties modify existing integration points.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Integration points can be locked by an object of the package that uses them (for</span>
+<span class="sd">        example a term built with :func:`pysdic.build_sdic_term`, which computes the shape</span>
+<span class="sd">        functions of the points once, see :class:`pysdic.core.lockable.LockableMixin`): the</span>
+<span class="sd">        setters ``natural_coordinates``, ``element_indices`` and ``weights`` then raise a</span>
+<span class="sd">        :class:`RuntimeError` explaining why. The locked points can still be read and used</span>
+<span class="sd">        everywhere, and their properties can be modified. A copy (``copy``) is always</span>
+<span class="sd">        unlocked.</span>
+
+<span class="sd">    """</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">"_natural_coordinates"</span><span class="p">,</span>
+        <span class="s2">"_element_indices"</span><span class="p">,</span>
+        <span class="s2">"_weights"</span><span class="p">,</span>
+        <span class="s2">"_properties"</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">natural_coordinates</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_topological_dimensions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">PropertyContainer</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_topological_dimensions</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span>
+            <span class="n">n_topological_dimensions</span><span class="p">,</span> <span class="s2">"n_topological_dimensions"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_natural_coordinates</span><span class="p">(</span>
+            <span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">n_topological_dimensions</span>
+        <span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_element_indices</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_weights</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">properties</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">PropertyContainer</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">force_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">PropertyContainer</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">N</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"The number of entities in 'properties' must match the number of "</span>
+                    <span class="sa">f</span><span class="s2">"integration points. Got N=</span><span class="si">{</span><span class="n">properties</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2"> for properties and N_p=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"for integration points."</span>
+                <span class="p">)</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">properties</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">PropertyContainer</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span> <span class="n">force_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'properties' must be None, a dictionary of arrays or a "</span>
+                <span class="sa">f</span><span class="s2">"PropertyContainer. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span> <span class="o">=</span> <span class="n">natural_coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span> <span class="o">=</span> <span class="n">element_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span> <span class="o">=</span> <span class="n">props</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_natural_coordinates</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">n_topological_dimensions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Copy the input to a (N_p, K) float64 array (NaN allowed for unlocated points).</span>
+        <span class="c1"># 1D input is only accepted for K = 1.</span>
+        <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span> <span class="s2">"natural_coordinates"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_topological_dimensions</span><span class="p">),</span>
+            <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(N_p, K)"</span> <span class="k">if</span> <span class="n">n_topological_dimensions</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"(N_p, </span><span class="si">{</span><span class="n">n_topological_dimensions</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+            <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">accept_1d_as_column</span><span class="o">=</span><span class="p">(</span><span class="n">n_topological_dimensions</span> <span class="o">==</span> <span class="mi">1</span><span class="p">),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Input 'natural_coordinates' must have at least one dimension (K &gt;= 1)."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">natural_coordinates</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_element_indices</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Copy the input to a (N_p,) int64 array of indices &gt;= -1</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">_as_integer_array</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span> <span class="s2">"element_indices"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_points</span><span class="p">,),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">n_points</span><span class="si">}</span><span class="s2">,)"</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'element_indices' must contain element indices &gt;= 0, or -1 for "</span>
+                <span class="sa">f</span><span class="s2">"unlocated points. Got a minimum index of </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">element_indices</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_weights</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Copy the input to a (N_p,) float64 array of finite non-negative weights (1 by default)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span> <span class="s2">"weights"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_points</span><span class="p">,),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">n_points</span><span class="si">}</span><span class="s2">,)"</span><span class="p">,</span>
+            <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'weights' must contain non-negative values. Got a minimum weight "</span>
+                <span class="sa">f</span><span class="s2">"of </span><span class="si">{</span><span class="n">weights</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">weights</span>
+
+<div class="viewcode-block" id="IntegrationPoints.validate">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.validate.html#pysdic.IntegrationPoints.validate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Validate the integrity of the integration points.</span>
+
+<span class="sd">        The following conditions are checked:</span>
+
+<span class="sd">        - The natural coordinates are a ``numpy.float64`` array of shape</span>
+<span class="sd">          :math:`(N_p, K)` with :math:`K \geq 1`.</span>
+<span class="sd">        - The element indices are a ``numpy.int64`` array of shape :math:`(N_p,)` with</span>
+<span class="sd">          values :math:`\geq -1`.</span>
+<span class="sd">        - The weights are a ``numpy.float64`` array of shape :math:`(N_p,)` with finite</span>
+<span class="sd">          non-negative values.</span>
+<span class="sd">        - The properties are a :class:`pysdic.core.property_container.PropertyContainer` with</span>
+<span class="sd">          :math:`N = N_p`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recursive: bool, optional (default: ``True``)</span>
+<span class="sd">            If True, the property container is also validated (see</span>
+<span class="sd">            :meth:`pysdic.core.property_container.PropertyContainer.validate`).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If an attribute has a wrong type.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If an attribute has a wrong shape or value.</span>
+
+<span class="sd">        """</span>
+        <span class="n">recursive</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">recursive</span><span class="p">,</span> <span class="s2">"recursive"</span><span class="p">)</span>
+
+        <span class="c1"># --- natural coordinates: 2D float64 array of shape (Np, K) ---</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"[IntegrationPoints validate] natural_coordinates should be a numpy ndarray."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] natural_coordinates should be a 2D array of "</span>
+                <span class="sa">f</span><span class="s2">"shape (Np, K) with K &gt;= 1. Got shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] natural_coordinates should have dtype "</span>
+                <span class="sa">f</span><span class="s2">"float64. Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># --- element indices: int64 array of shape (Np,) with values &gt;= -1 ---</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"[IntegrationPoints validate] element_indices should be a numpy ndarray."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">N</span><span class="p">,):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] element_indices should have shape (</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">,). "</span>
+                <span class="sa">f</span><span class="s2">"Got shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] element_indices should have dtype int64. "</span>
+                <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] element_indices should be &gt;= -1. "</span>
+                <span class="sa">f</span><span class="s2">"Minimum index found: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+        <span class="c1"># --- weights: float64 array of shape (Np,) with finite non-negative values ---</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"[IntegrationPoints validate] weights should be a numpy ndarray."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">N</span><span class="p">,):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] weights should have shape (</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">,). "</span>
+                <span class="sa">f</span><span class="s2">"Got shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] weights should have dtype float64. "</span>
+                <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"[IntegrationPoints validate] weights should be finite and non-negative."</span>
+            <span class="p">)</span>
+
+        <span class="c1"># --- properties: PropertyContainer with the same number of points ---</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">,</span> <span class="n">PropertyContainer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"[IntegrationPoints validate] properties should be a PropertyContainer."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">N</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"[IntegrationPoints validate] The number of entities in properties should "</span>
+                <span class="sa">f</span><span class="s2">"match the number of points. Got N=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2"> for properties and "</span>
+                <span class="sa">f</span><span class="s2">"N_p=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2"> for points."</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span></div>
+
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># API interface</span>
+    <span class="c1"># ==========================</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">natural_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The natural coordinates of the points, an array of shape</span>
+<span class="sd">        :math:`(N_p, K)`.</span>
+
+<span class="sd">        The getter returns a read-only view. The setter copies the given array, whose</span>
+<span class="sd">        shape must be :math:`(N_p, K)`. The setter is refused (``RuntimeError``) if the</span>
+<span class="sd">        integration points are locked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: ArrayLike</span>
+<span class="sd">            An array of shape :math:`(N_p, K)`. A 1D array of shape :math:`(N_p,)` is</span>
+<span class="sd">            accepted if :math:`K = 1`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A read-only view of shape :math:`(N_p, K)` on the natural coordinates.</span>
+
+<span class="sd">        """</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="nd">@natural_coordinates</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">natural_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_unlocked</span><span class="p">(</span><span class="s2">"set the natural coordinates"</span><span class="p">)</span>
+        <span class="n">natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_natural_coordinates</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'natural_coordinates' must keep the number of points "</span>
+                <span class="sa">f</span><span class="s2">"N_p=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points. Consider "</span>
+                <span class="sa">f</span><span class="s2">"using the filter/concatenate methods to change the number of points."</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span> <span class="o">=</span> <span class="n">natural_coordinates</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">element_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The element index of each point (``-1`` for an unlocated point), an</span>
+<span class="sd">        array of shape :math:`(N_p,)`.</span>
+
+<span class="sd">        The getter returns a read-only view. The setter copies the given array. The</span>
+<span class="sd">        setter is refused (``RuntimeError``) if the integration points are locked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(N_p,)` with values :math:`\geq -1`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A read-only view of shape :math:`(N_p,)` on the element indices.</span>
+
+<span class="sd">        """</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="nd">@element_indices</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">element_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_unlocked</span><span class="p">(</span><span class="s2">"set the element indices"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_element_indices</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get/Set] The weights of the points, an array of shape :math:`(N_p,)`.</span>
+
+<span class="sd">        The getter returns a read-only view. The setter copies the given array. The</span>
+<span class="sd">        setter is refused (``RuntimeError``) if the integration points are locked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: Optional[ArrayLike]</span>
+<span class="sd">            An array of shape :math:`(N_p,)` with finite non-negative values, or</span>
+<span class="sd">            ``None`` to set all the weights to 1.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A read-only view of shape :math:`(N_p,)` on the weights.</span>
+
+<span class="sd">        """</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">writeable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="nd">@weights</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_unlocked</span><span class="p">(</span><span class="s2">"set the weights"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_weights</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_topological_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The topological dimension :math:`K` of the elements.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of natural coordinates.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of points :math:`N_p` (located or not).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of points.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Return the number of points :math:`N_p`."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span>
+
+<div class="viewcode-block" id="IntegrationPoints.is_located">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.is_located.html#pysdic.IntegrationPoints.is_located">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_located</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Check which points are located in an element (element index :math:`\neq -1`).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            A boolean array of shape :math:`(N_p,)`, True for the located points.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_located</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of points located in an element (element index</span>
+<span class="sd">        :math:`\neq -1`).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of located points.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_located</span><span class="p">()))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The shape :math:`(N_p, K)` of the natural coordinates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[int, int]</span>
+<span class="sd">            The number of points and the topological dimension.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PropertyContainer</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The properties of the points.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.core.property_container.PropertyContainer`</span>
+<span class="sd">            The property container (not a copy).</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``integration_points.properties[key]``."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``integration_points.properties[key] = value``."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``del integration_points.properties[key]``."""</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``key in integration_points.properties``."""</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Shortcut for ``iter(integration_points.properties)`` (iterates over the names)."""</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        [Get] The number of properties of the points.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of properties.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">n_properties</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"IntegrationPoints(n_points=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2">, n_located=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_located</span><span class="si">}</span><span class="s2">, "</span>
+            <span class="sa">f</span><span class="s2">"n_topological_dimensions=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="si">}</span><span class="s2">)"</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  - Property: '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">' with shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">get_shape</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="c1"># ==========================</span>
+    <span class="c1"># Creation and I/O Methods</span>
+    <span class="c1"># ==========================</span>
+<div class="viewcode-block" id="IntegrationPoints.from_gauss_points">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.from_gauss_points.html#pysdic.IntegrationPoints.from_gauss_points">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_gauss_points</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">:</span> <span class="n">Integral</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create the Gauss quadrature points of all the elements of a mesh.</span>
+
+<span class="sd">        The :math:`N_{gp}` Gauss points of the element type (see</span>
+<span class="sd">        :func:`pysdic.fem.get_gauss_points`) are repeated for each element, with their</span>
+<span class="sd">        quadrature weights. The points are sorted by element: the points</span>
+<span class="sd">        :math:`e N_{gp}` to :math:`(e + 1) N_{gp} - 1` belong to the element :math:`e`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_type: str</span>
+<span class="sd">            The type of the elements (case insensitive, see</span>
+<span class="sd">            :class:`pysdic.Connectivity`).</span>
+
+<span class="sd">        n_elements: Integral</span>
+<span class="sd">            The number of elements :math:`N_e` of the mesh (non-negative).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            :math:`N_p = N_e N_{gp}` integration points, all located.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            :linenos:</span>
+
+<span class="sd">            from pysdic import IntegrationPoints</span>
+
+<span class="sd">            integration_points = IntegrationPoints.from_gauss_points("quadrangle_4", 2)</span>
+<span class="sd">            print(integration_points.element_indices)  # [0 0 0 0 1 1 1 1]</span>
+<span class="sd">            print(integration_points.weights)          # [1. 1. 1. 1. 1. 1. 1. 1.]</span>
+
+<span class="sd">        """</span>
+        <span class="n">element_type</span> <span class="o">=</span> <span class="n">_validate_element_type</span><span class="p">(</span><span class="n">element_type</span><span class="p">)</span>
+        <span class="n">n_elements</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="s2">"n_elements"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">gauss_points</span><span class="p">,</span> <span class="n">gauss_weights</span> <span class="o">=</span> <span class="n">get_gauss_points</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="n">return_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">n_gauss</span> <span class="o">=</span> <span class="n">gauss_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">gauss_points</span><span class="p">,</span> <span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">element_indices</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_elements</span><span class="p">),</span> <span class="n">n_gauss</span><span class="p">),</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">gauss_weights</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">),</span>
+            <span class="n">n_topological_dimensions</span><span class="o">=</span><span class="n">gauss_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.from_dict">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.from_dict.html#pysdic.IntegrationPoints.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">load_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create integration points from a dictionary.</span>
+
+<span class="sd">        The dictionary must contain the keys ``"natural_coordinates"`` (shape</span>
+<span class="sd">        :math:`(N_p, K)`) and ``"element_indices"`` (shape :math:`(N_p,)`), and may</span>
+<span class="sd">        contain the key ``"weights"`` (shape :math:`(N_p,)`, all 1 if missing). The</span>
+<span class="sd">        properties are read from the keys ``"_property/{property_name}"``.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The dictionary is flat (one level), as required by the NPZ format. See</span>
+<span class="sd">            :class:`pysdic.core.serialization.NpzSerializerMixin`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: Dict[str, Any]</span>
+<span class="sd">            The dictionary to read.</span>
+
+<span class="sd">        load_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the properties are ignored.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The new integration points.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'data' must be a dictionary. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"natural_coordinates"</span><span class="p">,</span> <span class="s2">"(N_p, K)"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"element_indices"</span><span class="p">,</span> <span class="s2">"(N_p,)"</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input dictionary must contain a key '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">' with shape </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">load_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">load_properties</span><span class="p">,</span> <span class="s2">"load_properties"</span><span class="p">)</span>
+
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">load_properties</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s2">"_property/"</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+                    <span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"natural_coordinates"</span><span class="p">],</span>
+            <span class="n">element_indices</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"element_indices"</span><span class="p">],</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"weights"</span><span class="p">),</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.to_dict">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.to_dict.html#pysdic.IntegrationPoints.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">save_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Convert the integration points to a flat dictionary.</span>
+
+<span class="sd">        The natural coordinates, element indices and weights are stored under the keys</span>
+<span class="sd">        ``"natural_coordinates"``, ``"element_indices"`` and ``"weights"``, and the</span>
+<span class="sd">        properties under the keys ``"_property/{property_name}"``. All the arrays are</span>
+<span class="sd">        copies.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The dictionary is flat (one level), as required by the NPZ format. See</span>
+<span class="sd">            :class:`pysdic.core.serialization.NpzSerializerMixin`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        save_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the properties are not included.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The dictionary representation of the integration points.</span>
+
+<span class="sd">        """</span>
+        <span class="n">save_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">save_properties</span><span class="p">,</span> <span class="s2">"save_properties"</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"natural_coordinates"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="s2">"element_indices"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="s2">"weights"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">save_properties</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">"_property/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+    <span class="c1"># =======================</span>
+    <span class="c1"># Structure Methods</span>
+    <span class="c1"># =======================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_new</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">natural_coordinates</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">weights</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PropertyContainer</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+        <span class="c1"># New instance with the same topological dimension (the arrays are copied by the constructor)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">natural_coordinates</span><span class="o">=</span><span class="n">natural_coordinates</span><span class="p">,</span>
+            <span class="n">element_indices</span><span class="o">=</span><span class="n">element_indices</span><span class="p">,</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">n_topological_dimensions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="IntegrationPoints.concatenate">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.concatenate.html#pysdic.IntegrationPoints.concatenate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Concatenate two sets of integration points (the points of ``other`` come after).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The element indices are not shifted: both sets must refer to the same mesh.</span>
+
+<span class="sd">        The properties are concatenated with :meth:`pysdic.core.property_container.PropertyContainer.concatenate`:</span>
+<span class="sd">        a property present in only one set is completed with ``numpy.nan`` for the points</span>
+<span class="sd">        of the other one (integer and boolean properties are then promoted to float).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points to append, with the same :math:`K`.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            New integration points with :math:`N_p + N_p^{other}` points.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">IntegrationPoints</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'other' must be an IntegrationPoints. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">propagate_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_properties</span><span class="p">,</span> <span class="s2">"propagate_properties"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_topological_dimensions</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"IntegrationPoints instances must have the same topological dimension to "</span>
+                <span class="sa">f</span><span class="s2">"be concatenated. Got K=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="si">}</span><span class="s2"> and "</span>
+                <span class="sa">f</span><span class="s2">"K=</span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">n_topological_dimensions</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+        <span class="n">concatenated_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">propagate_properties</span><span class="p">:</span>
+            <span class="n">concatenated_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_properties</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">(</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="p">)),</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">)),</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_weights</span><span class="p">)),</span>
+            <span class="n">concatenated_properties</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.copy">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.copy.html#pysdic.IntegrationPoints.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">copy_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Create a copy of the integration points. The copy is always unlocked.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        copy_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the copy has no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            New integration points with copies of the arrays and properties.</span>
+
+<span class="sd">        """</span>
+        <span class="n">copy_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">copy_properties</span><span class="p">,</span> <span class="s2">"copy_properties"</span><span class="p">)</span>
+
+        <span class="n">copied_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">copy_properties</span><span class="p">:</span>
+            <span class="n">copied_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">,</span> <span class="n">copied_properties</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -----------------------</span>
+    <span class="c1"># Points</span>
+    <span class="c1"># -----------------------</span>
+<div class="viewcode-block" id="IntegrationPoints.filter_points">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.filter_points.html#pysdic.IntegrationPoints.filter_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_points</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mask</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Keep only the points selected by a boolean mask.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask: ArrayLike</span>
+<span class="sd">            A boolean array of shape :math:`(N_p,)`. The points with a True value are</span>
+<span class="sd">            kept.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The filtered integration points.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the mask is not a boolean array (use :meth:`keep_points_by_index` for</span>
+<span class="sd">            indices).</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If the mask does not have the shape :math:`(N_p,)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">_as_bool_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">)</span>
+        <span class="n">propagate_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_properties</span><span class="p">,</span> <span class="s2">"propagate_properties"</span><span class="p">)</span>
+
+        <span class="c1"># Advanced indexing: copies</span>
+        <span class="n">new_natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">new_element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">new_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+        <span class="n">new_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">propagate_properties</span><span class="p">:</span>
+            <span class="n">new_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">(</span><span class="n">new_natural_coordinates</span><span class="p">,</span> <span class="n">new_element_indices</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">,</span> <span class="n">new_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.remove_points_by_index">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.remove_points_by_index.html#pysdic.IntegrationPoints.remove_points_by_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points_by_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Remove the points with the given indices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the points to</span>
+<span class="sd">            remove, in :math:`[0, N_p)`. Duplicates are allowed.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points without the given points.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the indices are not integers.</span>
+
+<span class="sd">        IndexError</span>
+<span class="sd">            If an index is out of :math:`[0, N_p)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_points</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.keep_points_by_index">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.keep_points_by_index.html#pysdic.IntegrationPoints.keep_points_by_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_points_by_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Keep only the points with the given indices.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The points keep their original order and duplicated indices are ignored.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the points to</span>
+<span class="sd">            keep, in :math:`[0, N_p)`.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points with only the given points.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the indices are not integers.</span>
+
+<span class="sd">        IndexError</span>
+<span class="sd">            If an index is out of :math:`[0, N_p)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_points</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_points_in_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Mask (N_p,) of the points located in the given elements (-1 selects the unlocated points)</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">_as_integer_array</span><span class="p">(</span>
+            <span class="n">element_indices</span><span class="p">,</span> <span class="s2">"element_indices"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(R,)"</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">element_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'element_indices' must contain element indices &gt;= 0, or -1 for "</span>
+                <span class="sa">f</span><span class="s2">"unlocated points. Got a minimum index of </span><span class="si">{</span><span class="n">element_indices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">,</span> <span class="n">element_indices</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IntegrationPoints.remove_points_by_element">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.remove_points_by_element.html#pysdic.IntegrationPoints.remove_points_by_element">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_points_by_element</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Remove the points located in the given elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the elements</span>
+<span class="sd">            (``-1`` selects the unlocated points). Indices of elements without points</span>
+<span class="sd">            are allowed.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points without the points of the given elements.</span>
+
+<span class="sd">        """</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points_in_elements</span><span class="p">(</span><span class="n">element_indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_points</span><span class="p">(</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.keep_points_by_element">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.keep_points_by_element.html#pysdic.IntegrationPoints.keep_points_by_element">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_points_by_element</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Keep only the points located in the given elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the elements</span>
+<span class="sd">            (``-1`` selects the unlocated points). Indices of elements without points</span>
+<span class="sd">            are allowed.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points with only the points of the given elements.</span>
+
+<span class="sd">        """</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points_in_elements</span><span class="p">(</span><span class="n">element_indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_points</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.remove_unlocated">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.remove_unlocated.html#pysdic.IntegrationPoints.remove_unlocated">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_unlocated</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Remove the unlocated points (element index ``-1``).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points without the unlocated points.</span>
+
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_points</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_located</span><span class="p">(),</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_unlocate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+        <span class="c1"># Unlocate the points selected by a validated mask: element index -1 and NaN coordinates</span>
+        <span class="n">propagate_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_properties</span><span class="p">,</span> <span class="s2">"propagate_properties"</span><span class="p">)</span>
+
+        <span class="n">new_natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new_element_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new_natural_coordinates</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">new_element_indices</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">new_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">propagate_properties</span><span class="p">:</span>
+            <span class="n">new_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">(</span><span class="n">new_natural_coordinates</span><span class="p">,</span> <span class="n">new_element_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">,</span> <span class="n">new_properties</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IntegrationPoints.unlocate_points_by_index">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.unlocate_points_by_index.html#pysdic.IntegrationPoints.unlocate_points_by_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unlocate_points_by_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Unlocate the points with the given indices without removing them: their element</span>
+<span class="sd">        index is set to ``-1`` and their natural coordinates to ``numpy.nan``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the points to</span>
+<span class="sd">            unlocate, in :math:`[0, N_p)`. Duplicates are allowed.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points with the given points unlocated.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the indices are not integers.</span>
+
+<span class="sd">        IndexError</span>
+<span class="sd">            If an index is out of :math:`[0, N_p)`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unlocate</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.unlocate_points_by_element">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.unlocate_points_by_element.html#pysdic.IntegrationPoints.unlocate_points_by_element">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unlocate_points_by_element</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Unlocate the points located in the given elements without removing them: their</span>
+<span class="sd">        element index is set to ``-1`` and their natural coordinates to ``numpy.nan``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the elements.</span>
+<span class="sd">            Indices of elements without points are allowed.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points with the points of the given elements unlocated.</span>
+
+<span class="sd">        """</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_points_in_elements</span><span class="p">(</span><span class="n">element_indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unlocate</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -----------------------</span>
+    <span class="c1"># Elements of the mesh</span>
+    <span class="c1"># -----------------------</span>
+<div class="viewcode-block" id="IntegrationPoints.filter_elements">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.filter_elements.html#pysdic.IntegrationPoints.filter_elements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_elements</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mask</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Update the integration points after the elements of their mesh are filtered</span>
+<span class="sd">        with a boolean mask (see :meth:`pysdic.Mesh.filter_connectivity`).</span>
+
+<span class="sd">        The points of the removed elements are unlocated (element index ``-1`` and</span>
+<span class="sd">        natural coordinates ``numpy.nan``) but not removed, and the element indices of</span>
+<span class="sd">        the other points are renumbered like the elements of the filtered mesh.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask: ArrayLike</span>
+<span class="sd">            A boolean array of shape :math:`(N_e,)`, with :math:`N_e` the number of</span>
+<span class="sd">            elements of the mesh, True for the elements to keep.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points consistent with the filtered mesh.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the mask is not a boolean array.</span>
+
+<span class="sd">        IndexError</span>
+<span class="sd">            If a point refers to an element :math:`\geq N_e`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            :linenos:</span>
+
+<span class="sd">            from pysdic import IntegrationPoints</span>
+
+<span class="sd">            integration_points = IntegrationPoints([[0.2], [0.5], [0.1]], [0, 1, 2])</span>
+<span class="sd">            filtered = integration_points.filter_elements([True, False, True])</span>
+<span class="sd">            print(filtered.element_indices)  # [ 0 -1  1]</span>
+
+<span class="sd">        """</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">_as_bool_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"mask"</span><span class="p">)</span>
+        <span class="n">propagate_properties</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">propagate_properties</span><span class="p">,</span> <span class="s2">"propagate_properties"</span><span class="p">)</span>
+        <span class="n">n_elements</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">located</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_located</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">[</span><span class="n">located</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">n_elements</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The integration points refer to elements out of the mask of </span><span class="si">{</span><span class="n">n_elements</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"elements. Maximum element index found: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+
+        <span class="n">new_index</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># old element index -&gt; new element index (kept elements)</span>
+        <span class="n">new_element_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">kept</span> <span class="o">=</span> <span class="n">located</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">kept</span><span class="p">[</span><span class="n">located</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">[</span><span class="n">located</span><span class="p">]]</span>
+        <span class="n">new_element_indices</span><span class="p">[</span><span class="n">kept</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_element_indices</span><span class="p">[</span><span class="n">kept</span><span class="p">]]</span>
+
+        <span class="n">new_natural_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_natural_coordinates</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">new_natural_coordinates</span><span class="p">[</span><span class="n">located</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">kept</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># Points of the removed elements</span>
+
+        <span class="n">new_properties</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">propagate_properties</span><span class="p">:</span>
+            <span class="n">new_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">(</span><span class="n">new_natural_coordinates</span><span class="p">,</span> <span class="n">new_element_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">,</span> <span class="n">new_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.remove_elements">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.remove_elements.html#pysdic.IntegrationPoints.remove_elements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_elements</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">n_elements</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Update the integration points after elements are removed from their mesh (see</span>
+<span class="sd">        :meth:`pysdic.Mesh.remove_connectivity_by_index`).</span>
+
+<span class="sd">        Equivalent to :meth:`filter_elements` with a mask of :math:`N_e` elements, False</span>
+<span class="sd">        for the removed elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the removed</span>
+<span class="sd">            elements, in :math:`[0, N_e)`. Duplicates are allowed.</span>
+
+<span class="sd">        n_elements: Integral</span>
+<span class="sd">            The number of elements :math:`N_e` of the mesh before the removal.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points consistent with the new mesh.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        IndexError</span>
+<span class="sd">            If an element index is out of :math:`[0, N_e)`, or if a point refers to an</span>
+<span class="sd">            element :math:`\geq N_e`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">n_elements</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="s2">"n_elements"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span> <span class="s2">"element_indices"</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">element_indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_elements</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegrationPoints.keep_elements">
+<a class="viewcode-back" href="../../../api/geometry/_generated/pysdic.IntegrationPoints.keep_elements.html#pysdic.IntegrationPoints.keep_elements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keep_elements</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">element_indices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">n_elements</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">propagate_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegrationPoints</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Update the integration points after only some elements of their mesh are kept</span>
+<span class="sd">        (see :meth:`pysdic.Mesh.keep_connectivity_by_index`).</span>
+
+<span class="sd">        Equivalent to :meth:`filter_elements` with a mask of :math:`N_e` elements, True</span>
+<span class="sd">        for the kept elements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_indices: ArrayLike</span>
+<span class="sd">            An integer array of shape :math:`(R,)` with the indices of the kept</span>
+<span class="sd">            elements, in :math:`[0, N_e)`. Duplicates are allowed.</span>
+
+<span class="sd">        n_elements: Integral</span>
+<span class="sd">            The number of elements :math:`N_e` of the mesh before the operation.</span>
+
+<span class="sd">        propagate_properties: bool, optional (default: ``True``)</span>
+<span class="sd">            If False, the new integration points have no properties.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`pysdic.IntegrationPoints`</span>
+<span class="sd">            The integration points consistent with the new mesh.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        IndexError</span>
+<span class="sd">            If an element index is out of :math:`[0, N_e)`, or if a point refers to an</span>
+<span class="sd">            element :math:`\geq N_e`.</span>
+
+<span class="sd">        """</span>
+        <span class="n">n_elements</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="s2">"n_elements"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">element_indices</span> <span class="o">=</span> <span class="n">_as_index_array</span><span class="p">(</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span> <span class="s2">"element_indices"</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">element_indices</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_elements</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">propagate_properties</span><span class="o">=</span><span class="n">propagate_properties</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

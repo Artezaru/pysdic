@@ -1,0 +1,128 @@
+r"""
+.. _example_workflows_integration_points:
+
+Preparing the integration points
+================================
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 1
+   :backlinks: top
+
+This example builds the integration points of a stereo analysis of a half cylinder with
+:mod:`pysdic.workflows`: a regular grid per element sized from a target density of points per
+pixel, then the selection of the points visible in all the views. Near its edges, the half
+cylinder is hidden from one camera by its own surface. All the lengths are in millimeters.
+
+.. important::
+
+    Requires the optional package ``open3d`` (ray casting of the 3D surface).
+
+"""
+
+# %%
+# The scene
+# ---------
+#
+# A half cylinder of radius 50 mm and axis :math:`X`, :math:`\vec{X}(\theta, h) = (h, R \cos\theta,
+# R \sin\theta)` with :math:`\theta \in [0°, 180°]`, is seen by two cameras placed at 250 mm and
+# rotated by :math:`\pm 10°` around :math:`X`. Each camera sees about :math:`\pm 78°` around its
+# direction: the camera on the side :math:`+Y` does not see the edge :math:`\theta \approx 180°`,
+# hidden behind the front of the cylinder, and conversely.
+
+import numpy
+from scipy.spatial.transform import Rotation
+from pysdic import (
+    Camera, Image, PerspectiveExtrinsic, PinholeIntrinsic, add_gaussian_noise, compute_projected_roi,
+    compute_wave_speckle, create_3d_quadrangle_4_cylindrical, create_bicamera_analysis, generate_synthetic_image,
+    quantize_image,
+)
+
+radius, t_bounds, h_bounds = 50.0, (0.0, numpy.pi), (-40.0, 40.0)
+mesh = create_3d_quadrangle_4_cylindrical(
+    lambda h, t: radius, t_bounds=t_bounds, h_bounds=h_bounds, n_t=19, n_h=5, uv_layout=0
+)
+mesh.coordinates = mesh.coordinates[:, [2, 0, 1]]  # Axis of the cylinder along X
+
+# Speckle of spots of about 1 mm (3 to 4 pixels) on texels of 0.2 mm (first row: v = 1)
+texel = 0.2
+arc_length, length = radius * numpy.pi, h_bounds[1] - h_bounds[0]
+s = (numpy.arange(int(arc_length / texel)) + 0.5) * texel
+h = length - (numpy.arange(int(length / texel)) + 0.5) * texel
+texture = compute_wave_speckle(numpy.stack(numpy.meshgrid(s, h), axis=-1), wavelength=2.0)
+texture = Image.from_array(texture, ku=1, kv=1)
+
+size, distance, focal = 400, 250.0, 900.0
+
+
+def stereo_camera(alpha: float) -> Camera:
+    # Camera at the distance of the axis, rotated by alpha around X, looking at the axis
+    center = distance * numpy.array([0.0, numpy.sin(numpy.radians(alpha)), numpy.cos(numpy.radians(alpha))])
+    z_axis = -center / distance
+    x_axis = numpy.array([1.0, 0.0, 0.0])
+    rotation = numpy.stack((x_axis, numpy.cross(z_axis, x_axis), z_axis))  # World -> camera
+    return Camera(
+        size, size,
+        extrinsic=PerspectiveExtrinsic.from_rt(rvec=Rotation.from_matrix(rotation).as_rotvec(), tvec=-rotation @ center),
+        intrinsic=PinholeIntrinsic.from_matrix([[focal, 0.0, (size - 1) / 2], [0.0, focal, (size - 1) / 2], [0.0, 0.0, 1.0]]),
+    )
+
+
+def acquire(camera: Camera, seed: int) -> Image:
+    rendered = generate_synthetic_image(camera, mesh, texture, n_samples=2)[..., 0]
+    data = quantize_image(add_gaussian_noise(rendered, std=1.0, seed=seed), bit_depth=8)
+    return Image.from_array(data, roi=compute_projected_roi(mesh, camera, margin=5))
+
+
+cameras = [stereo_camera(-10.0), stereo_camera(+10.0)]
+analysis = create_bicamera_analysis(mesh, cameras[0], cameras[1], [acquire(cameras[0], 0)], [acquire(cameras[1], 1)])
+analysis.set_zero_displacement(0)
+print(analysis)
+
+# %%
+# Grid of points from a density
+# -----------------------------
+#
+# :func:`pysdic.workflows.compute_grid_size` gives the number :math:`n` of subdivisions of the
+# elements such that the :math:`n^2` points of each element reach the target density in all the
+# views (here 0.25 point per pixel, from the largest projected element).
+# :func:`pysdic.workflows.create_grid_integration_points` places the points at the centers of the
+# :math:`n^2` cells of each element, weighted by the area of their cell.
+
+from pysdic.workflows import compute_grid_size, create_grid_integration_points
+
+n = compute_grid_size(analysis, density=0.25)
+grid = create_grid_integration_points(analysis.mesh, n)
+print(f"n = {n}: {n**2} points per element, {grid.n_points} points")
+
+# %%
+# Visible points
+# --------------
+#
+# :func:`pysdic.workflows.select_visible_integration_points` keeps the points visible in every
+# view of every frame (in the ROI of the image and not hidden by the mesh, see
+# :func:`pysdic.compute_visibility`). The visibility in each view tells which camera removes
+# which points.
+
+from pysdic.workflows import select_visible_integration_points
+
+selection = select_visible_integration_points(analysis, grid)
+for (frame, view), visible in selection.visibility.items():
+    print(f"Frame {frame}, view {view}: {visible.sum()} / {visible.size} visible points")
+print(f"Kept: {selection.integration_points.n_points} points ({selection.n_removed} removed)")
+
+# %%
+# The points removed (red) are those of the edge hidden from each camera: each view also sees
+# the points removed by the other one.
+
+import matplotlib.pyplot as plt
+from pysdic import ImagePlotter
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+for index, ax in enumerate(axes):
+    plotter = ImagePlotter(analysis.get_view(0, index), ax=ax)
+    plotter.add_image()
+    plotter.add_integration_points(grid, mesh, mask=selection.mask, color="lime", size=0.5)
+    plotter.add_integration_points(grid, mesh, mask=~selection.mask, color="red", size=0.5)
+    plotter.set_title(f"View {index}: kept (green) and removed (red) points")
+plt.show()

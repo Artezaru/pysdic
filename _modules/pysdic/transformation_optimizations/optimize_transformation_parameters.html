@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.transformation_optimizations.optimize_transformation_parameters &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/transformation_optimizations/optimize_transformation_parameters';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.transformation_optimizations.optimize_transformation_parameters</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.transformation_optimizations.optimize_transformation_parameters</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pysolvegn</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..transformations.transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComposedTransformation</span><span class="p">,</span> <span class="n">Transformation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._optionals</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_validate_bool</span><span class="p">,</span>
+    <span class="n">_validate_integer</span><span class="p">,</span>
+    <span class="n">_validate_real</span><span class="p">,</span>
+    <span class="n">_validate_choice</span><span class="p">,</span>
+    <span class="n">_validate_kwargs_sequence</span><span class="p">,</span>
+    <span class="n">_as_array</span><span class="p">,</span>
+    <span class="n">_as_batch_array</span><span class="p">,</span>
+    <span class="n">_as_index_array</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># ======================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># ======================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_split_parameters</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># Split the global parameter vector into the parameters of each transformation</span>
+    <span class="n">stops</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">n_parameters</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">seq_transformations</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">stops</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_operators</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_inputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">seq_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">filter_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">_use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">_cache_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build the operators of the least squares problem to optimize the parameters of several</span>
+<span class="sd">    transformations combined in chains.</span>
+
+<span class="sd">    Lets :math:`(T_0, T_1, ..., T_{N_T-1})` be a sequence of :math:`N_T` transformations, and</span>
+<span class="sd">    :math:`(C_0, C_1, ..., C_{N_C-1})` be a sequence of :math:`N_C` chains of transformations.</span>
+<span class="sd">    A chain :math:`C_c` is a sequence of indices of transformations, applied in this order:</span>
+
+<span class="sd">    .. code-block:: text</span>
+
+<span class="sd">        C_0 = (1, 4, 8) -----&gt; C_0(X) = T_8 ∘ T_4 ∘ T_1(X)</span>
+
+<span class="sd">    A transformation can be used in several chains (for example the same intrinsic transformation</span>
+<span class="sd">    for several views): its parameters are shared by these chains.</span>
+
+<span class="sd">    The optimized vector :math:`\vec{p}` is the concatenation of the parameters of **all** the</span>
+<span class="sd">    transformations, in the order of ``seq_transformations``:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \vec{p} = \begin{bmatrix} \vec{p}_0 &amp; \vec{p}_1 &amp; \dots &amp; \vec{p}_{N_T - 1} \end{bmatrix}</span>
+
+<span class="sd">    For each chain :math:`C_c`, with input points :math:`X_c` and output points :math:`Y_c`, the residuals</span>
+<span class="sd">    and their Jacobian with respect to the parameters of the chain are:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \vec{r}_c(\vec{p}) = C_c(X_c; \vec{p}) - Y_c,</span>
+<span class="sd">        \qquad</span>
+<span class="sd">        J_c(\vec{p}) = \frac{\partial C_c(X_c; \vec{p})}{\partial \vec{p}}</span>
+
+<span class="sd">    The problem solved is :math:`\min_{\vec{p}} \frac{1}{2} \sum_c \|\vec{r}_c(\vec{p})\|^2`.</span>
+<span class="sd">    Two modes are available to give it to ``pysolvegn``:</span>
+
+<span class="sd">    - ``"rJ"``: the residuals of all the chains are stacked in a single vector</span>
+<span class="sd">      :math:`\vec{r} = (\vec{r}_0, \vec{r}_1, \dots)` with its Jacobian :math:`J` of shape</span>
+<span class="sd">      :math:`(N_{eq}, N_p)`.</span>
+<span class="sd">    - ``"gH"``: the gradient :math:`\vec{g} = J^T \vec{r}` and the Gauss-Newton Hessian</span>
+<span class="sd">      :math:`H = J^T J` are built directly, chain by chain. Only the columns of the transformations</span>
+<span class="sd">      of the chain are non-zero in :math:`J_c`, so the blocks :math:`J_c^T J_c` and :math:`J_c^T \vec{r}_c`</span>
+<span class="sd">      are added at the rows and columns of these transformations:</span>
+
+<span class="sd">      .. math::</span>
+
+<span class="sd">          H = \sum_c J_c^T J_c, \qquad \vec{g} = \sum_c J_c^T \vec{r}_c</span>
+
+<span class="sd">      The full Jacobian :math:`J` is never stored, only matrices of size :math:`(N_p, N_p)`.</span>
+
+<span class="sd">    Two evaluation strategies are available with ``_use_cache``:</span>
+
+<span class="sd">    - ``False``: each function computes only what it returns and nothing is kept in memory.</span>
+<span class="sd">      The residuals and the cost are computed without the Jacobians with respect to the parameters.</span>
+<span class="sd">    - ``True``: the first call for given parameters computes all the operators of the mode</span>
+<span class="sd">      (:math:`\vec{r}` and :math:`J` in mode ``"rJ"``, :math:`\vec{g}`, :math:`H` and the cost in mode ``"gH"``)</span>
+<span class="sd">      and keeps them in cache, so the other calls for the same parameters return the cached operators.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The operators work on **copies** of the transformations: the given transformations are</span>
+<span class="sd">        never modified.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq_transformations : Sequence[Transformation]</span>
+<span class="sd">        The transformations :math:`(T_0, T_1, ..., T_{N_T-1})` whose parameters are optimized.</span>
+<span class="sd">        Each transformation must appear only once, must not be locked and must support</span>
+<span class="sd">        ``apply`` with ``dp`` (and ``dx`` if it is not the first of a chain).</span>
+
+<span class="sd">    seq_chains : Sequence[Sequence[Integral]]</span>
+<span class="sd">        The chains :math:`(C_0, C_1, ..., C_{N_C-1})`, each chain being a non-empty sequence of</span>
+<span class="sd">        indices of transformations (without duplicates), in the order of application.</span>
+
+<span class="sd">    seq_inputs : Sequence[ArrayLike]</span>
+<span class="sd">        The input points :math:`X_c` of each chain with shape :math:`(\dots, n_i)`, where :math:`n_i`</span>
+<span class="sd">        is the input dimension of the first transformation of the chain.</span>
+
+<span class="sd">    seq_outputs : Sequence[ArrayLike]</span>
+<span class="sd">        The output points :math:`Y_c` of each chain with shape :math:`(\dots, n_o)`, where :math:`n_o`</span>
+<span class="sd">        is the output dimension of the last transformation of the chain.</span>
+
+<span class="sd">    seq_parameters : Optional[Sequence[Optional[ArrayLike]]], optional (default: ``None``)</span>
+<span class="sd">        The initial parameters of each transformation. ``None`` (for the whole sequence or for an</span>
+<span class="sd">        element) means the current parameters of the transformation.</span>
+
+<span class="sd">    seq_kwargs : Optional[Sequence[Optional[Dict[str, Any]]]], optional (default: ``None``)</span>
+<span class="sd">        Additional keyword arguments passed to the ``apply`` method of each transformation: one dictionary</span>
+<span class="sd">        (or None) per transformation of ``seq_transformations``. They are the same for all the chains</span>
+<span class="sd">        using the transformation.</span>
+
+<span class="sd">    mode : str, optional (default: ``"rJ"``)</span>
+<span class="sd">        The mode of the operators, ``"rJ"`` or ``"gH"``.</span>
+
+<span class="sd">    filter_nans : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, the equations with non-finite residuals or Jacobians (for example points outside</span>
+<span class="sd">        the domain of a transformation) are set to zero, and a ``RuntimeWarning`` is emitted.</span>
+
+<span class="sd">    sparse : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, the Jacobian (mode ``"rJ"``) or the Hessian (mode ``"gH"``) is returned as a</span>
+<span class="sd">        ``scipy.sparse.csr_matrix``, which is efficient when there are many transformations with</span>
+<span class="sd">        few shared parameters.</span>
+
+<span class="sd">    _use_cache : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, all the operators of the mode are computed together and kept in cache (see above).</span>
+<span class="sd">        If False, each function computes only what it returns, without cache.</span>
+
+<span class="sd">    _cache_length : int, optional (default: ``1``)</span>
+<span class="sd">        The number of previous evaluations kept in cache when ``_use_cache`` is True.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Callable</span>
+<span class="sd">        The residual function :math:`\vec{p} \mapsto \vec{r}` (mode ``"rJ"``) or the gradient function</span>
+<span class="sd">        :math:`\vec{p} \mapsto \vec{g}` (mode ``"gH"``).</span>
+
+<span class="sd">    Callable</span>
+<span class="sd">        The Jacobian function :math:`\vec{p} \mapsto J` (mode ``"rJ"``) or the Hessian function</span>
+<span class="sd">        :math:`\vec{p} \mapsto H` (mode ``"gH"``).</span>
+
+<span class="sd">    Optional[Callable]</span>
+<span class="sd">        The cost function :math:`\vec{p} \mapsto \frac{1}{2} \|\vec{r}\|^2` in mode ``"gH"``, or None in</span>
+<span class="sd">        mode ``"rJ"`` (the cost is computed by ``pysolvegn`` from the residuals and the loss).</span>
+
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The initial parameters :math:`\vec{p}` with shape :math:`(N_p,)`.</span>
+
+<span class="sd">    """</span>
+    <span class="c1"># ------------- options -------------</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"rJ"</span><span class="p">,</span> <span class="s2">"gH"</span><span class="p">))</span>
+    <span class="n">filter_nans</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">filter_nans</span><span class="p">,</span> <span class="s2">"filter_nans"</span><span class="p">)</span>
+    <span class="n">sparse</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">)</span>
+    <span class="n">_use_cache</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">_use_cache</span><span class="p">,</span> <span class="s2">"_use_cache"</span><span class="p">)</span>
+    <span class="n">_cache_length</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">_cache_length</span><span class="p">,</span> <span class="s2">"_cache_length"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># ------------- transformations -------------</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'seq_transformations' must be a sequence of Transformation. "</span>
+            <span class="sa">f</span><span class="s2">"Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'seq_transformations' must contain at least one Transformation."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Transformation</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input 'seq_transformations[</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">]' must be a Transformation. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">is_locked</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The parameters of seq_transformations[</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">] (</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">) are locked. "</span>
+                <span class="sa">f</span><span class="s2">"Remove it from the optimized transformations or use a ReparametrizedTransformation."</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">({</span><span class="nb">id</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">seq_transformations</span><span class="p">})</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"Each transformation must appear only once in seq_transformations. "</span>
+            <span class="s2">"Use the same index in several chains to share a transformation."</span>
+        <span class="p">)</span>
+    <span class="n">n_transformations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">)</span>
+
+    <span class="c1"># ------------- initial parameters -------------</span>
+    <span class="k">if</span> <span class="n">seq_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">seq_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_transformations</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq_parameters</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'seq_parameters' must be a sequence of arrays (or None). Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq_parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_transformations</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Input 'seq_parameters' must contain one element per transformation (</span><span class="si">{</span><span class="n">n_transformations</span><span class="si">}</span><span class="s2">). "</span>
+            <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">seq_parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">transformations</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">seq_transformations</span><span class="p">]</span>  <span class="c1"># Work on copies</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">transformations</span><span class="p">,</span> <span class="n">seq_parameters</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>  <span class="c1"># Validated by the transformation (shape and finite values)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">t</span><span class="o">.</span><span class="n">is_setup</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The parameters of seq_transformations[</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">] (</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">) are not set "</span>
+                <span class="sa">f</span><span class="s2">"and no initial parameters are given in seq_parameters."</span>
+            <span class="p">)</span>
+    <span class="n">initial_parameters</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transformations</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">parameter_starts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+        <span class="p">[[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">n_parameters</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transformations</span><span class="p">])]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">n_total_parameters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parameter_starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">n_total_parameters</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The transformations have no parameters to optimize."</span><span class="p">)</span>
+
+    <span class="c1"># ------------- chains -------------</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'seq_chains' must be a sequence of chains. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'seq_chains' must contain at least one chain."</span><span class="p">)</span>
+    <span class="c1"># Indices in [0, N_T) (integers only, no negative index counting from the end)</span>
+    <span class="n">seq_chains</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">_as_index_array</span><span class="p">(</span><span class="n">chain</span><span class="p">,</span> <span class="n">n_transformations</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"seq_chains[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'seq_chains[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]' must not be empty."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">chain</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'seq_chains[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]' must not contain duplicate indices. Got </span><span class="si">{</span><span class="n">chain</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">n_chains</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq_chains</span><span class="p">)</span>
+
+    <span class="n">compositions</span> <span class="o">=</span> <span class="p">[</span><span class="n">ComposedTransformation</span><span class="p">([</span><span class="n">transformations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">])</span> <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">seq_chains</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">composition</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">compositions</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">composition</span><span class="o">.</span><span class="n">has_apply_dp</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The chain </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2"> cannot compute the Jacobian with respect to the parameters "</span>
+                <span class="sa">f</span><span class="s2">"(some transformations do not support dp or dx)."</span>
+            <span class="p">)</span>
+
+    <span class="c1"># ------------- kwargs -------------</span>
+    <span class="n">seq_kwargs</span> <span class="o">=</span> <span class="n">_validate_kwargs_sequence</span><span class="p">(</span><span class="n">seq_kwargs</span><span class="p">,</span> <span class="n">n_transformations</span><span class="p">,</span> <span class="s2">"seq_kwargs"</span><span class="p">)</span>
+    <span class="n">chain_kwargs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">seq_kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">]</span> <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">seq_chains</span><span class="p">]</span>  <span class="c1"># kwargs of T_k in each chain</span>
+
+    <span class="c1"># ------------- points -------------</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">seq</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"seq_inputs"</span><span class="p">,</span> <span class="n">seq_inputs</span><span class="p">),</span> <span class="p">(</span><span class="s2">"seq_outputs"</span><span class="p">,</span> <span class="n">seq_outputs</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must be a sequence of arrays. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_chains</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Input '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must contain one element per chain (</span><span class="si">{</span><span class="n">n_chains</span><span class="si">}</span><span class="s2">). Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+    <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="p">(</span><span class="n">composition</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">compositions</span><span class="p">,</span> <span class="n">seq_inputs</span><span class="p">,</span> <span class="n">seq_outputs</span><span class="p">)):</span>
+        <span class="c1"># NaN accepted (see filter_nans)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">_as_batch_array</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"seq_inputs[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]"</span><span class="p">,</span> <span class="n">composition</span><span class="o">.</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">min_ndim</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">_as_batch_array</span><span class="p">(</span>
+            <span class="n">y</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"seq_outputs[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">]"</span><span class="p">,</span> <span class="n">composition</span><span class="o">.</span><span class="n">output_dim</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">min_ndim</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The input and output points of the chain </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2"> must contain the same non-zero number "</span>
+                <span class="sa">f</span><span class="s2">"of points, got shapes </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">composition</span><span class="o">.</span><span class="n">input_dim</span><span class="p">))</span>
+        <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">composition</span><span class="o">.</span><span class="n">output_dim</span><span class="p">))</span>
+
+    <span class="c1"># ------------- indexing -------------</span>
+    <span class="n">chain_columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">parameter_starts</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">parameter_starts</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">seq_chains</span>
+    <span class="p">]</span>  <span class="c1"># Columns of the global vector for the parameters of each chain</span>
+    <span class="n">n_equations</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">output_dim</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">compositions</span><span class="p">)]</span>
+    <span class="n">equation_starts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">n_equations</span><span class="p">)])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">n_total_equations</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">equation_starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># ------------- evaluation -------------</span>
+    <span class="c1"># Without cache, each function computes only what it returns (the residuals and the cost are computed</span>
+    <span class="c1"># without the Jacobians, for example to test a Levenberg-Marquardt step). With cache, all the operators</span>
+    <span class="c1"># of the mode are computed together at the first call for given parameters.</span>
+    <span class="n">cached_outputs</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">)</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"g"</span><span class="p">,</span> <span class="s2">"H"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">)</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">chain_operators</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="c1"># Residuals (n_eq_c,) and Jacobian (n_eq_c, n_p_c) (None if not derivatives) of the chain c</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">compositions</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">dp</span><span class="o">=</span><span class="n">derivatives</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">chain_kwargs</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+        <span class="n">residuals</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">outputs</span><span class="p">[</span><span class="n">c</span><span class="p">])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">jacobian_dp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_equations</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">derivatives</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">n_bad</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">filter_nans</span><span class="p">:</span>
+            <span class="n">bad_rows</span> <span class="o">=</span> <span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">derivatives</span><span class="p">:</span>
+                <span class="n">bad_rows</span> <span class="o">|=</span> <span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">jacobian</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">n_bad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bad_rows</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">n_bad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">residuals</span><span class="p">[</span><span class="n">bad_rows</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">if</span> <span class="n">derivatives</span><span class="p">:</span>
+                    <span class="n">jacobian</span><span class="p">[</span><span class="n">bad_rows</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">residuals</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">,</span> <span class="n">n_bad</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">assemble</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">requested</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="c1"># Compute only the requested operators among "r", "J", "c", "g" and "H"</span>
+        <span class="n">need_r</span><span class="p">,</span> <span class="n">need_J</span><span class="p">,</span> <span class="n">need_c</span> <span class="o">=</span> <span class="s2">"r"</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">,</span> <span class="s2">"J"</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">,</span> <span class="s2">"c"</span> <span class="ow">in</span> <span class="n">requested</span>
+        <span class="n">need_g</span><span class="p">,</span> <span class="n">need_H</span> <span class="o">=</span> <span class="s2">"g"</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">,</span> <span class="s2">"H"</span> <span class="ow">in</span> <span class="n">requested</span>
+        <span class="n">derivatives</span> <span class="o">=</span> <span class="n">need_J</span> <span class="ow">or</span> <span class="n">need_g</span> <span class="ow">or</span> <span class="n">need_H</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">transformations</span><span class="p">):</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">parameter_starts</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="p">:</span> <span class="n">parameter_starts</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+
+        <span class="n">residuals</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n_total_equations</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">if</span> <span class="n">need_r</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_total_equations</span><span class="p">,</span> <span class="n">n_total_parameters</span><span class="p">))</span> <span class="k">if</span> <span class="n">need_J</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sparse</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_total_parameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">if</span> <span class="n">need_g</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">hessian</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_total_parameters</span><span class="p">,</span> <span class="n">n_total_parameters</span><span class="p">))</span> <span class="k">if</span> <span class="n">need_H</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sparse</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">cost</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">J_rows</span><span class="p">,</span> <span class="n">J_columns</span><span class="p">,</span> <span class="n">J_values</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>  <span class="c1"># Sparse Jacobian</span>
+        <span class="n">H_rows</span><span class="p">,</span> <span class="n">H_columns</span><span class="p">,</span> <span class="n">H_values</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>  <span class="c1"># Sparse Hessian</span>
+
+        <span class="n">n_bad</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_chains</span><span class="p">):</span>
+            <span class="n">r_c</span><span class="p">,</span> <span class="n">J_c</span><span class="p">,</span> <span class="n">n_bad_c</span> <span class="o">=</span> <span class="n">chain_operators</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">)</span>
+            <span class="n">n_bad</span> <span class="o">+=</span> <span class="n">n_bad_c</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="n">equation_starts</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">equation_starts</span><span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">columns_c</span> <span class="o">=</span> <span class="n">chain_columns</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">need_r</span><span class="p">:</span>
+                <span class="n">residuals</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_c</span>
+            <span class="k">if</span> <span class="n">need_c</span><span class="p">:</span>
+                <span class="n">cost</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">r_c</span> <span class="o">@</span> <span class="n">r_c</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">need_J</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+                    <span class="n">local_rows</span><span class="p">,</span> <span class="n">local_columns</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">J_c</span><span class="p">)</span>
+                    <span class="n">J_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_rows</span> <span class="o">+</span> <span class="n">start</span><span class="p">)</span>
+                    <span class="n">J_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">columns_c</span><span class="p">[</span><span class="n">local_columns</span><span class="p">])</span>
+                    <span class="n">J_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">J_c</span><span class="p">[</span><span class="n">local_rows</span><span class="p">,</span> <span class="n">local_columns</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">jacobian</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">,</span> <span class="n">columns_c</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_c</span>
+            <span class="k">if</span> <span class="n">need_g</span><span class="p">:</span>
+                <span class="n">gradient</span><span class="p">[</span><span class="n">columns_c</span><span class="p">]</span> <span class="o">+=</span> <span class="n">J_c</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">r_c</span>
+            <span class="k">if</span> <span class="n">need_H</span><span class="p">:</span>
+                <span class="n">H_c</span> <span class="o">=</span> <span class="n">J_c</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">J_c</span>  <span class="c1"># (n_p_c, n_p_c)</span>
+                <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+                    <span class="n">H_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">columns_c</span><span class="p">,</span> <span class="n">columns_c</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+                    <span class="n">H_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">columns_c</span><span class="p">,</span> <span class="n">columns_c</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+                    <span class="n">H_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H_c</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">hessian</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">columns_c</span><span class="p">,</span> <span class="n">columns_c</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">H_c</span>
+
+        <span class="k">if</span> <span class="n">need_J</span> <span class="ow">and</span> <span class="n">sparse</span><span class="p">:</span>
+            <span class="n">jacobian</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">J_values</span><span class="p">),</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">J_rows</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">J_columns</span><span class="p">))),</span>
+                <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_total_equations</span><span class="p">,</span> <span class="n">n_total_parameters</span><span class="p">),</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">need_H</span> <span class="ow">and</span> <span class="n">sparse</span><span class="p">:</span>
+            <span class="c1"># Duplicated entries (shared transformations) are summed by the conversion</span>
+            <span class="n">hessian</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">H_values</span><span class="p">),</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">H_rows</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">H_columns</span><span class="p">))),</span>
+                <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_total_parameters</span><span class="p">,</span> <span class="n">n_total_parameters</span><span class="p">),</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">n_bad</span> <span class="o">==</span> <span class="n">n_total_equations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"All the residuals or Jacobians are NaN or infinite, the optimization cannot proceed."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_bad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n_bad</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="n">n_total_equations</span><span class="si">}</span><span class="s2"> equations were filtered "</span>
+                <span class="sa">f</span><span class="s2">"because of NaN or infinite residuals or Jacobians."</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">operators</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"r"</span><span class="p">:</span> <span class="n">residuals</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">:</span> <span class="n">jacobian</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">:</span> <span class="n">cost</span><span class="p">,</span> <span class="s2">"g"</span><span class="p">:</span> <span class="n">gradient</span><span class="p">,</span> <span class="s2">"H"</span><span class="p">:</span> <span class="n">hessian</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">operators</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="c1"># Return the operator ``output`` for the given parameters, with or without cache</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_total_parameters</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_use_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">assemble</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="p">(</span><span class="n">output</span><span class="p">,))[</span><span class="n">output</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">cached_parameters</span><span class="p">,</span> <span class="n">cached_operators</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">cached_parameters</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">cached_operators</span><span class="p">[</span><span class="n">output</span><span class="p">]</span>
+        <span class="n">operators</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">cached_outputs</span><span class="p">)</span>
+        <span class="n">cache</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">operators</span><span class="p">))</span>
+        <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">_cache_length</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">operators</span><span class="p">[</span><span class="n">output</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">),</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">initial_parameters</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"g"</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"H"</span><span class="p">),</span>
+        <span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">),</span>
+        <span class="n">initial_parameters</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># ======================================================================</span>
+<span class="c1"># Terms</span>
+<span class="c1"># ======================================================================</span>
+<div class="viewcode-block" id="build_chains_transformation_term">
+<a class="viewcode-back" href="../../../api/computer_vision/build_chains_transformation_term.html#pysdic.build_chains_transformation_term">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_chains_transformation_term</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_inputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">seq_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">filter_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build a ``pysolvegn.Term`` to optimize the parameters of several transformations combined in chains.</span>
+
+<span class="sd">    Lets :math:`(T_0, T_1, ..., T_{N_T-1})` be a sequence of transformations and :math:`(C_0, C_1, ..., C_{N_C-1})`</span>
+<span class="sd">    a sequence of chains of indices of these transformations (a transformation can be shared by several chains).</span>
+<span class="sd">    The term minimizes the distance between the transformed input points and the output points of all the chains:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \min_{\vec{p}} \frac{1}{2} \sum_c \sum_j \rho\left( \| C_c(X_{c,j}; \vec{p}) - Y_{c,j} \|^2 \right)</span>
+
+<span class="sd">    where :math:`\vec{p}` is the concatenation of the parameters of all the transformations,</span>
+<span class="sd">    in the order of ``seq_transformations``, and :math:`\rho` is the loss function.</span>
+
+<span class="sd">    All the chains are gathered in a **single term** with the same loss and weight. To give different</span>
+<span class="sd">    losses or weights to some chains, call this function once per group of chains **with the same**</span>
+<span class="sd">    ``seq_transformations`` (so the parameter vectors are identical) and give the list of terms to ``pysolvegn.solve``.</span>
+
+<span class="sd">    The term can be built in two modes:</span>
+
+<span class="sd">    - ``"rJ"``: residuals and Jacobian of all the equations. Robust losses (``"soft_l1"``, ``"cauchy"``,</span>
+<span class="sd">      ``"huber"``, ...) are available, with a soft threshold ``loss_scale`` in the unit of the output points.</span>
+<span class="sd">    - ``"gH"``: gradient :math:`J^T \vec{r}` and Hessian :math:`J^T J` assembled chain by chain.</span>
+<span class="sd">      The full Jacobian is never stored, which saves a lot of memory for many points, but only the</span>
+<span class="sd">      ``"linear"`` loss is available.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The term works on copies of the transformations: the given transformations are never modified.</span>
+<span class="sd">        To optimize only some parameters of a transformation, give a :class:`pysdic.ReparametrizedTransformation`</span>
+<span class="sd">        or use the ``parametrization`` argument of ``pysolvegn.solve``.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_transformation_term` for a single transformation.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_chains_transformation_parameters` to directly solve the problem.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq_transformations : Sequence[Transformation]</span>
+<span class="sd">        The transformations :math:`(T_0, T_1, ..., T_{N_T-1})` whose parameters are optimized.</span>
+<span class="sd">        Each transformation must appear only once and must not be locked.</span>
+
+<span class="sd">    seq_chains : Sequence[Sequence[Integral]]</span>
+<span class="sd">        The chains, each chain being a non-empty sequence of indices of ``seq_transformations``</span>
+<span class="sd">        (without duplicates), in the order of application. For example ``(1, 4, 8)`` is</span>
+<span class="sd">        :math:`T_8 \circ T_4 \circ T_1`.</span>
+
+<span class="sd">    seq_inputs : Sequence[ArrayLike]</span>
+<span class="sd">        The input points :math:`X_c` of each chain with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    seq_outputs : Sequence[ArrayLike]</span>
+<span class="sd">        The output points :math:`Y_c` of each chain with shape :math:`(\dots, n_o)`.</span>
+
+<span class="sd">    seq_parameters : Optional[Sequence[Optional[ArrayLike]]], optional (default: ``None``)</span>
+<span class="sd">        The initial parameters of each transformation. ``None`` means the current parameters.</span>
+
+<span class="sd">    seq_kwargs : Optional[Sequence[Optional[Dict[str, Any]]]], optional (default: ``None``)</span>
+<span class="sd">        Additional keyword arguments passed to the ``apply`` method of each transformation: one dictionary</span>
+<span class="sd">        (or None) per transformation of ``seq_transformations``. They are the same for all the chains</span>
+<span class="sd">        using the transformation.</span>
+
+<span class="sd">    mode : str, optional (default: ``"rJ"``)</span>
+<span class="sd">        The mode of the term, ``"rJ"`` or ``"gH"``.</span>
+
+<span class="sd">    weight : Real, optional (default: ``1.0``)</span>
+<span class="sd">        The weight of the term.</span>
+
+<span class="sd">    loss : Optional[Union[str, Callable]], optional (default: ``None``)</span>
+<span class="sd">        The loss function of the term (see ``pysolvegn.Term``), only for the mode ``"rJ"``.</span>
+<span class="sd">        ``None`` means ``"linear"``.</span>
+
+<span class="sd">    loss_scale : Real, optional (default: ``1.0``)</span>
+<span class="sd">        The soft threshold :math:`C` of the loss function in the unit of the output points (for example in</span>
+<span class="sd">        pixels): the residuals with :math:`|r| \lesssim C` are treated as inliers and the larger ones as outliers.</span>
+<span class="sd">        Only for the mode ``"rJ"``, no effect on the ``"linear"`` loss.</span>
+
+<span class="sd">    filter_nans : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, the equations with non-finite residuals or Jacobians are set to zero.</span>
+
+<span class="sd">    sparse : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, the Jacobian (``"rJ"``) or the Hessian (``"gH"``) is a ``scipy.sparse.csr_matrix``.</span>
+
+<span class="sd">    use_cache : bool, optional (default: ``False``)</span>
+<span class="sd">        The evaluation strategy of the functions of the term:</span>
+
+<span class="sd">        - ``False``: each function computes only what it returns and nothing is kept in memory. The residuals</span>
+<span class="sd">          (``"rJ"``) and the cost (``"gH"``) are computed without the Jacobian, which is efficient when many</span>
+<span class="sd">          evaluated points are trial points whose Jacobian is never required (damped steps of Levenberg-Marquardt).</span>
+<span class="sd">          In mode ``"gH"``, the gradient and the Hessian each compute the Jacobian.</span>
+<span class="sd">        - ``True``: the first call for given parameters computes all the operators of the mode (residuals and</span>
+<span class="sd">          Jacobian in ``"rJ"``, gradient, Hessian and cost in ``"gH"``) and keeps them in cache, so the other</span>
+<span class="sd">          calls for the same parameters are free. It is efficient when the Jacobian is required at every</span>
+<span class="sd">          evaluated point (Gauss-Newton without damping).</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            With ``filter_nans=True``, the residuals and the cost computed without the Jacobian only filter the</span>
+<span class="sd">            equations with non-finite residuals, so they can differ from those computed with the Jacobian</span>
+<span class="sd">            (equations with finite residuals but non-finite Jacobians).</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pysolvegn.Term</span>
+<span class="sd">        The term to give to ``pysolvegn.solve``.</span>
+
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The initial parameters :math:`\vec{p}` with shape :math:`(N_p,)`, to use as ``p0``.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Calibrate one camera observing a target in two positions. The camera parameters</span>
+<span class="sd">    (``intrinsic``, ``distortion``) are shared by the two chains:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        seq_transformations = [extrinsic_0, extrinsic_1, distortion, intrinsic]</span>
+<span class="sd">        seq_chains = [(0, 2, 3), (1, 2, 3)]</span>
+
+<span class="sd">        term, p0 = build_chains_transformation_term(</span>
+<span class="sd">            seq_transformations, seq_chains, [world_0, world_1], [image_0, image_1],</span>
+<span class="sd">            loss="soft_l1", loss_scale=1.0,  # outliers above about 1 pixel</span>
+<span class="sd">        )</span>
+<span class="sd">        result = pysolvegn.solve(term, p0, max_iteration=50, xtol=1e-10, damping="lm-diag")</span>
+
+<span class="sd">    """</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">loss_scale</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">loss_scale</span><span class="p">,</span> <span class="s2">"loss_scale"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">use_cache</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">use_cache</span><span class="p">,</span> <span class="s2">"use_cache"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"gH"</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loss</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"linear"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">loss_scale</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Only the 'linear' loss (with loss_scale=1.0) is available in mode 'gH', got </span><span class="si">{</span><span class="n">loss</span><span class="si">!r}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"with loss_scale=</span><span class="si">{</span><span class="n">loss_scale</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+
+    <span class="n">func_1</span><span class="p">,</span> <span class="n">func_2</span><span class="p">,</span> <span class="n">cost_func</span><span class="p">,</span> <span class="n">initial_parameters</span> <span class="o">=</span> <span class="n">_build_operators</span><span class="p">(</span>
+        <span class="n">seq_transformations</span><span class="p">,</span>
+        <span class="n">seq_chains</span><span class="p">,</span>
+        <span class="n">seq_inputs</span><span class="p">,</span>
+        <span class="n">seq_outputs</span><span class="p">,</span>
+        <span class="n">seq_parameters</span><span class="p">,</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="n">seq_kwargs</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">filter_nans</span><span class="o">=</span><span class="n">filter_nans</span><span class="p">,</span>
+        <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
+        <span class="n">_use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span><span class="p">:</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="o">.</span><span class="n">from_rJ</span><span class="p">(</span>
+            <span class="n">residual_func</span><span class="o">=</span><span class="n">func_1</span><span class="p">,</span>
+            <span class="n">jacobian_func</span><span class="o">=</span><span class="n">func_2</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+            <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="o">.</span><span class="n">from_gH</span><span class="p">(</span>
+            <span class="n">gradient_func</span><span class="o">=</span><span class="n">func_1</span><span class="p">,</span>
+            <span class="n">hessian_func</span><span class="o">=</span><span class="n">func_2</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+            <span class="n">cost_func</span><span class="o">=</span><span class="n">cost_func</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">term</span><span class="p">,</span> <span class="n">initial_parameters</span></div>
+
+
+
+<div class="viewcode-block" id="build_transformation_term">
+<a class="viewcode-back" href="../../../api/computer_vision/build_transformation_term.html#pysdic.build_transformation_term">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_transformation_term</span><span class="p">(</span>
+    <span class="n">transformation</span><span class="p">:</span> <span class="n">Transformation</span><span class="p">,</span>
+    <span class="n">input_points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">output_points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">filter_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build a ``pysolvegn.Term`` to optimize the parameters :math:`\vec{p}` of a single transformation :math:`T`</span>
+<span class="sd">    such that :math:`T(X; \vec{p}) \approx Y`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \min_{\vec{p}} \frac{1}{2} \sum_j \rho\left( \| T(X_j; \vec{p}) - Y_j \|^2 \right)</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_chains_transformation_term` for the description of the modes and arguments.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transformation : Transformation</span>
+<span class="sd">        The transformation to optimize. It must not be locked.</span>
+
+<span class="sd">    input_points : ArrayLike</span>
+<span class="sd">        The input points :math:`X` with shape :math:`(\dots, n_i)`.</span>
+
+<span class="sd">    output_points : ArrayLike</span>
+<span class="sd">        The output points :math:`Y` with shape :math:`(\dots, n_o)`.</span>
+
+<span class="sd">    parameters : Optional[ArrayLike], optional (default: ``None``)</span>
+<span class="sd">        The initial parameters. ``None`` means the current parameters of the transformation.</span>
+
+<span class="sd">    kwargs : Optional[Dict[str, Any]], optional (default: ``None``)</span>
+<span class="sd">        Additional keyword arguments passed to the ``apply`` method of the transformation.</span>
+
+<span class="sd">    mode, weight, loss, loss_scale, filter_nans, sparse, use_cache</span>
+<span class="sd">        See :func:`pysdic.build_chains_transformation_term`.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pysolvegn.Term</span>
+<span class="sd">        The term to give to ``pysolvegn.solve``.</span>
+
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The initial parameters with shape :math:`(n_p,)`, to use as ``p0``.</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">build_chains_transformation_term</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">transformation</span><span class="p">],</span>
+        <span class="p">[[</span><span class="mi">0</span><span class="p">]],</span>
+        <span class="p">[</span><span class="n">input_points</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">output_points</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">parameters</span><span class="p">],</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="p">[</span><span class="n">kwargs</span><span class="p">],</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">filter_nans</span><span class="o">=</span><span class="n">filter_nans</span><span class="p">,</span>
+        <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ======================================================================</span>
+<span class="c1"># Optimization</span>
+<span class="c1"># ======================================================================</span>
+<div class="viewcode-block" id="optimize_chains_transformation_parameters">
+<a class="viewcode-back" href="../../../api/computer_vision/optimize_chains_transformation_parameters.html#pysdic.optimize_chains_transformation_parameters">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_chains_transformation_parameters</span><span class="p">(</span>
+    <span class="n">seq_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Transformation</span><span class="p">],</span>
+    <span class="n">seq_chains</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
+    <span class="n">seq_inputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">seq_outputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
+    <span class="n">seq_parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">seq_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">filter_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">SolveResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Optimize the parameters of several transformations combined in chains with ``pysolvegn.solve``.</span>
+
+<span class="sd">    The problem is built with :func:`pysdic.build_chains_transformation_term` and the optimized</span>
+<span class="sd">    parameters are split per transformation:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        (p_0, p_1, p_2), result = optimize_chains_transformation_parameters([T_0, T_1, T_2], ...)</span>
+
+<span class="sd">    The ``pysolvegn.SolveResult`` gives the convergence information (``success``, ``message``, ``cost``,</span>
+<span class="sd">    ``n_iterations``, ``history``, ...).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The given transformations are not modified. Set the optimized parameters yourself,</span>
+<span class="sd">        for example with ``T_0.parameters = p_0``.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_chains_transformation_term` for the description of the arguments.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_transformation_parameters` for a single transformation.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seq_transformations, seq_chains, seq_inputs, seq_outputs, seq_parameters, seq_kwargs, mode, loss, loss_scale, filter_nans, sparse, use_cache</span>
+<span class="sd">        See :func:`pysdic.build_chains_transformation_term`.</span>
+
+<span class="sd">    **solve_kwargs</span>
+<span class="sd">        Additional keyword arguments passed to ``pysolvegn.solve`` (``max_iteration``, ``xtol``,</span>
+<span class="sd">        ``ftol``, ``damping``, ``verbosity``, ``history``, ...). The ``parametrization`` argument is not</span>
+<span class="sd">        supported here: build the term with :func:`pysdic.build_chains_transformation_term` and call</span>
+<span class="sd">        ``pysolvegn.solve``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[numpy.ndarray]</span>
+<span class="sd">        The optimized parameters of each transformation, in the order of ``seq_transformations``.</span>
+
+<span class="sd">    pysolvegn.SolveResult</span>
+<span class="sd">        The result of ``pysolvegn.solve``.</span>
+
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"parametrization"</span> <span class="ow">in</span> <span class="n">solve_kwargs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">"The 'parametrization' argument is not supported by this function. Use "</span>
+            <span class="s2">"build_chains_transformation_term and pysolvegn.solve, or a ReparametrizedTransformation."</span>
+        <span class="p">)</span>
+
+    <span class="n">term</span><span class="p">,</span> <span class="n">initial_parameters</span> <span class="o">=</span> <span class="n">build_chains_transformation_term</span><span class="p">(</span>
+        <span class="n">seq_transformations</span><span class="p">,</span>
+        <span class="n">seq_chains</span><span class="p">,</span>
+        <span class="n">seq_inputs</span><span class="p">,</span>
+        <span class="n">seq_outputs</span><span class="p">,</span>
+        <span class="n">seq_parameters</span><span class="p">,</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="n">seq_kwargs</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">filter_nans</span><span class="o">=</span><span class="n">filter_nans</span><span class="p">,</span>
+        <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">initial_parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_split_parameters</span><span class="p">(</span><span class="n">seq_transformations</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="optimize_transformation_parameters">
+<a class="viewcode-back" href="../../../api/computer_vision/optimize_transformation_parameters.html#pysdic.optimize_transformation_parameters">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_transformation_parameters</span><span class="p">(</span>
+    <span class="n">transformation</span><span class="p">:</span> <span class="n">Transformation</span><span class="p">,</span>
+    <span class="n">input_points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">output_points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">filter_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">SolveResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Optimize the parameters :math:`\vec{p}` of a single transformation :math:`T` such that</span>
+<span class="sd">    :math:`T(X; \vec{p}) \approx Y` with ``pysolvegn.solve``:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \min_{\vec{p}} \frac{1}{2} \sum_j \rho\left( \| T(X_j; \vec{p}) - Y_j \|^2 \right)</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The given transformation is not modified. Set the optimized parameters yourself,</span>
+<span class="sd">        for example with ``transformation.parameters = p``.</span>
+
+<span class="sd">    .. seealso::</span>
+
+<span class="sd">        - Function :func:`pysdic.build_transformation_term` to build only the term.</span>
+<span class="sd">        - Function :func:`pysdic.optimize_chains_transformation_parameters` for several transformations and chains.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transformation, input_points, output_points, parameters, kwargs</span>
+<span class="sd">        See :func:`pysdic.build_transformation_term`.</span>
+
+<span class="sd">    mode, loss, loss_scale, filter_nans, sparse, use_cache</span>
+<span class="sd">        See :func:`pysdic.build_chains_transformation_term`.</span>
+
+<span class="sd">    **solve_kwargs</span>
+<span class="sd">        Additional keyword arguments passed to ``pysolvegn.solve``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The optimized parameters with shape :math:`(n_p,)`.</span>
+
+<span class="sd">    pysolvegn.SolveResult</span>
+<span class="sd">        The result of ``pysolvegn.solve``.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        p, result = optimize_transformation_parameters(homography, points_1, points_2, max_iteration=20, xtol=1e-10)</span>
+<span class="sd">        if result.success:</span>
+<span class="sd">            homography.parameters = p</span>
+
+<span class="sd">    """</span>
+    <span class="n">seq_parameters</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">optimize_chains_transformation_parameters</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">transformation</span><span class="p">],</span>
+        <span class="p">[[</span><span class="mi">0</span><span class="p">]],</span>
+        <span class="p">[</span><span class="n">input_points</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">output_points</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">parameters</span><span class="p">],</span>
+        <span class="n">seq_kwargs</span><span class="o">=</span><span class="p">[</span><span class="n">kwargs</span><span class="p">],</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span><span class="p">,</span>
+        <span class="n">filter_nans</span><span class="o">=</span><span class="n">filter_nans</span><span class="p">,</span>
+        <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
+        <span class="n">use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">solve_kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">seq_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

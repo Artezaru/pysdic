@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pysdic.sdic.temporal_regularization_term &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pysdic/sdic/temporal_regularization_term';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pysdic.sdic.temporal_regularization_term</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pysdic.sdic.temporal_regularization_term</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">pysdic - Python Stereo-Digital Image Correlation (Computer Vision</span>
+<span class="sd">Cameras Models, Image Processing, Meshes and tools for SDIC analysis)</span>
+<span class="sd">Copyright (C) 2026 Artezaru, artezaru.github@proton.me</span>
+
+<span class="sd">This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">This program is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pysolvegn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..numeric</span><span class="w"> </span><span class="kn">import</span> <span class="n">assemble_finite_difference_matrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_choice</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_frames</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICAnalysis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICUnknowns</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_time_weights</span><span class="p">(</span><span class="n">times</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_gap</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Duration represented by the evaluated samples rows: half the distance between the</span>
+    <span class="c1"># previous and the next samples of the same segment (half the step at the ends)</span>
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">max_gap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">segment</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_gap</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">following</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">rows</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="n">previous</span><span class="p">]</span> <span class="o">==</span> <span class="n">segment</span><span class="p">[</span><span class="n">rows</span><span class="p">],</span> <span class="n">previous</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
+    <span class="n">following</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="n">following</span><span class="p">]</span> <span class="o">==</span> <span class="n">segment</span><span class="p">[</span><span class="n">rows</span><span class="p">],</span> <span class="n">following</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">following</span><span class="p">]</span> <span class="o">-</span> <span class="n">times</span><span class="p">[</span><span class="n">previous</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_regularization_operators</span><span class="p">(</span>
+    <span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span>
+    <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">,</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">boundary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"one_sided"</span><span class="p">,</span>
+    <span class="n">max_gap</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">component_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">row_weights</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"uniform"</span><span class="p">,</span>
+    <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Build the operators of the linear residual :math:`\vec{r}(\vec{p}) = J \vec{p} + \vec{b}`</span>
+<span class="sd">    of the temporal regularization (see :class:`SDICTemporalRegularizationTerm`).</span>
+
+<span class="sd">    Returns the indices of the evaluated frames, the constant Jacobian :math:`J` of shape</span>
+<span class="sd">    :math:`(N_r N_v E, n_{unknowns})`, a function computing the vector :math:`\vec{b}` from</span>
+<span class="sd">    the current displacements of the fixed frames of the analysis (read at each call), and</span>
+<span class="sd">    the number of unknowns.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknowns</span><span class="p">,</span> <span class="n">SDICUnknowns</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'unknowns' must be a SDICUnknowns. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="n">analysis</span><span class="o">.</span><span class="n">validate_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">mesh</span>
+    <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">N_f</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span> <span class="n">analysis</span><span class="o">.</span><span class="n">n_frames</span>
+    <span class="n">n_dim</span> <span class="o">=</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span>
+
+    <span class="c1"># ------------- unknowns: [displacements of the optimized frames | transformations] -------------</span>
+    <span class="n">optimized_frames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">optimized_frames</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The temporal regularization needs at least one optimized frame in 'unknowns'."</span><span class="p">)</span>
+    <span class="n">n_unknowns</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+    <span class="n">frame_starts</span> <span class="o">=</span> <span class="p">{</span><span class="n">frame</span><span class="p">:</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_unknowns_frame_slice</span><span class="p">(</span><span class="n">unknowns</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span><span class="o">.</span><span class="n">start</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">optimized_frames</span><span class="p">}</span>
+
+    <span class="c1"># ------------- frames of the regularization, in chronological order -------------</span>
+    <span class="k">if</span> <span class="n">frames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">optimized_frames</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_f</span><span class="p">)</span> <span class="k">if</span> <span class="n">analysis</span><span class="o">.</span><span class="n">has_displacement</span><span class="p">(</span><span class="n">f</span><span class="p">)})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_validate_frames</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="s2">"frames"</span><span class="p">,</span> <span class="n">allow_empty</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">frame</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">optimized_frames</span> <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The optimized frames </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2"> must be in 'frames'."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame_starts</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">analysis</span><span class="o">.</span><span class="n">has_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The displacement of the frame </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> (fixed frame of the regularization) is not set."</span><span class="p">)</span>
+
+    <span class="n">times</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">times</span>
+    <span class="k">if</span> <span class="n">times</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"The times of acquisition of the frames are not defined in the analysis: the temporal "</span>
+            <span class="s2">"regularization needs them to compute the finite differences. Create the analysis with "</span>
+            <span class="s2">"SDICAnalysis(..., times=times), or get an analysis with times with analysis.with_times(times)."</span>
+        <span class="p">)</span>
+    <span class="n">frame_times</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="n">frames</span><span class="p">]</span>  <span class="c1"># Strictly increasing: the frames are sorted and the times increasing</span>
+
+    <span class="c1"># ------------- options -------------</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="s2">"order"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">boundary</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">boundary</span><span class="p">,</span> <span class="s2">"boundary"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"one_sided"</span><span class="p">,</span> <span class="s2">"valid"</span><span class="p">))</span>
+    <span class="n">max_gap</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">max_gap</span><span class="p">,</span> <span class="s2">"max_gap"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">row_weights</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">row_weights</span><span class="p">,</span> <span class="s2">"row_weights"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"uniform"</span><span class="p">,</span> <span class="s2">"time"</span><span class="p">))</span>
+    <span class="n">sparse</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">component_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">component_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">component_weights</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">component_weights</span><span class="p">,</span> <span class="s2">"component_weights"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">E</span><span class="p">,),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">E</span><span class="si">}</span><span class="s2">,)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">component_weights</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'component_weights' must be non-negative."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span>
+            <span class="n">target</span><span class="p">,</span> <span class="s2">"target"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N_f</span><span class="p">,</span> <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">N_f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">N_v</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">E</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ------------- finite difference operator on the frames of the regularization -------------</span>
+    <span class="n">D</span><span class="p">,</span> <span class="n">rows</span> <span class="o">=</span> <span class="n">assemble_finite_difference_matrix</span><span class="p">(</span>
+        <span class="n">frame_times</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span> <span class="n">max_gap</span><span class="o">=</span><span class="n">max_gap</span><span class="p">,</span> <span class="n">n_dim</span><span class="o">=</span><span class="n">n_dim</span><span class="p">,</span>
+        <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_indices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># (N_r n_dim, len(frames) n_dim), rows in chronological order of the frames</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+    <span class="n">is_optimized</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_starts</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>  <span class="c1"># Per frame of 'frames'</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">frame_starts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">block</span><span class="p">,</span> <span class="n">local</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">divmod</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">)</span>  <span class="c1"># Frame (index in 'frames') and component of each entry</span>
+    <span class="n">optimized</span> <span class="o">=</span> <span class="n">is_optimized</span><span class="p">[</span><span class="n">block</span><span class="p">]</span>
+
+    <span class="c1"># Rows involving no optimized frame are constant: they are removed</span>
+    <span class="n">kept_blocks</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">row</span><span class="p">[</span><span class="n">optimized</span><span class="p">]</span> <span class="o">//</span> <span class="n">n_dim</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="n">kept_blocks</span><span class="p">]</span>
+    <span class="n">row_map</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">n_dim</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">row_map</span><span class="p">[</span><span class="n">kept_blocks</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">kept_blocks</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="n">row_map</span><span class="p">[</span><span class="n">D</span><span class="o">.</span><span class="n">row</span> <span class="o">//</span> <span class="n">n_dim</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="n">entry_rows</span> <span class="o">=</span> <span class="n">row_map</span><span class="p">[</span><span class="n">D</span><span class="o">.</span><span class="n">row</span> <span class="o">//</span> <span class="n">n_dim</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_dim</span> <span class="o">+</span> <span class="n">D</span><span class="o">.</span><span class="n">row</span> <span class="o">%</span> <span class="n">n_dim</span>
+    <span class="n">n_rows</span> <span class="o">=</span> <span class="n">kept_blocks</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">n_dim</span>
+
+    <span class="c1"># Jacobian: entries of the optimized frames in the columns of their unknowns</span>
+    <span class="n">selected</span> <span class="o">=</span> <span class="n">keep</span> <span class="o">&amp;</span> <span class="n">optimized</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">selected</span><span class="p">],</span> <span class="p">(</span><span class="n">entry_rows</span><span class="p">[</span><span class="n">selected</span><span class="p">],</span> <span class="n">starts</span><span class="p">[</span><span class="n">block</span><span class="p">[</span><span class="n">selected</span><span class="p">]]</span> <span class="o">+</span> <span class="n">local</span><span class="p">[</span><span class="n">selected</span><span class="p">])),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">n_unknowns</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Vector b = B u_fixed - a: B maps the displacements of the fixed frames used by the kept rows</span>
+    <span class="c1"># (concatenated in Fortran order) to the rows. The displacements are read at each evaluation.</span>
+    <span class="n">fixed</span> <span class="o">=</span> <span class="n">keep</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">optimized</span>
+    <span class="n">fixed_blocks</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="n">fixed</span><span class="p">])</span>  <span class="c1"># Fixed frames used (indices in 'frames')</span>
+    <span class="n">fixed_frames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">frames</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fixed_blocks</span><span class="p">]</span>
+    <span class="n">fixed_index</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">fixed_index</span><span class="p">[</span><span class="n">fixed_blocks</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fixed_blocks</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">fixed</span><span class="p">],</span> <span class="p">(</span><span class="n">entry_rows</span><span class="p">[</span><span class="n">fixed</span><span class="p">],</span> <span class="n">fixed_index</span><span class="p">[</span><span class="n">block</span><span class="p">[</span><span class="n">fixed</span><span class="p">]]</span> <span class="o">*</span> <span class="n">n_dim</span> <span class="o">+</span> <span class="n">local</span><span class="p">[</span><span class="n">fixed</span><span class="p">])),</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">fixed_blocks</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">n_dim</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">evaluated_frames</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)[</span><span class="n">rows</span><span class="p">]</span>
+    <span class="n">target_part</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_rows</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rows</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">target_part</span> <span class="o">=</span> <span class="o">-</span><span class="n">target</span><span class="p">[</span><span class="n">evaluated_frames</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Fortran order of (N_v, E) per frame</span>
+
+    <span class="c1"># Row weights: component weights (Fortran order: component e on the rows e N_v ... (e + 1) N_v - 1</span>
+    <span class="c1"># of each frame block) and optionally the duration represented by each evaluated frame</span>
+    <span class="n">sqrt_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">component_weights</span><span class="p">),</span> <span class="n">N_v</span><span class="p">),</span> <span class="n">rows</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">row_weights</span> <span class="o">==</span> <span class="s2">"time"</span><span class="p">:</span>
+        <span class="n">sqrt_weights</span> <span class="o">*=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">_time_weights</span><span class="p">(</span><span class="n">frame_times</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">max_gap</span><span class="p">)),</span> <span class="n">n_dim</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">(</span><span class="n">sqrt_weights</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">W</span> <span class="o">@</span> <span class="n">J</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">B</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="n">target_part</span> <span class="o">=</span> <span class="n">sqrt_weights</span> <span class="o">*</span> <span class="n">target_part</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_b</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="c1"># Current displacements of the fixed frames (they can be updated, not removed)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fixed_frames</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">target_part</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">fixed_frames</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">B</span> <span class="o">@</span> <span class="n">values</span> <span class="o">+</span> <span class="n">target_part</span>
+
+    <span class="k">return</span> <span class="n">evaluated_frames</span><span class="p">,</span> <span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">J</span><span class="o">.</span><span class="n">toarray</span><span class="p">()),</span> <span class="n">compute_b</span><span class="p">,</span> <span class="n">n_unknowns</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Term</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="SDICTemporalRegularizationTerm">
+<a class="viewcode-back" href="../../../api/sdic/SDICTemporalRegularizationTerm.html#pysdic.SDICTemporalRegularizationTerm">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SDICTemporalRegularizationTerm</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    The temporal regularization of the displacements of the vertices of the mesh</span>
+<span class="sd">    along the frames of an analysis, by penalizing their temporal derivative of order</span>
+<span class="sd">    :math:`n`. The ``pysolvegn.Term`` to give to ``pysolvegn.solve`` is the property</span>
+<span class="sd">    :attr:`term`.</span>
+
+<span class="sd">    The term works on the vector of unknowns :math:`\vec{p} = [\vec{p}_U, \vec{p}_T]` described</span>
+<span class="sd">    by ``unknowns`` (see :class:`pysdic.SDICUnknowns`) in ``analysis``: give it the same analysis</span>
+<span class="sd">    and the same unknowns objects as the correlation term to combine both terms in the same</span>
+<span class="sd">    problem (see :func:`pysdic.check_same_problem`). :math:`\vec{p}_U` are the displacements of the optimized frames (Fortran order,</span>
+<span class="sd">    frame after frame) and :math:`\vec{p}_T` the parameters of the optimized transformations.</span>
+<span class="sd">    The regularization does not depend on the transformations: their columns of the Jacobian</span>
+<span class="sd">    are zero.</span>
+
+<span class="sd">    The object is immutable: :meth:`with_unknowns` and :meth:`with_options` create a new</span>
+<span class="sd">    regularization (e.g. with other unknowns, another order or another weight).</span>
+
+<span class="sd">    **Residuals.** The frames of the regularization (``frames``) are sorted by time. The</span>
+<span class="sd">    optimized frames take their displacement in :math:`\vec{p}_U`, the other ones (fixed</span>
+<span class="sd">    frames) their displacement set in the analysis. For each evaluated frame :math:`f_i`,</span>
+<span class="sd">    each vertex :math:`v` and each component :math:`e`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        r_{i,v,e} = \sqrt{w_e \, \omega_i} \left( \sum_{k} c_{i,k} \, u_{f_k, v, e} - a_{f_i, v, e} \right)</span>
+
+<span class="sd">    where :math:`c_{i,k}` are the finite difference coefficients of the derivative of order</span>
+<span class="sd">    :math:`n` at the time :math:`t_{f_i}` (see</span>
+<span class="sd">    :func:`pysdic.numeric.assemble_finite_difference_matrix`), :math:`a` the ``target``</span>
+<span class="sd">    derivative (zero by default), :math:`w_e` the ``component_weights`` and</span>
+<span class="sd">    :math:`\omega_i` the ``row_weights``.</span>
+
+<span class="sd">    **Sampling.** The coefficients are computed for the times of acquisition of the frames,</span>
+<span class="sd">    defined in the analysis (:attr:`pysdic.SDICAnalysis.times`, required): the frames that are not in</span>
+<span class="sd">    the regularization (frames without displacement, or not in ``frames``) only make the step</span>
+<span class="sd">    between their neighbors larger.</span>
+<span class="sd">    No displacement is interpolated or extrapolated:</span>
+
+<span class="sd">    - centered stencils when the neighbors are uniformly spaced, the most centered window of</span>
+<span class="sd">      :math:`n + p` frames otherwise (accuracy :math:`p`);</span>
+<span class="sd">    - at the first and last frames, one-sided stencils (``boundary="one_sided"``) or no</span>
+<span class="sd">      equation (``boundary="valid"``);</span>
+<span class="sd">    - with ``max_gap``, no stencil spans a step larger than ``max_gap``: the frames on each</span>
+<span class="sd">      side are regularized separately.</span>
+
+<span class="sd">    **Equations.** Only the equations involving at least one optimized frame are kept (the</span>
+<span class="sd">    other ones are constant). The equations of the fixed frames next to optimized frames</span>
+<span class="sd">    are kept: for example, the equation of the reference frame links it with the first</span>
+<span class="sd">    optimized frames.</span>
+
+<span class="sd">    **Weights of the rows.** The one-sided stencils have larger coefficients than the</span>
+<span class="sd">    centered ones: the first and last frames are more regularized. The coefficients of a</span>
+<span class="sd">    frame across a large step are smaller: a displacement change over a longer duration is a</span>
+<span class="sd">    smaller derivative. With ``row_weights="time"``, each equation is weighted by the</span>
+<span class="sd">    duration :math:`\omega_i` it represents (half the distance between the previous and the</span>
+<span class="sd">    next frames, half the step at the ends), so that the cost approximates</span>
+<span class="sd">    :math:`\int \| \vec{u}^{(n)}(t) - \vec{a}(t) \|^2 dt` independently of the sampling of the</span>
+<span class="sd">    frames.</span>
+
+<span class="sd">    The residual is linear: :math:`\vec{r} = J \vec{p} + \vec{b}`, with a constant Jacobian</span>
+<span class="sd">    computed once. The vector :math:`\vec{b}` (contribution of the fixed frames, minus the</span>
+<span class="sd">    target) is computed **at each evaluation** from the current displacements of the fixed</span>
+<span class="sd">    frames: a displacement updated after the creation of the term (for example the result of</span>
+<span class="sd">    a previous measurement) is taken into account.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The frames of the regularization are fixed at the creation of the term: a frame whose</span>
+<span class="sd">        displacement is set later is not added (build a new term to include it). The</span>
+<span class="sd">        displacements of the fixed frames cannot be removed from the analysis, so they are</span>
+<span class="sd">        always available.</span>
+
+<span class="sd">    The residuals are ordered by evaluated frame (chronological order), each frame in</span>
+<span class="sd">    Fortran order of :math:`(N_v, E)` (all the :math:`x` components, then all the :math:`y`</span>
+<span class="sd">    components, ...).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analysis : :class:`pysdic.SDICAnalysis`</span>
+<span class="sd">        The analysis, with the times of the frames defined (:attr:`pysdic.SDICAnalysis.times`)</span>
+<span class="sd">        and the displacements of the fixed frames of the regularization set.</span>
+
+<span class="sd">    unknowns : :class:`pysdic.SDICUnknowns`</span>
+<span class="sd">        The unknowns of the problem, with at least one optimized frame, validated by the</span>
+<span class="sd">        analysis. The optimized transformations only define the size of the vector of unknowns.</span>
+
+<span class="sd">    order : Integral</span>
+<span class="sd">        The order :math:`n \geq 1` of the penalized derivative (1 for the velocity, 2 for the</span>
+<span class="sd">        acceleration).</span>
+
+<span class="sd">    frames : Optional[Sequence[Integral]], optional</span>
+<span class="sd">        The frames of the regularization, which must contain the optimized frames. By</span>
+<span class="sd">        default, the optimized frames and all the frames whose displacement is set.</span>
+
+<span class="sd">    accuracy : Integral, optional (default: ``2``)</span>
+<span class="sd">        The order :math:`p` of the error of the finite differences, a positive even integer.</span>
+
+<span class="sd">    boundary : str, optional (default: ``"one_sided"``)</span>
+<span class="sd">        The equations at the first and last frames: ``"one_sided"`` or ``"valid"``.</span>
+
+<span class="sd">    max_gap : Optional[Real], optional</span>
+<span class="sd">        The largest step between two frames that a stencil can span, in the unit of the times</span>
+<span class="sd">        of the analysis. By default, no limit.</span>
+
+<span class="sd">    target : Optional[ArrayLike], optional</span>
+<span class="sd">        The target derivative :math:`a`, of shape :math:`(N_f, N_v, E)` (only the evaluated</span>
+<span class="sd">        frames are used). By default, zero.</span>
+
+<span class="sd">    component_weights : Optional[ArrayLike], optional</span>
+<span class="sd">        The non-negative weights :math:`w_e` of the components of the displacement, of shape</span>
+<span class="sd">        :math:`(E,)`, e.g. ``[1, 1, 0]`` to regularize only the in-plane components. By</span>
+<span class="sd">        default, 1.</span>
+
+<span class="sd">    row_weights : str, optional (default: ``"uniform"``)</span>
+<span class="sd">        The weights :math:`\omega_i` of the evaluated frames: ``"uniform"`` (1) or ``"time"``</span>
+<span class="sd">        (duration represented by each frame, see above).</span>
+
+<span class="sd">    mode : str, optional (default: ``"rJ"``)</span>
+<span class="sd">        The mode of the term: ``"rJ"`` (residuals and Jacobian) or ``"gH"`` (gradient</span>
+<span class="sd">        :math:`J^T \vec{r}`, Hessian :math:`J^T J` and cost, only the ``"linear"`` loss).</span>
+
+<span class="sd">    weight : Real, optional (default: ``1.0``)</span>
+<span class="sd">        The weight of the term in the ``pysolvegn`` problem.</span>
+
+<span class="sd">    loss : Optional[Union[str, Callable]], optional</span>
+<span class="sd">        The loss function of the term (see ``pysolvegn.Term``), only for the mode ``"rJ"``.</span>
+<span class="sd">        ``None`` means ``"linear"``.</span>
+
+<span class="sd">    loss_scale : Real, optional (default: ``1.0``)</span>
+<span class="sd">        The soft threshold of the loss function. Only for the mode ``"rJ"``.</span>
+
+<span class="sd">    sparse : bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the Jacobian (``"rJ"``) or the Hessian (``"gH"``) is a</span>
+<span class="sd">        ``scipy.sparse.csr_matrix``, otherwise a dense array.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If an input has a wrong type.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        If the times of the analysis are not defined, the frames or the transformations are not</span>
+<span class="sd">        consistent, the displacement of a fixed frame of the regularization is not set, a</span>
+<span class="sd">        loss other than ``"linear"`` is used in mode ``"gH"``, or an input has a wrong shape</span>
+<span class="sd">        or value.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Measure the displacements of the frames 1 to 9 with a penalty on the acceleration, the</span>
+<span class="sd">    frame 0 being the reference:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        import pysolvegn</span>
+<span class="sd">        from pysdic import SDICCorrelationTerm, SDICTemporalRegularizationTerm, SDICUnknowns</span>
+
+<span class="sd">        unknowns = SDICUnknowns(list(range(1, 10)), [])</span>
+<span class="sd">        correlation = SDICCorrelationTerm(analysis, unknowns, integration_points, pairings)</span>
+<span class="sd">        regularization = SDICTemporalRegularizationTerm(analysis, unknowns, order=2, weight=1e-2)</span>
+
+<span class="sd">        result = pysolvegn.solve([correlation.term, regularization.term], analysis.pack_unknowns(unknowns), max_iteration=20)</span>
+<span class="sd">        analysis.apply_unknowns(unknowns, result.parameters)</span>
+
+<span class="sd">        # The same problem with a stronger regularization of the velocity</span>
+<span class="sd">        regularization = regularization.with_options(order=1, weight=1e-1)</span>
+
+<span class="sd">    """</span>
+
+    <span class="c1"># Options of the regularization (everything except the analysis and the unknowns)</span>
+    <span class="n">_OPTION_KEYS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">"order"</span><span class="p">,</span> <span class="s2">"frames"</span><span class="p">,</span> <span class="s2">"accuracy"</span><span class="p">,</span> <span class="s2">"boundary"</span><span class="p">,</span> <span class="s2">"max_gap"</span><span class="p">,</span> <span class="s2">"target"</span><span class="p">,</span> <span class="s2">"component_weights"</span><span class="p">,</span> <span class="s2">"row_weights"</span><span class="p">,</span>
+        <span class="s2">"mode"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="s2">"loss"</span><span class="p">,</span> <span class="s2">"loss_scale"</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span>
+        <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">,</span>
+        <span class="n">order</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">frames</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">accuracy</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">boundary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"one_sided"</span><span class="p">,</span>
+        <span class="n">max_gap</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">component_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">row_weights</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"uniform"</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">loss_scale</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"rJ"</span><span class="p">,</span> <span class="s2">"gH"</span><span class="p">))</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">loss_scale</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">loss_scale</span><span class="p">,</span> <span class="s2">"loss_scale"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"gH"</span> <span class="ow">and</span> <span class="p">(</span><span class="n">loss</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"linear"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">loss_scale</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Only the 'linear' loss (with loss_scale=1.0) is available in mode 'gH', got </span><span class="si">{</span><span class="n">loss</span><span class="si">!r}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"with loss_scale=</span><span class="si">{</span><span class="n">loss_scale</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="n">evaluated_frames</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">compute_b</span><span class="p">,</span> <span class="n">n_unknowns</span> <span class="o">=</span> <span class="n">_build_regularization_operators</span><span class="p">(</span>
+            <span class="n">analysis</span><span class="p">,</span>
+            <span class="n">unknowns</span><span class="p">,</span>
+            <span class="n">order</span><span class="p">,</span>
+            <span class="n">frames</span><span class="o">=</span><span class="n">frames</span><span class="p">,</span>
+            <span class="n">accuracy</span><span class="o">=</span><span class="n">accuracy</span><span class="p">,</span>
+            <span class="n">boundary</span><span class="o">=</span><span class="n">boundary</span><span class="p">,</span>
+            <span class="n">max_gap</span><span class="o">=</span><span class="n">max_gap</span><span class="p">,</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+            <span class="n">component_weights</span><span class="o">=</span><span class="n">component_weights</span><span class="p">,</span>
+            <span class="n">row_weights</span><span class="o">=</span><span class="n">row_weights</span><span class="p">,</span>
+            <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">residuals</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_unknowns</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">J</span> <span class="o">@</span> <span class="n">parameters</span> <span class="o">+</span> <span class="n">compute_b</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span><span class="p">:</span>
+            <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="o">.</span><span class="n">from_rJ</span><span class="p">(</span>
+                <span class="n">residual_func</span><span class="o">=</span><span class="n">residuals</span><span class="p">,</span> <span class="n">jacobian_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">J</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">loss_scale</span><span class="o">=</span><span class="n">loss_scale</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hessian</span> <span class="o">=</span> <span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">J</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">J</span>  <span class="c1"># Constant</span>
+            <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="o">.</span><span class="n">from_gH</span><span class="p">(</span>
+                <span class="n">gradient_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">residuals</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span>
+                <span class="n">hessian_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">hessian</span><span class="p">,</span>
+                <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+                <span class="n">cost_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">parameters</span><span class="p">:</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">residuals</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span> <span class="o">=</span> <span class="n">analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span> <span class="o">=</span> <span class="n">unknowns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"order"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">order</span><span class="p">),</span>
+            <span class="s2">"frames"</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">frames</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">),</span>
+            <span class="s2">"accuracy"</span><span class="p">:</span> <span class="n">accuracy</span><span class="p">,</span>
+            <span class="s2">"boundary"</span><span class="p">:</span> <span class="n">boundary</span><span class="p">,</span>
+            <span class="s2">"max_gap"</span><span class="p">:</span> <span class="n">max_gap</span><span class="p">,</span>
+            <span class="s2">"target"</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+            <span class="s2">"component_weights"</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">component_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">component_weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+            <span class="s2">"row_weights"</span><span class="p">:</span> <span class="n">row_weights</span><span class="p">,</span>
+            <span class="s2">"mode"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+            <span class="s2">"weight"</span><span class="p">:</span> <span class="n">weight</span><span class="p">,</span>
+            <span class="s2">"loss"</span><span class="p">:</span> <span class="n">loss</span><span class="p">,</span>
+            <span class="s2">"loss_scale"</span><span class="p">:</span> <span class="n">loss_scale</span><span class="p">,</span>
+            <span class="s2">"sparse"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">evaluated_frames</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evaluated_frames</span> <span class="o">=</span> <span class="n">evaluated_frames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_term</span> <span class="o">=</span> <span class="n">term</span>
+
+    <span class="c1"># ------------------------------------------------------------------ Properties</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unknowns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SDICUnknowns</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The unknowns of the problem (shared with the correlation term)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The analysis (shared with the other objects of the problem)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">term</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The ``pysolvegn.Term``, to give to ``pysolvegn.solve``."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_term</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The order :math:`n` of the penalized derivative."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="s2">"order"</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The weight of the term in the ``pysolvegn`` problem."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="s2">"weight"</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The options of the regularization (a copy): the parameters of the constructor except ``analysis`` and ``unknowns``."""</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluated_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The frames with an equation, in chronological order (read-only)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluated_frames</span>
+
+    <span class="c1"># ------------------------------------------------------------------ Unknowns</span>
+<div class="viewcode-block" id="SDICTemporalRegularizationTerm.pack">
+<a class="viewcode-back" href="../../../api/_generated/pysdic.SDICTemporalRegularizationTerm.pack.html#pysdic.SDICTemporalRegularizationTerm.pack">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pack</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""The vector of unknowns of the current state of the analysis, see :meth:`pysdic.SDICAnalysis.pack_unknowns`."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">pack_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------ New terms</span>
+<div class="viewcode-block" id="SDICTemporalRegularizationTerm.with_unknowns">
+<a class="viewcode-back" href="../../../api/_generated/pysdic.SDICTemporalRegularizationTerm.with_unknowns.html#pysdic.SDICTemporalRegularizationTerm.with_unknowns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SDICTemporalRegularizationTerm</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""A new regularization with other unknowns and the same options."""</span>
+        <span class="k">return</span> <span class="n">SDICTemporalRegularizationTerm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SDICTemporalRegularizationTerm.with_options">
+<a class="viewcode-back" href="../../../api/_generated/pysdic.SDICTemporalRegularizationTerm.with_options.html#pysdic.SDICTemporalRegularizationTerm.with_options">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SDICTemporalRegularizationTerm</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        A new regularization with the same unknowns and other options (any parameter of the</span>
+<span class="sd">        constructor except ``analysis`` and ``unknowns``), e.g. ``with_options(order=1, weight=1e-1)``.</span>
+<span class="sd">        """</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">changes</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_OPTION_KEYS</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown options </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">. Valid options: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_OPTION_KEYS</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SDICTemporalRegularizationTerm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">})</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"SDICTemporalRegularizationTerm(order=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="si">}</span><span class="s2">, weight=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="si">}</span><span class="s2">, "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_evaluated_frames</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> evaluated frames, n_unknowns=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Triangulation of world points from two images &#8212; pysdic 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_gallery/computer_vision/example_triangulation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Imaging" href="../imaging/index.html" />
+    <link rel="prev" title="Projecting 3D points to image points" href="example_project_points.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysdic 2.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../geometry/index.html">Geometry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/example_cast_rays.html">Intersection of rays with surface meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/example_create_2d_surface_meshes.html">Creating 2D surface meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/example_create_3d_surface_meshes.html">Creating 3D surface meshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/example_integration_points.html">Integration points: interpolation, derivatives and projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/example_mesh_adjacency.html">Adjacency and neighborhoods of a mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geometry/example_surface_geometry.html">Areas, centers and normals of surface meshes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Computer vision</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="example_distorting_images.html">Distorting and undistorting images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_optical_flow.html">Optical flow between two images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_optimize_parameters.html">Optimizing the parameters of transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_project_points.html">Projecting 3D points to image points</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Triangulation of world points from two images</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../imaging/index.html">Imaging</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/example_camera_projection.html">Projection of meshes with a camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/example_image_plotter.html">Drawing on images with the ImagePlotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/example_synthetic_cylinder.html">Synthetic stereo images of an inflated cylinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imaging/example_view_image_projection.html">Gray levels of a view</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../sdic/index.html">Stereo digital image correlation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/example_finite_difference_operators.html">Finite difference operators on cropped and non-uniform samplings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/example_sdic_displacement.html">Measuring a displacement with the SDIC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sdic/example_sdic_transformations.html">Optimizing the cameras with the SDIC</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../workflows/index.html">Workflows</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/example_workflow_displacement_tools.html">Interpolating and filtering displacements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/example_workflow_integration_points.html">Preparing the integration points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/example_workflow_optical_flow.html">Initializing a displacement by optical flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/example_workflow_quality_control.html">Controlling the quality of a measure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/example_workflow_reference_shape.html">Measuring the shape at the reference frame</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../usage.html" class="nav-link">Usage</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Computer vision</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Triangulation of world points from two images</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-gallery-computer-vision-example-triangulation-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="triangulation-of-world-points-from-two-images">
+<span id="example-triangulation"></span><span id="sphx-glr-gallery-computer-vision-example-triangulation-py"></span><h1>Triangulation of world points from two images<a class="headerlink" href="#triangulation-of-world-points-from-two-images" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#stereo-setup" id="id1">Stereo setup</a></p></li>
+<li><p><a class="reference internal" href="#minimization-of-the-reprojection-errors" id="id2">Minimization of the reprojection errors</a></p></li>
+<li><p><a class="reference internal" href="#intersection-of-the-rays" id="id3">Intersection of the rays</a></p></li>
+<li><p><a class="reference internal" href="#comparison" id="id4">Comparison</a></p></li>
+</ul>
+</nav>
+<p>The world points seen by two cameras are estimated from their projections in the two
+images (stereo triangulation), with two methods:</p>
+<ul class="simple">
+<li><p>the minimization of the reprojection errors with
+<a class="reference internal" href="../../api/computer_vision/optimize_chains_transformation_input_points.html#pysdic.optimize_chains_transformation_input_points" title="pysdic.optimize_chains_transformation_input_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.optimize_chains_transformation_input_points()</span></code></a>;</p></li>
+<li><p>the intersection of the rays of the two cameras with <a class="reference internal" href="../../api/computer_vision/intersect_rays.html#pysdic.intersect_rays" title="pysdic.intersect_rays"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.intersect_rays()</span></code></a>.</p></li>
+</ul>
+<section id="stereo-setup">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Stereo setup</a><a class="headerlink" href="#stereo-setup" title="Link to this heading">#</a></h2>
+<p>100 random world points are seen by two cameras placed at <span class="math notranslate nohighlight">\(Y = \pm 4\)</span>, looking at
+the point <span class="math notranslate nohighlight">\((0, 0, 75)\)</span>. The rows of the rotation of a camera are its axes, with
+<span class="math notranslate nohighlight">\(\vec{z}_c\)</span> toward the target, and <span class="math notranslate nohighlight">\(\vec{t} = -R \, \vec{C}\)</span>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">spatial</span><span class="nn">.</span><span class="nn">transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rotation</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">PerspectiveExtrinsic</span></a><span class="p">,</span> <span class="n">PinholeIntrinsic</span><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">ZernikeDistortion</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/project_points.html#pysdic.project_points" title="pysdic.project_points"><span class="n">project_points</span></a><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="numpy.random.Generator"><span class="n">rng</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng" title="numpy.random.default_rng"><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span></a><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">world_points</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack" title="numpy.stack"><span class="n">numpy</span><span class="o">.</span><span class="n">stack</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-method reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.uniform.html#numpy.random.Generator.uniform" title="numpy.random.Generator.uniform"><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-method reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.uniform.html#numpy.random.Generator.uniform" title="numpy.random.Generator.uniform"><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-method reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.uniform.html#numpy.random.Generator.uniform" title="numpy.random.Generator.uniform"><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span></a><span class="p">(</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">def</span><span class="w"> </span><span class="nf">looking_at</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">target</span></a><span class="p">:</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></a><span class="p">)</span> <span class="o">-</span><span class="o">&gt;</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">PerspectiveExtrinsic</span></a><span class="p">:</span><span class="w">
+</span>    <span class="c1"># Extrinsic of a camera at 'center' looking at 'target'</span><span class="w">
+</span>    <span class="n">z_axis</span> <span class="o">=</span> <span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">target</span></a> <span class="o">-</span> <span class="n">center</span><span class="p">)</span> <span class="o">/</span> <a class="sphx-glr-backref-module-numpy-linalg sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html#numpy.linalg.norm" title="numpy.linalg.norm"><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">target</span></a> <span class="o">-</span> <span class="n">center</span><span class="p">)</span><span class="w">
+</span>    <span class="n">x_axis</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.cross.html#numpy.cross" title="numpy.cross"><span class="n">numpy</span><span class="o">.</span><span class="n">cross</span></a><span class="p">(</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">)</span><span class="w">
+</span>    <span class="n">x_axis</span> <span class="o">/</span><span class="o">=</span> <a class="sphx-glr-backref-module-numpy-linalg sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html#numpy.linalg.norm" title="numpy.linalg.norm"><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span></a><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span><span class="w">
+</span>    <span class="n">rotation</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack" title="numpy.stack"><span class="n">numpy</span><span class="o">.</span><span class="n">stack</span></a><span class="p">(</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.cross.html#numpy.cross" title="numpy.cross"><span class="n">numpy</span><span class="o">.</span><span class="n">cross</span></a><span class="p">(</span><span class="n">z_axis</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">)</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">)</span><span class="p">)</span>  <span class="c1"># World -&gt; camera</span><span class="w">
+</span>    <span class="k">return</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-method reference internal" href="../../api/morphisms/_generated/pysdic.PerspectiveExtrinsic.from_rt.html#pysdic.PerspectiveExtrinsic.from_rt" title="pysdic.PerspectiveExtrinsic.from_rt"><span class="n">PerspectiveExtrinsic</span><span class="o">.</span><span class="n">from_rt</span></a><span class="p">(</span><span class="n">rvec</span><span class="o">=</span><a class="sphx-glr-backref-module-scipy-spatial-transform-Rotation sphx-glr-backref-type-py-method reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_matrix.html#scipy.spatial.transform.Rotation.from_matrix" title="scipy.spatial.transform.Rotation.from_matrix"><span class="n">Rotation</span><span class="o">.</span><span class="n">from_matrix</span></a><span class="p">(</span><span class="n">rotation</span><span class="p">)</span><span class="o">.</span><span class="n">as_rotvec</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">tvec</span><span class="o">=</span><span class="o">-</span><span class="n">rotation</span> <span class="o">&#64;</span> <span class="n">center</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">target</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">numpy</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_1</span></a> <span class="o">=</span> <span class="n">looking_at</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">numpy</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span><span class="p">)</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">target</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_2</span></a> <span class="o">=</span> <span class="n">looking_at</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">numpy</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span><span class="p">)</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">target</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">height</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">width</span></a> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="w">
+</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-method reference internal" href="../../api/morphisms/_generated/pysdic.PinholeIntrinsic.from_matrix.html#pysdic.PinholeIntrinsic.from_matrix" title="pysdic.PinholeIntrinsic.from_matrix"><span class="n">PinholeIntrinsic</span><span class="o">.</span><span class="n">from_matrix</span></a><span class="p">(</span><span class="p">[</span><span class="p">[</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">width</span></a> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">height</span></a> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p>The cameras share a Zernike distortion given in pixels on the disk circumscribed to the
+image. It is applied to the normalized points, so the coefficients, the radius and the
+center are divided by the focal lengths.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">center_pixels</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">numpy</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">width</span></a> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">height</span></a> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">radius_pixels</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy-linalg sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html#numpy.linalg.norm" title="numpy.linalg.norm"><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">center_pixels</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">distortion</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">ZernikeDistortion</span></a><span class="p">(</span><span class="w">
+</span>    <span class="p">[</span><span class="w">
+</span>        <span class="mf">0.8541972545746392</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.468596289790535</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.974287819021697</span><span class="p">,</span> <span class="mf">14.292956075116104</span><span class="p">,</span><span class="w">
+</span>        <span class="mf">2.1403205479372627</span><span class="p">,</span> <span class="mf">4.544169430137205</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.10099732464199339</span><span class="p">,</span> <span class="mf">0.4363509204067417</span><span class="p">,</span><span class="w">
+</span>        <span class="o">-</span><span class="mf">0.5106374355681896</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.770087687650705</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39147505788710696</span><span class="p">,</span> <span class="mf">11.699411273002498</span><span class="p">,</span><span class="w">
+</span>    <span class="p">]</span><span class="p">,</span>  <span class="c1"># In pixels</span><span class="w">
+</span>    <span class="n">radius_x</span><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">radius_pixels</span></a> <span class="o">/</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">fx</span><span class="p">,</span><span class="w">
+</span>    <span class="n">radius_y</span><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><span class="n">radius_pixels</span></a> <span class="o">/</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">fy</span><span class="p">,</span><span class="w">
+</span>    <span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">center_pixels</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">cx</span><span class="p">)</span> <span class="o">/</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">fx</span><span class="p">,</span> <span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">center_pixels</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">cy</span><span class="p">)</span> <span class="o">/</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">fy</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-property reference internal" href="../../api/morphisms/_generated/pysdic.ZernikeDistortion.parameters_x.html#pysdic.ZernikeDistortion.parameters_x" title="pysdic.ZernikeDistortion.parameters_x"><span class="n">distortion</span><span class="o">.</span><span class="n">parameters_x</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-property reference internal" href="../../api/morphisms/_generated/pysdic.ZernikeDistortion.parameters_x.html#pysdic.ZernikeDistortion.parameters_x" title="pysdic.ZernikeDistortion.parameters_x"><span class="n">distortion</span><span class="o">.</span><span class="n">parameters_x</span></a> <span class="o">/</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">fx</span><span class="w">
+</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-property reference internal" href="../../api/morphisms/_generated/pysdic.ZernikeDistortion.parameters_y.html#pysdic.ZernikeDistortion.parameters_y" title="pysdic.ZernikeDistortion.parameters_y"><span class="n">distortion</span><span class="o">.</span><span class="n">parameters_y</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-property reference internal" href="../../api/morphisms/_generated/pysdic.ZernikeDistortion.parameters_y.html#pysdic.ZernikeDistortion.parameters_y" title="pysdic.ZernikeDistortion.parameters_y"><span class="n">distortion</span><span class="o">.</span><span class="n">parameters_y</span></a> <span class="o">/</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="o">.</span><span class="n">fy</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/project_points.html#pysdic.project_points" title="pysdic.project_points"><span class="n">project_points</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">world_points</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">distortion</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_1</span></a><span class="p">)</span><span class="o">.</span><span class="n">image_points</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_2</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/project_points.html#pysdic.project_points" title="pysdic.project_points"><span class="n">project_points</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">world_points</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">distortion</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_2</span></a><span class="p">)</span><span class="o">.</span><span class="n">image_points</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noisy_points_1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_1</span></a> <span class="o">+</span> <a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-method reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal" title="numpy.random.Generator.normal"><span class="n">rng</span><span class="o">.</span><span class="n">normal</span></a><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">image_points_1</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>  <span class="c1"># 0.5 pixel of noise</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noisy_points_2</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_2</span></a> <span class="o">+</span> <a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-method reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal" title="numpy.random.Generator.normal"><span class="n">rng</span><span class="o">.</span><span class="n">normal</span></a><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">image_points_2</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">inside</span></a> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.all.html#numpy.all" title="numpy.all"><span class="n">numpy</span><span class="o">.</span><span class="n">all</span></a><span class="p">(</span><span class="p">(</span><span class="n">points</span> <span class="o">&gt;</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">points</span> <span class="o">&lt;</span> <span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">width</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="int"><span class="n">height</span></a><span class="p">]</span><span class="p">)</span><span class="p">)</span> <span class="k">for</span> <span class="n">points</span> <span class="ow">in</span> <span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_2</span></a><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">All the points are in both images: </span><span class="si">{</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">inside</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">def</span><span class="w"> </span><span class="nf">rms_error</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></a><span class="p">)</span> <span class="o">-</span><span class="o">&gt;</span> <span class="nb">float</span><span class="p">:</span><span class="w">
+</span>    <span class="c1"># RMS distance to the true world points</span><span class="w">
+</span>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc"><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean"><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="numpy.sum"><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span></a><span class="p">(</span><span class="p">(</span><span class="n">points</span> <span class="o">-</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">world_points</span></a><span class="p">)</span> <span class="o">*</span><span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>All the points are in both images: True
+</pre></div>
+</div>
+</section>
+<section id="minimization-of-the-reprojection-errors">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Minimization of the reprojection errors</a><a class="headerlink" href="#minimization-of-the-reprojection-errors" title="Link to this heading">#</a></h2>
+<p>Each image gives a chain of transformations:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Chain 1: world points -&gt; extrinsic_1 -&gt; distortion -&gt; intrinsic -&gt; image points 1
+Chain 2: world points -&gt; extrinsic_2 -&gt; distortion -&gt; intrinsic -&gt; image points 2
+</pre></div>
+</div>
+<p>Each world point minimizes the sum of its squared reprojection errors in both images.
+The points are independent problems solved together with <code class="docutils literal notranslate"><span class="pre">pysolvegn.solve_batch</span></code>: a
+point leaves the optimization as soon as it converges. With noise, <code class="docutils literal notranslate"><span class="pre">atol</span></code> stops the
+points whose cost is small enough (here a reprojection error of about 0.01 pixel).</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/optimize_chains_transformation_input_points.html#pysdic.optimize_chains_transformation_input_points" title="pysdic.optimize_chains_transformation_input_points"><span class="n">optimize_chains_transformation_input_points</span></a><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">transformations</span></a> <span class="o">=</span> <span class="p">[</span><a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_2</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">distortion</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">chains</span></a> <span class="o">=</span> <span class="p">[</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">guess</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">world_points</span></a> <span class="o">+</span> <a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-method reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html#numpy.random.Generator.normal" title="numpy.random.Generator.normal"><span class="n">rng</span><span class="o">.</span><span class="n">normal</span></a><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">world_points</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">optimized</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysolvegn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://artezaru.github.io/pysolve-gn/_autosummary/pysolvegn.BatchSolveResult.html#pysolvegn.BatchSolveResult" title="pysolvegn.BatchSolveResult"><span class="n">result</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/optimize_chains_transformation_input_points.html#pysdic.optimize_chains_transformation_input_points" title="pysdic.optimize_chains_transformation_input_points"><span class="n">optimize_chains_transformation_input_points</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">transformations</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">chains</span></a><span class="p">,</span> <span class="p">[</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_2</span></a><span class="p">]</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">guess</span></a><span class="p">,</span> <span class="n">max_iteration</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">gtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pysolvegn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://artezaru.github.io/pysolve-gn/_autosummary/pysolvegn.BatchSolveResult.html#pysolvegn.BatchSolveResult" title="pysolvegn.BatchSolveResult"><span class="n">result</span></a><span class="o">.</span><span class="n">message</span><span class="p">)</span>  <span class="c1"># Converged points and stopping criteria</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">optimized_noisy</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysolvegn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://artezaru.github.io/pysolve-gn/_autosummary/pysolvegn.BatchSolveResult.html#pysolvegn.BatchSolveResult" title="pysolvegn.BatchSolveResult"><span class="n">result</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/optimize_chains_transformation_input_points.html#pysdic.optimize_chains_transformation_input_points" title="pysdic.optimize_chains_transformation_input_points"><span class="n">optimize_chains_transformation_input_points</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">transformations</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">chains</span></a><span class="p">,</span> <span class="p">[</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noisy_points_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noisy_points_2</span></a><span class="p">]</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">guess</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">max_iteration</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">gtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>100/100 problems converged.
+[gtol] 100 problem(s).
+[xtol] 63 problem(s).
+</pre></div>
+</div>
+</section>
+<section id="intersection-of-the-rays">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Intersection of the rays</a><a class="headerlink" href="#intersection-of-the-rays" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="../../api/computer_vision/compute_rays.html#pysdic.compute_rays" title="pysdic.compute_rays"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.compute_rays()</span></code></a> gives the rays of the cameras through the image points (with
+the inverse of the distortion, computed by a Newton method set with
+<code class="docutils literal notranslate"><span class="pre">distortion_kwargs</span></code>), and <a class="reference internal" href="../../api/computer_vision/intersect_rays.html#pysdic.intersect_rays" title="pysdic.intersect_rays"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.intersect_rays()</span></code></a> the point closest to the two
+rays of each pair.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">pysdic</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/compute_rays.html#pysdic.compute_rays" title="pysdic.compute_rays"><span class="n">compute_rays</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/intersect_rays.html#pysdic.intersect_rays" title="pysdic.intersect_rays"><span class="n">intersect_rays</span></a><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">distortion_kwargs</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;</span><span class="s2">max_iteration</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">tolerance</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">def</span><span class="w"> </span><span class="nf">triangulate</span><span class="p">(</span><span class="n">points_1</span><span class="p">:</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></a><span class="p">,</span> <span class="n">points_2</span><span class="p">:</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></a><span class="p">)</span> <span class="o">-</span><span class="o">&gt;</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span></a><span class="p">:</span><span class="w">
+</span>    <span class="n">rays_1</span> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/compute_rays.html#pysdic.compute_rays" title="pysdic.compute_rays"><span class="n">compute_rays</span></a><span class="p">(</span><span class="n">points_1</span><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">distortion</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">distortion_kwargs</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">distortion_kwargs</span></a><span class="p">)</span><span class="w">
+</span>    <span class="n">rays_2</span> <span class="o">=</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/compute_rays.html#pysdic.compute_rays" title="pysdic.compute_rays"><span class="n">compute_rays</span></a><span class="p">(</span><span class="n">points_2</span><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PinholeIntrinsic.html#pysdic.PinholeIntrinsic" title="pysdic.PinholeIntrinsic"><span class="n">intrinsic</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/ZernikeDistortion.html#pysdic.ZernikeDistortion" title="pysdic.ZernikeDistortion"><span class="n">distortion</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/morphisms/PerspectiveExtrinsic.html#pysdic.PerspectiveExtrinsic" title="pysdic.PerspectiveExtrinsic"><span class="n">extrinsic_2</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">distortion_kwargs</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">distortion_kwargs</span></a><span class="p">)</span><span class="w">
+</span>    <span class="k">return</span> <a class="sphx-glr-backref-module-pysdic sphx-glr-backref-type-py-function reference internal" href="../../api/computer_vision/intersect_rays.html#pysdic.intersect_rays" title="pysdic.intersect_rays"><span class="n">intersect_rays</span></a><span class="p">(</span><span class="p">[</span><span class="n">rays_1</span><span class="p">,</span> <span class="n">rays_2</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">intersected</span></a> <span class="o">=</span> <span class="n">triangulate</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image_points_2</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">intersected_noisy</span></a> <span class="o">=</span> <span class="n">triangulate</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noisy_points_1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">noisy_points_2</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+</section>
+<section id="comparison">
+<h2><a class="toc-backref" href="#table-of-contents" role="doc-backlink">Comparison</a><a class="headerlink" href="#comparison" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The minimization of the reprojection errors is the optimal estimate when the noise is
+in the images, and does not need the inverse of the transformations, but it needs an
+initial guess and iterations.</p></li>
+<li><p>The intersection of the rays is direct (no initial guess), but it needs the inverse of
+the distortion and minimizes distances in the world instead of errors in the images.</p></li>
+</ul>
+<p>A common strategy is to use the intersection of the rays as the initial guess of the
+minimization.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">'</span><span class="s1">RMS error (world units)</span><span class="s1">'</span><span class="si">:</span><span class="s2">&lt;26</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'</span><span class="s1">without noise</span><span class="s1">'</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'</span><span class="s1">with noise</span><span class="s1">'</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">'</span><span class="s1">reprojection errors</span><span class="s1">'</span><span class="si">:</span><span class="s2">&lt;26</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_error</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">optimized</span></a><span class="p">)</span><span class="si">:</span><span class="s2">&gt;14.2e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_error</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">optimized_noisy</span></a><span class="p">)</span><span class="si">:</span><span class="s2">&gt;12.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">'</span><span class="s1">intersection of the rays</span><span class="s1">'</span><span class="si">:</span><span class="s2">&lt;26</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_error</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">intersected</span></a><span class="p">)</span><span class="si">:</span><span class="s2">&gt;14.2e</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_error</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">intersected_noisy</span></a><span class="p">)</span><span class="si">:</span><span class="s2">&gt;12.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>RMS error (world units)     without noise   with noise
+reprojection errors              3.26e-11     5.36e-01
+intersection of the rays         3.79e-12     5.36e-01
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.017 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-computer-vision-example-triangulation-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/b62672c1ee5939839606d9529be8a71c/example_triangulation.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_triangulation.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/62e1d6c0fbadeb12ad49eb10a81aeb81/example_triangulation.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_triangulation.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/ec90dc6e9ff7fada95e3097d0552db13/example_triangulation.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_triangulation.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_project_points.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Projecting 3D points to image points</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../imaging/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Imaging</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stereo-setup">Stereo setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization-of-the-reprojection-errors">Minimization of the reprojection errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intersection-of-the-rays">Intersection of the rays</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison">Comparison</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/_gallery/computer_vision/example_triangulation.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026-2026, Artezaru.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
