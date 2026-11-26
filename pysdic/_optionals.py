@@ -178,6 +178,16 @@ def _try_import(module: str) -> Tuple[Optional[ModuleType], Optional[BaseExcepti
         return None, error
 
 
+def _is_missing_package(module: str, error: ImportError) -> bool:
+    # True if the error means that the package itself is not installed, False if the package is
+    # installed but fails to import (missing system library, missing sub-dependency, broken
+    # install, ...). Only a ModuleNotFoundError on the top-level package means "not installed":
+    # a ModuleNotFoundError on another module is a missing sub-dependency of the package.
+    if not isinstance(error, ModuleNotFoundError) or error.name is None:
+        return False
+    return error.name.split(".")[0] == module.split(".")[0]
+
+
 def import_optional(name: str, method: Optional[str] = None) -> ModuleType:
     r"""
     Import an optional dependency of pysdic.
@@ -210,7 +220,9 @@ def import_optional(name: str, method: Optional[str] = None) -> ModuleType:
 
     ImportError
         If the package is not installed, or if it is installed but cannot be
-        imported. The original error is attached as ``__cause__``.
+        imported (missing system library, missing sub-dependency, ...). The message
+        distinguishes the two cases and repeats the original error, which is also
+        attached as ``__cause__``.
 
     Examples
     --------
@@ -231,10 +243,21 @@ def import_optional(name: str, method: Optional[str] = None) -> ModuleType:
     module, error = _try_import(dependency.module)
     if module is None:
         feature = f"'{method}'" if method is not None else "this feature"
-        raise ImportError(
-            f"Missing '{name}' package to use {feature}. Install it with "
-            f"'pip install {dependency.pip_name}', or from '{dependency.url}'."
-        ) from error  # keeps the real cause (missing package, broken install, ...)
+        cause = f"{type(error).__name__}: {error}"
+        if _is_missing_package(dependency.module, error):
+            message = (
+                f"Missing '{name}' package to use {feature}. Install it with "
+                f"'pip install {dependency.pip_name}', or from '{dependency.url}'. "
+                f"Original error: {cause}"
+            )
+        else:
+            message = (
+                f"The '{name}' package is installed but cannot be imported, so {feature} cannot be used. "
+                f"Original error: {cause}. Check its dependencies (e.g. the system libraries) or "
+                f"reinstall it with 'pip install --force-reinstall {dependency.pip_name}' "
+                f"(see '{dependency.url}')."
+            )
+        raise ImportError(message) from error  # keeps the real cause as __cause__
     return module
 
 
