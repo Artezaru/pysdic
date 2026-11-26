@@ -56,6 +56,14 @@ jobs:
           pip install $DOCS_REQUIREMENTS
           pip install .[all]
 
+      - name: Install system libraries (open3d, VTK/PyVista)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libgomp1 libosmesa6 libxrender1 libxkbcommon0 xvfb
+
+      - name: Set up a virtual display for PyVista
+        uses: pyvista/setup-headless-display-action@v4
+
       - name: Build documentation
         run: sphinx-build -b html "$DOCS_SOURCE" public/
 
