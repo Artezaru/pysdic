@@ -1,0 +1,112 @@
+r"""
+.. _example_workflows_reference_shape:
+
+Measuring the shape at the reference frame
+==========================================
+
+.. contents:: Table of Contents
+   :local:
+   :depth: 1
+   :backlinks: top
+
+The mesh of an analysis (e.g. from a CAD model) is never exactly at the position of the
+specimen. Before measuring displacements, :func:`pysdic.workflows.measure_reference_shape`
+brings the mesh onto the observed surface with the stereo pairings of the reference frame.
+
+.. important::
+
+    Requires the optional package ``open3d`` (ray casting of the 3D surface).
+
+"""
+
+# %%
+# The scene
+# ---------
+#
+# The mesh is the plane :math:`Z = 0`, but the observed plate is bent and shifted:
+# :math:`Z = h(X) = 0.1 + 0.1 (1 - X^2)`, i.e. 0.1 to 0.2 units (1.5 to 3 pixels of
+# disparity between the cameras). The speckle is attached to the material point :math:`(X, Y)`.
+
+import numpy
+from pysdic import (
+    Camera, Image, PerspectiveExtrinsic, PinholeIntrinsic, add_gaussian_noise, compute_projected_roi,
+    compute_wave_speckle, create_3d_quadrangle_4_heightmap, create_bicamera_analysis, generate_synthetic_image,
+    quantize_image,
+)
+
+height, width = 180, 240
+cameras = [
+    Camera(
+        height, width,
+        extrinsic=PerspectiveExtrinsic.from_rt(rvec=[numpy.pi, side * 0.15, 0.0], tvec=[side * 0.6, 0.0, 5.0]),
+        intrinsic=PinholeIntrinsic.from_matrix([[300.0, 0.0, 120.0], [0.0, 300.0, 90.0], [0.0, 0.0, 1.0]]),
+    )
+    for side in (1, -1)
+]
+
+plate = create_3d_quadrangle_4_heightmap(x_bounds=(-2.5, 2.5), y_bounds=(-2.0, 2.0), n_x=41, n_y=33)
+x, y = numpy.linspace(-2.5, 2.5, 500), numpy.linspace(2.0, -2.0, 400)
+texture = compute_wave_speckle(numpy.stack(numpy.meshgrid(x, y), axis=-1), wavelength=0.15)
+
+
+def gap(points: numpy.ndarray) -> numpy.ndarray:
+    # Displacement from the plane Z = 0 to the observed surface
+    result = numpy.zeros_like(points)
+    result[:, 2] = 0.1 + 0.1 * (1.0 - points[:, 0] ** 2)
+    return result
+
+
+mesh = create_3d_quadrangle_4_heightmap(x_bounds=(-1.0, 1.0), y_bounds=(-0.6, 0.6), n_x=7, n_y=5)
+truth = gap(mesh.coordinates)
+
+
+def acquire(camera: Camera, seed: int) -> Image:
+    rendered = generate_synthetic_image(camera, plate, texture, displacement=gap(plate.coordinates), n_samples=2)
+    data = quantize_image(add_gaussian_noise(rendered[..., 0], std=1.0, seed=seed), bit_depth=8)
+    return Image.from_array(data, roi=compute_projected_roi(mesh, camera, warp_by=truth, margin=10))
+
+
+analysis = create_bicamera_analysis(mesh, cameras[0], cameras[1], [acquire(cameras[0], 0)], [acquire(cameras[1], 1)])
+analysis.set_zero_displacement(0)  # The initial guess: the mesh as given
+
+# %%
+# Stereo measure of the shape
+# ---------------------------
+#
+# The displacement of the frame 0 is optimized with the stereo pairing ``(0, 0) - (0, 1)``
+# only. A displacement tangent to the surface is not seen by the stereo pairings (both views
+# still see the same speckle), so each vertex only moves along its normal (``normal_only=True``,
+# default). The analysis is not modified: the result is written with ``set_displacement``.
+
+from pysdic import Pairing, compute_residuals
+from pysdic.workflows import create_grid_integration_points, measure_reference_shape
+
+integration_points = create_grid_integration_points(mesh, 6)
+
+
+def stereo_rms() -> float:
+    residuals = compute_residuals(analysis, Pairing.stereo(0, 0, 1), integration_points).residuals
+    return float(numpy.sqrt(numpy.nanmean(residuals**2)))
+
+
+print(f"Stereo RMS residual before: {stereo_rms():.1f} gray levels")
+shape = measure_reference_shape(analysis, integration_points, max_iteration=30)
+analysis.set_displacement(0, shape.displacement)
+print(f"Stereo RMS residual after:  {stereo_rms():.1f} gray levels ({shape.solver_result.n_iterations} iterations)")
+print(f"Maximum error on the gap: {numpy.abs(shape.displacement[:, 2] - truth[:, 2]).max():.4f} units")
+
+# %%
+# The measured gap along :math:`X` (each curve is a row of vertices of constant :math:`Y`).
+
+import matplotlib.pyplot as plt
+
+n_x, n_y = 7, 5  # Vertex (i_x, i_y) = mesh.coordinates[i_y * n_x + i_x]
+X = mesh.coordinates[:, 0].reshape(n_y, n_x)
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(X[0], truth[:, 2].reshape(n_y, n_x)[0], "k-", label="true gap")
+for row, measured in enumerate(shape.displacement[:, 2].reshape(n_y, n_x)):
+    ax.plot(X[row], measured, "o", markersize=4, label="measured" if row == 0 else None)
+ax.set_xlabel("X")
+ax.set_ylabel("Z displacement")
+ax.legend()
+plt.show()
