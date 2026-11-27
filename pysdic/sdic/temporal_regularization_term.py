@@ -30,6 +30,7 @@ from numpy.typing import ArrayLike
 from ..numeric import assemble_finite_difference_matrix
 from .._validation import _as_array, _validate_bool, _validate_choice, _validate_integer, _validate_real
 from ._sdic_validation import _validate_frames
+from .problem import _validate_problem
 from .sdic_analysis import SDICAnalysis
 from .sdic_unknowns import SDICUnknowns
 
@@ -73,11 +74,7 @@ def _build_regularization_operators(
     the current displacements of the fixed frames of the analysis (read at each call), and
     the number of unknowns.
     """
-    if not isinstance(analysis, SDICAnalysis):
-        raise TypeError(f"Input 'analysis' must be a SDICAnalysis. Got type {type(analysis)}.")
-    if not isinstance(unknowns, SDICUnknowns):
-        raise TypeError(f"Input 'unknowns' must be a SDICUnknowns. Got type {type(unknowns)}.")
-    analysis.validate_unknowns(unknowns)
+    layout = _validate_problem(analysis, unknowns)  # The positions of the unknowns in p, from the analysis
     mesh = analysis.mesh
     N_v, E, N_f = mesh.n_vertices, mesh.n_dimensions, analysis.n_frames
     n_dim = N_v * E
@@ -86,8 +83,8 @@ def _build_regularization_operators(
     optimized_frames = list(unknowns.optimized_frames)
     if not optimized_frames:
         raise ValueError("The temporal regularization needs at least one optimized frame in 'unknowns'.")
-    n_unknowns = analysis.n_unknowns(unknowns)
-    frame_starts = {frame: analysis.get_unknowns_frame_slice(unknowns, frame).start for frame in optimized_frames}
+    n_unknowns = layout.n_unknowns
+    frame_starts = {frame: columns.start for frame, columns in layout.frame_slices.items()}
 
     # ------------- frames of the regularization, in chronological order -------------
     if frames is None:
@@ -201,13 +198,16 @@ class SDICTemporalRegularizationTerm:
     :math:`n`. The ``pysolvegn.Term`` to give to ``pysolvegn.solve`` is the property
     :attr:`term`.
 
-    The term works on the vector of unknowns :math:`\vec{p} = [\vec{p}_U, \vec{p}_T]` described
-    by ``unknowns`` (see :class:`pysdic.SDICUnknowns`) in ``analysis``: give it the same analysis
-    and the same unknowns objects as the correlation term to combine both terms in the same
-    problem (see :func:`pysdic.check_same_problem`). :math:`\vec{p}_U` are the displacements of the optimized frames (Fortran order,
-    frame after frame) and :math:`\vec{p}_T` the parameters of the optimized transformations.
-    The regularization does not depend on the transformations: their columns of the Jacobian
-    are zero.
+    The term works on the complete vector of unknowns :math:`\vec{p}` of ``unknowns`` in
+    ``analysis``: give it the same analysis and the same unknowns objects as the correlation term
+    to combine both terms in the same problem (see :func:`pysdic.check_same_problem`). The
+    regularization does not depend on the transformations: their columns of the Jacobian are
+    zero. The term does not build the vectors (see the ``*_unknowns`` methods of the analysis).
+
+    .. seealso::
+
+        :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and
+        :class:`pysdic.SDICFixedParametrization` for the reduced vector :math:`\vec{q}`.
 
     The object is immutable: :meth:`with_unknowns` and :meth:`with_options` create a new
     regularization (e.g. with other unknowns, another order or another weight).
@@ -455,7 +455,7 @@ class SDICTemporalRegularizationTerm:
         return self._unknowns
 
     @property
-    def analysis(self) -> Any:
+    def analysis(self) -> SDICAnalysis:
         r"""The analysis (shared with the other objects of the problem)."""
         return self._analysis
 
@@ -484,11 +484,6 @@ class SDICTemporalRegularizationTerm:
         r"""The frames with an equation, in chronological order (read-only)."""
         return self._evaluated_frames
 
-    # ------------------------------------------------------------------ Unknowns
-    def pack(self) -> numpy.ndarray:
-        r"""The vector of unknowns of the current state of the analysis, see :meth:`pysdic.SDICAnalysis.pack_unknowns`."""
-        return self._analysis.pack_unknowns(self._unknowns)
-
     # ------------------------------------------------------------------ New terms
     def with_unknowns(self, unknowns: SDICUnknowns) -> SDICTemporalRegularizationTerm:
         r"""A new regularization with other unknowns and the same options."""
@@ -507,5 +502,5 @@ class SDICTemporalRegularizationTerm:
     def __repr__(self) -> str:
         return (
             f"SDICTemporalRegularizationTerm(order={self.order}, weight={self.weight}, "
-            f"{self._evaluated_frames.size} evaluated frames, n_unknowns={self._analysis.n_unknowns(self._unknowns)})"
+            f"{self._evaluated_frames.size} evaluated frames, {self._unknowns!r})"
         )

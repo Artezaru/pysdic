@@ -30,6 +30,7 @@ import matplotlib.pyplot as plt
 from ..geometry.integration_points import IntegrationPoints
 from ..imaging.image_plotter import ImagePlotter
 from .._validation import _validate_bool, _validate_integer, _validate_real
+from ._sdic_validation import _validate_gl_correction, _validate_gray_level_groups, _validate_located_integration_points
 from .gl_correction import GrayLevelGroups, compute_gray_level_groups, matching_correction, znssd_correction
 from .pairing import Pairing
 from .sdic_analysis import SDICAnalysis
@@ -206,15 +207,11 @@ def compute_residuals(
         not all located, a displacement of the pairing is not set, or the gray level options are not valid.
 
     """
-    from .sdic_term import _validate_gl_correction, _validate_gray_level_groups  # Shared validation
-
     if not isinstance(analysis, SDICAnalysis):
         raise TypeError(f"Input 'analysis' must be a SDICAnalysis. Got type {type(analysis)}.")
     analysis.validate_pairing(pairing)
     mesh = analysis.mesh
-    mesh.validate_integration_points(integration_points)
-    if not numpy.all(integration_points.is_located()):
-        raise ValueError("The integration points must all be located (use 'remove_unlocated').")
+    _validate_located_integration_points(mesh, integration_points)
     gl_options = _validate_gl_correction(gl_correction)
     groups = _validate_gray_level_groups(gray_level_groups, gl_correction, mesh, integration_points)
     if gl_options is not None and groups is None:

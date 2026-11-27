@@ -24,10 +24,29 @@ from __future__ import annotations
 from itertools import combinations
 from typing import Any, Sequence
 
-from .sdic_analysis import SDICAnalysis
+from .sdic_analysis import SDICAnalysis, _UnknownsLayout
 from .sdic_unknowns import SDICUnknowns
 
 
+# =============================================================================
+# Internal helpers
+# =============================================================================
+def _validate_problem(analysis: SDICAnalysis, unknowns: SDICUnknowns) -> _UnknownsLayout:
+    # The only check of (analysis, unknowns) at the creation of an object of a problem (terms,
+    # parametrizations): types, validation of the unknowns by the analysis, and the positions of
+    # the unknowns in the vector p (the single source of truth of its order, computed once)
+    if not isinstance(analysis, SDICAnalysis):
+        raise TypeError(f"Input 'analysis' must be a SDICAnalysis. Got type {type(analysis)}.")
+    if not isinstance(unknowns, SDICUnknowns):
+        raise TypeError(
+            f"Input 'unknowns' must be a SDICUnknowns (e.g. SDICUnknowns([1], [])). Got type {type(unknowns)}."
+        )
+    return analysis._unknowns_layout(unknowns)
+
+
+# =============================================================================
+# Public
+# =============================================================================
 def check_same_problem(objects: Sequence[Any]) -> None:
     r"""
     Check that the objects of a ``pysolvegn`` problem (terms and parametrizations) work on the

@@ -98,6 +98,14 @@ analysis object and the same unknowns object**: :func:`pysdic.check_same_problem
 solving. ``pysolvegn`` only sees functions: two terms on different unknowns of the same size would be added without
 error.
 
+.. important::
+
+   The terms (:class:`pysdic.SDICCorrelationTerm`, :class:`pysdic.SDICTemporalRegularizationTerm`) **do not build the
+   vectors of unknowns**. The vectors are built only by the
+   analysis (complete vector :math:`\vec{p}`: ``pack_unknowns``, ``unpack_unknowns``, ``apply_unknowns``) and by the
+   parametrization (reduced vector :math:`\vec{q}`: ``reparametrized_pack``, ``reparametrized_unpack``,
+   ``reparametrized_apply``).
+
 .. seealso::
 
    The optimization problems are solved with the Gauss-Newton least squares solver ``pysolvegn``

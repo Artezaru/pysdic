@@ -162,10 +162,9 @@ Pairings
 Unknowns
 ^^^^^^^^
 
-The unknowns of an optimization are described by a :class:`pysdic.SDICUnknowns`, which does not know the analysis
-(as a :class:`pysdic.Pairing`). The analysis validates it and builds the vector of unknowns
-:math:`\vec{p} = [\vec{p}_U, \vec{p}_T]` from its current state: the **total** displacements of the optimized frames
-(Fortran order) and the parameters of the optimized transformations.
+The analysis validates a :class:`pysdic.SDICUnknowns` and builds the vector of unknowns :math:`\vec{p}` from its
+current state. It is the only place where the positions of the unknowns in :math:`\vec{p}` are computed: the terms
+and the parametrizations take them from the analysis.
 
 .. code-block:: python
 
@@ -176,10 +175,11 @@ The unknowns of an optimization are described by a :class:`pysdic.SDICUnknowns`,
    displacements, parameters = analysis.unpack_unknowns(unknowns, p)     # p -> copies
    analysis.apply_unknowns(unknowns, result.parameters)                  # p -> analysis (replaced, not added)
 
-.. warning::
+.. seealso::
 
-   With a parametrization, the solver works on a reduced vector :math:`\vec{q}`: use
-   ``parametrization.reparametrized_pack/unpack/apply`` (see :class:`pysdic.SDICFixedParametrization`).
+   :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and :class:`pysdic.SDICFixedParametrization` for
+   the reduced vector :math:`\vec{q}` of a parametrization (``reparametrized_pack``, ``reparametrized_unpack``,
+   ``reparametrized_apply``).
 
 .. autosummary::
    :toctree: ./_generated/
@@ -218,6 +218,7 @@ along the frames and the views.
 
    SDICAnalysis.compute_structure
    SDICAnalysis.display_structure
+   SDICAnalysis.get_transformations
    SDICAnalysis.get_transformation
    SDICAnalysis.get_transformation_parameters
    SDICAnalysis.set_transformation_parameters

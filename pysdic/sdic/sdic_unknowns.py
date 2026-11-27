@@ -26,7 +26,8 @@ import numpy
 
 from .._validation import _validate_integer
 
-# The kinds of transformations that can be optimized (see pysdic.SDICAnalysis.get_transformation)
+# The kinds of transformations of the cameras (see pysdic.SDICAnalysis.get_transformation): the only
+# definition, imported by the analysis and the terms
 _TRANSFORMATION_KINDS = ("extrinsic", "distortion", "intrinsic")
 
 
@@ -69,13 +70,11 @@ class SDICUnknowns:
     are all created with the **same analysis and the same unknowns objects**, checked by
     :func:`pysdic.check_same_problem` before solving.
 
-    .. warning::
+    .. seealso::
 
-        **With a parametrization, do not use** ``pack_unknowns``, ``unpack_unknowns`` **or**
-        ``apply_unknowns`` **on the vectors of the solver**: they are reduced vectors
-        :math:`\vec{q}`. Use ``parametrization.reparametrized_pack()``,
-        ``reparametrized_unpack(q)`` and ``reparametrized_apply(q)`` (see
-        :class:`pysdic.SDICFixedParametrization`).
+        With a parametrization, the vectors of the solver are reduced vectors :math:`\vec{q}`:
+        see :class:`pysdic.SDICFixedParametrization` (``reparametrized_pack``,
+        ``reparametrized_unpack``, ``reparametrized_apply``).
 
     The object cannot be modified after its creation. It is compared by identity: the objects
     of a problem must share the **same** :class:`SDICUnknowns` object.
@@ -189,34 +188,3 @@ class SDICUnknowns:
             f"SDICUnknowns(optimized_frames={list(self._frames)}, "
             f"optimized_transformations={list(self._transformations)})"
         )
-
-
-# =============================================================================
-# Selections (shared helpers, independent of the analysis)
-# =============================================================================
-def _as_vertex_selection(vertices, n_vertices: int) -> numpy.ndarray:
-    # Sorted unique vertex indices from None (all), indices or a boolean mask (N_v,)
-    if vertices is None:
-        return numpy.arange(n_vertices)
-    vertices = numpy.asarray(vertices)
-    if vertices.dtype == bool:
-        if vertices.shape != (n_vertices,):
-            raise ValueError(f"A boolean mask 'vertices' must have shape ({n_vertices},). Got {vertices.shape}.")
-        return numpy.flatnonzero(vertices)
-    if vertices.ndim != 1 or not numpy.issubdtype(vertices.dtype, numpy.integer):
-        raise ValueError("Input 'vertices' must be a 1D array of vertex indices or a boolean mask.")
-    if numpy.any((vertices < 0) | (vertices >= n_vertices)):
-        raise ValueError(f"Input 'vertices' must contain indices in [0, {n_vertices - 1}].")
-    return numpy.unique(vertices)
-
-
-def _as_component_selection(components, n_dimensions: int) -> numpy.ndarray:
-    # Sorted unique component indices
-    if components is None:
-        return numpy.arange(n_dimensions)
-    components = numpy.atleast_1d(numpy.asarray(components))
-    if components.ndim != 1 or not numpy.issubdtype(components.dtype, numpy.integer):
-        raise ValueError("Input 'components' must be a sequence of component indices.")
-    if numpy.any((components < 0) | (components >= n_dimensions)):
-        raise ValueError(f"Input 'components' must contain indices in [0, {n_dimensions - 1}].")
-    return numpy.unique(components)

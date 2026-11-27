@@ -30,6 +30,7 @@ from numpy.typing import ArrayLike
 from ..geometry.integration_points import IntegrationPoints
 from ..geometry.mesh import Mesh
 from .._validation import _as_array, _validate_bool
+from .problem import _validate_problem
 from .sdic_analysis import SDICAnalysis
 from .sdic_unknowns import SDICUnknowns
 
@@ -37,7 +38,7 @@ from .sdic_unknowns import SDICUnknowns
 # =============================================================================
 # Internal helpers
 # =============================================================================
-def _build_solver_parametrization(p_func: Callable, jacobian_func: Callable) -> Any:
+def _build_solver_parametrization(p_func: Callable, jacobian_func: Callable) -> pysolvegn.Parametrization:
     # The pysolvegn.Parametrization q -> p of the functions (the only call to its constructor)
     return pysolvegn.Parametrization(parametric_func=p_func, jacobian_func=jacobian_func)
 
@@ -155,8 +156,7 @@ class SDICFixedParametrization:
         :meth:`reparametrized_unpack` **and** :meth:`reparametrized_apply` **on the vectors of
         the solver** (``p0`` and ``result.parameters`` are reduced vectors :math:`\vec{q}`).
         ``analysis.pack_unknowns``, ``analysis.unpack_unknowns`` and
-        ``analysis.apply_unknowns`` (and ``pack``, ``unpack``, ``apply`` of the terms) work on
-        the complete vector :math:`\vec{p}`: giving them :math:`\vec{q}` raises an error (wrong
+        ``analysis.apply_unknowns`` work on the complete vector :math:`\vec{p}`: giving them :math:`\vec{q}` raises an error (wrong
         size) or, worse, misplaces the values if the sizes happen to match.
 
         .. code-block:: python
@@ -237,11 +237,7 @@ class SDICFixedParametrization:
         components: Optional[Sequence[Integral]] = None,
         sparse: bool = True,
     ) -> None:
-        if not isinstance(analysis, SDICAnalysis):
-            raise TypeError(f"Input 'analysis' must be a SDICAnalysis. Got type {type(analysis)}.")
-        if not isinstance(unknowns, SDICUnknowns):
-            raise TypeError(f"Input 'unknowns' must be a SDICUnknowns. Got type {type(unknowns)}.")
-        analysis.validate_unknowns(unknowns)
+        layout = _validate_problem(analysis, unknowns)
         self._analysis = analysis
         self._unknowns = unknowns
         self._sparse = _validate_bool(sparse, "sparse")
@@ -252,7 +248,7 @@ class SDICFixedParametrization:
         self._components = None if components is None else tuple(int(c) for c in numpy.atleast_1d(components))
         indices.setflags(write=False)
         self._indices = indices
-        n_p, n_q = analysis.n_unknowns(unknowns), indices.size
+        n_p, n_q = layout.n_unknowns, indices.size
         selection = scipy.sparse.csr_matrix(
             (numpy.ones(n_q), (indices, numpy.arange(n_q))), shape=(n_p, n_q)
         )
@@ -266,12 +262,12 @@ class SDICFixedParametrization:
         return self._unknowns
 
     @property
-    def analysis(self) -> Any:
+    def analysis(self) -> SDICAnalysis:
         r"""The analysis of the problem (shared with its terms)."""
         return self._analysis
 
     @property
-    def parametrization(self) -> Any:
+    def parametrization(self) -> pysolvegn.Parametrization:
         r"""The ``pysolvegn.Parametrization`` :math:`\vec{q} \mapsto \vec{p}`, to give to ``pysolvegn.solve``."""
         return self._parametrization
 

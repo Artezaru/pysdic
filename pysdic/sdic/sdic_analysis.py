@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import datetime
+import types
 import hashlib
 import json
 import os
@@ -27,6 +28,7 @@ import shutil
 import tempfile
 import zipfile
 from collections.abc import Mapping
+from dataclasses import dataclass
 from numbers import Integral
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
@@ -44,19 +46,18 @@ from ..transformations.reparametrized_transformation import ReparametrizedTransf
 from .._validation import _as_array, _validate_bool, _validate_integer, _validate_path
 from ._load_previous_sdic_analysis import PREVIOUS_FORMAT_NAMES, load_previous_save, parse_version
 from .pairing import Pairing
-from .sdic_unknowns import SDICUnknowns, _as_component_selection, _as_vertex_selection
+from ._sdic_validation import _as_component_selection, _as_vertex_selection
+from .sdic_unknowns import _TRANSFORMATION_KINDS, SDICUnknowns
 
 
 # Objects whose sharing between the views can be displayed (see SDICAnalysis.compute_structure)
+# (the kinds of transformations are defined once, in sdic_unknowns.py)
 _STRUCTURE_KINDS = {
     "view": lambda view: view,
     "image": lambda view: view.image,
     "camera": lambda view: view.camera,
-    "extrinsic": lambda view: view.camera.extrinsic,
-    "distortion": lambda view: view.camera.distortion,
-    "intrinsic": lambda view: view.camera.intrinsic,
+    **{kind: (lambda view, kind=kind: getattr(view.camera, kind)) for kind in _TRANSFORMATION_KINDS},
 }
-_TRANSFORMATION_KINDS = ("extrinsic", "distortion", "intrinsic")
 
 # Reason of the lock of the mesh of an SDIC analysis (added after "Cannot ...: this Mesh is locked.")
 _MESH_LOCK_MESSAGE = (
@@ -167,6 +168,20 @@ def _check_manifest(folder: Path) -> None:
             f"missing files {missing}, modified files {modified} (SHA-256 of manifest.json). "
             f"Use check_integrity=False to load it anyway, at your own risk."
         )
+
+
+@dataclass(frozen=True)
+class _UnknownsLayout:
+    # The positions of the unknowns of a SDICUnknowns in the vector p of an analysis: indices only,
+    # never values (the values stay in the analysis). Computed by SDICAnalysis._unknowns_layout, the
+    # single source of truth of the order of p, used by the public methods of the analysis and once
+    # at the creation of the terms and parametrizations. It only depends on fixed data (the unknowns,
+    # the shape (N_v, E) of the locked mesh, the numbers of parameters of the transformations).
+    frame_slices: Mapping[int, slice]  # Optimized frame -> slice of its displacement (N_v E,), Fortran order
+    transformation_slices: Mapping[Tuple[str, int], slice]  # (kind, index) -> slice of its parameters
+    transformations: Tuple[Transformation, ...]  # The optimized transformations, in the order of the unknowns
+    n_displacements: int  # Size of p_U
+    n_unknowns: int  # Size of p
 
 
 def _leaf_transformations(transformation: Transformation) -> List[Transformation]:
@@ -929,16 +944,25 @@ class SDICAnalysis(object):
     # ===================================================================
     # Unknowns
     # ===================================================================
-    def _unknowns_layout(self, unknowns: SDICUnknowns) -> Tuple[int, List[slice], int]:
-        # (number of displacement unknowns, slices of the transformations, number of unknowns)
+    def _unknowns_layout(self, unknowns: SDICUnknowns) -> _UnknownsLayout:
+        # The positions of the unknowns in p (see _UnknownsLayout), after validate_unknowns
         self.validate_unknowns(unknowns)
-        n_U = unknowns.n_frames * self._mesh.n_vertices * self._mesh.n_dimensions
-        slices, start = [], n_U
-        for kind, index in unknowns.optimized_transformations:
-            n_p = self.get_transformation(kind, index).n_parameters
-            slices.append(slice(start, start + n_p))
-            start += n_p
-        return n_U, slices, start
+        size = self._mesh.n_vertices * self._mesh.n_dimensions
+        frame_slices = {frame: slice(k * size, (k + 1) * size) for k, frame in enumerate(unknowns.optimized_frames)}
+        n_displacements = len(frame_slices) * size
+        transformation_slices, transformations, start = {}, [], n_displacements
+        for entry in unknowns.optimized_transformations:
+            transformation = self.get_transformation(*entry)
+            transformation_slices[entry] = slice(start, start + transformation.n_parameters)
+            transformations.append(transformation)
+            start += transformation.n_parameters
+        return _UnknownsLayout(
+            frame_slices=types.MappingProxyType(frame_slices),
+            transformation_slices=types.MappingProxyType(transformation_slices),
+            transformations=tuple(transformations),
+            n_displacements=n_displacements,
+            n_unknowns=start,
+        )
 
     def validate_unknowns(self, unknowns: SDICUnknowns) -> None:
         r"""
@@ -992,7 +1016,7 @@ class SDICAnalysis(object):
         The size of the vector of unknowns :math:`N_f N_v E + \sum n_p` of a
         :class:`pysdic.SDICUnknowns` in the analysis.
         """
-        return self._unknowns_layout(unknowns)[2]
+        return self._unknowns_layout(unknowns).n_unknowns
 
     def get_unknowns_frame_slice(self, unknowns: SDICUnknowns, frame: Integral) -> slice:
         r"""
@@ -1005,12 +1029,10 @@ class SDICAnalysis(object):
             If the frame is not optimized.
 
         """
-        self.validate_unknowns(unknowns)
-        if frame not in unknowns.optimized_frames:
+        frame_slices = self._unknowns_layout(unknowns).frame_slices
+        if frame not in frame_slices:
             raise ValueError(f"The frame {frame} is not optimized. Optimized frames: {list(unknowns.optimized_frames)}.")
-        k = unknowns.optimized_frames.index(frame)
-        size = self._mesh.n_vertices * self._mesh.n_dimensions
-        return slice(k * size, (k + 1) * size)
+        return frame_slices[frame]
 
     def get_unknowns_transformation_slice(self, unknowns: SDICUnknowns, kind: str, index: Integral) -> slice:
         r"""
@@ -1022,14 +1044,14 @@ class SDICAnalysis(object):
             If the transformation is not optimized.
 
         """
-        _, slices, _ = self._unknowns_layout(unknowns)
+        transformation_slices = self._unknowns_layout(unknowns).transformation_slices
         entry = (kind, int(index))
-        if entry not in unknowns.optimized_transformations:
+        if entry not in transformation_slices:
             raise ValueError(
                 f"The transformation {entry} is not optimized. "
                 f"Optimized transformations: {list(unknowns.optimized_transformations)}."
             )
-        return slices[unknowns.optimized_transformations.index(entry)]
+        return transformation_slices[entry]
 
     def compute_unknowns_indices(
         self,
@@ -1065,13 +1087,15 @@ class SDICAnalysis(object):
             The sorted indices (``numpy.int64``).
 
         """
-        n_U, _, n = self._unknowns_layout(unknowns)
+        layout = self._unknowns_layout(unknowns)
         N_v, E = self._mesh.n_vertices, self._mesh.n_dimensions
         vertices = _as_vertex_selection(vertices, N_v)
         components = _as_component_selection(components, E)
         block = (components[:, numpy.newaxis] * N_v + vertices[numpy.newaxis, :]).ravel()  # Indices in one frame
-        displacement_indices = (numpy.arange(unknowns.n_frames)[:, numpy.newaxis] * (N_v * E) + block).ravel()
-        return numpy.concatenate((displacement_indices, numpy.arange(n_U, n))).astype(numpy.int64)
+        starts = numpy.array([s.start for s in layout.frame_slices.values()], dtype=numpy.int64)
+        displacement_indices = (starts[:, numpy.newaxis] + block[numpy.newaxis, :]).ravel()
+        transformation_indices = numpy.arange(layout.n_displacements, layout.n_unknowns)
+        return numpy.concatenate((displacement_indices, transformation_indices)).astype(numpy.int64)
 
     def pack_unknowns(self, unknowns: SDICUnknowns) -> numpy.ndarray:
         r"""
@@ -1086,10 +1110,10 @@ class SDICAnalysis(object):
                 + [analysis.get_transformation_parameters(kind, index) for kind, index in unknowns.optimized_transformations]
             )
 
-        .. warning::
+        .. seealso::
 
-            With a parametrization, use ``parametrization.reparametrized_pack()`` (see
-            :class:`pysdic.SDICFixedParametrization`).
+            :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and
+            :class:`pysdic.SDICFixedParametrization` (``reparametrized_pack``) with a parametrization.
 
         Returns
         -------
@@ -1102,13 +1126,10 @@ class SDICAnalysis(object):
             If the unknowns are not valid or the displacement of an optimized frame is not set.
 
         """
-        self.validate_unknowns(unknowns)
+        layout = self._unknowns_layout(unknowns)
         return numpy.concatenate(
-            [self.get_displacement(frame).ravel(order="F") for frame in unknowns.optimized_frames]
-            + [
-                numpy.asarray(self.get_transformation(kind, index).parameters, dtype=numpy.float64)
-                for kind, index in unknowns.optimized_transformations
-            ]
+            [self.get_displacement(frame).ravel(order="F") for frame in layout.frame_slices]
+            + [numpy.asarray(transformation.parameters, dtype=numpy.float64) for transformation in layout.transformations]
             + [numpy.zeros(0)]
         )
 
@@ -1119,10 +1140,10 @@ class SDICAnalysis(object):
         Split a complete vector of unknowns (inverse of :meth:`pack_unknowns`). The analysis is
         not modified (see :meth:`apply_unknowns`).
 
-        .. warning::
+        .. seealso::
 
-            With a parametrization, use ``parametrization.reparametrized_unpack(q)`` (see
-            :class:`pysdic.SDICFixedParametrization`).
+            :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and
+            :class:`pysdic.SDICFixedParametrization` (``reparametrized_unpack``) with a parametrization.
 
         Parameters
         ----------
@@ -1141,16 +1162,13 @@ class SDICAnalysis(object):
             For each optimized transformation ``(kind, index)``, its parameters (a copy).
 
         """
-        n_U, slices, n = self._unknowns_layout(unknowns)
-        parameters = _as_array(parameters, "parameters", numpy.float64, shape=(n,), finite=False)
+        layout = self._unknowns_layout(unknowns)
+        parameters = _as_array(parameters, "parameters", numpy.float64, shape=(layout.n_unknowns,), finite=False)
         N_v, E = self._mesh.n_vertices, self._mesh.n_dimensions
         displacements = {
-            frame: parameters[k * N_v * E : (k + 1) * N_v * E].reshape((N_v, E), order="F").copy()
-            for k, frame in enumerate(unknowns.optimized_frames)
+            frame: parameters[columns].reshape((N_v, E), order="F").copy() for frame, columns in layout.frame_slices.items()
         }
-        transformations = {
-            entry: parameters[columns].copy() for entry, columns in zip(unknowns.optimized_transformations, slices)
-        }
+        transformations = {entry: parameters[columns].copy() for entry, columns in layout.transformation_slices.items()}
         return displacements, transformations
 
     def apply_unknowns(self, unknowns: SDICUnknowns, parameters: ArrayLike) -> None:
@@ -1160,10 +1178,10 @@ class SDICAnalysis(object):
         replaced, not added) and the parameters of the optimized transformations
         (:meth:`set_transformation_parameters`, all the cameras using them are updated).
 
-        .. warning::
+        .. seealso::
 
-            With a parametrization, use ``parametrization.reparametrized_apply(q)`` (see
-            :class:`pysdic.SDICFixedParametrization`).
+            :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and
+            :class:`pysdic.SDICFixedParametrization` (``reparametrized_apply``) with a parametrization.
 
         Parameters
         ----------
@@ -1265,6 +1283,33 @@ class SDICAnalysis(object):
         print(f"Structure of the {kind}s (index of the shared {kind} of each view):")
         for frame, indices in enumerate(structure):
             print(f"  Frame {frame:<3}: {indices}")
+
+    def get_transformations(self, kind: str) -> Tuple[Transformation, ...]:
+        r"""
+        Get all the distinct transformations of a kind of the cameras of the analysis, in the
+        order of their index in the structure of ``kind`` (see :meth:`get_transformation`).
+
+        Parameters
+        ----------
+        kind : str
+            The kind of the transformations: ``"extrinsic"``, ``"distortion"`` or
+            ``"intrinsic"``.
+
+        Returns
+        -------
+        Tuple[:class:`pysdic.Transformation`, ...]
+            The transformations (not copies: they are shared by the cameras that use them),
+            ``get_transformations(kind)[index] is get_transformation(kind, index)``.
+
+        Raises
+        ------
+        ValueError
+            If ``kind`` is not valid.
+
+        """
+        if kind not in _TRANSFORMATION_KINDS:
+            raise ValueError(f"Input 'kind' must be one of {_TRANSFORMATION_KINDS}. Got {kind!r}.")
+        return tuple(self._structure(kind)[1])
 
     def get_transformation(self, kind: str, index: Integral) -> Transformation:
         r"""

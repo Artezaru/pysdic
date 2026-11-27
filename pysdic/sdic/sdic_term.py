@@ -44,9 +44,10 @@ from .gl_correction import (
 from ._sdic_term_caches import SDICTermOperatorsCache, SDICTermReferenceProjectionCache, SDICTermSparseStructure
 from .pairing import Pairing
 from .residuals import PairingResiduals, _pairing_residuals
-from ._sdic_validation import _validate_frames, _validate_transformations
-from .sdic_unknowns import SDICUnknowns
-from .sdic_analysis import SDICAnalysis, _TRANSFORMATION_KINDS
+from ._sdic_validation import _validate_gl_correction, _validate_gray_level_groups, _validate_located_integration_points
+from .problem import _validate_problem
+from .sdic_unknowns import _TRANSFORMATION_KINDS, SDICUnknowns
+from .sdic_analysis import SDICAnalysis, _UnknownsLayout
 
 # Gray level corrections: (mode, jacobian) -> function
 _GL_CORRECTIONS = {
@@ -55,10 +56,6 @@ _GL_CORRECTIONS = {
     ("matching", "approximate"): matching_correction,
     ("matching", "exact"): matching_correction_exact,
 }
-_GL_DEFAULTS = {"mode": "ZNSSD", "jacobian": "approximate", "neighborhood": None, "scale": 1.0}
-
-# Kinds of the transformations of a camera, in the order of the blocks of jacobian_dp
-_KINDS = ("extrinsic", "distortion", "intrinsic")
 
 # Reason of the lock of the integration points used by a SDIC term
 _INTEGRATION_POINTS_LOCK_MESSAGE = (
@@ -73,51 +70,6 @@ _INTEGRATION_POINTS_LOCK_MESSAGE = (
 # =============================================================================
 # Internal helpers
 # =============================================================================
-def _validate_gl_correction(gl_correction: Optional[Mapping[str, Any]]) -> Optional[Dict[str, Any]]:
-    if gl_correction is None:
-        return None
-    if not isinstance(gl_correction, Mapping):
-        raise TypeError(f"Input 'gl_correction' must be a dictionary or None. Got type {type(gl_correction)}.")
-    unknown = set(gl_correction) - set(_GL_DEFAULTS)
-    if unknown:
-        raise ValueError(f"Unknown keys {sorted(unknown)} in 'gl_correction'. Valid keys: {tuple(_GL_DEFAULTS)}.")
-    options = {**_GL_DEFAULTS, **gl_correction}
-    options["mode"] = _validate_choice(options["mode"], "gl_correction['mode']", ("ZNSSD", "matching"))
-    options["jacobian"] = _validate_choice(options["jacobian"], "gl_correction['jacobian']", ("approximate", "exact"))
-    options["neighborhood"] = _validate_integer(options["neighborhood"], "gl_correction['neighborhood']", min_value=0, allow_none=True)
-    options["scale"] = _validate_real(options["scale"], "gl_correction['scale']", positive=True, finite=True)
-    return options
-
-def _validate_gray_level_groups(
-    gray_level_groups: Optional[GrayLevelGroups],
-    gl_correction: Optional[Mapping[str, Any]],
-    mesh: Any,
-    integration_points: IntegrationPoints,
-) -> Optional[GrayLevelGroups]:
-    # Groups given by the user: consistent with the points and the mesh, and not given twice
-    if gray_level_groups is None:
-        return None
-    if not isinstance(gray_level_groups, GrayLevelGroups):
-        raise TypeError(f"Input 'gray_level_groups' must be a GrayLevelGroups or None. Got type {type(gray_level_groups)}.")
-    if gl_correction is None:
-        raise ValueError("Input 'gray_level_groups' requires a gray level correction ('gl_correction').")
-    if "neighborhood" in gl_correction:
-        raise ValueError(
-            "Give either gl_correction['neighborhood'] (groups computed by the term) or 'gray_level_groups' "
-            "(groups computed once with compute_gray_level_groups), not both."
-        )
-    if gray_level_groups.n_points != integration_points.n_points or gray_level_groups.n_elements != mesh.n_elements:
-        raise ValueError(
-            f"Input 'gray_level_groups' ({gray_level_groups.n_points} points, {gray_level_groups.n_elements} elements) "
-            f"does not match the integration points ({integration_points.n_points}) and the mesh ({mesh.n_elements} elements)."
-        )
-    if not numpy.array_equal(gray_level_groups.point_elements, integration_points.element_indices):
-        raise ValueError(
-            "Input 'gray_level_groups' was computed for other integration points (different elements of the points)."
-        )
-    return gray_level_groups
-
-
 def _block_rows(jacobian: numpy.ndarray) -> numpy.ndarray:
     # Jacobian (N_p, C, n) -> (N_p C, n) with the rows in Fortran order of (N_p, C): row p + c N_p
     N_p, C, n = jacobian.shape
@@ -218,10 +170,10 @@ def _transposed_product(
 
 def _build_sdic_operators(
     analysis: SDICAnalysis,
+    unknowns: SDICUnknowns,
+    layout: _UnknownsLayout,
     integration_points: IntegrationPoints,
     pairings: Sequence[Pairing],
-    optimized_frames: Union[Integral, Sequence[Integral]],
-    optimized_transformations: Sequence[Tuple[str, Integral]],
     *,
     mode: str = "rJ",
     gl_correction: Optional[Mapping[str, Any]] = None,
@@ -238,50 +190,43 @@ def _build_sdic_operators(
 
     Returns the residual and Jacobian functions (mode ``"rJ"``, the third output is None) or
     the gradient, Hessian and cost functions (mode ``"gH"``) of the vector of unknowns
-    :math:`\vec{p} = [\vec{p}_U, \vec{p}_T]` (see :class:`SDICUnknowns`).
+    :math:`\vec{p}` (see :class:`SDICUnknowns`). The analysis and the unknowns are validated, and
+    ``layout`` is their layout (see :func:`pysdic.sdic.problem._validate_problem`).
     """
-    # ------------- options -------------
-    if not isinstance(analysis, SDICAnalysis):
-        raise TypeError(f"Input 'analysis' must be a SDICAnalysis. Got type {type(analysis)}.")
-    mode = _validate_choice(mode, "mode", ("rJ", "gH"))
+    # ------------- options (mode, filter_nans, sparse and pairings are validated by SDICCorrelationTerm) -------------
     gl_options = _validate_gl_correction(gl_correction)
-    filter_nans = _validate_bool(filter_nans, "filter_nans")
-    sparse = _validate_bool(sparse, "sparse")
     _use_cache = _validate_bool(_use_cache, "_use_cache")
     _cache_length = _validate_integer(_cache_length, "_cache_length", min_value=1)
 
     # ------------- unknowns: [displacements of the optimized frames | transformations] -------------
     mesh = analysis.mesh
     N_v, E = mesh.n_vertices, mesh.n_dimensions
-    optimized_frames = _validate_frames(analysis, optimized_frames, "optimized_frames", allow_empty=True)
-    entries, objects, transformation_starts = _validate_transformations(
-        analysis, optimized_transformations, allow_empty=True
-    )
-    n_displacement_unknowns = len(optimized_frames) * N_v * E
-    n_unknowns = n_displacement_unknowns + transformation_starts[-1]
+    # The positions of the unknowns come from the analysis (layout): the single source of truth of the order of p
+    optimized_frames = list(unknowns.optimized_frames)
+    entries = list(unknowns.optimized_transformations)
+    objects = list(layout.transformations)
+    n_unknowns = layout.n_unknowns
     if n_unknowns == 0:
         raise ValueError("At least one optimized frame or one optimized transformation is required.")
-    frame_starts = {frame: k * N_v * E for k, frame in enumerate(optimized_frames)}
-    starts = [n_displacement_unknowns + start for start in transformation_starts]  # Columns of the transformations
+    frame_slices = dict(layout.frame_slices)  # Optimized frame -> columns of its displacement
+    starts = [layout.transformation_slices[entry].start for entry in entries] + [n_unknowns]  # Columns of the transformations
 
     def view_blocks(frame: int, index: int) -> List[Tuple[str, int, int]]:
         # The optimized transformations of the camera of a view: (kind, start, stop) of their columns
         camera = analysis.get_view(frame, index).camera
         blocks = []
-        for kind in _KINDS:
+        for kind in _TRANSFORMATION_KINDS:
             for k, transformation in enumerate(objects):
                 if getattr(camera, kind) is transformation:
                     blocks.append((kind, starts[k], starts[k + 1]))
         return blocks
 
     # ------------- pairings -------------
-    if not isinstance(pairings, (list, tuple)):
-        raise TypeError(f"Input 'pairings' must be a list or a tuple of Pairing. Got type {type(pairings)}.")
     active_pairings = []
     for pairing in pairings:
         analysis.validate_pairing(pairing)
         has_unknowns = any(
-            frame in frame_starts or view_blocks(frame, index) for frame, index in (pairing.view_1, pairing.view_2)
+            frame in frame_slices or view_blocks(frame, index) for frame, index in (pairing.view_1, pairing.view_2)
         )
         if has_unknowns:
             active_pairings.append(pairing)  # Pairings without unknowns are ignored
@@ -297,9 +242,7 @@ def _build_sdic_operators(
         raise ValueError(f"The transformations {missing} are used by no view of the pairings.")
 
     # ------------- mesh and integration points -------------
-    mesh.validate_integration_points(integration_points)
-    if not numpy.all(integration_points.is_located()):
-        raise ValueError("The integration points must all be located (use 'remove_unlocated').")
+    _validate_located_integration_points(mesh, integration_points)
     N_p = integration_points.n_points
     point_vertices = mesh.elements[integration_points.element_indices]  # (N_p, N_vpe)
     shape_functions = fem.compute_shape_functions(integration_points.natural_coordinates, mesh.element_type)  # (N_p, N_vpe)
@@ -313,7 +256,7 @@ def _build_sdic_operators(
     # The frames of the pairings that are not optimized are reference frames: their displacements
     # are read from the analysis at each evaluation (they can be updated between two evaluations,
     # but not removed). They must be set at the creation of the term.
-    reference_frames = sorted(frame for frame in used_frames if frame not in frame_starts)
+    reference_frames = sorted(frame for frame in used_frames if frame not in frame_slices)
     for frame in reference_frames:
         analysis.get_displacement(frame)  # Error if the displacement is not set
     # The groups of the gray level correction: given (computed once for several terms) or computed here
@@ -336,9 +279,9 @@ def _build_sdic_operators(
     # depend on the unknowns (kept by the reference projection cache with use_cache=True)
     def camera_transformations(view: Tuple[int, int]) -> List[Any]:
         camera = analysis.get_view(*view).camera
-        return [getattr(camera, kind) for kind in _KINDS if getattr(camera, kind, None) is not None]
+        return [getattr(camera, kind) for kind in _TRANSFORMATION_KINDS if getattr(camera, kind, None) is not None]
 
-    reference_views = [view for view in used_views if view[0] not in frame_starts and not blocks[view]]
+    reference_views = [view for view in used_views if view[0] not in frame_slices and not blocks[view]]
     reference_view_transformations = {view: camera_transformations(view) for view in reference_views}
 
     # Memory of an evaluation: the projections (and the positions of the points) are computed when a
@@ -350,7 +293,7 @@ def _build_sdic_operators(
     # ------------- evaluation -------------
     # The ranges of the unknowns, which partition [0, n_unknowns): the displacement of each optimized
     # frame, then each optimized transformation. A Jacobian is assembled by blocks of these ranges.
-    unknown_ranges = [(frame_starts[frame], frame_starts[frame] + N_v * E) for frame in optimized_frames]
+    unknown_ranges = [(frame_slices[frame].start, frame_slices[frame].stop) for frame in optimized_frames]
     unknown_ranges += [(starts[k], starts[k + 1]) for k in range(len(objects))]
     frame_range = {frame: k for k, frame in enumerate(optimized_frames)}
     transformation_range = {starts[k]: len(optimized_frames) + k for k in range(len(objects))}
@@ -365,7 +308,7 @@ def _build_sdic_operators(
         # by row_factors (N_p C,) if given (weights and sign of the view in the pairing).
         frame = view[0]
         view_blocks_: List[ColumnBlock] = []
-        if frame in frame_starts:
+        if frame in frame_slices:
             block = structure.assemble(result.jacobian_dx, row_factors)  # (N_p C, N_v E), csr
             view_blocks_.append((frame_range[frame], block if sparse else block.toarray()))
         for kind, start, stop in blocks[view]:
@@ -429,7 +372,7 @@ def _build_sdic_operators(
     operators_cache = SDICTermOperatorsCache(_cache_length) if _use_cache else None
     reference_cache = SDICTermReferenceProjectionCache(reference_views) if _use_cache else None
     fixed_transformations = [
-        t for kind in _TRANSFORMATION_KINDS for t in analysis._structure(kind)[1] if not any(t is o for o in objects)
+        t for kind in _TRANSFORMATION_KINDS for t in analysis.get_transformations(kind) if not any(t is o for o in objects)
     ]
 
     def check_transformations() -> None:
@@ -465,9 +408,8 @@ def _build_sdic_operators(
 
         def position(frame: int) -> numpy.ndarray:
             if frame not in positions:
-                if frame in frame_starts:
-                    start = frame_starts[frame]
-                    displacement = parameters[start : start + N_v * E].reshape((N_v, E), order="F")
+                if frame in frame_slices:
+                    displacement = parameters[frame_slices[frame]].reshape((N_v, E), order="F")
                 else:
                     displacement = analysis.get_displacement(frame)  # Reference frame: read from the analysis
                 positions[frame] = locate(displacement)
@@ -485,7 +427,7 @@ def _build_sdic_operators(
             kinds = {kind for kind, _, _ in blocks[view]} if derivatives else set()
             return analysis.get_view(*view).image_project(
                 position(frame),
-                dx=derivatives and frame in frame_starts,
+                dx=derivatives and frame in frame_slices,
                 dextrinsic="extrinsic" in kinds,
                 ddistortion="distortion" in kinds,
                 dintrinsic="intrinsic" in kinds,
@@ -643,9 +585,8 @@ def _build_sdic_operators(
         frames = {frame for pairing in value_pairings for frame in (pairing.frame_index_1, pairing.frame_index_2)}
         displacements, positions = {}, {}
         for frame in frames:
-            if frame in frame_starts:
-                start = frame_starts[frame]
-                displacements[frame] = parameters[start : start + N_v * E].reshape((N_v, E), order="F").copy()
+            if frame in frame_slices:
+                displacements[frame] = parameters[frame_slices[frame]].reshape((N_v, E), order="F").copy()
             else:
                 displacements[frame] = analysis.get_displacement(frame)
             positions[frame] = locate(displacements[frame])
@@ -720,36 +661,15 @@ class SDICCorrelationTerm:
     each pairing (row :math:`p + c N_p`, with :math:`C` the number of channels of the
     images of the pairing).
 
-    **Unknowns.** The vector of unknowns is
+    **Unknowns.** The term works on the complete vector of unknowns :math:`\vec{p}` of
+    ``unknowns`` in ``analysis``. It does not build the vectors: they are built by the analysis
+    (``pack_unknowns``, ``unpack_unknowns``, ``apply_unknowns``), or by the parametrization with a
+    reduced vector :math:`\vec{q}`.
 
-    .. math::
+    .. seealso::
 
-        \vec{p} = [\vec{p}_U, \vec{p}_T]
-
-    - :math:`\vec{p}_U`: the displacements :math:`(N_v, E)` of the optimized frames of
-      ``unknowns``, each one flattened in Fortran order (all the :math:`x` components, then all
-      the :math:`y` components, ...) and concatenated in their order;
-    - :math:`\vec{p}_T`: the parameters of the optimized transformations of ``unknowns``,
-      concatenated in their order.
-
-    The vectors are built by the analysis (:meth:`pack`, :meth:`unpack` and :meth:`apply` of the
-    term are :meth:`pysdic.SDICAnalysis.pack_unknowns`, :meth:`pysdic.SDICAnalysis.unpack_unknowns`
-    and :meth:`pysdic.SDICAnalysis.apply_unknowns` with :attr:`unknowns`):
-
-    - **without parametrization**, the solver starts from the complete vector
-      :math:`\vec{p}_0` = ``analysis.pack_unknowns(unknowns)``, and the result is written with
-      ``analysis.apply_unknowns(unknowns, result.parameters)``;
-    - **with a parametrization** (e.g. :class:`pysdic.SDICFixedParametrization`), the solver
-      starts from the reduced vector :math:`\vec{q}_0` = ``parametrization.reparametrized_pack()``,
-      and the result is written with ``parametrization.reparametrized_apply(result.parameters)``.
-
-    .. warning::
-
-        **With a parametrization, always use** ``parametrization.reparametrized_pack()``,
-        ``reparametrized_unpack(q)`` **and** ``reparametrized_apply(q)``: :meth:`pack`,
-        :meth:`unpack` and :meth:`apply` of the term (and the ``*_unknowns`` methods of the
-        analysis) work on the
-        complete vector :math:`\vec{p}`, not on the reduced vector :math:`\vec{q}` of the solver.
+        :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and
+        :class:`pysdic.SDICFixedParametrization` for the reduced vector :math:`\vec{q}`.
 
     **Frames.** The frames of the pairings that are not optimized are reference frames: their
     displacements are fixed during the optimization, and must be set when the term is created
@@ -786,7 +706,7 @@ class SDICCorrelationTerm:
     extrinsic at all the frames), and is then one unknown for all of them.
 
     - The optimized transformations must have parameters, must not be locked and must not be
-      given twice.
+      given twice (see :meth:`pysdic.SDICAnalysis.validate_unknowns`).
     - The entries of the analysis must be independent: two different entries
       ``(kind, index)`` must not share a unit transformation (see
       :meth:`pysdic.SDICAnalysis.check_consistency`).
@@ -794,7 +714,8 @@ class SDICCorrelationTerm:
       :class:`pysdic.ReparametrizedTransformation`, which is then optimized.
     - At each evaluation, the parameters of the optimized transformations are set once for all
       the cameras that use them, then restored: the analysis is never modified by an
-      evaluation. Apply the result with :meth:`apply`.
+      evaluation. Apply the result with :meth:`pysdic.SDICAnalysis.apply_unknowns` (or
+      ``parametrization.reparametrized_apply`` with a parametrization).
     - At each evaluation, the optimized transformations must still have parameters and must not
       have been locked after the creation of the term (an explicit error is raised otherwise).
 
@@ -1075,13 +996,7 @@ class SDICCorrelationTerm:
         sparse: bool = True,
         use_cache: bool = False,
     ) -> None:
-        if not isinstance(analysis, SDICAnalysis):
-            raise TypeError(f"Input 'analysis' must be a SDICAnalysis. Got type {type(analysis)}.")
-        if not isinstance(unknowns, SDICUnknowns):
-            raise TypeError(
-                f"Input 'unknowns' must be a SDICUnknowns (e.g. SDICUnknowns([1], [])). Got type {type(unknowns)}."
-            )
-        analysis.validate_unknowns(unknowns)
+        layout = _validate_problem(analysis, unknowns)
         if not isinstance(pairings, (list, tuple)):
             raise TypeError(f"Input 'pairings' must be a list or a tuple of Pairing. Got type {type(pairings)}.")
         mode = _validate_choice(mode, "mode", ("rJ", "gH"))
@@ -1100,10 +1015,10 @@ class SDICCorrelationTerm:
 
         func_1, func_2, cost_func = _build_sdic_operators(
             analysis,
+            unknowns,
+            layout,
             integration_points,
             list(pairings),
-            list(unknowns.optimized_frames),
-            list(unknowns.optimized_transformations),
             mode=mode,
             gl_correction=gl_correction,
             gray_level_groups=gray_level_groups,
@@ -1208,16 +1123,6 @@ class SDICCorrelationTerm:
         return self._pairings
 
     @property
-    def optimized_frames(self) -> Tuple[int, ...]:
-        r"""The optimized frames of the unknowns."""
-        return self._unknowns.optimized_frames
-
-    @property
-    def optimized_transformations(self) -> Tuple[Tuple[str, int], ...]:
-        r"""The optimized transformations ``(kind, index)`` of the unknowns."""
-        return self._unknowns.optimized_transformations
-
-    @property
     def mode(self) -> str:
         r"""The mode, ``"rJ"`` or ``"gH"``."""
         return self._options["mode"]
@@ -1268,31 +1173,6 @@ class SDICCorrelationTerm:
         r"""The options of the term (a copy): the keyword parameters of the constructor."""
         return dict(self._options)
 
-    @property
-    def n_unknowns(self) -> int:
-        r"""The number of unknowns."""
-        return self._analysis.n_unknowns(self._unknowns)
-
-    # ------------------------------------------------------------------ Unknowns
-    def pack(self) -> numpy.ndarray:
-        r"""
-        The complete vector of unknowns of the current state of the analysis: the initial
-        parameters ``p0`` **without parametrization**, see :meth:`pysdic.SDICAnalysis.pack_unknowns`. With a
-        parametrization, use its reduced vector (e.g.
-        :meth:`pysdic.SDICFixedParametrization.reparametrized_pack`).
-        """
-        return self._analysis.pack_unknowns(self._unknowns)
-
-    def unpack(
-        self, parameters: ArrayLike
-    ) -> Tuple[Dict[int, numpy.ndarray], Dict[Tuple[str, int], numpy.ndarray]]:
-        r"""Split a complete vector of unknowns, see :meth:`pysdic.SDICAnalysis.unpack_unknowns`."""
-        return self._analysis.unpack_unknowns(self._unknowns, parameters)
-
-    def apply(self, parameters: ArrayLike) -> None:
-        r"""Write a complete vector of unknowns in the analysis, see :meth:`pysdic.SDICAnalysis.apply_unknowns`."""
-        self._analysis.apply_unknowns(self._unknowns, parameters)
-
     # ------------------------------------------------------------------ Residuals
     def compute_residuals(
         self, parameters: Optional[ArrayLike] = None, pairings: Optional[Sequence[Pairing]] = None
@@ -1311,7 +1191,8 @@ class SDICCorrelationTerm:
         ----------
         parameters : Optional[ArrayLike], optional
             The complete vector of unknowns, of shape :math:`(N_f N_v E + \sum n_p,)` (with a parametrization,
-            ``parametrization.p_func(q)``). By default, the current state of the analysis (:meth:`pack`).
+            ``parametrization.p_func(q)``). By default, the current state of the analysis
+            (``analysis.pack_unknowns(unknowns)``).
 
         pairings : Optional[Sequence[:class:`pysdic.Pairing`]], optional
             The pairings to evaluate: any valid pairing of the analysis (also a pairing without unknown, or not
@@ -1324,7 +1205,7 @@ class SDICCorrelationTerm:
 
         """
         if parameters is None:
-            parameters = self.pack()
+            parameters = self._analysis.pack_unknowns(self._unknowns)
         if pairings is None:
             pairings = self.pairings
         if not isinstance(pairings, (list, tuple)):
@@ -1333,9 +1214,7 @@ class SDICCorrelationTerm:
 
     def __repr__(self) -> str:
         return (
-            f"SDICCorrelationTerm(mode={self.mode!r}, {len(self.pairings)} pairings, "
-            f"optimized_frames={list(self.optimized_frames)}, "
-            f"optimized_transformations={list(self.optimized_transformations)}, "
-            f"{self.integration_points.n_points} integration points, n_unknowns={self.n_unknowns}, "
+            f"SDICCorrelationTerm(mode={self.mode!r}, {len(self.pairings)} pairings, {self._unknowns!r}, "
+            f"{self.integration_points.n_points} integration points, "
             f"sparse={self.sparse}, use_cache={self.use_cache})"
         )
