@@ -42,6 +42,7 @@ from ..imaging.view import View
 from ..transformations.transformation import ComposedTransformation, Transformation
 from ..transformations.reparametrized_transformation import ReparametrizedTransformation
 from .._validation import _as_array, _validate_bool, _validate_integer, _validate_path
+from ._load_previous_sdic_analysis import PREVIOUS_FORMAT_NAMES, load_previous_save, parse_version
 from .pairing import Pairing
 from .sdic_unknowns import SDICUnknowns, _as_component_selection, _as_vertex_selection
 
@@ -72,10 +73,21 @@ _MESH_LOCK_MESSAGE = (
 # Sentinel of SDICAnalysis.with_views: keep the current times
 _KEEP = object()
 
-# Format of the folders written by SDICAnalysis.to_folder (see SDICAnalysis.from_folder)
+# Format of the saves written by SDICAnalysis.to_folder (see SDICAnalysis.from_folder). The saves
+# written by the versions in [_MIN_VERSION, _MAX_VERSION) (None: no bound) have the current format;
+# the older ones are converted while loading (see _load_previous_sdic_analysis.py, whose last
+# migration must end at _MIN_VERSION).
 _FORMAT_NAME = "pysdic.SDICAnalysis"
-_FORMAT_VERSION = 1
-_TRANSFORMATION_FOLDERS = {"extrinsic": "extrinsics", "distortion": "distortions", "intrinsic": "intrinsics"}
+_MIN_VERSION = "2.1.0"
+_MAX_VERSION: Optional[str] = None
+
+# Files of the atoms of a save: kind -> (folder, extension)
+_ATOM_FILES = {
+    "image": ("images", "npz"),
+    "extrinsic": ("extrinsics", "json"),
+    "distortion": ("distortions", "json"),
+    "intrinsic": ("intrinsics", "json"),
+}
 
 
 def _index_width(n: int) -> int:
@@ -83,9 +95,46 @@ def _index_width(n: int) -> int:
     return max(1, len(str(n - 1)))
 
 
-def _timestamp() -> str:
-    # Current UTC time with microseconds, usable in a file name
-    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%S%f")
+def _write_json(path: Path, data: Any) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+
+def _read_json(path: Path) -> Any:
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _read_arrays(path: Path) -> Dict[str, numpy.ndarray]:
+    # Numeric arrays of an NPZ file, without pickle
+    with numpy.load(path, allow_pickle=False) as npz:
+        return {key: npz[key] for key in npz.files}
+
+
+def _read_metadata(folder: Path) -> Optional[Dict[str, Any]]:
+    # The metadata of a SDIC save (current or previous format), or None if the folder is not a SDIC save
+    try:
+        metadata = _read_json(folder / "metadata.json")
+    except (OSError, ValueError):
+        return None
+    if isinstance(metadata, dict) and metadata.get("format") in (_FORMAT_NAME, *PREVIOUS_FORMAT_NAMES):
+        return metadata
+    return None
+
+
+def _check_version(folder: Path, metadata: Dict[str, Any]) -> Tuple[int, ...]:
+    # The parsed version of pysdic that wrote the save, which must be before _MAX_VERSION
+    version = metadata.get("pysdic_version")
+    try:
+        saved = parse_version(version)
+    except ValueError:
+        raise ValueError(f"The SDIC save '{folder}' has an invalid pysdic version {version!r}.") from None
+    if _MAX_VERSION is not None and saved >= parse_version(_MAX_VERSION):
+        raise ValueError(
+            f"The SDIC save '{folder}' was written by pysdic {version}, but this version of pysdic "
+            f"({__version__}) loads the saves written by the versions before {_MAX_VERSION}."
+        )
+    return saved
 
 
 def _sha256(path: Path) -> str:
@@ -97,49 +146,6 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _write_json(path: Path, data: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-
-
-def _read_json(path: Path) -> Any:
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def _write_arrays(path: Path, arrays: Dict[str, numpy.ndarray]) -> None:
-    # NPZ of numeric arrays, without pickle (no object array can be written)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "wb") as f:
-        numpy.savez(f, **{key: numpy.asarray(value) for key, value in arrays.items()})
-
-
-def _read_arrays(path: Path) -> Dict[str, numpy.ndarray]:
-    with numpy.load(path, allow_pickle=False) as npz:
-        return {key: npz[key] for key in npz.files}
-
-
-def _is_sdic_folder(folder: Path) -> bool:
-    # True if the folder contains the metadata of a SDIC save
-    metadata = folder / "metadata.json"
-    if not metadata.is_file():
-        return False
-    try:
-        return _read_json(metadata).get("format") == _FORMAT_NAME
-    except (OSError, ValueError, AttributeError):
-        return False
-
-
-def _write_manifest(folder: Path) -> None:
-    # SHA-256 of all the files of the folder (except the manifest itself)
-    files = {}
-    for path in sorted(folder.rglob("*")):
-        if path.is_file() and path.name != "manifest.json":
-            files[path.relative_to(folder).as_posix()] = _sha256(path)
-    _write_json(folder / "manifest.json", {"algorithm": "sha256", "files": files})
-
-
 def _check_manifest(folder: Path) -> None:
     # Check the SHA-256 of all the files listed in the manifest
     manifest_path = folder / "manifest.json"
@@ -148,9 +154,8 @@ def _check_manifest(folder: Path) -> None:
             f"The SDIC save '{folder}' has no manifest.json: its integrity cannot be checked. "
             f"Use check_integrity=False to load it anyway."
         )
-    manifest = _read_json(manifest_path)
     missing, modified = [], []
-    for relative, expected in manifest.get("files", {}).items():
+    for relative, expected in _read_json(manifest_path).get("files", {}).items():
         path = folder / relative
         if not path.is_file():
             missing.append(relative)
@@ -1446,113 +1451,96 @@ class SDICAnalysis(object):
     # ===================================================================
     # Save and load
     # ===================================================================
+    def _summary(self) -> Dict[str, Any]:
+        # Summary of the analysis, written in metadata.json and compared at the loading
+        return {
+            "n_frames": self._n_frames,
+            "n_vertices": self._mesh.n_vertices,
+            "n_elements": self._mesh.n_elements,
+            "n_dimensions": self._mesh.n_dimensions,
+            "n_views": [len(frame_views) for frame_views in self._views],
+            "n_images": len(self._structure("image")[1]),
+            "n_cameras": len(self._structure("camera")[1]),
+            "n_transformations": {kind: len(self._structure(kind)[1]) for kind in _TRANSFORMATION_KINDS},
+            "frames_with_displacement": [frame for frame, u in enumerate(self._displacements) if u is not None],
+            "has_times": self._times is not None,
+        }
+
     def _write_folder(
         self, folder: Path, title: Optional[str], description: Optional[str], export_vtk: bool
     ) -> None:
         # Write the content of a save in an existing empty folder (see to_folder)
-        structure: Dict[str, Any] = {"n_frames": self._n_frames}
+        objects = {kind: self._structure(kind)[1] for kind in _STRUCTURE_KINDS}
+        index = {kind: {id(obj): k for k, obj in enumerate(objs)} for kind, objs in objects.items()}
 
         # Mesh (exact NPZ, optional VTK for the visualization only)
         self._mesh.to_npz_file(folder / "mesh" / "mesh.npz", make_dirs=True)
-        structure["mesh"] = "mesh/mesh.npz"
         if export_vtk:
             self._mesh.to_vtk_file(folder / "mesh" / "mesh.vtk", make_dirs=True, binary=True)
 
-        # Atoms: images and transformations, each distinct object saved once
-        images = self._structure("image")[1]
-        width = _index_width(len(images))
-        structure["images"] = [f"images/image_{k:0{width}d}.npz" for k in range(len(images))]
-        for image, relative in zip(images, structure["images"]):
-            image.to_npz_file(folder / relative, make_dirs=True)
-
-        structure["transformations"] = {}
-        transformation_indices: Dict[str, Dict[int, int]] = {}
-        for kind in _TRANSFORMATION_KINDS:
-            objects = self._structure(kind)[1]
-            width = _index_width(len(objects))
-            paths = [f"{_TRANSFORMATION_FOLDERS[kind]}/{kind}_{k:0{width}d}.json" for k in range(len(objects))]
-            for transformation, relative in zip(objects, paths):
-                transformation.to_json_file(folder / relative, make_dirs=True)
-            structure["transformations"][kind] = paths
-            transformation_indices[kind] = {id(obj): k for k, obj in enumerate(objects)}
-
-        # Cameras and views, as indices of the atoms
-        cameras = self._structure("camera")[1]
-        camera_indices = {id(camera): k for k, camera in enumerate(cameras)}
-        image_indices = {id(image): k for k, image in enumerate(images)}
-        structure["cameras"] = [
-            {
-                "sensor_height": camera.sensor_height,
-                "sensor_width": camera.sensor_width,
-                **{kind: transformation_indices[kind][id(getattr(camera, kind))] for kind in _TRANSFORMATION_KINDS},
-            }
-            for camera in cameras
-        ]
-        views = self._structure("view")[1]
-        view_indices = {id(view): k for k, view in enumerate(views)}
-        structure["views"] = [
-            {"camera": camera_indices[id(view.camera)], "image": image_indices[id(view.image)]} for view in views
-        ]
-        structure["frames"] = [[view_indices[id(view)] for view in frame_views] for frame_views in self._views]
-        structure["structures"] = {kind: self.compute_structure(kind) for kind in _STRUCTURE_KINDS}
+        # Atoms: each distinct image and transformation is saved once
+        paths = {}
+        for kind, (subfolder, extension) in _ATOM_FILES.items():
+            width = _index_width(len(objects[kind]))
+            paths[kind] = [f"{subfolder}/{kind}_{k:0{width}d}.{extension}" for k in range(len(objects[kind]))]
+            for obj, relative in zip(objects[kind], paths[kind]):
+                save = obj.to_npz_file if extension == "npz" else obj.to_json_file
+                save(folder / relative, make_dirs=True)
 
         # Displacements (only the frames with a displacement) and times
         width = _index_width(self._n_frames)
-        displacement_keys = {
+        displacements = {
             str(frame): f"frame_{frame:0{width}d}"
-            for frame, displacement in enumerate(self._displacements)
-            if displacement is not None
+            for frame, u in enumerate(self._displacements)
+            if u is not None
         }
-        if displacement_keys:
-            _write_arrays(
+        if displacements:
+            numpy.savez(
                 folder / "displacements.npz",
-                {key: self._displacements[int(frame)] for frame, key in displacement_keys.items()},
+                **{key: self._displacements[int(frame)] for frame, key in displacements.items()},
             )
-        structure["displacements"] = displacement_keys
-        structure["times"] = self._times is not None
         if self._times is not None:
-            _write_arrays(folder / "times.npz", {"times": self._times})
+            numpy.savez(folder / "times.npz", times=self._times)
 
-        _write_json(folder / "structure.json", structure)
+        # Cameras, views and frames as indices of the atoms
+        _write_json(folder / "structure.json", {
+            "mesh": "mesh/mesh.npz",
+            "images": paths["image"],
+            "transformations": {kind: paths[kind] for kind in _TRANSFORMATION_KINDS},
+            "cameras": [
+                {
+                    "sensor_height": camera.sensor_height,
+                    "sensor_width": camera.sensor_width,
+                    **{kind: index[kind][id(getattr(camera, kind))] for kind in _TRANSFORMATION_KINDS},
+                }
+                for camera in objects["camera"]
+            ],
+            "views": [
+                {"camera": index["camera"][id(view.camera)], "image": index["image"][id(view.image)]}
+                for view in objects["view"]
+            ],
+            "frames": [[index["view"][id(view)] for view in frame_views] for frame_views in self._views],
+            "displacements": displacements,
+            "times": self._times is not None,
+            "structures": {kind: self.compute_structure(kind) for kind in _STRUCTURE_KINDS},
+        })
 
-        # Metadata, readable by a human in README.txt
+        # Metadata, and the same information readable by a human in README.txt
         created = datetime.datetime.now(datetime.timezone.utc).isoformat()
-        metadata = {
+        summary = self._summary()
+        _write_json(folder / "metadata.json", {
             "format": _FORMAT_NAME,
-            "format_version": _FORMAT_VERSION,
             "pysdic_version": __version__,
             "created_utc": created,
             "title": title,
             "description": description,
-            "n_frames": self._n_frames,
-            "n_vertices": self._mesh.n_vertices,
-            "n_elements": self._mesh.n_elements,
-            "n_views": [len(frame_views) for frame_views in self._views],
-            "n_images": len(images),
-            "n_cameras": len(cameras),
-            "frames_with_displacement": [int(frame) for frame in displacement_keys],
-            "has_times": self._times is not None,
-        }
-        _write_json(folder / "metadata.json", metadata)
-        lines = [
-            f"pysdic SDIC save (format version {_FORMAT_VERSION}, pysdic {__version__})",
-            f"Created (UTC): {created}",
-        ]
-        if title is not None:
-            lines.append(f"Title: {title}")
-        if description is not None:
-            lines.append(f"Description: {description}")
+            "summary": summary,
+        })
+        lines = [f"pysdic SDIC save (pysdic {__version__})", f"Created (UTC): {created}"]
+        lines += [f"{label}: {text}" for label, text in (("Title", title), ("Description", description)) if text is not None]
+        lines += ["", f"element_type: {self._mesh.element_type}"]
+        lines += [f"{key}: {value}" for key, value in summary.items()]
         lines += [
-            "",
-            f"Frames: {self._n_frames} (times {'defined' if self._times is not None else 'not defined'})",
-            f"Mesh: {self._mesh.n_vertices} vertices, {self._mesh.n_elements} elements "
-            f"({self._mesh.element_type})",
-            f"Views per frame: {metadata['n_views']}",
-            f"Distinct images: {len(images)}, cameras: {len(cameras)}, extrinsics: "
-            f"{len(structure['transformations']['extrinsic'])}, distortions: "
-            f"{len(structure['transformations']['distortion'])}, intrinsics: "
-            f"{len(structure['transformations']['intrinsic'])}",
-            f"Frames with a displacement: {metadata['frames_with_displacement']}",
             "",
             "Load with: pysdic.SDICAnalysis.from_folder(path)",
             "Do not modify the files: their SHA-256 are checked at the loading (manifest.json).",
@@ -1560,13 +1548,61 @@ class SDICAnalysis(object):
         with open(folder / "README.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
 
-        _write_manifest(folder)
+        # Manifest: SHA-256 of all the other files, written last
+        manifest_path = folder / "manifest.json"
+        files = {
+            path.relative_to(folder).as_posix(): _sha256(path)
+            for path in sorted(folder.rglob("*"))
+            if path.is_file() and path != manifest_path
+        }
+        _write_json(manifest_path, {"algorithm": "sha256", "files": files})
+
+    def _check_loaded(self, folder: Path, metadata: Dict[str, Any], structure: Dict[str, Any]) -> None:
+        # The loaded analysis must have the saved summary (metadata.json) and structures (structure.json).
+        # Only the keys of the saved summary are compared (a previous format may lack some of them).
+        saved_summary = metadata.get("summary")
+        saved_summary = saved_summary if isinstance(saved_summary, dict) else {}
+        saved_structures = structure.get("structures")
+        saved_structures = saved_structures if isinstance(saved_structures, dict) else {}
+        mismatches = [
+            f"{key}: saved {saved_summary[key]!r}, loaded {value!r}"
+            for key, value in self._summary().items()
+            if key in saved_summary and saved_summary[key] != value
+        ]
+        for kind in _STRUCTURE_KINDS:
+            loaded = self.compute_structure(kind)
+            if saved_structures.get(kind) != loaded:
+                mismatches.append(f"structure of the {kind}s: saved {saved_structures.get(kind)!r}, loaded {loaded!r}")
+        if mismatches:
+            raise ValueError(
+                f"Inconsistent loading of '{folder}': the loaded analysis differs from the save "
+                f"({'; '.join(mismatches)}). The save may have been modified or written by an "
+                f"incompatible version."
+            )
 
     @staticmethod
     def _validate_text(value: Optional[str], name: str) -> Optional[str]:
         if value is not None and not isinstance(value, str):
             raise TypeError(f"Input '{name}' must be a string or None. Got type {type(value)}.")
         return value
+
+    @staticmethod
+    def _prepare_target(path: Path, *, overwrite: bool, make_dirs: bool, is_folder: bool) -> None:
+        # Check that a save (folder or archive) can be written at 'path' and create its parent
+        if path.exists():
+            if not overwrite:
+                raise FileExistsError(f"'{path}' already exists. Use overwrite=True to replace it.")
+            if is_folder and _read_metadata(path) is None:
+                raise FileExistsError(
+                    f"'{path}' exists but is not a SDIC save (no metadata.json of the format "
+                    f"{_FORMAT_NAME!r}): it is not replaced, to avoid deleting unrelated data."
+                )
+            if not is_folder and path.is_dir():
+                raise FileExistsError(f"'{path}' is a folder: it cannot be replaced by an archive.")
+        if not path.parent.is_dir():
+            if not make_dirs:
+                raise FileNotFoundError(f"The parent folder '{path.parent}' does not exist. Use make_dirs=True to create it.")
+            path.parent.mkdir(parents=True, exist_ok=True)
 
     def to_folder(
         self,
@@ -1587,8 +1623,8 @@ class SDICAnalysis(object):
         .. code-block:: text
 
             folder/
-            ├── metadata.json        format, versions, date, title, description, summary
-            ├── README.txt           the same summary, readable by a human
+            ├── metadata.json        format, pysdic version, date, title, description, summary
+            ├── README.txt           the same information, readable by a human
             ├── manifest.json        SHA-256 of all the files (checked at the loading)
             ├── structure.json       cameras, views and frames as indices of the atoms,
             │                        and the structures of the analysis
@@ -1605,9 +1641,9 @@ class SDICAnalysis(object):
         indices of the file names have the number of digits of the largest index (for
         example 4 digits for 1543 frames).
 
-        The save is safe: the content is written in a temporary folder next to ``folder``
-        (named with the current time), which is renamed at the end. If an error occurs, the
-        temporary folder is removed and an existing ``folder`` is unchanged.
+        The save is safe: the content is written in a temporary folder next to ``folder``,
+        which is renamed at the end. If an error occurs, the temporary folder is removed and
+        an existing ``folder`` is unchanged.
 
         .. note::
 
@@ -1661,47 +1697,25 @@ class SDICAnalysis(object):
         title = self._validate_text(title, "title")
         description = self._validate_text(description, "description")
         export_vtk = _validate_bool(export_vtk, "export_vtk")
+        self._prepare_target(folder, overwrite=overwrite, make_dirs=make_dirs, is_folder=True)
 
-        if folder.exists():
-            if not overwrite:
-                raise FileExistsError(
-                    f"The folder '{folder}' already exists. Use overwrite=True to replace it (only "
-                    f"an existing SDIC save can be replaced)."
-                )
-            if not folder.is_dir() or not _is_sdic_folder(folder):
-                raise FileExistsError(
-                    f"'{folder}' exists but is not a SDIC save (no metadata.json of the format "
-                    f"{_FORMAT_NAME!r}): it is not replaced, to avoid deleting unrelated data."
-                )
-        parent = folder.parent
-        if not parent.is_dir():
-            if not make_dirs:
-                raise FileNotFoundError(
-                    f"The parent folder '{parent}' does not exist. Use make_dirs=True to create it."
-                )
-            parent.mkdir(parents=True, exist_ok=True)
-
-        stamp = _timestamp()
-        temporary = parent / f".{folder.name}.tmp-{stamp}"
-        temporary.mkdir()
+        # Write in a temporary folder next to 'folder', then swap it with the existing save (if any)
+        temporary = Path(tempfile.mkdtemp(prefix=f".{folder.name}.tmp-", dir=folder.parent))
         try:
             self._write_folder(temporary, title, description, export_vtk)
-        except BaseException:
+            if not folder.exists():
+                os.replace(temporary, folder)
+                return
+            old = temporary.with_name(temporary.name + ".old")
+            os.replace(folder, old)
+            try:
+                os.replace(temporary, folder)
+            except BaseException:
+                os.replace(old, folder)  # Restore the previous save
+                raise
+            shutil.rmtree(old)
+        finally:
             shutil.rmtree(temporary, ignore_errors=True)
-            raise
-
-        if not folder.exists():
-            os.replace(temporary, folder)
-            return
-        old = parent / f".{folder.name}.old-{stamp}"
-        os.replace(folder, old)
-        try:
-            os.replace(temporary, folder)
-        except BaseException:
-            os.replace(old, folder)  # Restore the previous save
-            shutil.rmtree(temporary, ignore_errors=True)
-            raise
-        shutil.rmtree(old)
 
     @classmethod
     def from_folder(
@@ -1714,10 +1728,13 @@ class SDICAnalysis(object):
         r"""
         Load an analysis saved with :meth:`to_folder`.
 
-        The atoms are loaded first (mesh, images, extrinsics, distortions, intrinsics), then
-        the cameras and the views are rebuilt with the same sharing as the saved analysis,
-        and the analysis is created with its times and displacements. Finally, the
-        structures of the loaded analysis (:meth:`compute_structure`) are compared with the
+        A save written by a previous version of pysdic (before 2.1.0) is converted to the
+        current format while loading, with a :class:`PreviousSaveWarning` (the files are not
+        modified: save the analysis again to update the save). The atoms are loaded first
+        (mesh, images, extrinsics, distortions, intrinsics), then the cameras and the views
+        are rebuilt with the same sharing as the saved analysis, and the analysis is created
+        with its times and displacements. Finally, the summary (``metadata.json``) and the
+        structures (:meth:`compute_structure`) of the loaded analysis are compared with the
         saved ones.
 
         Parameters
@@ -1742,27 +1759,27 @@ class SDICAnalysis(object):
         FileNotFoundError
             If the folder does not exist.
 
+        DeprecatedError
+            If the save was written by a version of pysdic whose format is deprecated.
+
         ValueError
-            If the folder is not a SDIC save, its format version is not supported, a file
-            is missing or modified (with ``check_integrity``), or the structures of the
-            loaded analysis differ from the saved ones (inconsistent loading).
+            If the folder is not a SDIC save, it was written by an unsupported version of
+            pysdic, a file is missing or modified (with ``check_integrity``), or the loaded
+            analysis differs from the saved summary and structures (inconsistent loading).
 
         """
         folder = _validate_path(folder, "folder", must_be_dir=True)
         check_integrity = _validate_bool(check_integrity, "check_integrity")
         auto_construct = _validate_bool(auto_construct, "auto_construct")
-        if not _is_sdic_folder(folder):
+        metadata = _read_metadata(folder)
+        if metadata is None:
             raise ValueError(f"'{folder}' is not a SDIC save (no metadata.json of the format {_FORMAT_NAME!r}).")
-        metadata = _read_json(folder / "metadata.json")
-        version = metadata.get("format_version")
-        if version != _FORMAT_VERSION:
-            raise ValueError(
-                f"The SDIC save '{folder}' has the format version {version!r}, but this version of "
-                f"pysdic ({__version__}) reads the format version {_FORMAT_VERSION}."
-            )
+        version = _check_version(folder, metadata)
         if check_integrity:
             _check_manifest(folder)
         structure = _read_json(folder / "structure.json")
+        if version < parse_version(_MIN_VERSION):
+            metadata, structure = load_previous_save(folder, metadata, structure, version)
 
         # Atoms
         mesh = Mesh.from_npz_file(folder / structure["mesh"])
@@ -1791,16 +1808,7 @@ class SDICAnalysis(object):
             displacements = {int(frame): arrays[key] for frame, key in structure["displacements"].items()}
 
         analysis = cls(mesh, frames, times=times, displacements=displacements)
-
-        # The loaded analysis must have exactly the saved structures
-        for kind in _STRUCTURE_KINDS:
-            loaded, saved = analysis.compute_structure(kind), structure["structures"][kind]
-            if loaded != saved:
-                raise ValueError(
-                    f"Inconsistent loading of '{folder}': the structure of the {kind}s of the loaded "
-                    f"analysis {loaded} differs from the saved one {saved}. The save may have been "
-                    f"modified or written by an incompatible version."
-                )
+        analysis._check_loaded(folder, metadata, structure)
         return analysis
 
     def to_archive(
@@ -1820,7 +1828,7 @@ class SDICAnalysis(object):
 
         The archive contains exactly the files of :meth:`to_folder` (at its root), including
         ``manifest.json``: the integrity of the content is checked at the loading. It is
-        written in a temporary file next to ``file_path`` and renamed at the end, so an
+        written in a temporary folder next to ``file_path`` and renamed at the end, so an
         existing archive is unchanged if an error occurs.
 
         Parameters
@@ -1857,36 +1865,21 @@ class SDICAnalysis(object):
         title = self._validate_text(title, "title")
         description = self._validate_text(description, "description")
         export_vtk = _validate_bool(export_vtk, "export_vtk")
+        self._prepare_target(file_path, overwrite=overwrite, make_dirs=make_dirs, is_folder=False)
 
-        if file_path.exists():
-            if file_path.is_dir():
-                raise FileExistsError(f"'{file_path}' is a folder: it cannot be replaced by an archive.")
-            if not overwrite:
-                raise FileExistsError(f"The file '{file_path}' already exists. Use overwrite=True to replace it.")
-        parent = file_path.parent
-        if not parent.is_dir():
-            if not make_dirs:
-                raise FileNotFoundError(
-                    f"The parent folder '{parent}' does not exist. Use make_dirs=True to create it."
-                )
-            parent.mkdir(parents=True, exist_ok=True)
-
-        stamp = _timestamp()
-        temporary_folder = parent / f".{file_path.name}.tmp-{stamp}"
-        temporary_file = parent / f".{file_path.name}.tmp-{stamp}.zip"
-        temporary_folder.mkdir()
-        try:
-            self._write_folder(temporary_folder, title, description, export_vtk)
+        # Write the save and its archive in a temporary folder next to 'file_path' (same file
+        # system: the final rename is atomic), removed in all cases
+        with tempfile.TemporaryDirectory(prefix=f".{file_path.name}.tmp-", dir=file_path.parent) as temporary:
+            content = Path(temporary) / "content"
+            content.mkdir()
+            self._write_folder(content, title, description, export_vtk)
+            archive_path = Path(temporary) / "archive.zip"
             mode = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
-            with zipfile.ZipFile(temporary_file, "w", compression=mode) as archive:
-                for path in sorted(temporary_folder.rglob("*")):
+            with zipfile.ZipFile(archive_path, "w", compression=mode) as archive:
+                for path in sorted(content.rglob("*")):
                     if path.is_file():
-                        archive.write(path, path.relative_to(temporary_folder).as_posix())
-            os.replace(temporary_file, file_path)
-        finally:
-            shutil.rmtree(temporary_folder, ignore_errors=True)
-            if temporary_file.exists():
-                temporary_file.unlink()
+                        archive.write(path, path.relative_to(content).as_posix())
+            os.replace(archive_path, file_path)
 
     @classmethod
     def from_archive(
@@ -1933,8 +1926,7 @@ class SDICAnalysis(object):
             raise ValueError(f"'{file_path}' is not a ZIP archive of a SDIC save.")
         with zipfile.ZipFile(file_path, "r") as archive:
             for name in archive.namelist():
-                parts = Path(name).parts
-                if Path(name).is_absolute() or ".." in parts or name.startswith(("/", "\\")):
+                if Path(name).is_absolute() or ".." in Path(name).parts or name.startswith(("/", "\\")):
                     raise ValueError(f"The archive '{file_path}' contains an unsafe path: {name!r}.")
             with tempfile.TemporaryDirectory() as temporary:
                 archive.extractall(temporary)
