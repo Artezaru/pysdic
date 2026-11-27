@@ -24,7 +24,6 @@ from numbers import Integral, Real
 from typing import Any, Dict, Mapping, Optional, Tuple
 
 import numpy
-from numpy.typing import ArrayLike
 import matplotlib.pyplot as plt
 
 from ..geometry.integration_points import IntegrationPoints

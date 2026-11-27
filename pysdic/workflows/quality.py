@@ -304,7 +304,7 @@ def compute_uncertainty(
     parameters : Optional[ArrayLike], optional
         The complete vector of unknowns at convergence (with a parametrization,
         ``parametrization.p_func(result.parameters)``). By default, the current state of the
-        analysis (:meth:`pysdic.SDICCorrelationTerm.pack`).
+        analysis (:meth:`pysdic.SDICAnalysis.pack_unknowns`).
 
     image_noise_std : Optional[Real], optional
         The standard deviation of the noise of the images (gray levels). By default, the
@@ -363,7 +363,7 @@ def compute_uncertainty(
         if numpy.any((vertices < 0) | (vertices >= N_v)):
             raise ValueError(f"Input 'vertices' must be in [0, {N_v - 1}].")
     if parameters is None:
-        parameters = correlation.pack()
+        parameters = analysis.pack_unknowns(unknowns)
     parameters = _as_array(parameters, "parameters", numpy.float64, shape=(n_unknowns,), finite=True)
 
     # Jacobian of the finite residuals and weights of the rows

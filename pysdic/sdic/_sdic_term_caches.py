@@ -28,6 +28,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #   (``use_cache=True``).
 # - :class:`SDICTermSparseStructure`: the CSR structure of the displacement blocks of the
 #   Jacobian, fixed for the life of the term (always used).
+# - :class:`SDICTermGeometry`: the data of the mesh and the integration points used by a term
+#   (shape functions, weights, sparse structure), shared by the terms created with the with_*
+#   methods (same mesh and same integration points, both locked).
 #
 # The state of the analysis is read through the displacements of the frames and the
 # ``parameters`` of the transformations (the other attributes of the transformations are fixed).
@@ -35,10 +38,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import hashlib
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy
 import scipy.sparse
+
+from .. import fem
 
 # Largest index of a sparse matrix stored with numpy.int32 indices
 _INT32_MAX = numpy.iinfo(numpy.int32).max
@@ -339,3 +345,57 @@ class SDICTermSparseStructure:
             f"n_dimensions={self.n_dimensions}, entries_per_row={self.entries_per_row}, "
             f"channels={sorted(self._layouts)})"
         )
+
+
+# =============================================================================
+# Geometry of a term
+# =============================================================================
+@dataclass(frozen=True, eq=False)
+class SDICTermGeometry:
+    r"""
+    The data of a SDIC term that only depend on the mesh and on the integration points: the
+    vertices and the shape functions of the points, their weights and the sparse structure of
+    the displacement blocks of the Jacobian.
+
+    The mesh (locked by the analysis) and the integration points (locked by the term) cannot be
+    modified: while the same objects are used and locked, these data are valid. They are shared
+    by the terms created with ``with_unknowns``, ``with_pairings`` and ``with_options`` (not with
+    ``with_integration_points``), after the check of :meth:`is_valid_for`.
+
+    .. important::
+
+        Internal use only. The integration points are validated (consistent with the mesh, all
+        located) before :meth:`compute`.
+
+    """
+
+    mesh: Any
+    integration_points: Any
+    point_vertices: numpy.ndarray  # (N_p, N_vpe)
+    shape_functions: numpy.ndarray  # (N_p, N_vpe)
+    sqrt_weights: numpy.ndarray  # (N_p,)
+    structure: SDICTermSparseStructure
+
+    @classmethod
+    def compute(cls, mesh: Any, integration_points: Any) -> SDICTermGeometry:
+        point_vertices = mesh.elements[integration_points.element_indices]
+        shape_functions = fem.compute_shape_functions(integration_points.natural_coordinates, mesh.element_type)
+        sqrt_weights = numpy.sqrt(integration_points.weights)
+        structure = SDICTermSparseStructure(
+            mesh.elements, integration_points.element_indices, shape_functions, mesh.n_vertices, mesh.n_dimensions
+        )
+        for array in (point_vertices, shape_functions, sqrt_weights):
+            array.flags.writeable = False
+        return cls(mesh, integration_points, point_vertices, shape_functions, sqrt_weights, structure)
+
+    def is_valid_for(self, mesh: Any, integration_points: Any) -> bool:
+        # The same objects (identity), both locked: their data cannot have changed since compute
+        return (
+            self.mesh is mesh
+            and self.integration_points is integration_points
+            and bool(mesh.is_locked)
+            and bool(integration_points.is_locked)
+        )
+
+    def __repr__(self) -> str:
+        return f"SDICTermGeometry(n_points={self.sqrt_weights.size}, structure={self.structure!r})"

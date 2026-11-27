@@ -21,17 +21,15 @@ from __future__ import annotations
 
 import collections
 import warnings
-from numbers import Integral, Real
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple, Union
+from numbers import Real
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 from numpy.typing import ArrayLike
 
 import numpy
 import scipy.sparse
 import pysolvegn
 
-from .. import fem
 from ..geometry.integration_points import IntegrationPoints
-from .._optionals import import_optional
 from .._validation import _as_array, _validate_bool, _validate_choice, _validate_integer, _validate_real
 from .gl_correction import (
     GrayLevelGroups,
@@ -41,7 +39,7 @@ from .gl_correction import (
     znssd_correction,
     znssd_correction_exact,
 )
-from ._sdic_term_caches import SDICTermOperatorsCache, SDICTermReferenceProjectionCache, SDICTermSparseStructure
+from ._sdic_term_caches import SDICTermGeometry, SDICTermOperatorsCache, SDICTermReferenceProjectionCache, SDICTermSparseStructure
 from .pairing import Pairing
 from .residuals import PairingResiduals, _pairing_residuals
 from ._sdic_validation import _validate_gl_correction, _validate_gray_level_groups, _validate_located_integration_points
@@ -182,6 +180,7 @@ def _build_sdic_operators(
     sparse: bool = True,
     _use_cache: bool = False,
     _cache_length: int = 1,
+    _geometry: Optional[SDICTermGeometry] = None,
 ) -> Tuple[Callable, Callable, Optional[Callable]]:
     r"""
     Build the operators of the least squares problem on the displacements of the optimized
@@ -244,9 +243,20 @@ def _build_sdic_operators(
     # ------------- mesh and integration points -------------
     _validate_located_integration_points(mesh, integration_points)
     N_p = integration_points.n_points
-    point_vertices = mesh.elements[integration_points.element_indices]  # (N_p, N_vpe)
-    shape_functions = fem.compute_shape_functions(integration_points.natural_coordinates, mesh.element_type)  # (N_p, N_vpe)
-    sqrt_weights = numpy.sqrt(integration_points.weights)  # (N_p,)
+    # The data of the mesh and the points: shared with the term this term was created from (with_*), only if
+    # it is the same mesh and the same integration points, both locked (their data cannot have changed)
+    if _geometry is None:
+        geometry = SDICTermGeometry.compute(mesh, integration_points)
+    elif _geometry.is_valid_for(mesh, integration_points):
+        geometry = _geometry
+    else:
+        raise RuntimeError(
+            "Internal error: the shared geometry of a SDIC term was computed for another mesh or other "
+            "integration points (or they are not locked anymore). Please report this bug."
+        )
+    point_vertices = geometry.point_vertices  # (N_p, N_vpe)
+    shape_functions = geometry.shape_functions  # (N_p, N_vpe)
+    sqrt_weights = geometry.sqrt_weights  # (N_p,)
     reference_coordinates = mesh.coordinates
 
     def locate(displacement: numpy.ndarray) -> numpy.ndarray:
@@ -269,11 +279,7 @@ def _build_sdic_operators(
     n_total_equations = int(equation_starts[-1])
 
     # Structure of the displacement blocks (fixed: the integration points are locked by the term)
-    structure = (
-        SDICTermSparseStructure(mesh.elements, integration_points.element_indices, shape_functions, N_v, E)
-        if optimized_frames
-        else None
-    )
+    structure = geometry.structure if optimized_frames else None
 
     # Reference views: no unknown in their frame nor in their camera, their projection does not
     # depend on the unknowns (kept by the reference projection cache with use_cache=True)
@@ -376,23 +382,24 @@ def _build_sdic_operators(
     ]
 
     def check_transformations() -> None:
-        # The optimized transformations must still have parameters and be unlocked
+        # No transformation of the analysis is locked (the parameters of the optimized transformations
+        # set during the evaluation can always be restored in the 'finally'), and the optimized
+        # transformations still have parameters
+        if analysis._has_locked_transformation():
+            raise RuntimeError(
+                f"The transformations of the cameras {analysis._describe_locked_transformations()} were "
+                f"locked after the creation of the analysis. The term sets the parameters of its optimized "
+                f"transformations during each evaluation and restores them afterwards: all the transformations "
+                f"of the analysis must remain modifiable. Create a new analysis with cameras using unlocked "
+                f"transformations (e.g. the ReparametrizedTransformation that owns a locked transformation), "
+                f"and a new term on it."
+            )
         for entry, transformation in zip(entries, objects):
-            name = type(transformation).__name__
             if transformation.parameters is None:
                 raise ValueError(
-                    f"The optimized transformation {entry} ({name}) has no parameters anymore: they "
-                    f"were unset after the creation of the term. Set them again (for example with "
+                    f"The optimized transformation {entry} ({type(transformation).__name__}) has no parameters "
+                    f"anymore: they were unset after the creation of the term. Set them again (for example with "
                     f"analysis.set_transformation_parameters) or build a new term."
-                )
-            if transformation.is_locked:
-                reason = transformation.locked_message
-                raise RuntimeError(
-                    f"The optimized transformation {entry} ({name}) was locked after the creation "
-                    f"of the term, so the term cannot set its parameters during the evaluation. "
-                    + (f"Reason of the lock: {reason} " if reason else "")
-                    + "Build a new term without this transformation (or with the object that "
-                    "owns it, for example its ReparametrizedTransformation)."
                 )
 
     def assemble(parameters: numpy.ndarray, requested: Tuple[str, ...]) -> Dict[str, Any]:
@@ -602,7 +609,12 @@ def _build_sdic_operators(
             for transformation, values in zip(objects, saved):
                 transformation.parameters = values
 
-    caches = {"operators": operators_cache, "reference_projections": reference_cache, "sparse_structure": structure}
+    caches = {
+        "operators": operators_cache,
+        "reference_projections": reference_cache,
+        "sparse_structure": structure,
+        "geometry": geometry,
+    }
     for function in functions:
         if function is not None:
             function._sdic_term_caches = caches
@@ -679,8 +691,11 @@ class SDICCorrelationTerm:
 
     **Immutability.** The configuration of the term cannot be changed: :meth:`with_unknowns`,
     :meth:`with_pairings`, :meth:`with_integration_points` and :meth:`with_options` create a new
-    term with the same configuration except the given changes (new caches and structures; the
-    gray level groups given with ``gray_level_groups`` are shared). The objects of a problem
+    term with the same configuration except the given changes (new caches; the gray level groups
+    given with ``gray_level_groups`` are shared). The shape functions, the weights and the sparse
+    structure of the points only depend on the mesh and on the integration points, both locked:
+    they are shared by the new terms of :meth:`with_unknowns`, :meth:`with_pairings` and
+    :meth:`with_options`, and computed again by :meth:`with_integration_points`. The objects of a problem
     must share the same analysis and unknowns objects: build the regularization and the
     parametrization on the same new unknowns (their ``with_unknowns``), and check them with
     :func:`pysdic.check_same_problem`.
@@ -716,8 +731,10 @@ class SDICCorrelationTerm:
       the cameras that use them, then restored: the analysis is never modified by an
       evaluation. Apply the result with :meth:`pysdic.SDICAnalysis.apply_unknowns` (or
       ``parametrization.reparametrized_apply`` with a parametrization).
-    - At each evaluation, the optimized transformations must still have parameters and must not
-      have been locked after the creation of the term (an explicit error is raised otherwise).
+    - At each evaluation (residuals, Jacobian, gradient, Hessian, cost, :meth:`compute_residuals`),
+      no transformation of the analysis must have been locked after its creation, and the optimized
+      transformations must still have parameters (an explicit error is raised otherwise, before any
+      parameter is set: they can always be restored after the evaluation).
 
     **Jacobian.** For each view of a pairing, the Jacobian of its gray levels is:
 
@@ -995,7 +1012,10 @@ class SDICCorrelationTerm:
         filter_nans: bool = True,
         sparse: bool = True,
         use_cache: bool = False,
+        _geometry: Optional[SDICTermGeometry] = None,
     ) -> None:
+        # _geometry (private): the data of the mesh and the points of the term this one is created from by a
+        # with_* method (see SDICTermGeometry), checked before use. Never given by the user.
         layout = _validate_problem(analysis, unknowns)
         if not isinstance(pairings, (list, tuple)):
             raise TypeError(f"Input 'pairings' must be a list or a tuple of Pairing. Got type {type(pairings)}.")
@@ -1025,6 +1045,7 @@ class SDICCorrelationTerm:
             filter_nans=filter_nans,
             sparse=sparse,
             _use_cache=use_cache,
+            _geometry=_geometry,
         )
         if mode == "rJ":
             term = pysolvegn.Term.from_rJ(
@@ -1050,6 +1071,7 @@ class SDICCorrelationTerm:
         }
         self._term = term
         self._caches = func_1._sdic_term_caches
+        self._geometry = self._caches["geometry"]
         self._values = func_1._sdic_term_values
 
     # ------------------------------------------------------------------ New terms
@@ -1074,14 +1096,18 @@ class SDICCorrelationTerm:
             self._integration_points,
             self._pairings if pairings is None else pairings,
             **self._options,
+            _geometry=self._geometry,
         )
 
     def with_pairings(self, pairings: Sequence[Pairing]) -> SDICCorrelationTerm:
         r"""A new term with other pairings, the same unknowns, integration points and options."""
-        return SDICCorrelationTerm(self._analysis, self._unknowns, self._integration_points, pairings, **self._options)
+        return SDICCorrelationTerm(
+            self._analysis, self._unknowns, self._integration_points, pairings, **self._options, _geometry=self._geometry
+        )
 
     def with_integration_points(self, integration_points: IntegrationPoints) -> SDICCorrelationTerm:
-        r"""A new term with other integration points, the same unknowns, pairings and options."""
+        r"""A new term with other integration points, the same unknowns, pairings and options (the shape
+        functions and the sparse structure are computed again for the new points)."""
         return SDICCorrelationTerm(self._analysis, self._unknowns, integration_points, self._pairings, **self._options)
 
     def with_options(self, **changes: Any) -> SDICCorrelationTerm:
@@ -1093,7 +1119,12 @@ class SDICCorrelationTerm:
         if unknown:
             raise TypeError(f"Unknown options {unknown}. Valid options: {list(self._OPTION_KEYS)}.")
         return SDICCorrelationTerm(
-            self._analysis, self._unknowns, self._integration_points, self._pairings, **{**self._options, **changes}
+            self._analysis,
+            self._unknowns,
+            self._integration_points,
+            self._pairings,
+            **{**self._options, **changes},
+            _geometry=self._geometry,
         )
 
     # ------------------------------------------------------------------ Properties

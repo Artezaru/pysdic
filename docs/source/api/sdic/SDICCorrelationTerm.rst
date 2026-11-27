@@ -22,8 +22,9 @@ the user, which does not know the analysis), the integration points, the pairing
 correction, weight, loss, sparse matrices, caches).
 
 A term is **immutable**: the methods below create a new term with the same configuration except the given changes
-(new caches and structures; the gray level groups given with ``gray_level_groups`` are shared). The previous term
-stays valid on its own unknowns.
+(new caches; the gray level groups given with ``gray_level_groups`` are shared). The shape functions, the weights and
+the sparse structure of the integration points are shared too (the mesh and the points are locked), except by
+:meth:`SDICCorrelationTerm.with_integration_points`. The previous term stays valid on its own unknowns.
 
 .. code-block:: python
 

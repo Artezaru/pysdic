@@ -222,7 +222,8 @@ class SDICAnalysis(object):
         creation: the views, cameras and images are immutable, and the mesh is locked.
         Only the displacements (:meth:`set_displacement`) and the parameters of the
         transformations of the cameras (:meth:`set_transformation_parameters`) can be
-        modified. Use :meth:`with_mesh`, :meth:`with_views`, :meth:`with_frame_views` and
+        modified: no transformation of the cameras can be locked (checked at the creation,
+        before each evaluation of a term and in :meth:`apply_unknowns`). Use :meth:`with_mesh`, :meth:`with_views`, :meth:`with_frame_views` and
         :meth:`with_times` to get a new analysis with another mesh, other views or other
         times: the new analysis shares the other data (no copy).
 
@@ -261,8 +262,9 @@ class SDICAnalysis(object):
     ValueError
         If the mesh has no element type, there is no frame, the input dimension of a
         camera is not the dimension of the mesh, the times are invalid, a displacement is
-        invalid, or the transformations of the cameras are not independent (see
-        :meth:`check_consistency`).
+        invalid, the transformations of the cameras are not independent (see
+        :meth:`check_consistency`), or a transformation of the cameras is locked (their parameters
+        must remain modifiable: the terms and the solvers set them).
 
     IndexError
         If a frame of ``displacements`` is out of range.
@@ -332,6 +334,15 @@ class SDICAnalysis(object):
         self._times = times
         self._structures = {kind: self._compute_structure(kind) for kind in _STRUCTURE_KINDS}
         self.check_consistency()
+        if self._has_locked_transformation():
+            raise ValueError(
+                f"The transformations of the cameras {self._describe_locked_transformations()} are locked. The "
+                f"parameters of all the transformations of an SDIC analysis must remain modifiable: the terms "
+                f"set the parameters of their optimized transformations during each evaluation (and restore them "
+                f"afterwards), and the results of the solvers are written with apply_unknowns or "
+                f"set_transformation_parameters. Use in the camera the object that owns the locked transformation "
+                f"(e.g. its ReparametrizedTransformation), or an unlocked copy (transformation.copy())."
+            )
         if not mesh.is_locked:
             mesh._set_locked(True, message=_MESH_LOCK_MESSAGE)
 
@@ -1174,9 +1185,20 @@ class SDICAnalysis(object):
     def apply_unknowns(self, unknowns: SDICUnknowns, parameters: ArrayLike) -> None:
         r"""
         Write a complete vector of unknowns (e.g. ``result.parameters`` without parametrization)
-        in the analysis: the displacements of the optimized frames (:meth:`set_displacement`,
-        replaced, not added) and the parameters of the optimized transformations
-        (:meth:`set_transformation_parameters`, all the cameras using them are updated).
+        in the analysis: the displacements of the optimized frames (replaced, not added) and the
+        parameters of the optimized transformations (all the cameras using them are updated).
+
+        The writing is **atomic**: if an error is raised, the analysis is unchanged.
+
+        1. Everything that can be checked without writing is checked first: no transformation of
+           the cameras is locked (a transformation locked after the creation of the analysis raises
+           an error here, before any writing: the rollback of the step 2 can always restore the
+           parameters), the unknowns (:meth:`validate_unknowns`), the shape of the vector and the
+           finite values.
+        2. The parameters of the transformations are written one by one. If a transformation
+           refuses its parameters (e.g. values out of its domain), the transformations already
+           written get their previous parameters back and the error is raised again.
+        3. The displacements are written last (this step cannot fail).
 
         .. seealso::
 
@@ -1189,14 +1211,94 @@ class SDICAnalysis(object):
             The unknowns.
 
         parameters : ArrayLike
-            The vector of unknowns, of shape :math:`(N_f N_v E + \sum n_p,)` (:meth:`n_unknowns`).
+            The vector of unknowns, of shape :math:`(N_f N_v E + \sum n_p,)` (:meth:`n_unknowns`),
+            with finite values.
+
+        Raises
+        ------
+        ValueError
+            If the unknowns are not valid (e.g. a locked transformation), the vector has a wrong
+            shape or non-finite values, or a transformation refuses its parameters. The analysis
+            is unchanged.
+
+        RuntimeError
+            If a transformation of the cameras was locked after the creation of the analysis
+            (nothing is written), or, in a case that should not happen, if a transformation refused
+            its parameters and the previous parameters of another transformation could not be
+            restored (the analysis is then inconsistent: the message gives the transformations to
+            check).
 
         """
-        displacements, transformations = self.unpack_unknowns(unknowns, parameters)
+        # 1. Checks without writing
+        if self._has_locked_transformation():
+            raise RuntimeError(
+                f"Cannot apply the vector of unknowns: the transformations of the cameras "
+                f"{self._describe_locked_transformations()} were locked after the creation of the analysis. "
+                f"The parameters of the transformations of an analysis must remain modifiable (they could not "
+                f"be restored if the writing failed). Nothing was written in the analysis: create a new analysis "
+                f"with cameras using unlocked transformations (e.g. the ReparametrizedTransformation that owns a "
+                f"locked transformation)."
+            )
+        layout = self._unknowns_layout(unknowns)
+        parameters = _as_array(parameters, "parameters", numpy.float64, shape=(layout.n_unknowns,), finite=False)
+        non_finite = [
+            f"the displacement of the frame {frame}"
+            for frame, columns in layout.frame_slices.items()
+            if not numpy.all(numpy.isfinite(parameters[columns]))
+        ] + [
+            f"the parameters of the transformation {entry}"
+            for entry, columns in layout.transformation_slices.items()
+            if not numpy.all(numpy.isfinite(parameters[columns]))
+        ]
+        if non_finite:
+            raise ValueError(
+                f"Cannot apply the vector of unknowns: non-finite values in {', '.join(non_finite)}. "
+                f"Nothing was written in the analysis."
+            )
+        N_v, E = self._mesh.n_vertices, self._mesh.n_dimensions
+        displacements = {
+            frame: self._as_displacement(parameters[columns].reshape((N_v, E), order="F"), self._mesh)
+            for frame, columns in layout.frame_slices.items()
+        }
+
+        # 2. Transformations, with rollback of the ones already written
+        written: List[Tuple[Tuple[str, int], Transformation, numpy.ndarray]] = []
+        for (entry, columns), transformation in zip(layout.transformation_slices.items(), layout.transformations):
+            previous = transformation.parameters.copy()
+            try:
+                transformation.parameters = parameters[columns]
+            except BaseException as error:
+                self._restore_transformations(written, entry, error)
+                raise
+            written.append((entry, transformation, previous))  # Only once its writing succeeded
+
+        # 3. Displacements (already validated read-only copies: cannot fail)
         for frame, displacement in displacements.items():
-            self.set_displacement(frame, displacement)
-        for (kind, index), values in transformations.items():
-            self.set_transformation_parameters(kind, index, values)
+            self._displacements[frame] = displacement
+
+    @staticmethod
+    def _restore_transformations(
+        written: List[Tuple[Tuple[str, int], Transformation, numpy.ndarray]],
+        failed_entry: Tuple[str, int],
+        error: BaseException,
+    ) -> None:
+        # Give back their previous parameters to the transformations already written by apply_unknowns,
+        # after the transformation 'failed_entry' refused its parameters (the original error is raised
+        # by the caller). A failed restoration does not hide the original error: it is chained to it.
+        not_restored = []
+        for entry, transformation, previous in reversed(written):
+            try:
+                transformation.parameters = previous
+            except BaseException:
+                not_restored.append(entry)
+        if not_restored:
+            raise RuntimeError(
+                f"The transformation {failed_entry} refused its parameters ({type(error).__name__}: {error}), "
+                f"and the previous parameters of the transformations {not_restored}, already written, could "
+                f"not be restored: the analysis is inconsistent (the displacements were not written). Check "
+                f"these transformations (e.g. locked during the writing) and set their parameters again with "
+                f"set_transformation_parameters."
+            ) from error
 
     # ===================================================================
     # Structure
@@ -1430,6 +1532,35 @@ class SDICAnalysis(object):
 
         """
         self.get_transformation(kind, index).parameters = parameters
+
+    def _locked_transformations(self) -> List[Tuple[str, int]]:
+        # The transformations (kind, index) of the cameras that are locked
+        return [
+            (kind, index)
+            for kind in _TRANSFORMATION_KINDS
+            for index, transformation in enumerate(self._structure(kind)[1])
+            if transformation.is_locked
+        ]
+
+    def _has_locked_transformation(self) -> bool:
+        # Whether a transformation of the cameras is locked. None is locked at the creation of the analysis
+        # (error), but a transformation can be locked later (e.g. used by a ReparametrizedTransformation
+        # created after the analysis): checked before each evaluation of a term and in apply_unknowns, so
+        # that the parameters set during these operations can always be restored.
+        return any(
+            transformation.is_locked for kind in _TRANSFORMATION_KINDS for transformation in self._structure(kind)[1]
+        )
+
+    def _describe_locked_transformations(self) -> str:
+        # The locked transformations with their type and the reason of their lock, for the error messages
+        descriptions = []
+        for kind, index in self._locked_transformations():
+            transformation = self._structure(kind)[1][index]
+            reason = transformation.locked_message
+            descriptions.append(
+                f"{(kind, index)} ({type(transformation).__name__}" + (f", reason of the lock: {reason})" if reason else ")")
+            )
+        return "[" + "; ".join(descriptions) + "]"
 
     def check_consistency(self) -> None:
         r"""

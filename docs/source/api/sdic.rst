@@ -143,7 +143,8 @@ error.
 
    An evaluation of the term never modifies the analysis, it reads its current state (displacements of the reference
    frames, parameters of the transformations): apply a result with :meth:`pysdic.SDICAnalysis.apply_unknowns`. A term cannot be
-   modified: the ``with_*`` methods create a new term (new caches, new structures). The objects built on other
+   modified: the ``with_*`` methods create a new term (new caches; the data of the locked mesh and integration points
+   are shared, except by ``with_integration_points``). The objects built on other
    unknowns (regularization, parametrization) must be built on the same new unknowns (their own ``with_unknowns``).
 
 .. note::

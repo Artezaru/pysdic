@@ -75,7 +75,9 @@ The usual acquisition setups can be built directly with the constructors functio
      (``mesh.copy()``) and use :meth:`SDICAnalysis.with_mesh` to analyse another mesh. A mesh already locked (e.g. by
      another analysis) is accepted and shared.
    - The ``with_*`` methods create a new analysis sharing everything else (images, cameras, displacements).
-   - The displacements and the parameters of the transformations remain modifiable.
+   - The displacements and the parameters of the transformations remain modifiable: no transformation of the cameras
+     can be locked (error at the creation; checked again before each evaluation of a term and in
+     :meth:`SDICAnalysis.apply_unknowns`, which raise an error if a transformation was locked after the creation).
    - The terms and parametrizations built on an analysis keep this analysis: an analysis created with a ``with_*``
      method needs new terms (the same :class:`pysdic.SDICUnknowns` can be reused).
 
