@@ -171,6 +171,7 @@ from .synthetic.synthetic_image import (
 # SDIC
 # =============================================================================
 from .sdic.sdic_analysis import SDICAnalysis
+from .sdic._load_previous_sdic_analysis import PreviousSaveWarning, DeprecatedError
 from .sdic.setups import (
     create_multicamera_analysis,
     create_bicamera_analysis,
@@ -313,6 +314,8 @@ __all__ = [
     "generate_synthetic_image",
     # SDIC
     "SDICAnalysis",
+    "PreviousSaveWarning",
+    "DeprecatedError",
     "create_multicamera_analysis",
     "create_bicamera_analysis",
     "create_splitscreen_analysis",
