@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.sdic.sdic_unknowns &#8212; pysdic 2.2.0 documentation</title>
+    <title>pysdic.sdic.sdic_unknowns &#8212; pysdic 2.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.2.0 documentation</p>
+    <p class="title logo__title">pysdic 2.3.0 documentation</p>
   
 </a></div>
     
@@ -369,7 +369,8 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_integer</span>
 
-<span class="c1"># The kinds of transformations that can be optimized (see pysdic.SDICAnalysis.get_transformation)</span>
+<span class="c1"># The kinds of transformations of the cameras (see pysdic.SDICAnalysis.get_transformation): the only</span>
+<span class="c1"># definition, imported by the analysis and the terms</span>
 <span class="n">_TRANSFORMATION_KINDS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"extrinsic"</span><span class="p">,</span> <span class="s2">"distortion"</span><span class="p">,</span> <span class="s2">"intrinsic"</span><span class="p">)</span>
 
 
@@ -414,13 +415,11 @@
 <span class="sd">    are all created with the **same analysis and the same unknowns objects**, checked by</span>
 <span class="sd">    :func:`pysdic.check_same_problem` before solving.</span>
 
-<span class="sd">    .. warning::</span>
+<span class="sd">    .. seealso::</span>
 
-<span class="sd">        **With a parametrization, do not use** ``pack_unknowns``, ``unpack_unknowns`` **or**</span>
-<span class="sd">        ``apply_unknowns`` **on the vectors of the solver**: they are reduced vectors</span>
-<span class="sd">        :math:`\vec{q}`. Use ``parametrization.reparametrized_pack()``,</span>
-<span class="sd">        ``reparametrized_unpack(q)`` and ``reparametrized_apply(q)`` (see</span>
-<span class="sd">        :class:`pysdic.SDICFixedParametrization`).</span>
+<span class="sd">        With a parametrization, the vectors of the solver are reduced vectors :math:`\vec{q}`:</span>
+<span class="sd">        see :class:`pysdic.SDICFixedParametrization` (``reparametrized_pack``,</span>
+<span class="sd">        ``reparametrized_unpack``, ``reparametrized_apply``).</span>
 
 <span class="sd">    The object cannot be modified after its creation. It is compared by identity: the objects</span>
 <span class="sd">    of a problem must share the **same** :class:`SDICUnknowns` object.</span>
@@ -535,37 +534,6 @@
             <span class="sa">f</span><span class="s2">"optimized_transformations=</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transformations</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
         <span class="p">)</span></div>
 
-
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Selections (shared helpers, independent of the analysis)</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_as_vertex_selection</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">n_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="c1"># Sorted unique vertex indices from None (all), indices or a boolean mask (N_v,)</span>
-    <span class="k">if</span> <span class="n">vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">)</span>
-    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">vertices</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_vertices</span><span class="p">,):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"A boolean mask 'vertices' must have shape (</span><span class="si">{</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2">,). Got </span><span class="si">{</span><span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">vertices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">vertices</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'vertices' must be a 1D array of vertex indices or a boolean mask."</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">vertices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">vertices</span> <span class="o">&gt;=</span> <span class="n">n_vertices</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'vertices' must contain indices in [0, </span><span class="si">{</span><span class="n">n_vertices</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">]."</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_as_component_selection</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="c1"># Sorted unique component indices</span>
-    <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_dimensions</span><span class="p">)</span>
-    <span class="n">components</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">components</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">components</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">components</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'components' must be a sequence of component indices."</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">components</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">components</span> <span class="o">&gt;=</span> <span class="n">n_dimensions</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'components' must contain indices in [0, </span><span class="si">{</span><span class="n">n_dimensions</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">]."</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 </pre></div>
 
                 </article>

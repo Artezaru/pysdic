@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.sdic.residuals &#8212; pysdic 2.2.0 documentation</title>
+    <title>pysdic.sdic.residuals &#8212; pysdic 2.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.2.0 documentation</p>
+    <p class="title logo__title">pysdic 2.3.0 documentation</p>
   
 </a></div>
     
@@ -367,12 +367,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..geometry.integration_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegrationPoints</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..imaging.image_plotter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImagePlotter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_gl_correction</span><span class="p">,</span> <span class="n">_validate_gray_level_groups</span><span class="p">,</span> <span class="n">_validate_located_integration_points</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.gl_correction</span><span class="w"> </span><span class="kn">import</span> <span class="n">GrayLevelGroups</span><span class="p">,</span> <span class="n">compute_gray_level_groups</span><span class="p">,</span> <span class="n">matching_correction</span><span class="p">,</span> <span class="n">znssd_correction</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.pairing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pairing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICAnalysis</span>
@@ -554,15 +554,11 @@
 <span class="sd">        not all located, a displacement of the pairing is not set, or the gray level options are not valid.</span>
 
 <span class="sd">    """</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_term</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_gl_correction</span><span class="p">,</span> <span class="n">_validate_gray_level_groups</span>  <span class="c1"># Shared validation</span>
-
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
     <span class="n">analysis</span><span class="o">.</span><span class="n">validate_pairing</span><span class="p">(</span><span class="n">pairing</span><span class="p">)</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">mesh</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">validate_integration_points</span><span class="p">(</span><span class="n">integration_points</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">integration_points</span><span class="o">.</span><span class="n">is_located</span><span class="p">()):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The integration points must all be located (use 'remove_unlocated')."</span><span class="p">)</span>
+    <span class="n">_validate_located_integration_points</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">)</span>
     <span class="n">gl_options</span> <span class="o">=</span> <span class="n">_validate_gl_correction</span><span class="p">(</span><span class="n">gl_correction</span><span class="p">)</span>
     <span class="n">groups</span> <span class="o">=</span> <span class="n">_validate_gray_level_groups</span><span class="p">(</span><span class="n">gray_level_groups</span><span class="p">,</span> <span class="n">gl_correction</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">gl_options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">groups</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

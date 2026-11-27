@@ -98,6 +98,14 @@ analysis object and the same unknowns object**: :func:`pysdic.check_same_problem
 solving. ``pysolvegn`` only sees functions: two terms on different unknowns of the same size would be added without
 error.
 
+.. important::
+
+   The terms (:class:`pysdic.SDICCorrelationTerm`, :class:`pysdic.SDICTemporalRegularizationTerm`) **do not build the
+   vectors of unknowns**. The vectors are built only by the
+   analysis (complete vector :math:`\vec{p}`: ``pack_unknowns``, ``unpack_unknowns``, ``apply_unknowns``) and by the
+   parametrization (reduced vector :math:`\vec{q}`: ``reparametrized_pack``, ``reparametrized_unpack``,
+   ``reparametrized_apply``).
+
 .. seealso::
 
    The optimization problems are solved with the Gauss-Newton least squares solver ``pysolvegn``
@@ -135,7 +143,8 @@ error.
 
    An evaluation of the term never modifies the analysis, it reads its current state (displacements of the reference
    frames, parameters of the transformations): apply a result with :meth:`pysdic.SDICAnalysis.apply_unknowns`. A term cannot be
-   modified: the ``with_*`` methods create a new term (new caches, new structures). The objects built on other
+   modified: the ``with_*`` methods create a new term (new caches; the data of the locked mesh and integration points
+   are shared, except by ``with_integration_points``). The objects built on other
    unknowns (regularization, parametrization) must be built on the same new unknowns (their own ``with_unknowns``).
 
 .. note::

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.workflows.quality &#8212; pysdic 2.2.0 documentation</title>
+    <title>pysdic.workflows.quality &#8212; pysdic 2.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.2.0 documentation</p>
+    <p class="title logo__title">pysdic 2.3.0 documentation</p>
   
 </a></div>
     
@@ -658,7 +658,7 @@
 <span class="sd">    parameters : Optional[ArrayLike], optional</span>
 <span class="sd">        The complete vector of unknowns at convergence (with a parametrization,</span>
 <span class="sd">        ``parametrization.p_func(result.parameters)``). By default, the current state of the</span>
-<span class="sd">        analysis (:meth:`pysdic.SDICCorrelationTerm.pack`).</span>
+<span class="sd">        analysis (:meth:`pysdic.SDICAnalysis.pack_unknowns`).</span>
 
 <span class="sd">    image_noise_std : Optional[Real], optional</span>
 <span class="sd">        The standard deviation of the noise of the images (gray levels). By default, the</span>
@@ -717,7 +717,7 @@
         <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">vertices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">vertices</span> <span class="o">&gt;=</span> <span class="n">N_v</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'vertices' must be in [0, </span><span class="si">{</span><span class="n">N_v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">]."</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">parameters</span> <span class="o">=</span> <span class="n">correlation</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">pack_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_unknowns</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Jacobian of the finite residuals and weights of the rows</span>

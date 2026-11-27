@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.sdic.sdic_parametrization &#8212; pysdic 2.2.0 documentation</title>
+    <title>pysdic.sdic.sdic_parametrization &#8212; pysdic 2.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.2.0 documentation</p>
+    <p class="title logo__title">pysdic 2.3.0 documentation</p>
   
 </a></div>
     
@@ -373,6 +373,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..geometry.integration_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegrationPoints</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..geometry.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_bool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_problem</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICAnalysis</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICUnknowns</span>
 
@@ -380,7 +381,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internal helpers</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_build_solver_parametrization</span><span class="p">(</span><span class="n">p_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">jacobian_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_solver_parametrization</span><span class="p">(</span><span class="n">p_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">jacobian_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Parametrization</span><span class="p">:</span>
     <span class="c1"># The pysolvegn.Parametrization q -&gt; p of the functions (the only call to its constructor)</span>
     <span class="k">return</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Parametrization</span><span class="p">(</span><span class="n">parametric_func</span><span class="o">=</span><span class="n">p_func</span><span class="p">,</span> <span class="n">jacobian_func</span><span class="o">=</span><span class="n">jacobian_func</span><span class="p">)</span>
 
@@ -503,8 +504,7 @@
 <span class="sd">        :meth:`reparametrized_unpack` **and** :meth:`reparametrized_apply` **on the vectors of</span>
 <span class="sd">        the solver** (``p0`` and ``result.parameters`` are reduced vectors :math:`\vec{q}`).</span>
 <span class="sd">        ``analysis.pack_unknowns``, ``analysis.unpack_unknowns`` and</span>
-<span class="sd">        ``analysis.apply_unknowns`` (and ``pack``, ``unpack``, ``apply`` of the terms) work on</span>
-<span class="sd">        the complete vector :math:`\vec{p}`: giving them :math:`\vec{q}` raises an error (wrong</span>
+<span class="sd">        ``analysis.apply_unknowns`` work on the complete vector :math:`\vec{p}`: giving them :math:`\vec{q}` raises an error (wrong</span>
 <span class="sd">        size) or, worse, misplaces the values if the sizes happen to match.</span>
 
 <span class="sd">        .. code-block:: python</span>
@@ -585,11 +585,7 @@
         <span class="n">components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknowns</span><span class="p">,</span> <span class="n">SDICUnknowns</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'unknowns' must be a SDICUnknowns. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-        <span class="n">analysis</span><span class="o">.</span><span class="n">validate_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">_validate_problem</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span> <span class="o">=</span> <span class="n">analysis</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span> <span class="o">=</span> <span class="n">unknowns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sparse</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">)</span>
@@ -600,7 +596,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_components</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">components</span><span class="p">))</span>
         <span class="n">indices</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_indices</span> <span class="o">=</span> <span class="n">indices</span>
-        <span class="n">n_p</span><span class="p">,</span> <span class="n">n_q</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">),</span> <span class="n">indices</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">n_p</span><span class="p">,</span> <span class="n">n_q</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">,</span> <span class="n">indices</span><span class="o">.</span><span class="n">size</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span>
             <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_q</span><span class="p">),</span> <span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_q</span><span class="p">))),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_p</span><span class="p">,</span> <span class="n">n_q</span><span class="p">)</span>
         <span class="p">)</span>
@@ -614,12 +610,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SDICAnalysis</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""The analysis of the problem (shared with its terms)."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">parametrization</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parametrization</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Parametrization</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""The ``pysolvegn.Parametrization`` :math:`\vec{q} \mapsto \vec{p}`, to give to ``pysolvegn.solve``."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parametrization</span>
 

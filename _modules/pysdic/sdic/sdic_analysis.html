@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.sdic.sdic_analysis &#8212; pysdic 2.2.0 documentation</title>
+    <title>pysdic.sdic.sdic_analysis &#8212; pysdic 2.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.2.0 documentation</p>
+    <p class="title logo__title">pysdic 2.3.0 documentation</p>
   
 </a></div>
     
@@ -363,6 +363,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">types</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -370,6 +371,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
@@ -387,19 +389,18 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._load_previous_sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">PREVIOUS_FORMAT_NAMES</span><span class="p">,</span> <span class="n">load_previous_save</span><span class="p">,</span> <span class="n">parse_version</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.pairing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pairing</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICUnknowns</span><span class="p">,</span> <span class="n">_as_component_selection</span><span class="p">,</span> <span class="n">_as_vertex_selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_component_selection</span><span class="p">,</span> <span class="n">_as_vertex_selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">,</span> <span class="n">SDICUnknowns</span>
 
 
 <span class="c1"># Objects whose sharing between the views can be displayed (see SDICAnalysis.compute_structure)</span>
+<span class="c1"># (the kinds of transformations are defined once, in sdic_unknowns.py)</span>
 <span class="n">_STRUCTURE_KINDS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"view"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">view</span><span class="p">:</span> <span class="n">view</span><span class="p">,</span>
     <span class="s2">"image"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">view</span><span class="p">:</span> <span class="n">view</span><span class="o">.</span><span class="n">image</span><span class="p">,</span>
     <span class="s2">"camera"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">view</span><span class="p">:</span> <span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span>
-    <span class="s2">"extrinsic"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">view</span><span class="p">:</span> <span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">extrinsic</span><span class="p">,</span>
-    <span class="s2">"distortion"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">view</span><span class="p">:</span> <span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">distortion</span><span class="p">,</span>
-    <span class="s2">"intrinsic"</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">view</span><span class="p">:</span> <span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">intrinsic</span><span class="p">,</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">view</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">))</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">},</span>
 <span class="p">}</span>
-<span class="n">_TRANSFORMATION_KINDS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"extrinsic"</span><span class="p">,</span> <span class="s2">"distortion"</span><span class="p">,</span> <span class="s2">"intrinsic"</span><span class="p">)</span>
 
 <span class="c1"># Reason of the lock of the mesh of an SDIC analysis (added after "Cannot ...: this Mesh is locked.")</span>
 <span class="n">_MESH_LOCK_MESSAGE</span> <span class="o">=</span> <span class="p">(</span>
@@ -512,6 +513,20 @@
         <span class="p">)</span>
 
 
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_UnknownsLayout</span><span class="p">:</span>
+    <span class="c1"># The positions of the unknowns of a SDICUnknowns in the vector p of an analysis: indices only,</span>
+    <span class="c1"># never values (the values stay in the analysis). Computed by SDICAnalysis._unknowns_layout, the</span>
+    <span class="c1"># single source of truth of the order of p, used by the public methods of the analysis and once</span>
+    <span class="c1"># at the creation of the terms and parametrizations. It only depends on fixed data (the unknowns,</span>
+    <span class="c1"># the shape (N_v, E) of the locked mesh, the numbers of parameters of the transformations).</span>
+    <span class="n">frame_slices</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">slice</span><span class="p">]</span>  <span class="c1"># Optimized frame -&gt; slice of its displacement (N_v E,), Fortran order</span>
+    <span class="n">transformation_slices</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">slice</span><span class="p">]</span>  <span class="c1"># (kind, index) -&gt; slice of its parameters</span>
+    <span class="n">transformations</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Transformation</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>  <span class="c1"># The optimized transformations, in the order of the unknowns</span>
+    <span class="n">n_displacements</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Size of p_U</span>
+    <span class="n">n_unknowns</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Size of p</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_leaf_transformations</span><span class="p">(</span><span class="n">transformation</span><span class="p">:</span> <span class="n">Transformation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Transformation</span><span class="p">]:</span>
     <span class="c1"># The leaf transformations of a transformation, recursively: the transformations of a</span>
     <span class="c1"># composition, the transformation reparametrized by a ReparametrizedTransformation, or the</span>
@@ -552,7 +567,8 @@
 <span class="sd">        creation: the views, cameras and images are immutable, and the mesh is locked.</span>
 <span class="sd">        Only the displacements (:meth:`set_displacement`) and the parameters of the</span>
 <span class="sd">        transformations of the cameras (:meth:`set_transformation_parameters`) can be</span>
-<span class="sd">        modified. Use :meth:`with_mesh`, :meth:`with_views`, :meth:`with_frame_views` and</span>
+<span class="sd">        modified: no transformation of the cameras can be locked (checked at the creation,</span>
+<span class="sd">        before each evaluation of a term and in :meth:`apply_unknowns`). Use :meth:`with_mesh`, :meth:`with_views`, :meth:`with_frame_views` and</span>
 <span class="sd">        :meth:`with_times` to get a new analysis with another mesh, other views or other</span>
 <span class="sd">        times: the new analysis shares the other data (no copy).</span>
 
@@ -591,8 +607,9 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        If the mesh has no element type, there is no frame, the input dimension of a</span>
 <span class="sd">        camera is not the dimension of the mesh, the times are invalid, a displacement is</span>
-<span class="sd">        invalid, or the transformations of the cameras are not independent (see</span>
-<span class="sd">        :meth:`check_consistency`).</span>
+<span class="sd">        invalid, the transformations of the cameras are not independent (see</span>
+<span class="sd">        :meth:`check_consistency`), or a transformation of the cameras is locked (their parameters</span>
+<span class="sd">        must remain modifiable: the terms and the solvers set them).</span>
 
 <span class="sd">    IndexError</span>
 <span class="sd">        If a frame of ``displacements`` is out of range.</span>
@@ -662,6 +679,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_times</span> <span class="o">=</span> <span class="n">times</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_structures</span> <span class="o">=</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_STRUCTURE_KINDS</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_consistency</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_locked_transformation</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The transformations of the cameras </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_describe_locked_transformations</span><span class="p">()</span><span class="si">}</span><span class="s2"> are locked. The "</span>
+                <span class="sa">f</span><span class="s2">"parameters of all the transformations of an SDIC analysis must remain modifiable: the terms "</span>
+                <span class="sa">f</span><span class="s2">"set the parameters of their optimized transformations during each evaluation (and restore them "</span>
+                <span class="sa">f</span><span class="s2">"afterwards), and the results of the solvers are written with apply_unknowns or "</span>
+                <span class="sa">f</span><span class="s2">"set_transformation_parameters. Use in the camera the object that owns the locked transformation "</span>
+                <span class="sa">f</span><span class="s2">"(e.g. its ReparametrizedTransformation), or an unlocked copy (transformation.copy())."</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">is_locked</span><span class="p">:</span>
             <span class="n">mesh</span><span class="o">.</span><span class="n">_set_locked</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">_MESH_LOCK_MESSAGE</span><span class="p">)</span>
 
@@ -1316,16 +1342,25 @@
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Unknowns</span>
     <span class="c1"># ===================================================================</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_unknowns_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">slice</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="c1"># (number of displacement unknowns, slices of the transformations, number of unknowns)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_unknowns_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_UnknownsLayout</span><span class="p">:</span>
+        <span class="c1"># The positions of the unknowns in p (see _UnknownsLayout), after validate_unknowns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validate_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
-        <span class="n">n_U</span> <span class="o">=</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
-        <span class="n">slices</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">n_U</span>
-        <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">:</span>
-            <span class="n">n_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_transformation</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">n_parameters</span>
-            <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">n_p</span><span class="p">))</span>
-            <span class="n">start</span> <span class="o">+=</span> <span class="n">n_p</span>
-        <span class="k">return</span> <span class="n">n_U</span><span class="p">,</span> <span class="n">slices</span><span class="p">,</span> <span class="n">start</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
+        <span class="n">frame_slices</span> <span class="o">=</span> <span class="p">{</span><span class="n">frame</span><span class="p">:</span> <span class="nb">slice</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">)}</span>
+        <span class="n">n_displacements</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">frame_slices</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span>
+        <span class="n">transformation_slices</span><span class="p">,</span> <span class="n">transformations</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">[],</span> <span class="n">n_displacements</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">:</span>
+            <span class="n">transformation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_transformation</span><span class="p">(</span><span class="o">*</span><span class="n">entry</span><span class="p">)</span>
+            <span class="n">transformation_slices</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">transformation</span><span class="o">.</span><span class="n">n_parameters</span><span class="p">)</span>
+            <span class="n">transformations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transformation</span><span class="p">)</span>
+            <span class="n">start</span> <span class="o">+=</span> <span class="n">transformation</span><span class="o">.</span><span class="n">n_parameters</span>
+        <span class="k">return</span> <span class="n">_UnknownsLayout</span><span class="p">(</span>
+            <span class="n">frame_slices</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">MappingProxyType</span><span class="p">(</span><span class="n">frame_slices</span><span class="p">),</span>
+            <span class="n">transformation_slices</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">MappingProxyType</span><span class="p">(</span><span class="n">transformation_slices</span><span class="p">),</span>
+            <span class="n">transformations</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">transformations</span><span class="p">),</span>
+            <span class="n">n_displacements</span><span class="o">=</span><span class="n">n_displacements</span><span class="p">,</span>
+            <span class="n">n_unknowns</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="SDICAnalysis.validate_unknowns">
 <a class="viewcode-back" href="../../../api/sdic/_generated/pysdic.SDICAnalysis.validate_unknowns.html#pysdic.SDICAnalysis.validate_unknowns">[docs]</a>
@@ -1384,7 +1419,7 @@
 <span class="sd">        The size of the vector of unknowns :math:`N_f N_v E + \sum n_p` of a</span>
 <span class="sd">        :class:`pysdic.SDICUnknowns` in the analysis.</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="o">.</span><span class="n">n_unknowns</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.get_unknowns_frame_slice">
@@ -1400,12 +1435,10 @@
 <span class="sd">            If the frame is not optimized.</span>
 
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">validate_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">:</span>
+        <span class="n">frame_slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="o">.</span><span class="n">frame_slices</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame_slices</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The frame </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> is not optimized. Optimized frames: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
-        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">frame_slices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.get_unknowns_transformation_slice">
@@ -1420,14 +1453,14 @@
 <span class="sd">            If the transformation is not optimized.</span>
 
 <span class="sd">        """</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">slices</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="n">transformation_slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="o">.</span><span class="n">transformation_slices</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">transformation_slices</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"The transformation </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> is not optimized. "</span>
                 <span class="sa">f</span><span class="s2">"Optimized transformations: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">slices</span><span class="p">[</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">entry</span><span class="p">)]</span></div>
+        <span class="k">return</span> <span class="n">transformation_slices</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.compute_unknowns_indices">
@@ -1466,13 +1499,15 @@
 <span class="sd">            The sorted indices (``numpy.int64``).</span>
 
 <span class="sd">        """</span>
-        <span class="n">n_U</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
         <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">_as_vertex_selection</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">N_v</span><span class="p">)</span>
         <span class="n">components</span> <span class="o">=</span> <span class="n">_as_component_selection</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
         <span class="n">block</span> <span class="o">=</span> <span class="p">(</span><span class="n">components</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">N_v</span> <span class="o">+</span> <span class="n">vertices</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># Indices in one frame</span>
-        <span class="n">displacement_indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span><span class="p">)</span> <span class="o">+</span> <span class="n">block</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">displacement_indices</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_U</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span></div>
+        <span class="n">starts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">frame_slices</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">displacement_indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">starts</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> <span class="n">block</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">transformation_indices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">n_displacements</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">displacement_indices</span><span class="p">,</span> <span class="n">transformation_indices</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.pack_unknowns">
@@ -1490,10 +1525,10 @@
 <span class="sd">                + [analysis.get_transformation_parameters(kind, index) for kind, index in unknowns.optimized_transformations]</span>
 <span class="sd">            )</span>
 
-<span class="sd">        .. warning::</span>
+<span class="sd">        .. seealso::</span>
 
-<span class="sd">            With a parametrization, use ``parametrization.reparametrized_pack()`` (see</span>
-<span class="sd">            :class:`pysdic.SDICFixedParametrization`).</span>
+<span class="sd">            :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and</span>
+<span class="sd">            :class:`pysdic.SDICFixedParametrization` (``reparametrized_pack``) with a parametrization.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1506,13 +1541,10 @@
 <span class="sd">            If the unknowns are not valid or the displacement of an optimized frame is not set.</span>
 
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">validate_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">]</span>
-            <span class="o">+</span> <span class="p">[</span>
-                <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_transformation</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span>
-            <span class="p">]</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">frame_slices</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">transformation</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">transformation</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">transformations</span><span class="p">]</span>
             <span class="o">+</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
         <span class="p">)</span></div>
 
@@ -1526,10 +1558,10 @@
 <span class="sd">        Split a complete vector of unknowns (inverse of :meth:`pack_unknowns`). The analysis is</span>
 <span class="sd">        not modified (see :meth:`apply_unknowns`).</span>
 
-<span class="sd">        .. warning::</span>
+<span class="sd">        .. seealso::</span>
 
-<span class="sd">            With a parametrization, use ``parametrization.reparametrized_unpack(q)`` (see</span>
-<span class="sd">            :class:`pysdic.SDICFixedParametrization`).</span>
+<span class="sd">            :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and</span>
+<span class="sd">            :class:`pysdic.SDICFixedParametrization` (``reparametrized_unpack``) with a parametrization.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1548,16 +1580,13 @@
 <span class="sd">            For each optimized transformation ``(kind, index)``, its parameters (a copy).</span>
 
 <span class="sd">        """</span>
-        <span class="n">n_U</span><span class="p">,</span> <span class="n">slices</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
-        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
         <span class="n">displacements</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">frame</span><span class="p">:</span> <span class="n">parameters</span><span class="p">[</span><span class="n">k</span> <span class="o">*</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span> <span class="p">:</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">)</span>
+            <span class="n">frame</span><span class="p">:</span> <span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">frame_slices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
-        <span class="n">transformations</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">entry</span><span class="p">:</span> <span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">entry</span><span class="p">,</span> <span class="n">columns</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">,</span> <span class="n">slices</span><span class="p">)</span>
-        <span class="p">}</span>
+        <span class="n">transformations</span> <span class="o">=</span> <span class="p">{</span><span class="n">entry</span><span class="p">:</span> <span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">entry</span><span class="p">,</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">transformation_slices</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">return</span> <span class="n">displacements</span><span class="p">,</span> <span class="n">transformations</span></div>
 
 
@@ -1566,14 +1595,25 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">apply_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Write a complete vector of unknowns (e.g. ``result.parameters`` without parametrization)</span>
-<span class="sd">        in the analysis: the displacements of the optimized frames (:meth:`set_displacement`,</span>
-<span class="sd">        replaced, not added) and the parameters of the optimized transformations</span>
-<span class="sd">        (:meth:`set_transformation_parameters`, all the cameras using them are updated).</span>
+<span class="sd">        in the analysis: the displacements of the optimized frames (replaced, not added) and the</span>
+<span class="sd">        parameters of the optimized transformations (all the cameras using them are updated).</span>
 
-<span class="sd">        .. warning::</span>
+<span class="sd">        The writing is **atomic**: if an error is raised, the analysis is unchanged.</span>
 
-<span class="sd">            With a parametrization, use ``parametrization.reparametrized_apply(q)`` (see</span>
-<span class="sd">            :class:`pysdic.SDICFixedParametrization`).</span>
+<span class="sd">        1. Everything that can be checked without writing is checked first: no transformation of</span>
+<span class="sd">           the cameras is locked (a transformation locked after the creation of the analysis raises</span>
+<span class="sd">           an error here, before any writing: the rollback of the step 2 can always restore the</span>
+<span class="sd">           parameters), the unknowns (:meth:`validate_unknowns`), the shape of the vector and the</span>
+<span class="sd">           finite values.</span>
+<span class="sd">        2. The parameters of the transformations are written one by one. If a transformation</span>
+<span class="sd">           refuses its parameters (e.g. values out of its domain), the transformations already</span>
+<span class="sd">           written get their previous parameters back and the error is raised again.</span>
+<span class="sd">        3. The displacements are written last (this step cannot fail).</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and</span>
+<span class="sd">            :class:`pysdic.SDICFixedParametrization` (``reparametrized_apply``) with a parametrization.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1581,15 +1621,95 @@
 <span class="sd">            The unknowns.</span>
 
 <span class="sd">        parameters : ArrayLike</span>
-<span class="sd">            The vector of unknowns, of shape :math:`(N_f N_v E + \sum n_p,)` (:meth:`n_unknowns`).</span>
+<span class="sd">            The vector of unknowns, of shape :math:`(N_f N_v E + \sum n_p,)` (:meth:`n_unknowns`),</span>
+<span class="sd">            with finite values.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the unknowns are not valid (e.g. a locked transformation), the vector has a wrong</span>
+<span class="sd">            shape or non-finite values, or a transformation refuses its parameters. The analysis</span>
+<span class="sd">            is unchanged.</span>
+
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If a transformation of the cameras was locked after the creation of the analysis</span>
+<span class="sd">            (nothing is written), or, in a case that should not happen, if a transformation refused</span>
+<span class="sd">            its parameters and the previous parameters of another transformation could not be</span>
+<span class="sd">            restored (the analysis is then inconsistent: the message gives the transformations to</span>
+<span class="sd">            check).</span>
 
 <span class="sd">        """</span>
-        <span class="n">displacements</span><span class="p">,</span> <span class="n">transformations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unpack_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">displacement</span> <span class="ow">in</span> <span class="n">displacements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">displacement</span><span class="p">)</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">index</span><span class="p">),</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">transformations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_transformation_parameters</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+        <span class="c1"># 1. Checks without writing</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_locked_transformation</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Cannot apply the vector of unknowns: the transformations of the cameras "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_describe_locked_transformations</span><span class="p">()</span><span class="si">}</span><span class="s2"> were locked after the creation of the analysis. "</span>
+                <span class="sa">f</span><span class="s2">"The parameters of the transformations of an analysis must remain modifiable (they could not "</span>
+                <span class="sa">f</span><span class="s2">"be restored if the writing failed). Nothing was written in the analysis: create a new analysis "</span>
+                <span class="sa">f</span><span class="s2">"with cameras using unlocked transformations (e.g. the ReparametrizedTransformation that owns a "</span>
+                <span class="sa">f</span><span class="s2">"locked transformation)."</span>
+            <span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns_layout</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"parameters"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">,),</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">non_finite</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">"the displacement of the frame </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2">"</span>
+            <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">frame_slices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]))</span>
+        <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">"the parameters of the transformation </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2">"</span>
+            <span class="k">for</span> <span class="n">entry</span><span class="p">,</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">transformation_slices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]))</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">non_finite</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Cannot apply the vector of unknowns: non-finite values in </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">non_finite</span><span class="p">)</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Nothing was written in the analysis."</span>
+            <span class="p">)</span>
+        <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
+        <span class="n">displacements</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">frame</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as_displacement</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">columns</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">frame_slices</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
 
+        <span class="c1"># 2. Transformations, with rollback of the ones already written</span>
+        <span class="n">written</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">Transformation</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">columns</span><span class="p">),</span> <span class="n">transformation</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">transformation_slices</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">layout</span><span class="o">.</span><span class="n">transformations</span><span class="p">):</span>
+            <span class="n">previous</span> <span class="o">=</span> <span class="n">transformation</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">transformation</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_restore_transformations</span><span class="p">(</span><span class="n">written</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+                <span class="k">raise</span>
+            <span class="n">written</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">entry</span><span class="p">,</span> <span class="n">transformation</span><span class="p">,</span> <span class="n">previous</span><span class="p">))</span>  <span class="c1"># Only once its writing succeeded</span>
+
+        <span class="c1"># 3. Displacements (already validated read-only copies: cannot fail)</span>
+        <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">displacement</span> <span class="ow">in</span> <span class="n">displacements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_displacements</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">displacement</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_restore_transformations</span><span class="p">(</span>
+        <span class="n">written</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">Transformation</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+        <span class="n">failed_entry</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">error</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Give back their previous parameters to the transformations already written by apply_unknowns,</span>
+        <span class="c1"># after the transformation 'failed_entry' refused its parameters (the original error is raised</span>
+        <span class="c1"># by the caller). A failed restoration does not hide the original error: it is chained to it.</span>
+        <span class="n">not_restored</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span><span class="p">,</span> <span class="n">transformation</span><span class="p">,</span> <span class="n">previous</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">written</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">transformation</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">previous</span>
+            <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+                <span class="n">not_restored</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">not_restored</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The transformation </span><span class="si">{</span><span class="n">failed_entry</span><span class="si">}</span><span class="s2"> refused its parameters (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">), "</span>
+                <span class="sa">f</span><span class="s2">"and the previous parameters of the transformations </span><span class="si">{</span><span class="n">not_restored</span><span class="si">}</span><span class="s2">, already written, could "</span>
+                <span class="sa">f</span><span class="s2">"not be restored: the analysis is inconsistent (the displacements were not written). Check "</span>
+                <span class="sa">f</span><span class="s2">"these transformations (e.g. locked during the writing) and set their parameters again with "</span>
+                <span class="sa">f</span><span class="s2">"set_transformation_parameters."</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Structure</span>
@@ -1681,6 +1801,36 @@
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Structure of the </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">s (index of the shared </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> of each view):"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Frame </span><span class="si">{</span><span class="n">frame</span><span class="si">:</span><span class="s2">&lt;3</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">indices</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SDICAnalysis.get_transformations">
+<a class="viewcode-back" href="../../../api/sdic/_generated/pysdic.SDICAnalysis.get_transformations.html#pysdic.SDICAnalysis.get_transformations">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transformations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Transformation</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">        Get all the distinct transformations of a kind of the cameras of the analysis, in the</span>
+<span class="sd">        order of their index in the structure of ``kind`` (see :meth:`get_transformation`).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kind : str</span>
+<span class="sd">            The kind of the transformations: ``"extrinsic"``, ``"distortion"`` or</span>
+<span class="sd">            ``"intrinsic"``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[:class:`pysdic.Transformation`, ...]</span>
+<span class="sd">            The transformations (not copies: they are shared by the cameras that use them),</span>
+<span class="sd">            ``get_transformations(kind)[index] is get_transformation(kind, index)``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If ``kind`` is not valid.</span>
+
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'kind' must be one of </span><span class="si">{</span><span class="n">_TRANSFORMATION_KINDS</span><span class="si">}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">kind</span><span class="si">!r}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.get_transformation">
@@ -1811,6 +1961,35 @@
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_transformation</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_locked_transformations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="c1"># The transformations (kind, index) of the cameras that are locked</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">transformation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">transformation</span><span class="o">.</span><span class="n">is_locked</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_has_locked_transformation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># Whether a transformation of the cameras is locked. None is locked at the creation of the analysis</span>
+        <span class="c1"># (error), but a transformation can be locked later (e.g. used by a ReparametrizedTransformation</span>
+        <span class="c1"># created after the analysis): checked before each evaluation of a term and in apply_unknowns, so</span>
+        <span class="c1"># that the parameters set during these operations can always be restored.</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">transformation</span><span class="o">.</span><span class="n">is_locked</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span> <span class="k">for</span> <span class="n">transformation</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_describe_locked_transformations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># The locked transformations with their type and the reason of their lock, for the error messages</span>
+        <span class="n">descriptions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locked_transformations</span><span class="p">():</span>
+            <span class="n">transformation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">reason</span> <span class="o">=</span> <span class="n">transformation</span><span class="o">.</span><span class="n">locked_message</span>
+            <span class="n">descriptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">transformation</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span> <span class="o">+</span> <span class="p">(</span><span class="sa">f</span><span class="s2">", reason of the lock: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s2">)"</span> <span class="k">if</span> <span class="n">reason</span> <span class="k">else</span> <span class="s2">")"</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="s2">"["</span> <span class="o">+</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">descriptions</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"]"</span>
 
 <div class="viewcode-block" id="SDICAnalysis.check_consistency">
 <a class="viewcode-back" href="../../../api/sdic/_generated/pysdic.SDICAnalysis.check_consistency.html#pysdic.SDICAnalysis.check_consistency">[docs]</a>

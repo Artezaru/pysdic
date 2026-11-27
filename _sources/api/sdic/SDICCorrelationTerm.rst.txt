@@ -17,13 +17,14 @@ SDICCorrelationTerm class
 Instantiation and new terms
 ---------------------------
 
-A :class:`SDICCorrelationTerm` is created with the unknowns (a :class:`pysdic.SDICUnknowns` created by the user),
-the integration points, the pairings and its options (mode, gray level correction, weight, loss, sparse matrices,
-caches). Its analysis is the analysis of the unknowns.
+A :class:`SDICCorrelationTerm` is created with the analysis, the unknowns (a :class:`pysdic.SDICUnknowns` created by
+the user, which does not know the analysis), the integration points, the pairings and its options (mode, gray level
+correction, weight, loss, sparse matrices, caches).
 
 A term is **immutable**: the methods below create a new term with the same configuration except the given changes
-(new caches and structures; the gray level groups given with ``gray_level_groups`` are shared). The previous term
-stays valid on its own unknowns.
+(new caches; the gray level groups given with ``gray_level_groups`` are shared). The shape functions, the weights and
+the sparse structure of the integration points are shared too (the mesh and the points are locked), except by
+:meth:`SDICCorrelationTerm.with_integration_points`. The previous term stays valid on its own unknowns.
 
 .. code-block:: python
 
@@ -42,13 +43,20 @@ stays valid on its own unknowns.
 Term and unknowns
 -----------------
 
-:meth:`SDICCorrelationTerm.pack`, :meth:`SDICCorrelationTerm.unpack` and :meth:`SDICCorrelationTerm.apply` are those of
-:attr:`SDICCorrelationTerm.unknowns`: they work on the complete vector :math:`\vec{p}` (total displacements).
+The term does not build the vectors of unknowns: use the analysis on the complete vector :math:`\vec{p}`
+(:meth:`pysdic.SDICAnalysis.pack_unknowns`, :meth:`pysdic.SDICAnalysis.unpack_unknowns`,
+:meth:`pysdic.SDICAnalysis.apply_unknowns`), or the parametrization on the reduced vector :math:`\vec{q}`.
 
-.. warning::
+.. code-block:: python
 
-   **With a parametrization, always use** ``parametrization.reparametrized_pack()``, ``reparametrized_unpack(q)``
-   **and** ``reparametrized_apply(q)`` on the vectors of the solver (see :class:`pysdic.SDICFixedParametrization`).
+   result = pysolvegn.solve([correlation.term], analysis.pack_unknowns(unknowns))
+   analysis.apply_unknowns(unknowns, result.parameters)
+
+.. seealso::
+
+   :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and :class:`pysdic.SDICFixedParametrization` for
+   the reduced vector :math:`\vec{q}` of a parametrization (``reparametrized_pack``, ``reparametrized_unpack``,
+   ``reparametrized_apply``).
 
 .. autosummary::
    :toctree: ../_generated/
@@ -57,10 +65,6 @@ Term and unknowns
    SDICCorrelationTerm.term
    SDICCorrelationTerm.unknowns
    SDICCorrelationTerm.analysis
-   SDICCorrelationTerm.n_unknowns
-   SDICCorrelationTerm.pack
-   SDICCorrelationTerm.unpack
-   SDICCorrelationTerm.apply
 
 Residuals
 ---------
@@ -82,8 +86,6 @@ Read-only properties (see the ``with_*`` methods to create a term with other val
 
    SDICCorrelationTerm.integration_points
    SDICCorrelationTerm.pairings
-   SDICCorrelationTerm.optimized_frames
-   SDICCorrelationTerm.optimized_transformations
    SDICCorrelationTerm.options
    SDICCorrelationTerm.mode
    SDICCorrelationTerm.gl_correction

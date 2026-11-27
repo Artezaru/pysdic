@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.sdic.sdic_term &#8212; pysdic 2.2.0 documentation</title>
+    <title>pysdic.sdic.sdic_term &#8212; pysdic 2.3.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.2.0 documentation</p>
+    <p class="title logo__title">pysdic 2.3.0 documentation</p>
   
 </a></div>
     
@@ -364,17 +364,15 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">Real</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.sparse</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pysolvegn</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..geometry.integration_points</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntegrationPoints</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.._optionals</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_choice</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_real</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.gl_correction</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">GrayLevelGroups</span><span class="p">,</span>
@@ -384,12 +382,13 @@
     <span class="n">znssd_correction</span><span class="p">,</span>
     <span class="n">znssd_correction_exact</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_term_caches</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICTermOperatorsCache</span><span class="p">,</span> <span class="n">SDICTermReferenceProjectionCache</span><span class="p">,</span> <span class="n">SDICTermSparseStructure</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_term_caches</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICTermGeometry</span><span class="p">,</span> <span class="n">SDICTermOperatorsCache</span><span class="p">,</span> <span class="n">SDICTermReferenceProjectionCache</span><span class="p">,</span> <span class="n">SDICTermSparseStructure</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.pairing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pairing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.residuals</span><span class="w"> </span><span class="kn">import</span> <span class="n">PairingResiduals</span><span class="p">,</span> <span class="n">_pairing_residuals</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_frames</span><span class="p">,</span> <span class="n">_validate_transformations</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICUnknowns</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICAnalysis</span><span class="p">,</span> <span class="n">_TRANSFORMATION_KINDS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._sdic_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_gl_correction</span><span class="p">,</span> <span class="n">_validate_gray_level_groups</span><span class="p">,</span> <span class="n">_validate_located_integration_points</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">,</span> <span class="n">SDICUnknowns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICAnalysis</span><span class="p">,</span> <span class="n">_UnknownsLayout</span>
 
 <span class="c1"># Gray level corrections: (mode, jacobian) -&gt; function</span>
 <span class="n">_GL_CORRECTIONS</span> <span class="o">=</span> <span class="p">{</span>
@@ -398,10 +397,6 @@
     <span class="p">(</span><span class="s2">"matching"</span><span class="p">,</span> <span class="s2">"approximate"</span><span class="p">):</span> <span class="n">matching_correction</span><span class="p">,</span>
     <span class="p">(</span><span class="s2">"matching"</span><span class="p">,</span> <span class="s2">"exact"</span><span class="p">):</span> <span class="n">matching_correction_exact</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">_GL_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"ZNSSD"</span><span class="p">,</span> <span class="s2">"jacobian"</span><span class="p">:</span> <span class="s2">"approximate"</span><span class="p">,</span> <span class="s2">"neighborhood"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"scale"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
-
-<span class="c1"># Kinds of the transformations of a camera, in the order of the blocks of jacobian_dp</span>
-<span class="n">_KINDS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"extrinsic"</span><span class="p">,</span> <span class="s2">"distortion"</span><span class="p">,</span> <span class="s2">"intrinsic"</span><span class="p">)</span>
 
 <span class="c1"># Reason of the lock of the integration points used by a SDIC term</span>
 <span class="n">_INTEGRATION_POINTS_LOCK_MESSAGE</span> <span class="o">=</span> <span class="p">(</span>
@@ -416,51 +411,6 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internal helpers</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_validate_gl_correction</span><span class="p">(</span><span class="n">gl_correction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-    <span class="k">if</span> <span class="n">gl_correction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gl_correction</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'gl_correction' must be a dictionary or None. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gl_correction</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-    <span class="n">unknown</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">gl_correction</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">_GL_DEFAULTS</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown keys </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span><span class="si">}</span><span class="s2"> in 'gl_correction'. Valid keys: </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">_GL_DEFAULTS</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-    <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">_GL_DEFAULTS</span><span class="p">,</span> <span class="o">**</span><span class="n">gl_correction</span><span class="p">}</span>
-    <span class="n">options</span><span class="p">[</span><span class="s2">"mode"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">"mode"</span><span class="p">],</span> <span class="s2">"gl_correction['mode']"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"ZNSSD"</span><span class="p">,</span> <span class="s2">"matching"</span><span class="p">))</span>
-    <span class="n">options</span><span class="p">[</span><span class="s2">"jacobian"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">"jacobian"</span><span class="p">],</span> <span class="s2">"gl_correction['jacobian']"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"approximate"</span><span class="p">,</span> <span class="s2">"exact"</span><span class="p">))</span>
-    <span class="n">options</span><span class="p">[</span><span class="s2">"neighborhood"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">"neighborhood"</span><span class="p">],</span> <span class="s2">"gl_correction['neighborhood']"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">options</span><span class="p">[</span><span class="s2">"scale"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">"scale"</span><span class="p">],</span> <span class="s2">"gl_correction['scale']"</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">options</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_validate_gray_level_groups</span><span class="p">(</span>
-    <span class="n">gray_level_groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GrayLevelGroups</span><span class="p">],</span>
-    <span class="n">gl_correction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
-    <span class="n">mesh</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-    <span class="n">integration_points</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GrayLevelGroups</span><span class="p">]:</span>
-    <span class="c1"># Groups given by the user: consistent with the points and the mesh, and not given twice</span>
-    <span class="k">if</span> <span class="n">gray_level_groups</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gray_level_groups</span><span class="p">,</span> <span class="n">GrayLevelGroups</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'gray_level_groups' must be a GrayLevelGroups or None. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gray_level_groups</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">gl_correction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Input 'gray_level_groups' requires a gray level correction ('gl_correction')."</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">"neighborhood"</span> <span class="ow">in</span> <span class="n">gl_correction</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"Give either gl_correction['neighborhood'] (groups computed by the term) or 'gray_level_groups' "</span>
-            <span class="s2">"(groups computed once with compute_gray_level_groups), not both."</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">gray_level_groups</span><span class="o">.</span><span class="n">n_points</span> <span class="o">!=</span> <span class="n">integration_points</span><span class="o">.</span><span class="n">n_points</span> <span class="ow">or</span> <span class="n">gray_level_groups</span><span class="o">.</span><span class="n">n_elements</span> <span class="o">!=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Input 'gray_level_groups' (</span><span class="si">{</span><span class="n">gray_level_groups</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2"> points, </span><span class="si">{</span><span class="n">gray_level_groups</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2"> elements) "</span>
-            <span class="sa">f</span><span class="s2">"does not match the integration points (</span><span class="si">{</span><span class="n">integration_points</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2">) and the mesh (</span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2"> elements)."</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">gray_level_groups</span><span class="o">.</span><span class="n">point_elements</span><span class="p">,</span> <span class="n">integration_points</span><span class="o">.</span><span class="n">element_indices</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"Input 'gray_level_groups' was computed for other integration points (different elements of the points)."</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gray_level_groups</span>
-
-
 <span class="k">def</span><span class="w"> </span><span class="nf">_block_rows</span><span class="p">(</span><span class="n">jacobian</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="c1"># Jacobian (N_p, C, n) -&gt; (N_p C, n) with the rows in Fortran order of (N_p, C): row p + c N_p</span>
     <span class="n">N_p</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">shape</span>
@@ -561,10 +511,10 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_build_sdic_operators</span><span class="p">(</span>
     <span class="n">analysis</span><span class="p">:</span> <span class="n">SDICAnalysis</span><span class="p">,</span>
+    <span class="n">unknowns</span><span class="p">:</span> <span class="n">SDICUnknowns</span><span class="p">,</span>
+    <span class="n">layout</span><span class="p">:</span> <span class="n">_UnknownsLayout</span><span class="p">,</span>
     <span class="n">integration_points</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">,</span>
     <span class="n">pairings</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Pairing</span><span class="p">],</span>
-    <span class="n">optimized_frames</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Integral</span><span class="p">]],</span>
-    <span class="n">optimized_transformations</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Integral</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rJ"</span><span class="p">,</span>
     <span class="n">gl_correction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -573,6 +523,7 @@
     <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">_use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">_cache_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">_geometry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SDICTermGeometry</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Build the operators of the least squares problem on the displacements of the optimized</span>
@@ -581,50 +532,43 @@
 
 <span class="sd">    Returns the residual and Jacobian functions (mode ``"rJ"``, the third output is None) or</span>
 <span class="sd">    the gradient, Hessian and cost functions (mode ``"gH"``) of the vector of unknowns</span>
-<span class="sd">    :math:`\vec{p} = [\vec{p}_U, \vec{p}_T]` (see :class:`SDICUnknowns`).</span>
+<span class="sd">    :math:`\vec{p}` (see :class:`SDICUnknowns`). The analysis and the unknowns are validated, and</span>
+<span class="sd">    ``layout`` is their layout (see :func:`pysdic.sdic.problem._validate_problem`).</span>
 <span class="sd">    """</span>
-    <span class="c1"># ------------- options -------------</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-    <span class="n">mode</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"rJ"</span><span class="p">,</span> <span class="s2">"gH"</span><span class="p">))</span>
+    <span class="c1"># ------------- options (mode, filter_nans, sparse and pairings are validated by SDICCorrelationTerm) -------------</span>
     <span class="n">gl_options</span> <span class="o">=</span> <span class="n">_validate_gl_correction</span><span class="p">(</span><span class="n">gl_correction</span><span class="p">)</span>
-    <span class="n">filter_nans</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">filter_nans</span><span class="p">,</span> <span class="s2">"filter_nans"</span><span class="p">)</span>
-    <span class="n">sparse</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="s2">"sparse"</span><span class="p">)</span>
     <span class="n">_use_cache</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">_use_cache</span><span class="p">,</span> <span class="s2">"_use_cache"</span><span class="p">)</span>
     <span class="n">_cache_length</span> <span class="o">=</span> <span class="n">_validate_integer</span><span class="p">(</span><span class="n">_cache_length</span><span class="p">,</span> <span class="s2">"_cache_length"</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># ------------- unknowns: [displacements of the optimized frames | transformations] -------------</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">mesh</span>
     <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">n_dimensions</span>
-    <span class="n">optimized_frames</span> <span class="o">=</span> <span class="n">_validate_frames</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">optimized_frames</span><span class="p">,</span> <span class="s2">"optimized_frames"</span><span class="p">,</span> <span class="n">allow_empty</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">entries</span><span class="p">,</span> <span class="n">objects</span><span class="p">,</span> <span class="n">transformation_starts</span> <span class="o">=</span> <span class="n">_validate_transformations</span><span class="p">(</span>
-        <span class="n">analysis</span><span class="p">,</span> <span class="n">optimized_transformations</span><span class="p">,</span> <span class="n">allow_empty</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="n">n_displacement_unknowns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">optimized_frames</span><span class="p">)</span> <span class="o">*</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span>
-    <span class="n">n_unknowns</span> <span class="o">=</span> <span class="n">n_displacement_unknowns</span> <span class="o">+</span> <span class="n">transformation_starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># The positions of the unknowns come from the analysis (layout): the single source of truth of the order of p</span>
+    <span class="n">optimized_frames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">)</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">)</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">transformations</span><span class="p">)</span>
+    <span class="n">n_unknowns</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">n_unknowns</span>
     <span class="k">if</span> <span class="n">n_unknowns</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"At least one optimized frame or one optimized transformation is required."</span><span class="p">)</span>
-    <span class="n">frame_starts</span> <span class="o">=</span> <span class="p">{</span><span class="n">frame</span><span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">optimized_frames</span><span class="p">)}</span>
-    <span class="n">starts</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_displacement_unknowns</span> <span class="o">+</span> <span class="n">start</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">transformation_starts</span><span class="p">]</span>  <span class="c1"># Columns of the transformations</span>
+    <span class="n">frame_slices</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">frame_slices</span><span class="p">)</span>  <span class="c1"># Optimized frame -&gt; columns of its displacement</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="p">[</span><span class="n">layout</span><span class="o">.</span><span class="n">transformation_slices</span><span class="p">[</span><span class="n">entry</span><span class="p">]</span><span class="o">.</span><span class="n">start</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">n_unknowns</span><span class="p">]</span>  <span class="c1"># Columns of the transformations</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">view_blocks</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
         <span class="c1"># The optimized transformations of the camera of a view: (kind, start, stop) of their columns</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">camera</span>
         <span class="n">blocks</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_KINDS</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">transformation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span> <span class="ow">is</span> <span class="n">transformation</span><span class="p">:</span>
                     <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">kind</span><span class="p">,</span> <span class="n">starts</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">starts</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">blocks</span>
 
     <span class="c1"># ------------- pairings -------------</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pairings</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'pairings' must be a list or a tuple of Pairing. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pairings</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
     <span class="n">active_pairings</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">pairing</span> <span class="ow">in</span> <span class="n">pairings</span><span class="p">:</span>
         <span class="n">analysis</span><span class="o">.</span><span class="n">validate_pairing</span><span class="p">(</span><span class="n">pairing</span><span class="p">)</span>
         <span class="n">has_unknowns</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
-            <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_starts</span> <span class="ow">or</span> <span class="n">view_blocks</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pairing</span><span class="o">.</span><span class="n">view_1</span><span class="p">,</span> <span class="n">pairing</span><span class="o">.</span><span class="n">view_2</span><span class="p">)</span>
+            <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_slices</span> <span class="ow">or</span> <span class="n">view_blocks</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pairing</span><span class="o">.</span><span class="n">view_1</span><span class="p">,</span> <span class="n">pairing</span><span class="o">.</span><span class="n">view_2</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">has_unknowns</span><span class="p">:</span>
             <span class="n">active_pairings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pairing</span><span class="p">)</span>  <span class="c1"># Pairings without unknowns are ignored</span>
@@ -640,13 +584,22 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The transformations </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2"> are used by no view of the pairings."</span><span class="p">)</span>
 
     <span class="c1"># ------------- mesh and integration points -------------</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">validate_integration_points</span><span class="p">(</span><span class="n">integration_points</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">integration_points</span><span class="o">.</span><span class="n">is_located</span><span class="p">()):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The integration points must all be located (use 'remove_unlocated')."</span><span class="p">)</span>
+    <span class="n">_validate_located_integration_points</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">)</span>
     <span class="n">N_p</span> <span class="o">=</span> <span class="n">integration_points</span><span class="o">.</span><span class="n">n_points</span>
-    <span class="n">point_vertices</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">integration_points</span><span class="o">.</span><span class="n">element_indices</span><span class="p">]</span>  <span class="c1"># (N_p, N_vpe)</span>
-    <span class="n">shape_functions</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">compute_shape_functions</span><span class="p">(</span><span class="n">integration_points</span><span class="o">.</span><span class="n">natural_coordinates</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">element_type</span><span class="p">)</span>  <span class="c1"># (N_p, N_vpe)</span>
-    <span class="n">sqrt_weights</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">integration_points</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>  <span class="c1"># (N_p,)</span>
+    <span class="c1"># The data of the mesh and the points: shared with the term this term was created from (with_*), only if</span>
+    <span class="c1"># it is the same mesh and the same integration points, both locked (their data cannot have changed)</span>
+    <span class="k">if</span> <span class="n">_geometry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">SDICTermGeometry</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">_geometry</span><span class="o">.</span><span class="n">is_valid_for</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">):</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">_geometry</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">"Internal error: the shared geometry of a SDIC term was computed for another mesh or other "</span>
+            <span class="s2">"integration points (or they are not locked anymore). Please report this bug."</span>
+        <span class="p">)</span>
+    <span class="n">point_vertices</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">point_vertices</span>  <span class="c1"># (N_p, N_vpe)</span>
+    <span class="n">shape_functions</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">shape_functions</span>  <span class="c1"># (N_p, N_vpe)</span>
+    <span class="n">sqrt_weights</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">sqrt_weights</span>  <span class="c1"># (N_p,)</span>
     <span class="n">reference_coordinates</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">coordinates</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">locate</span><span class="p">(</span><span class="n">displacement</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -656,7 +609,7 @@
     <span class="c1"># The frames of the pairings that are not optimized are reference frames: their displacements</span>
     <span class="c1"># are read from the analysis at each evaluation (they can be updated between two evaluations,</span>
     <span class="c1"># but not removed). They must be set at the creation of the term.</span>
-    <span class="n">reference_frames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">frame</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">used_frames</span> <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame_starts</span><span class="p">)</span>
+    <span class="n">reference_frames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">frame</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">used_frames</span> <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame_slices</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">reference_frames</span><span class="p">:</span>
         <span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>  <span class="c1"># Error if the displacement is not set</span>
     <span class="c1"># The groups of the gray level correction: given (computed once for several terms) or computed here</span>
@@ -669,19 +622,15 @@
     <span class="n">n_total_equations</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">equation_starts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Structure of the displacement blocks (fixed: the integration points are locked by the term)</span>
-    <span class="n">structure</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">SDICTermSparseStructure</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">elements</span><span class="p">,</span> <span class="n">integration_points</span><span class="o">.</span><span class="n">element_indices</span><span class="p">,</span> <span class="n">shape_functions</span><span class="p">,</span> <span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">optimized_frames</span>
-        <span class="k">else</span> <span class="kc">None</span>
-    <span class="p">)</span>
+    <span class="n">structure</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">structure</span> <span class="k">if</span> <span class="n">optimized_frames</span> <span class="k">else</span> <span class="kc">None</span>
 
     <span class="c1"># Reference views: no unknown in their frame nor in their camera, their projection does not</span>
     <span class="c1"># depend on the unknowns (kept by the reference projection cache with use_cache=True)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">camera_transformations</span><span class="p">(</span><span class="n">view</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="o">*</span><span class="n">view</span><span class="p">)</span><span class="o">.</span><span class="n">camera</span>
-        <span class="k">return</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_KINDS</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
 
-    <span class="n">reference_views</span> <span class="o">=</span> <span class="p">[</span><span class="n">view</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">used_views</span> <span class="k">if</span> <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame_starts</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">blocks</span><span class="p">[</span><span class="n">view</span><span class="p">]]</span>
+    <span class="n">reference_views</span> <span class="o">=</span> <span class="p">[</span><span class="n">view</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">used_views</span> <span class="k">if</span> <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame_slices</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">blocks</span><span class="p">[</span><span class="n">view</span><span class="p">]]</span>
     <span class="n">reference_view_transformations</span> <span class="o">=</span> <span class="p">{</span><span class="n">view</span><span class="p">:</span> <span class="n">camera_transformations</span><span class="p">(</span><span class="n">view</span><span class="p">)</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">reference_views</span><span class="p">}</span>
 
     <span class="c1"># Memory of an evaluation: the projections (and the positions of the points) are computed when a</span>
@@ -693,7 +642,7 @@
     <span class="c1"># ------------- evaluation -------------</span>
     <span class="c1"># The ranges of the unknowns, which partition [0, n_unknowns): the displacement of each optimized</span>
     <span class="c1"># frame, then each optimized transformation. A Jacobian is assembled by blocks of these ranges.</span>
-    <span class="n">unknown_ranges</span> <span class="o">=</span> <span class="p">[(</span><span class="n">frame_starts</span><span class="p">[</span><span class="n">frame</span><span class="p">],</span> <span class="n">frame_starts</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">+</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">optimized_frames</span><span class="p">]</span>
+    <span class="n">unknown_ranges</span> <span class="o">=</span> <span class="p">[(</span><span class="n">frame_slices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">frame_slices</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">optimized_frames</span><span class="p">]</span>
     <span class="n">unknown_ranges</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">starts</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">starts</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">))]</span>
     <span class="n">frame_range</span> <span class="o">=</span> <span class="p">{</span><span class="n">frame</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">optimized_frames</span><span class="p">)}</span>
     <span class="n">transformation_range</span> <span class="o">=</span> <span class="p">{</span><span class="n">starts</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">optimized_frames</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">))}</span>
@@ -708,7 +657,7 @@
         <span class="c1"># by row_factors (N_p C,) if given (weights and sign of the view in the pairing).</span>
         <span class="n">frame</span> <span class="o">=</span> <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">view_blocks_</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ColumnBlock</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_starts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_slices</span><span class="p">:</span>
             <span class="n">block</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">jacobian_dx</span><span class="p">,</span> <span class="n">row_factors</span><span class="p">)</span>  <span class="c1"># (N_p C, N_v E), csr</span>
             <span class="n">view_blocks_</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">frame_range</span><span class="p">[</span><span class="n">frame</span><span class="p">],</span> <span class="n">block</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">block</span><span class="o">.</span><span class="n">toarray</span><span class="p">()))</span>
         <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">[</span><span class="n">view</span><span class="p">]:</span>
@@ -772,27 +721,28 @@
     <span class="n">operators_cache</span> <span class="o">=</span> <span class="n">SDICTermOperatorsCache</span><span class="p">(</span><span class="n">_cache_length</span><span class="p">)</span> <span class="k">if</span> <span class="n">_use_cache</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="n">reference_cache</span> <span class="o">=</span> <span class="n">SDICTermReferenceProjectionCache</span><span class="p">(</span><span class="n">reference_views</span><span class="p">)</span> <span class="k">if</span> <span class="n">_use_cache</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="n">fixed_transformations</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">t</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">analysis</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span> <span class="ow">is</span> <span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">)</span>
+        <span class="n">t</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_transformations</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span> <span class="ow">is</span> <span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">)</span>
     <span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">check_transformations</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># The optimized transformations must still have parameters and be unlocked</span>
+        <span class="c1"># No transformation of the analysis is locked (the parameters of the optimized transformations</span>
+        <span class="c1"># set during the evaluation can always be restored in the 'finally'), and the optimized</span>
+        <span class="c1"># transformations still have parameters</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="o">.</span><span class="n">_has_locked_transformation</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The transformations of the cameras </span><span class="si">{</span><span class="n">analysis</span><span class="o">.</span><span class="n">_describe_locked_transformations</span><span class="p">()</span><span class="si">}</span><span class="s2"> were "</span>
+                <span class="sa">f</span><span class="s2">"locked after the creation of the analysis. The term sets the parameters of its optimized "</span>
+                <span class="sa">f</span><span class="s2">"transformations during each evaluation and restores them afterwards: all the transformations "</span>
+                <span class="sa">f</span><span class="s2">"of the analysis must remain modifiable. Create a new analysis with cameras using unlocked "</span>
+                <span class="sa">f</span><span class="s2">"transformations (e.g. the ReparametrizedTransformation that owns a locked transformation), "</span>
+                <span class="sa">f</span><span class="s2">"and a new term on it."</span>
+            <span class="p">)</span>
         <span class="k">for</span> <span class="n">entry</span><span class="p">,</span> <span class="n">transformation</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">entries</span><span class="p">,</span> <span class="n">objects</span><span class="p">):</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">transformation</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="k">if</span> <span class="n">transformation</span><span class="o">.</span><span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The optimized transformation </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">) has no parameters anymore: they "</span>
-                    <span class="sa">f</span><span class="s2">"were unset after the creation of the term. Set them again (for example with "</span>
+                    <span class="sa">f</span><span class="s2">"The optimized transformation </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">transformation</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">) has no parameters "</span>
+                    <span class="sa">f</span><span class="s2">"anymore: they were unset after the creation of the term. Set them again (for example with "</span>
                     <span class="sa">f</span><span class="s2">"analysis.set_transformation_parameters) or build a new term."</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">transformation</span><span class="o">.</span><span class="n">is_locked</span><span class="p">:</span>
-                <span class="n">reason</span> <span class="o">=</span> <span class="n">transformation</span><span class="o">.</span><span class="n">locked_message</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The optimized transformation </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">) was locked after the creation "</span>
-                    <span class="sa">f</span><span class="s2">"of the term, so the term cannot set its parameters during the evaluation. "</span>
-                    <span class="o">+</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"Reason of the lock: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s2"> "</span> <span class="k">if</span> <span class="n">reason</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="s2">"Build a new term without this transformation (or with the object that "</span>
-                    <span class="s2">"owns it, for example its ReparametrizedTransformation)."</span>
                 <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">assemble</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">requested</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -808,9 +758,8 @@
 
         <span class="k">def</span><span class="w"> </span><span class="nf">position</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">frame</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_starts</span><span class="p">:</span>
-                    <span class="n">start</span> <span class="o">=</span> <span class="n">frame_starts</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span>
-                    <span class="n">displacement</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_slices</span><span class="p">:</span>
+                    <span class="n">displacement</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">frame_slices</span><span class="p">[</span><span class="n">frame</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">displacement</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>  <span class="c1"># Reference frame: read from the analysis</span>
                 <span class="n">positions</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">locate</span><span class="p">(</span><span class="n">displacement</span><span class="p">)</span>
@@ -828,7 +777,7 @@
             <span class="n">kinds</span> <span class="o">=</span> <span class="p">{</span><span class="n">kind</span> <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">[</span><span class="n">view</span><span class="p">]}</span> <span class="k">if</span> <span class="n">derivatives</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span><span class="o">*</span><span class="n">view</span><span class="p">)</span><span class="o">.</span><span class="n">image_project</span><span class="p">(</span>
                 <span class="n">position</span><span class="p">(</span><span class="n">frame</span><span class="p">),</span>
-                <span class="n">dx</span><span class="o">=</span><span class="n">derivatives</span> <span class="ow">and</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_starts</span><span class="p">,</span>
+                <span class="n">dx</span><span class="o">=</span><span class="n">derivatives</span> <span class="ow">and</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_slices</span><span class="p">,</span>
                 <span class="n">dextrinsic</span><span class="o">=</span><span class="s2">"extrinsic"</span> <span class="ow">in</span> <span class="n">kinds</span><span class="p">,</span>
                 <span class="n">ddistortion</span><span class="o">=</span><span class="s2">"distortion"</span> <span class="ow">in</span> <span class="n">kinds</span><span class="p">,</span>
                 <span class="n">dintrinsic</span><span class="o">=</span><span class="s2">"intrinsic"</span> <span class="ow">in</span> <span class="n">kinds</span><span class="p">,</span>
@@ -986,9 +935,8 @@
         <span class="n">frames</span> <span class="o">=</span> <span class="p">{</span><span class="n">frame</span> <span class="k">for</span> <span class="n">pairing</span> <span class="ow">in</span> <span class="n">value_pairings</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pairing</span><span class="o">.</span><span class="n">frame_index_1</span><span class="p">,</span> <span class="n">pairing</span><span class="o">.</span><span class="n">frame_index_2</span><span class="p">)}</span>
         <span class="n">displacements</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_starts</span><span class="p">:</span>
-                <span class="n">start</span> <span class="o">=</span> <span class="n">frame_starts</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span>
-                <span class="n">displacements</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">N_v</span> <span class="o">*</span> <span class="n">E</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frame_slices</span><span class="p">:</span>
+                <span class="n">displacements</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">frame_slices</span><span class="p">[</span><span class="n">frame</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N_v</span><span class="p">,</span> <span class="n">E</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">displacements</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get_displacement</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
             <span class="n">positions</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">locate</span><span class="p">(</span><span class="n">displacements</span><span class="p">[</span><span class="n">frame</span><span class="p">])</span>
@@ -1004,7 +952,12 @@
             <span class="k">for</span> <span class="n">transformation</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">saved</span><span class="p">):</span>
                 <span class="n">transformation</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">values</span>
 
-    <span class="n">caches</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"operators"</span><span class="p">:</span> <span class="n">operators_cache</span><span class="p">,</span> <span class="s2">"reference_projections"</span><span class="p">:</span> <span class="n">reference_cache</span><span class="p">,</span> <span class="s2">"sparse_structure"</span><span class="p">:</span> <span class="n">structure</span><span class="p">}</span>
+    <span class="n">caches</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"operators"</span><span class="p">:</span> <span class="n">operators_cache</span><span class="p">,</span>
+        <span class="s2">"reference_projections"</span><span class="p">:</span> <span class="n">reference_cache</span><span class="p">,</span>
+        <span class="s2">"sparse_structure"</span><span class="p">:</span> <span class="n">structure</span><span class="p">,</span>
+        <span class="s2">"geometry"</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span>
+    <span class="p">}</span>
     <span class="k">for</span> <span class="n">function</span> <span class="ow">in</span> <span class="n">functions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">function</span><span class="o">.</span><span class="n">_sdic_term_caches</span> <span class="o">=</span> <span class="n">caches</span>
@@ -1065,36 +1018,15 @@
 <span class="sd">    each pairing (row :math:`p + c N_p`, with :math:`C` the number of channels of the</span>
 <span class="sd">    images of the pairing).</span>
 
-<span class="sd">    **Unknowns.** The vector of unknowns is</span>
+<span class="sd">    **Unknowns.** The term works on the complete vector of unknowns :math:`\vec{p}` of</span>
+<span class="sd">    ``unknowns`` in ``analysis``. It does not build the vectors: they are built by the analysis</span>
+<span class="sd">    (``pack_unknowns``, ``unpack_unknowns``, ``apply_unknowns``), or by the parametrization with a</span>
+<span class="sd">    reduced vector :math:`\vec{q}`.</span>
 
-<span class="sd">    .. math::</span>
+<span class="sd">    .. seealso::</span>
 
-<span class="sd">        \vec{p} = [\vec{p}_U, \vec{p}_T]</span>
-
-<span class="sd">    - :math:`\vec{p}_U`: the displacements :math:`(N_v, E)` of the optimized frames of</span>
-<span class="sd">      ``unknowns``, each one flattened in Fortran order (all the :math:`x` components, then all</span>
-<span class="sd">      the :math:`y` components, ...) and concatenated in their order;</span>
-<span class="sd">    - :math:`\vec{p}_T`: the parameters of the optimized transformations of ``unknowns``,</span>
-<span class="sd">      concatenated in their order.</span>
-
-<span class="sd">    The vectors are built by the analysis (:meth:`pack`, :meth:`unpack` and :meth:`apply` of the</span>
-<span class="sd">    term are :meth:`pysdic.SDICAnalysis.pack_unknowns`, :meth:`pysdic.SDICAnalysis.unpack_unknowns`</span>
-<span class="sd">    and :meth:`pysdic.SDICAnalysis.apply_unknowns` with :attr:`unknowns`):</span>
-
-<span class="sd">    - **without parametrization**, the solver starts from the complete vector</span>
-<span class="sd">      :math:`\vec{p}_0` = ``analysis.pack_unknowns(unknowns)``, and the result is written with</span>
-<span class="sd">      ``analysis.apply_unknowns(unknowns, result.parameters)``;</span>
-<span class="sd">    - **with a parametrization** (e.g. :class:`pysdic.SDICFixedParametrization`), the solver</span>
-<span class="sd">      starts from the reduced vector :math:`\vec{q}_0` = ``parametrization.reparametrized_pack()``,</span>
-<span class="sd">      and the result is written with ``parametrization.reparametrized_apply(result.parameters)``.</span>
-
-<span class="sd">    .. warning::</span>
-
-<span class="sd">        **With a parametrization, always use** ``parametrization.reparametrized_pack()``,</span>
-<span class="sd">        ``reparametrized_unpack(q)`` **and** ``reparametrized_apply(q)``: :meth:`pack`,</span>
-<span class="sd">        :meth:`unpack` and :meth:`apply` of the term (and the ``*_unknowns`` methods of the</span>
-<span class="sd">        analysis) work on the</span>
-<span class="sd">        complete vector :math:`\vec{p}`, not on the reduced vector :math:`\vec{q}` of the solver.</span>
+<span class="sd">        :class:`pysdic.SDICUnknowns` for the order of :math:`\vec{p}`, and</span>
+<span class="sd">        :class:`pysdic.SDICFixedParametrization` for the reduced vector :math:`\vec{q}`.</span>
 
 <span class="sd">    **Frames.** The frames of the pairings that are not optimized are reference frames: their</span>
 <span class="sd">    displacements are fixed during the optimization, and must be set when the term is created</span>
@@ -1104,8 +1036,11 @@
 
 <span class="sd">    **Immutability.** The configuration of the term cannot be changed: :meth:`with_unknowns`,</span>
 <span class="sd">    :meth:`with_pairings`, :meth:`with_integration_points` and :meth:`with_options` create a new</span>
-<span class="sd">    term with the same configuration except the given changes (new caches and structures; the</span>
-<span class="sd">    gray level groups given with ``gray_level_groups`` are shared). The objects of a problem</span>
+<span class="sd">    term with the same configuration except the given changes (new caches; the gray level groups</span>
+<span class="sd">    given with ``gray_level_groups`` are shared). The shape functions, the weights and the sparse</span>
+<span class="sd">    structure of the points only depend on the mesh and on the integration points, both locked:</span>
+<span class="sd">    they are shared by the new terms of :meth:`with_unknowns`, :meth:`with_pairings` and</span>
+<span class="sd">    :meth:`with_options`, and computed again by :meth:`with_integration_points`. The objects of a problem</span>
 <span class="sd">    must share the same analysis and unknowns objects: build the regularization and the</span>
 <span class="sd">    parametrization on the same new unknowns (their ``with_unknowns``), and check them with</span>
 <span class="sd">    :func:`pysdic.check_same_problem`.</span>
@@ -1131,7 +1066,7 @@
 <span class="sd">    extrinsic at all the frames), and is then one unknown for all of them.</span>
 
 <span class="sd">    - The optimized transformations must have parameters, must not be locked and must not be</span>
-<span class="sd">      given twice.</span>
+<span class="sd">      given twice (see :meth:`pysdic.SDICAnalysis.validate_unknowns`).</span>
 <span class="sd">    - The entries of the analysis must be independent: two different entries</span>
 <span class="sd">      ``(kind, index)`` must not share a unit transformation (see</span>
 <span class="sd">      :meth:`pysdic.SDICAnalysis.check_consistency`).</span>
@@ -1139,9 +1074,12 @@
 <span class="sd">      :class:`pysdic.ReparametrizedTransformation`, which is then optimized.</span>
 <span class="sd">    - At each evaluation, the parameters of the optimized transformations are set once for all</span>
 <span class="sd">      the cameras that use them, then restored: the analysis is never modified by an</span>
-<span class="sd">      evaluation. Apply the result with :meth:`apply`.</span>
-<span class="sd">    - At each evaluation, the optimized transformations must still have parameters and must not</span>
-<span class="sd">      have been locked after the creation of the term (an explicit error is raised otherwise).</span>
+<span class="sd">      evaluation. Apply the result with :meth:`pysdic.SDICAnalysis.apply_unknowns` (or</span>
+<span class="sd">      ``parametrization.reparametrized_apply`` with a parametrization).</span>
+<span class="sd">    - At each evaluation (residuals, Jacobian, gradient, Hessian, cost, :meth:`compute_residuals`),</span>
+<span class="sd">      no transformation of the analysis must have been locked after its creation, and the optimized</span>
+<span class="sd">      transformations must still have parameters (an explicit error is raised otherwise, before any</span>
+<span class="sd">      parameter is set: they can always be restored after the evaluation).</span>
 
 <span class="sd">    **Jacobian.** For each view of a pairing, the Jacobian of its gray levels is:</span>
 
@@ -1419,14 +1357,11 @@
         <span class="n">filter_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">sparse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">_geometry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SDICTermGeometry</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">SDICAnalysis</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'analysis' must be a SDICAnalysis. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknowns</span><span class="p">,</span> <span class="n">SDICUnknowns</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"Input 'unknowns' must be a SDICUnknowns (e.g. SDICUnknowns([1], [])). Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
-            <span class="p">)</span>
-        <span class="n">analysis</span><span class="o">.</span><span class="n">validate_unknowns</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span>
+        <span class="c1"># _geometry (private): the data of the mesh and the points of the term this one is created from by a</span>
+        <span class="c1"># with_* method (see SDICTermGeometry), checked before use. Never given by the user.</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">_validate_problem</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pairings</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'pairings' must be a list or a tuple of Pairing. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pairings</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="n">_validate_choice</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"rJ"</span><span class="p">,</span> <span class="s2">"gH"</span><span class="p">))</span>
@@ -1445,16 +1380,17 @@
 
         <span class="n">func_1</span><span class="p">,</span> <span class="n">func_2</span><span class="p">,</span> <span class="n">cost_func</span> <span class="o">=</span> <span class="n">_build_sdic_operators</span><span class="p">(</span>
             <span class="n">analysis</span><span class="p">,</span>
+            <span class="n">unknowns</span><span class="p">,</span>
+            <span class="n">layout</span><span class="p">,</span>
             <span class="n">integration_points</span><span class="p">,</span>
             <span class="nb">list</span><span class="p">(</span><span class="n">pairings</span><span class="p">),</span>
-            <span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">),</span>
-            <span class="nb">list</span><span class="p">(</span><span class="n">unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">),</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
             <span class="n">gl_correction</span><span class="o">=</span><span class="n">gl_correction</span><span class="p">,</span>
             <span class="n">gray_level_groups</span><span class="o">=</span><span class="n">gray_level_groups</span><span class="p">,</span>
             <span class="n">filter_nans</span><span class="o">=</span><span class="n">filter_nans</span><span class="p">,</span>
             <span class="n">sparse</span><span class="o">=</span><span class="n">sparse</span><span class="p">,</span>
             <span class="n">_use_cache</span><span class="o">=</span><span class="n">use_cache</span><span class="p">,</span>
+            <span class="n">_geometry</span><span class="o">=</span><span class="n">_geometry</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"rJ"</span><span class="p">:</span>
             <span class="n">term</span> <span class="o">=</span> <span class="n">pysolvegn</span><span class="o">.</span><span class="n">Term</span><span class="o">.</span><span class="n">from_rJ</span><span class="p">(</span>
@@ -1480,6 +1416,7 @@
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_term</span> <span class="o">=</span> <span class="n">term</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_caches</span> <span class="o">=</span> <span class="n">func_1</span><span class="o">.</span><span class="n">_sdic_term_caches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_caches</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="n">func_1</span><span class="o">.</span><span class="n">_sdic_term_values</span>
 
     <span class="c1"># ------------------------------------------------------------------ New terms</span>
@@ -1506,6 +1443,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_integration_points</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pairings</span> <span class="k">if</span> <span class="n">pairings</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">pairings</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">,</span>
+            <span class="n">_geometry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -1513,13 +1451,16 @@
 <a class="viewcode-back" href="../../../api/_generated/pysdic.SDICCorrelationTerm.with_pairings.html#pysdic.SDICCorrelationTerm.with_pairings">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">with_pairings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pairings</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Pairing</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">SDICCorrelationTerm</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""A new term with other pairings, the same unknowns, integration points and options."""</span>
-        <span class="k">return</span> <span class="n">SDICCorrelationTerm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integration_points</span><span class="p">,</span> <span class="n">pairings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">SDICCorrelationTerm</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integration_points</span><span class="p">,</span> <span class="n">pairings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">,</span> <span class="n">_geometry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SDICCorrelationTerm.with_integration_points">
 <a class="viewcode-back" href="../../../api/_generated/pysdic.SDICCorrelationTerm.with_integration_points.html#pysdic.SDICCorrelationTerm.with_integration_points">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">with_integration_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">:</span> <span class="n">IntegrationPoints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SDICCorrelationTerm</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""A new term with other integration points, the same unknowns, pairings and options."""</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""A new term with other integration points, the same unknowns, pairings and options (the shape</span>
+<span class="sd">        functions and the sparse structure are computed again for the new points)."""</span>
         <span class="k">return</span> <span class="n">SDICCorrelationTerm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="n">integration_points</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pairings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span></div>
 
 
@@ -1534,7 +1475,12 @@
         <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown options </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">. Valid options: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_OPTION_KEYS</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SDICCorrelationTerm</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integration_points</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pairings</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_integration_points</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pairings</span><span class="p">,</span>
+            <span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">},</span>
+            <span class="n">_geometry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_geometry</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -1563,16 +1509,6 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">pairings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Pairing</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""The pairings, including those without unknown (ignored by the term)."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pairings</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">optimized_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The optimized frames of the unknowns."""</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="o">.</span><span class="n">optimized_frames</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">optimized_transformations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="o">...</span><span class="p">]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The optimized transformations ``(kind, index)`` of the unknowns."""</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="o">.</span><span class="n">optimized_transformations</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -1625,40 +1561,6 @@
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""The options of the term (a copy): the keyword parameters of the constructor."""</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">n_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""The number of unknowns."""</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">n_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">)</span>
-
-    <span class="c1"># ------------------------------------------------------------------ Unknowns</span>
-<div class="viewcode-block" id="SDICCorrelationTerm.pack">
-<a class="viewcode-back" href="../../../api/_generated/pysdic.SDICCorrelationTerm.pack.html#pysdic.SDICCorrelationTerm.pack">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">pack</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">        The complete vector of unknowns of the current state of the analysis: the initial</span>
-<span class="sd">        parameters ``p0`` **without parametrization**, see :meth:`pysdic.SDICAnalysis.pack_unknowns`. With a</span>
-<span class="sd">        parametrization, use its reduced vector (e.g.</span>
-<span class="sd">        :meth:`pysdic.SDICFixedParametrization.reparametrized_pack`).</span>
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">pack_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SDICCorrelationTerm.unpack">
-<a class="viewcode-back" href="../../../api/_generated/pysdic.SDICCorrelationTerm.unpack.html#pysdic.SDICCorrelationTerm.unpack">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">unpack</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">ArrayLike</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Split a complete vector of unknowns, see :meth:`pysdic.SDICAnalysis.unpack_unknowns`."""</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">unpack_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SDICCorrelationTerm.apply">
-<a class="viewcode-back" href="../../../api/_generated/pysdic.SDICCorrelationTerm.apply.html#pysdic.SDICCorrelationTerm.apply">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">"""Write a complete vector of unknowns in the analysis, see :meth:`pysdic.SDICAnalysis.apply_unknowns`."""</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">apply_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span></div>
-
-
     <span class="c1"># ------------------------------------------------------------------ Residuals</span>
 <div class="viewcode-block" id="SDICCorrelationTerm.compute_residuals">
 <a class="viewcode-back" href="../../../api/_generated/pysdic.SDICCorrelationTerm.compute_residuals.html#pysdic.SDICCorrelationTerm.compute_residuals">[docs]</a>
@@ -1679,7 +1581,8 @@
 <span class="sd">        ----------</span>
 <span class="sd">        parameters : Optional[ArrayLike], optional</span>
 <span class="sd">            The complete vector of unknowns, of shape :math:`(N_f N_v E + \sum n_p,)` (with a parametrization,</span>
-<span class="sd">            ``parametrization.p_func(q)``). By default, the current state of the analysis (:meth:`pack`).</span>
+<span class="sd">            ``parametrization.p_func(q)``). By default, the current state of the analysis</span>
+<span class="sd">            (``analysis.pack_unknowns(unknowns)``).</span>
 
 <span class="sd">        pairings : Optional[Sequence[:class:`pysdic.Pairing`]], optional</span>
 <span class="sd">            The pairings to evaluate: any valid pairing of the analysis (also a pairing without unknown, or not</span>
@@ -1692,7 +1595,7 @@
 
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analysis</span><span class="o">.</span><span class="n">pack_unknowns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pairings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pairings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairings</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pairings</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -1702,10 +1605,8 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"SDICCorrelationTerm(mode=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pairings</span><span class="p">)</span><span class="si">}</span><span class="s2"> pairings, "</span>
-            <span class="sa">f</span><span class="s2">"optimized_frames=</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimized_frames</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
-            <span class="sa">f</span><span class="s2">"optimized_transformations=</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimized_transformations</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">integration_points</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2"> integration points, n_unknowns=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_unknowns</span><span class="si">}</span><span class="s2">, "</span>
+            <span class="sa">f</span><span class="s2">"SDICCorrelationTerm(mode=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pairings</span><span class="p">)</span><span class="si">}</span><span class="s2"> pairings, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknowns</span><span class="si">!r}</span><span class="s2">, "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">integration_points</span><span class="o">.</span><span class="n">n_points</span><span class="si">}</span><span class="s2"> integration points, "</span>
             <span class="sa">f</span><span class="s2">"sparse=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sparse</span><span class="si">}</span><span class="s2">, use_cache=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">use_cache</span><span class="si">}</span><span class="s2">)"</span>
         <span class="p">)</span></div>
 
