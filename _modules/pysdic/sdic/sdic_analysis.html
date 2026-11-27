@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.sdic.sdic_analysis &#8212; pysdic 2.0.2 documentation</title>
+    <title>pysdic.sdic.sdic_analysis &#8212; pysdic 2.1.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=c2377ec0"></script>
+    <script src="../../../_static/documentation_options.js?v=20623aea"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.0.2 documentation</p>
+    <p class="title logo__title">pysdic 2.1.0 documentation</p>
   
 </a></div>
     
@@ -385,6 +385,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformations.transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComposedTransformation</span><span class="p">,</span> <span class="n">Transformation</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformations.reparametrized_transformation</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReparametrizedTransformation</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_as_array</span><span class="p">,</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_integer</span><span class="p">,</span> <span class="n">_validate_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._load_previous_sdic_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">PREVIOUS_FORMAT_NAMES</span><span class="p">,</span> <span class="n">load_previous_save</span><span class="p">,</span> <span class="n">parse_version</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.pairing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pairing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.sdic_unknowns</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDICUnknowns</span><span class="p">,</span> <span class="n">_as_component_selection</span><span class="p">,</span> <span class="n">_as_vertex_selection</span>
 
@@ -415,10 +416,21 @@
 <span class="c1"># Sentinel of SDICAnalysis.with_views: keep the current times</span>
 <span class="n">_KEEP</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
 
-<span class="c1"># Format of the folders written by SDICAnalysis.to_folder (see SDICAnalysis.from_folder)</span>
+<span class="c1"># Format of the saves written by SDICAnalysis.to_folder (see SDICAnalysis.from_folder). The saves</span>
+<span class="c1"># written by the versions in [_MIN_VERSION, _MAX_VERSION) (None: no bound) have the current format;</span>
+<span class="c1"># the older ones are converted while loading (see _load_previous_sdic_analysis.py, whose last</span>
+<span class="c1"># migration must end at _MIN_VERSION).</span>
 <span class="n">_FORMAT_NAME</span> <span class="o">=</span> <span class="s2">"pysdic.SDICAnalysis"</span>
-<span class="n">_FORMAT_VERSION</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">_TRANSFORMATION_FOLDERS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"extrinsic"</span><span class="p">:</span> <span class="s2">"extrinsics"</span><span class="p">,</span> <span class="s2">"distortion"</span><span class="p">:</span> <span class="s2">"distortions"</span><span class="p">,</span> <span class="s2">"intrinsic"</span><span class="p">:</span> <span class="s2">"intrinsics"</span><span class="p">}</span>
+<span class="n">_MIN_VERSION</span> <span class="o">=</span> <span class="s2">"2.1.0"</span>
+<span class="n">_MAX_VERSION</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Files of the atoms of a save: kind -&gt; (folder, extension)</span>
+<span class="n">_ATOM_FILES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"image"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"images"</span><span class="p">,</span> <span class="s2">"npz"</span><span class="p">),</span>
+    <span class="s2">"extrinsic"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"extrinsics"</span><span class="p">,</span> <span class="s2">"json"</span><span class="p">),</span>
+    <span class="s2">"distortion"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"distortions"</span><span class="p">,</span> <span class="s2">"json"</span><span class="p">),</span>
+    <span class="s2">"intrinsic"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"intrinsics"</span><span class="p">,</span> <span class="s2">"json"</span><span class="p">),</span>
+<span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_index_width</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -426,9 +438,46 @@
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_timestamp</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="c1"># Current UTC time with microseconds, usable in a file name</span>
-    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">T%H%M%S</span><span class="si">%f</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_write_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_arrays</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># Numeric arrays of an NPZ file, without pickle</span>
+    <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">npz</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">npz</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">npz</span><span class="o">.</span><span class="n">files</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_metadata</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="c1"># The metadata of a SDIC save (current or previous format), or None if the folder is not a SDIC save</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">_read_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"metadata.json"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"format"</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_FORMAT_NAME</span><span class="p">,</span> <span class="o">*</span><span class="n">PREVIOUS_FORMAT_NAMES</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">metadata</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_version</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+    <span class="c1"># The parsed version of pysdic that wrote the save, which must be before _MAX_VERSION</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pysdic_version"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">saved</span> <span class="o">=</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The SDIC save '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' has an invalid pysdic version </span><span class="si">{</span><span class="n">version</span><span class="si">!r}</span><span class="s2">."</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+    <span class="k">if</span> <span class="n">_MAX_VERSION</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">saved</span> <span class="o">&gt;=</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">_MAX_VERSION</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"The SDIC save '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' was written by pysdic </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">, but this version of pysdic "</span>
+            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">) loads the saves written by the versions before </span><span class="si">{</span><span class="n">_MAX_VERSION</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">saved</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_sha256</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -440,49 +489,6 @@
     <span class="k">return</span> <span class="n">digest</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_write_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_read_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_write_arrays</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">arrays</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="c1"># NPZ of numeric arrays, without pickle (no object array can be written)</span>
-    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">numpy</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">arrays</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_read_arrays</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">npz</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">npz</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">npz</span><span class="o">.</span><span class="n">files</span><span class="p">}</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_is_sdic_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="c1"># True if the folder contains the metadata of a SDIC save</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="s2">"metadata.json"</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_read_json</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"format"</span><span class="p">)</span> <span class="o">==</span> <span class="n">_FORMAT_NAME</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">False</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_write_manifest</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="c1"># SHA-256 of all the files of the folder (except the manifest itself)</span>
-    <span class="n">files</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"manifest.json"</span><span class="p">:</span>
-            <span class="n">files</span><span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()]</span> <span class="o">=</span> <span class="n">_sha256</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="n">_write_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"manifest.json"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"algorithm"</span><span class="p">:</span> <span class="s2">"sha256"</span><span class="p">,</span> <span class="s2">"files"</span><span class="p">:</span> <span class="n">files</span><span class="p">})</span>
-
-
 <span class="k">def</span><span class="w"> </span><span class="nf">_check_manifest</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># Check the SHA-256 of all the files listed in the manifest</span>
     <span class="n">manifest_path</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="s2">"manifest.json"</span>
@@ -491,9 +497,8 @@
             <span class="sa">f</span><span class="s2">"The SDIC save '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' has no manifest.json: its integrity cannot be checked. "</span>
             <span class="sa">f</span><span class="s2">"Use check_integrity=False to load it anyway."</span>
         <span class="p">)</span>
-    <span class="n">manifest</span> <span class="o">=</span> <span class="n">_read_json</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">)</span>
     <span class="n">missing</span><span class="p">,</span> <span class="n">modified</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">relative</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"files"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">relative</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">_read_json</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"files"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="n">relative</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relative</span><span class="p">)</span>
@@ -1875,113 +1880,96 @@
     <span class="c1"># ===================================================================</span>
     <span class="c1"># Save and load</span>
     <span class="c1"># ===================================================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="c1"># Summary of the analysis, written in metadata.json and compared at the loading</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"n_frames"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_frames</span><span class="p">,</span>
+            <span class="s2">"n_vertices"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span>
+            <span class="s2">"n_elements"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span>
+            <span class="s2">"n_dimensions"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_dimensions</span><span class="p">,</span>
+            <span class="s2">"n_views"</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">frame_views</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame_views</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_views</span><span class="p">],</span>
+            <span class="s2">"n_images"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="s2">"n_cameras"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="s2">"camera"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="s2">"n_transformations"</span><span class="p">:</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">},</span>
+            <span class="s2">"frames_with_displacement"</span><span class="p">:</span> <span class="p">[</span><span class="n">frame</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_displacements</span><span class="p">)</span> <span class="k">if</span> <span class="n">u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">"has_times"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_write_folder</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">export_vtk</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Write the content of a save in an existing empty folder (see to_folder)</span>
-        <span class="n">structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n_frames"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_frames</span><span class="p">}</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_STRUCTURE_KINDS</span><span class="p">}</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="p">{</span><span class="nb">id</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objs</span><span class="p">)}</span> <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">objs</span> <span class="ow">in</span> <span class="n">objects</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
         <span class="c1"># Mesh (exact NPZ, optional VTK for the visualization only)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">to_npz_file</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"mesh"</span> <span class="o">/</span> <span class="s2">"mesh.npz"</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"mesh"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"mesh/mesh.npz"</span>
         <span class="k">if</span> <span class="n">export_vtk</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">to_vtk_file</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"mesh"</span> <span class="o">/</span> <span class="s2">"mesh.vtk"</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># Atoms: images and transformations, each distinct object saved once</span>
-        <span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="s2">"image"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">_index_width</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">))</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"images"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"images/image_</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">0</span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">d</span><span class="si">}</span><span class="s2">.npz"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">))]</span>
-        <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">relative</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">structure</span><span class="p">[</span><span class="s2">"images"</span><span class="p">]):</span>
-            <span class="n">image</span><span class="o">.</span><span class="n">to_npz_file</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="n">relative</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"transformations"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">transformation_indices</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">:</span>
-            <span class="n">objects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">width</span> <span class="o">=</span> <span class="n">_index_width</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">))</span>
-            <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_TRANSFORMATION_FOLDERS</span><span class="p">[</span><span class="n">kind</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">0</span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">d</span><span class="si">}</span><span class="s2">.json"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">))]</span>
-            <span class="k">for</span> <span class="n">transformation</span><span class="p">,</span> <span class="n">relative</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
-                <span class="n">transformation</span><span class="o">.</span><span class="n">to_json_file</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="n">relative</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">structure</span><span class="p">[</span><span class="s2">"transformations"</span><span class="p">][</span><span class="n">kind</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span>
-            <span class="n">transformation_indices</span><span class="p">[</span><span class="n">kind</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objects</span><span class="p">)}</span>
-
-        <span class="c1"># Cameras and views, as indices of the atoms</span>
-        <span class="n">cameras</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="s2">"camera"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">camera_indices</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">(</span><span class="n">camera</span><span class="p">):</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">camera</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cameras</span><span class="p">)}</span>
-        <span class="n">image_indices</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">(</span><span class="n">image</span><span class="p">):</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">)}</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"cameras"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span>
-                <span class="s2">"sensor_height"</span><span class="p">:</span> <span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span>
-                <span class="s2">"sensor_width"</span><span class="p">:</span> <span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">,</span>
-                <span class="o">**</span><span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="n">transformation_indices</span><span class="p">[</span><span class="n">kind</span><span class="p">][</span><span class="nb">id</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">))]</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">},</span>
-            <span class="p">}</span>
-            <span class="k">for</span> <span class="n">camera</span> <span class="ow">in</span> <span class="n">cameras</span>
-        <span class="p">]</span>
-        <span class="n">views</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">(</span><span class="s2">"view"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">view_indices</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="p">):</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">view</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">views</span><span class="p">)}</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"views"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">"camera"</span><span class="p">:</span> <span class="n">camera_indices</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="p">)],</span> <span class="s2">"image"</span><span class="p">:</span> <span class="n">image_indices</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">image</span><span class="p">)]}</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">views</span>
-        <span class="p">]</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"frames"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">view_indices</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="p">)]</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">frame_views</span><span class="p">]</span> <span class="k">for</span> <span class="n">frame_views</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_views</span><span class="p">]</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"structures"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_STRUCTURE_KINDS</span><span class="p">}</span>
+        <span class="c1"># Atoms: each distinct image and transformation is saved once</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="p">(</span><span class="n">subfolder</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span> <span class="ow">in</span> <span class="n">_ATOM_FILES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">_index_width</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="n">kind</span><span class="p">]))</span>
+            <span class="n">paths</span><span class="p">[</span><span class="n">kind</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">subfolder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">0</span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">d</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="n">kind</span><span class="p">]))]</span>
+            <span class="k">for</span> <span class="n">obj</span><span class="p">,</span> <span class="n">relative</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="n">kind</span><span class="p">],</span> <span class="n">paths</span><span class="p">[</span><span class="n">kind</span><span class="p">]):</span>
+                <span class="n">save</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">to_npz_file</span> <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">"npz"</span> <span class="k">else</span> <span class="n">obj</span><span class="o">.</span><span class="n">to_json_file</span>
+                <span class="n">save</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="n">relative</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Displacements (only the frames with a displacement) and times</span>
         <span class="n">width</span> <span class="o">=</span> <span class="n">_index_width</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_frames</span><span class="p">)</span>
-        <span class="n">displacement_keys</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">displacements</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span> <span class="sa">f</span><span class="s2">"frame_</span><span class="si">{</span><span class="n">frame</span><span class="si">:</span><span class="s2">0</span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">d</span><span class="si">}</span><span class="s2">"</span>
-            <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">displacement</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_displacements</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">displacement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_displacements</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="n">displacement_keys</span><span class="p">:</span>
-            <span class="n">_write_arrays</span><span class="p">(</span>
+        <span class="k">if</span> <span class="n">displacements</span><span class="p">:</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span>
                 <span class="n">folder</span> <span class="o">/</span> <span class="s2">"displacements.npz"</span><span class="p">,</span>
-                <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_displacements</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">)]</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">displacement_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+                <span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_displacements</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">)]</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">displacements</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
             <span class="p">)</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"displacements"</span><span class="p">]</span> <span class="o">=</span> <span class="n">displacement_keys</span>
-        <span class="n">structure</span><span class="p">[</span><span class="s2">"times"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">_write_arrays</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"times.npz"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"times"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_times</span><span class="p">})</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"times.npz"</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_times</span><span class="p">)</span>
 
-        <span class="n">_write_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"structure.json"</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span>
+        <span class="c1"># Cameras, views and frames as indices of the atoms</span>
+        <span class="n">_write_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"structure.json"</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s2">"mesh"</span><span class="p">:</span> <span class="s2">"mesh/mesh.npz"</span><span class="p">,</span>
+            <span class="s2">"images"</span><span class="p">:</span> <span class="n">paths</span><span class="p">[</span><span class="s2">"image"</span><span class="p">],</span>
+            <span class="s2">"transformations"</span><span class="p">:</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="n">paths</span><span class="p">[</span><span class="n">kind</span><span class="p">]</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">},</span>
+            <span class="s2">"cameras"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">"sensor_height"</span><span class="p">:</span> <span class="n">camera</span><span class="o">.</span><span class="n">sensor_height</span><span class="p">,</span>
+                    <span class="s2">"sensor_width"</span><span class="p">:</span> <span class="n">camera</span><span class="o">.</span><span class="n">sensor_width</span><span class="p">,</span>
+                    <span class="o">**</span><span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="n">index</span><span class="p">[</span><span class="n">kind</span><span class="p">][</span><span class="nb">id</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">kind</span><span class="p">))]</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_TRANSFORMATION_KINDS</span><span class="p">},</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">camera</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">"camera"</span><span class="p">]</span>
+            <span class="p">],</span>
+            <span class="s2">"views"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">"camera"</span><span class="p">:</span> <span class="n">index</span><span class="p">[</span><span class="s2">"camera"</span><span class="p">][</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="p">)],</span> <span class="s2">"image"</span><span class="p">:</span> <span class="n">index</span><span class="p">[</span><span class="s2">"image"</span><span class="p">][</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">image</span><span class="p">)]}</span>
+                <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">"view"</span><span class="p">]</span>
+            <span class="p">],</span>
+            <span class="s2">"frames"</span><span class="p">:</span> <span class="p">[[</span><span class="n">index</span><span class="p">[</span><span class="s2">"view"</span><span class="p">][</span><span class="nb">id</span><span class="p">(</span><span class="n">view</span><span class="p">)]</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">frame_views</span><span class="p">]</span> <span class="k">for</span> <span class="n">frame_views</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_views</span><span class="p">],</span>
+            <span class="s2">"displacements"</span><span class="p">:</span> <span class="n">displacements</span><span class="p">,</span>
+            <span class="s2">"times"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"structures"</span><span class="p">:</span> <span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span> <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_STRUCTURE_KINDS</span><span class="p">},</span>
+        <span class="p">})</span>
 
-        <span class="c1"># Metadata, readable by a human in README.txt</span>
+        <span class="c1"># Metadata, and the same information readable by a human in README.txt</span>
         <span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
-        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_summary</span><span class="p">()</span>
+        <span class="n">_write_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"metadata.json"</span><span class="p">,</span> <span class="p">{</span>
             <span class="s2">"format"</span><span class="p">:</span> <span class="n">_FORMAT_NAME</span><span class="p">,</span>
-            <span class="s2">"format_version"</span><span class="p">:</span> <span class="n">_FORMAT_VERSION</span><span class="p">,</span>
             <span class="s2">"pysdic_version"</span><span class="p">:</span> <span class="n">__version__</span><span class="p">,</span>
             <span class="s2">"created_utc"</span><span class="p">:</span> <span class="n">created</span><span class="p">,</span>
             <span class="s2">"title"</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
             <span class="s2">"description"</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
-            <span class="s2">"n_frames"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_frames</span><span class="p">,</span>
-            <span class="s2">"n_vertices"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="p">,</span>
-            <span class="s2">"n_elements"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="p">,</span>
-            <span class="s2">"n_views"</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">frame_views</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame_views</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_views</span><span class="p">],</span>
-            <span class="s2">"n_images"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">),</span>
-            <span class="s2">"n_cameras"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cameras</span><span class="p">),</span>
-            <span class="s2">"frames_with_displacement"</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">displacement_keys</span><span class="p">],</span>
-            <span class="s2">"has_times"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="n">_write_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"metadata.json"</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">f</span><span class="s2">"pysdic SDIC save (format version </span><span class="si">{</span><span class="n">_FORMAT_VERSION</span><span class="si">}</span><span class="s2">, pysdic </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"Created (UTC): </span><span class="si">{</span><span class="n">created</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Title: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Description: </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="s2">"summary"</span><span class="p">:</span> <span class="n">summary</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"pysdic SDIC save (pysdic </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Created (UTC): </span><span class="si">{</span><span class="n">created</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"Title"</span><span class="p">,</span> <span class="n">title</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Description"</span><span class="p">,</span> <span class="n">description</span><span class="p">))</span> <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">""</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"element_type: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">element_type</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">summary</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
         <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="s2">""</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"Frames: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_frames</span><span class="si">}</span><span class="s2"> (times </span><span class="si">{</span><span class="s1">'defined'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_times</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'not defined'</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"Mesh: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_vertices</span><span class="si">}</span><span class="s2"> vertices, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">n_elements</span><span class="si">}</span><span class="s2"> elements "</span>
-            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">element_type</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"Views per frame: </span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'n_views'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"Distinct images: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2">, cameras: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cameras</span><span class="p">)</span><span class="si">}</span><span class="s2">, extrinsics: "</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s1">'transformations'</span><span class="p">][</span><span class="s1">'extrinsic'</span><span class="p">])</span><span class="si">}</span><span class="s2">, distortions: "</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s1">'transformations'</span><span class="p">][</span><span class="s1">'distortion'</span><span class="p">])</span><span class="si">}</span><span class="s2">, intrinsics: "</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s1">'transformations'</span><span class="p">][</span><span class="s1">'intrinsic'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"Frames with a displacement: </span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'frames_with_displacement'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="s2">""</span><span class="p">,</span>
             <span class="s2">"Load with: pysdic.SDICAnalysis.from_folder(path)"</span><span class="p">,</span>
             <span class="s2">"Do not modify the files: their SHA-256 are checked at the loading (manifest.json)."</span><span class="p">,</span>
@@ -1989,13 +1977,61 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"README.txt"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">_write_manifest</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+        <span class="c1"># Manifest: SHA-256 of all the other files, written last</span>
+        <span class="n">manifest_path</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="s2">"manifest.json"</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">():</span> <span class="n">_sha256</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">path</span> <span class="o">!=</span> <span class="n">manifest_path</span>
+        <span class="p">}</span>
+        <span class="n">_write_json</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">,</span> <span class="p">{</span><span class="s2">"algorithm"</span><span class="p">:</span> <span class="s2">"sha256"</span><span class="p">,</span> <span class="s2">"files"</span><span class="p">:</span> <span class="n">files</span><span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">structure</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># The loaded analysis must have the saved summary (metadata.json) and structures (structure.json).</span>
+        <span class="c1"># Only the keys of the saved summary are compared (a previous format may lack some of them).</span>
+        <span class="n">saved_summary</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"summary"</span><span class="p">)</span>
+        <span class="n">saved_summary</span> <span class="o">=</span> <span class="n">saved_summary</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">saved_summary</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">saved_structures</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"structures"</span><span class="p">)</span>
+        <span class="n">saved_structures</span> <span class="o">=</span> <span class="n">saved_structures</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">saved_structures</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">mismatches</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: saved </span><span class="si">{</span><span class="n">saved_summary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">!r}</span><span class="s2">, loaded </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">"</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_summary</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">saved_summary</span> <span class="ow">and</span> <span class="n">saved_summary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_STRUCTURE_KINDS</span><span class="p">:</span>
+            <span class="n">loaded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">saved_structures</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span> <span class="o">!=</span> <span class="n">loaded</span><span class="p">:</span>
+                <span class="n">mismatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"structure of the </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">s: saved </span><span class="si">{</span><span class="n">saved_structures</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span><span class="si">!r}</span><span class="s2">, loaded </span><span class="si">{</span><span class="n">loaded</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mismatches</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Inconsistent loading of '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">': the loaded analysis differs from the save "</span>
+                <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="s1">'; '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mismatches</span><span class="p">)</span><span class="si">}</span><span class="s2">). The save may have been modified or written by an "</span>
+                <span class="sa">f</span><span class="s2">"incompatible version."</span>
+            <span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_text</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' must be a string or None. Got type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_target</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">make_dirs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">is_folder</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Check that a save (folder or archive) can be written at 'path' and create its parent</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">' already exists. Use overwrite=True to replace it."</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_folder</span> <span class="ow">and</span> <span class="n">_read_metadata</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">' exists but is not a SDIC save (no metadata.json of the format "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_FORMAT_NAME</span><span class="si">!r}</span><span class="s2">): it is not replaced, to avoid deleting unrelated data."</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_folder</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">' is a folder: it cannot be replaced by an archive."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">make_dirs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The parent folder '</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="si">}</span><span class="s2">' does not exist. Use make_dirs=True to create it."</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SDICAnalysis.to_folder">
 <a class="viewcode-back" href="../../../api/sdic/_generated/pysdic.SDICAnalysis.to_folder.html#pysdic.SDICAnalysis.to_folder">[docs]</a>
@@ -2018,8 +2054,8 @@
 <span class="sd">        .. code-block:: text</span>
 
 <span class="sd">            folder/</span>
-<span class="sd">            ├── metadata.json        format, versions, date, title, description, summary</span>
-<span class="sd">            ├── README.txt           the same summary, readable by a human</span>
+<span class="sd">            ├── metadata.json        format, pysdic version, date, title, description, summary</span>
+<span class="sd">            ├── README.txt           the same information, readable by a human</span>
 <span class="sd">            ├── manifest.json        SHA-256 of all the files (checked at the loading)</span>
 <span class="sd">            ├── structure.json       cameras, views and frames as indices of the atoms,</span>
 <span class="sd">            │                        and the structures of the analysis</span>
@@ -2036,9 +2072,9 @@
 <span class="sd">        indices of the file names have the number of digits of the largest index (for</span>
 <span class="sd">        example 4 digits for 1543 frames).</span>
 
-<span class="sd">        The save is safe: the content is written in a temporary folder next to ``folder``</span>
-<span class="sd">        (named with the current time), which is renamed at the end. If an error occurs, the</span>
-<span class="sd">        temporary folder is removed and an existing ``folder`` is unchanged.</span>
+<span class="sd">        The save is safe: the content is written in a temporary folder next to ``folder``,</span>
+<span class="sd">        which is renamed at the end. If an error occurs, the temporary folder is removed and</span>
+<span class="sd">        an existing ``folder`` is unchanged.</span>
 
 <span class="sd">        .. note::</span>
 
@@ -2092,47 +2128,25 @@
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_text</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">)</span>
         <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_text</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">)</span>
         <span class="n">export_vtk</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">export_vtk</span><span class="p">,</span> <span class="s2">"export_vtk"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_target</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="n">make_dirs</span><span class="p">,</span> <span class="n">is_folder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The folder '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' already exists. Use overwrite=True to replace it (only "</span>
-                    <span class="sa">f</span><span class="s2">"an existing SDIC save can be replaced)."</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_is_sdic_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' exists but is not a SDIC save (no metadata.json of the format "</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_FORMAT_NAME</span><span class="si">!r}</span><span class="s2">): it is not replaced, to avoid deleting unrelated data."</span>
-                <span class="p">)</span>
-        <span class="n">parent</span> <span class="o">=</span> <span class="n">folder</span><span class="o">.</span><span class="n">parent</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">make_dirs</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The parent folder '</span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2">' does not exist. Use make_dirs=True to create it."</span>
-                <span class="p">)</span>
-            <span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">stamp</span> <span class="o">=</span> <span class="n">_timestamp</span><span class="p">()</span>
-        <span class="n">temporary</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">folder</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.tmp-</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">"</span>
-        <span class="n">temporary</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+        <span class="c1"># Write in a temporary folder next to 'folder', then swap it with the existing save (if any)</span>
+        <span class="n">temporary</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">folder</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.tmp-"</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">folder</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_write_folder</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">export_vtk</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">raise</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
-            <span class="k">return</span>
-        <span class="n">old</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">folder</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.old-</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">"</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">old</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>  <span class="c1"># Restore the previous save</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">raise</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">old</span><span class="p">)</span></div>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="n">old</span> <span class="o">=</span> <span class="n">temporary</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="n">temporary</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">".old"</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">old</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>  <span class="c1"># Restore the previous save</span>
+                <span class="k">raise</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temporary</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.from_folder">
@@ -2148,10 +2162,13 @@
 <span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Load an analysis saved with :meth:`to_folder`.</span>
 
-<span class="sd">        The atoms are loaded first (mesh, images, extrinsics, distortions, intrinsics), then</span>
-<span class="sd">        the cameras and the views are rebuilt with the same sharing as the saved analysis,</span>
-<span class="sd">        and the analysis is created with its times and displacements. Finally, the</span>
-<span class="sd">        structures of the loaded analysis (:meth:`compute_structure`) are compared with the</span>
+<span class="sd">        A save written by a previous version of pysdic (before 2.1.0) is converted to the</span>
+<span class="sd">        current format while loading, with a :class:`PreviousSaveWarning` (the files are not</span>
+<span class="sd">        modified: save the analysis again to update the save). The atoms are loaded first</span>
+<span class="sd">        (mesh, images, extrinsics, distortions, intrinsics), then the cameras and the views</span>
+<span class="sd">        are rebuilt with the same sharing as the saved analysis, and the analysis is created</span>
+<span class="sd">        with its times and displacements. Finally, the summary (``metadata.json``) and the</span>
+<span class="sd">        structures (:meth:`compute_structure`) of the loaded analysis are compared with the</span>
 <span class="sd">        saved ones.</span>
 
 <span class="sd">        Parameters</span>
@@ -2176,27 +2193,27 @@
 <span class="sd">        FileNotFoundError</span>
 <span class="sd">            If the folder does not exist.</span>
 
+<span class="sd">        DeprecatedError</span>
+<span class="sd">            If the save was written by a version of pysdic whose format is deprecated.</span>
+
 <span class="sd">        ValueError</span>
-<span class="sd">            If the folder is not a SDIC save, its format version is not supported, a file</span>
-<span class="sd">            is missing or modified (with ``check_integrity``), or the structures of the</span>
-<span class="sd">            loaded analysis differ from the saved ones (inconsistent loading).</span>
+<span class="sd">            If the folder is not a SDIC save, it was written by an unsupported version of</span>
+<span class="sd">            pysdic, a file is missing or modified (with ``check_integrity``), or the loaded</span>
+<span class="sd">            analysis differs from the saved summary and structures (inconsistent loading).</span>
 
 <span class="sd">        """</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="n">_validate_path</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">"folder"</span><span class="p">,</span> <span class="n">must_be_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">check_integrity</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">check_integrity</span><span class="p">,</span> <span class="s2">"check_integrity"</span><span class="p">)</span>
         <span class="n">auto_construct</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">auto_construct</span><span class="p">,</span> <span class="s2">"auto_construct"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_sdic_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">_read_metadata</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' is not a SDIC save (no metadata.json of the format </span><span class="si">{</span><span class="n">_FORMAT_NAME</span><span class="si">!r}</span><span class="s2">)."</span><span class="p">)</span>
-        <span class="n">metadata</span> <span class="o">=</span> <span class="n">_read_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"metadata.json"</span><span class="p">)</span>
-        <span class="n">version</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"format_version"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">version</span> <span class="o">!=</span> <span class="n">_FORMAT_VERSION</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"The SDIC save '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">' has the format version </span><span class="si">{</span><span class="n">version</span><span class="si">!r}</span><span class="s2">, but this version of "</span>
-                <span class="sa">f</span><span class="s2">"pysdic (</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">) reads the format version </span><span class="si">{</span><span class="n">_FORMAT_VERSION</span><span class="si">}</span><span class="s2">."</span>
-            <span class="p">)</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">_check_version</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">check_integrity</span><span class="p">:</span>
             <span class="n">_check_manifest</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
         <span class="n">structure</span> <span class="o">=</span> <span class="n">_read_json</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="s2">"structure.json"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="o">&lt;</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">_MIN_VERSION</span><span class="p">):</span>
+            <span class="n">metadata</span><span class="p">,</span> <span class="n">structure</span> <span class="o">=</span> <span class="n">load_previous_save</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
 
         <span class="c1"># Atoms</span>
         <span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_npz_file</span><span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="n">structure</span><span class="p">[</span><span class="s2">"mesh"</span><span class="p">])</span>
@@ -2225,16 +2242,7 @@
             <span class="n">displacements</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span> <span class="n">arrays</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">[</span><span class="s2">"displacements"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
         <span class="n">analysis</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">displacements</span><span class="o">=</span><span class="n">displacements</span><span class="p">)</span>
-
-        <span class="c1"># The loaded analysis must have exactly the saved structures</span>
-        <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_STRUCTURE_KINDS</span><span class="p">:</span>
-            <span class="n">loaded</span><span class="p">,</span> <span class="n">saved</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">compute_structure</span><span class="p">(</span><span class="n">kind</span><span class="p">),</span> <span class="n">structure</span><span class="p">[</span><span class="s2">"structures"</span><span class="p">][</span><span class="n">kind</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">loaded</span> <span class="o">!=</span> <span class="n">saved</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Inconsistent loading of '</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">': the structure of the </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">s of the loaded "</span>
-                    <span class="sa">f</span><span class="s2">"analysis </span><span class="si">{</span><span class="n">loaded</span><span class="si">}</span><span class="s2"> differs from the saved one </span><span class="si">{</span><span class="n">saved</span><span class="si">}</span><span class="s2">. The save may have been "</span>
-                    <span class="sa">f</span><span class="s2">"modified or written by an incompatible version."</span>
-                <span class="p">)</span>
+        <span class="n">analysis</span><span class="o">.</span><span class="n">_check_loaded</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">analysis</span></div>
 
 
@@ -2257,7 +2265,7 @@
 
 <span class="sd">        The archive contains exactly the files of :meth:`to_folder` (at its root), including</span>
 <span class="sd">        ``manifest.json``: the integrity of the content is checked at the loading. It is</span>
-<span class="sd">        written in a temporary file next to ``file_path`` and renamed at the end, so an</span>
+<span class="sd">        written in a temporary folder next to ``file_path`` and renamed at the end, so an</span>
 <span class="sd">        existing archive is unchanged if an error occurs.</span>
 
 <span class="sd">        Parameters</span>
@@ -2294,36 +2302,21 @@
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_text</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">)</span>
         <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_text</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">)</span>
         <span class="n">export_vtk</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">export_vtk</span><span class="p">,</span> <span class="s2">"export_vtk"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_target</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">make_dirs</span><span class="o">=</span><span class="n">make_dirs</span><span class="p">,</span> <span class="n">is_folder</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">' is a folder: it cannot be replaced by an archive."</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The file '</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">' already exists. Use overwrite=True to replace it."</span><span class="p">)</span>
-        <span class="n">parent</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">parent</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">make_dirs</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The parent folder '</span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2">' does not exist. Use make_dirs=True to create it."</span>
-                <span class="p">)</span>
-            <span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">stamp</span> <span class="o">=</span> <span class="n">_timestamp</span><span class="p">()</span>
-        <span class="n">temporary_folder</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.tmp-</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">"</span>
-        <span class="n">temporary_file</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.tmp-</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">.zip"</span>
-        <span class="n">temporary_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_write_folder</span><span class="p">(</span><span class="n">temporary_folder</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">export_vtk</span><span class="p">)</span>
+        <span class="c1"># Write the save and its archive in a temporary folder next to 'file_path' (same file</span>
+        <span class="c1"># system: the final rename is atomic), removed in all cases</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.tmp-"</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">file_path</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="k">as</span> <span class="n">temporary</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temporary</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"content"</span>
+            <span class="n">content</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_folder</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">export_vtk</span><span class="p">)</span>
+            <span class="n">archive_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temporary</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"archive.zip"</span>
             <span class="n">mode</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span> <span class="k">if</span> <span class="n">compress</span> <span class="k">else</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_STORED</span>
-            <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">temporary_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">temporary_folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)):</span>
+            <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">archive_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)):</span>
                     <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                        <span class="n">archive</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">temporary_folder</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temporary_file</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temporary_folder</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">temporary_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">temporary_file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
+                        <span class="n">archive</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">archive_path</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SDICAnalysis.from_archive">
@@ -2373,8 +2366,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">' is not a ZIP archive of a SDIC save."</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">archive</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
-                <span class="n">parts</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">parts</span>
-                <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">".."</span> <span class="ow">in</span> <span class="n">parts</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">"/"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">".."</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">parts</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">"/"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">)):</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The archive '</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">' contains an unsafe path: </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">."</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temporary</span><span class="p">:</span>
                 <span class="n">archive</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">temporary</span><span class="p">)</span>

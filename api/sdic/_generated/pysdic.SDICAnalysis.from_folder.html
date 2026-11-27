@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pysdic.SDICAnalysis.from_folder &#8212; pysdic 2.0.2 documentation</title>
+    <title>pysdic.SDICAnalysis.from_folder &#8212; pysdic 2.1.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=c2377ec0"></script>
+    <script src="../../../_static/documentation_options.js?v=20623aea"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.0.2 documentation</p>
+    <p class="title logo__title">pysdic 2.1.0 documentation</p>
   
 </a></div>
     
@@ -1286,10 +1286,13 @@
 <dt class="sig sig-object py" id="pysdic.SDICAnalysis.from_folder">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">SDICAnalysis.</span></span><span class="sig-name descname"><span class="pre">from_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_integrity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_construct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pysdic/sdic/sdic_analysis.html#SDICAnalysis.from_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pysdic.SDICAnalysis.from_folder" title="Link to this definition">#</a></dt>
 <dd><p>Load an analysis saved with <a class="reference internal" href="pysdic.SDICAnalysis.to_folder.html#pysdic.SDICAnalysis.to_folder" title="pysdic.SDICAnalysis.to_folder"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_folder()</span></code></a>.</p>
-<p>The atoms are loaded first (mesh, images, extrinsics, distortions, intrinsics), then
-the cameras and the views are rebuilt with the same sharing as the saved analysis,
-and the analysis is created with its times and displacements. Finally, the
-structures of the loaded analysis (<a class="reference internal" href="pysdic.SDICAnalysis.compute_structure.html#pysdic.SDICAnalysis.compute_structure" title="pysdic.SDICAnalysis.compute_structure"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_structure()</span></code></a>) are compared with the
+<p>A save written by a previous version of pysdic (before 2.1.0) is converted to the
+current format while loading, with a <code class="xref py py-class docutils literal notranslate"><span class="pre">PreviousSaveWarning</span></code> (the files are not
+modified: save the analysis again to update the save). The atoms are loaded first
+(mesh, images, extrinsics, distortions, intrinsics), then the cameras and the views
+are rebuilt with the same sharing as the saved analysis, and the analysis is created
+with its times and displacements. Finally, the summary (<code class="docutils literal notranslate"><span class="pre">metadata.json</span></code>) and the
+structures (<a class="reference internal" href="pysdic.SDICAnalysis.compute_structure.html#pysdic.SDICAnalysis.compute_structure" title="pysdic.SDICAnalysis.compute_structure"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_structure()</span></code></a>) of the loaded analysis are compared with the
 saved ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1309,9 +1312,10 @@ the loading: a missing or modified file raises an error.</p></li>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#FileNotFoundError" title="(in Python v3.15)"><strong>FileNotFoundError</strong></a> – If the folder does not exist.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If the folder is not a SDIC save, its format version is not supported, a file
-    is missing or modified (with <code class="docutils literal notranslate"><span class="pre">check_integrity</span></code>), or the structures of the
-    loaded analysis differ from the saved ones (inconsistent loading).</p></li>
+<li><p><strong>DeprecatedError</strong> – If the save was written by a version of pysdic whose format is deprecated.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If the folder is not a SDIC save, it was written by an unsupported version of
+    pysdic, a file is missing or modified (with <code class="docutils literal notranslate"><span class="pre">check_integrity</span></code>), or the loaded
+    analysis differs from the saved summary and structures (inconsistent loading).</p></li>
 </ul>
 </dd>
 </dl>
