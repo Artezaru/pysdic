@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pysdic.create_uniform_quadrangle_4_mesh &#8212; pysdic 2.1.1 documentation</title>
+    <title>pysdic.create_uniform_quadrangle_4_mesh &#8212; pysdic 2.2.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=841abef3"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.1.1 documentation</p>
+    <p class="title logo__title">pysdic 2.2.0 documentation</p>
   
 </a></div>
     
@@ -1340,7 +1340,10 @@ so the vertex at <span class="math notranslate nohighlight">\(x = i, y = n_y\)</
 </dl>
 <section id="uv-mapping">
 <h2>UV Mapping<a class="headerlink" href="#uv-mapping" title="Link to this heading">#</a></h2>
-<p>The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the <code class="docutils literal notranslate"><span class="pre">OpenGL</span> <span class="pre">texture</span> <span class="pre">mapping</span> <span class="pre">convention</span></code> (See <a class="reference external" href="https://learnopengl.com/Getting-started/Textures">https://learnopengl.com/Getting-started/Textures</a>).
+<p>The UV coordinates are generated based on the vertex indices in the grid and uniformly distributed in the range [0, 1] for the <code class="docutils literal notranslate"><span class="pre">OpenGL</span> <span class="pre">texture</span> <span class="pre">mapping</span> <span class="pre">convention</span></code> (See <a class="reference external" href="https://learnopengl.com/Getting-started/Textures">https://learnopengl.com/Getting-started/Textures</a>).
+They do not depend on the positions of the vertices: this is the <code class="docutils literal notranslate"><span class="pre">uv_mode=&quot;index&quot;</span></code> of the mesh generators
+(for example <a class="reference internal" href="create_3d_quadrangle_4_heightmap.html#pysdic.create_3d_quadrangle_4_heightmap" title="pysdic.create_3d_quadrangle_4_heightmap"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysdic.create_3d_quadrangle_4_heightmap()</span></code></a>), whose default <code class="docutils literal notranslate"><span class="pre">uv_mode=&quot;parametric&quot;</span></code> follows
+the coordinates of the grid instead.
 Several UV mapping strategies are available and synthesized in the <code class="docutils literal notranslate"><span class="pre">uv_layout</span></code> parameter.</p>
 <p>An image is defined by its four corners:</p>
 <ul class="simple">
@@ -1412,6 +1415,8 @@ Several UV mapping strategies are available and synthesized in the <code class="
 </table>
 </div>
 <p>The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">uv_layout</span></code> in 0, 3, 5 and 7, the x axis of the grid is along <span class="math notranslate nohighlight">\(u\)</span> (image width) and the y axis
+along <span class="math notranslate nohighlight">\(v\)</span> (image height). With <code class="docutils literal notranslate"><span class="pre">uv_layout</span></code> in 1, 2, 4 and 6, the axes are swapped.</p>
 </section>
 </dd></dl>
 

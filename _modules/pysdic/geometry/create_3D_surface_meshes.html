@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.geometry.create_3D_surface_meshes &#8212; pysdic 2.1.1 documentation</title>
+    <title>pysdic.geometry.create_3D_surface_meshes &#8212; pysdic 2.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=841abef3"></script>
+    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.1.1 documentation</p>
+    <p class="title logo__title">pysdic 2.2.0 documentation</p>
   
 </a></div>
     
@@ -394,6 +394,75 @@
     <span class="k">return</span> <span class="n">uv_layout</span>
 
 
+<span class="n">_UV_MODES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"index"</span><span class="p">,</span> <span class="s2">"parametric"</span><span class="p">)</span>
+<span class="n">_UV_MODES_ANGLE</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"index"</span><span class="p">,</span> <span class="s2">"parametric"</span><span class="p">,</span> <span class="s2">"parametric-angle"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_uv_mode</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allowed</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># UV mode: one of the allowed strings</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">uv_mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input 'uv_mode' must be one of </span><span class="si">{</span><span class="n">allowed</span><span class="si">}</span><span class="s2">. Got </span><span class="si">{</span><span class="n">uv_mode</span><span class="si">!r}</span><span class="s2">."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">uv_mode</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_index_uv_fractions</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">connect</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># UV fractions of the "index" mode along one axis: (n,), or (n + 1,) with the fictive vertex of a connected axis</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">connect</span> <span class="k">else</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parametric_uv_fractions</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">period</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># UV fractions of the "parametric" mode along one axis: the coordinates (n,) normalized between the first</span>
+    <span class="c1"># and the last vertices, or, for a closed axis, (n + 1,) normalized by the period (fictive vertex at</span>
+    <span class="c1"># values[0] +/- period, fraction 1)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">delta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"The coordinates along </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be strictly monotonic for a parametric UV map "</span>
+            <span class="sa">f</span><span class="s2">"(use uv_mode='index' for any coordinates)."</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">period</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">values</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">span</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">span</span> <span class="o">&gt;=</span> <span class="n">period</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"The coordinates along </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must span less than </span><span class="si">{</span><span class="n">period</span><span class="si">}</span><span class="s2"> to close the mesh with a parametric "</span>
+            <span class="sa">f</span><span class="s2">"UV map. Got a span of </span><span class="si">{</span><span class="n">span</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">values</span> <span class="o">-</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">period</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_uv_fractions</span><span class="p">(</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">connect</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">period</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">conformal</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># UV fractions along one axis of a grid with the parametric coordinates values (n,). conformal is the</span>
+    <span class="c1"># change of variable of the "parametric-angle" mode along this axis (None: same as "parametric")</span>
+    <span class="k">if</span> <span class="n">uv_mode</span> <span class="o">==</span> <span class="s2">"index"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_index_uv_fractions</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">connect</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">uv_mode</span> <span class="o">==</span> <span class="s2">"parametric-angle"</span> <span class="ow">and</span> <span class="n">conformal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">conformal</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">connect</span> <span class="ow">and</span> <span class="n">period</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"A connected axis (</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">) needs a period for a parametric UV map."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_parametric_uv_fractions</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">period</span> <span class="k">if</span> <span class="n">connect</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_isometric_latitude</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Isometric latitude psi = ln(tan(theta / 2)) of the polar angles theta (strictly between 0 and pi):</span>
+    <span class="c1"># (phi, psi) is a conformal parametrization of the unit sphere (Mercator projection), its metric is</span>
+    <span class="c1"># sin(theta)**2 * (dphi**2 + dpsi**2)</span>
+    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"The polar angles (t_bounds or t_array) must be strictly between 0 and pi for "</span>
+            <span class="s2">"uv_mode='parametric-angle' (the Mercator projection is infinite at the poles)."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_grid_axis</span><span class="p">(</span>
     <span class="n">bounds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">Real</span><span class="p">]],</span>
     <span class="n">array</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span>
@@ -454,17 +523,17 @@
     <span class="k">return</span> <span class="n">mesh</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_create_uniform_vertices_uvmap</span><span class="p">(</span><span class="n">n_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_vertices_uvmap</span><span class="p">(</span><span class="n">fx</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">fy</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">    Create a uniform UV map for a grid of vertices defined by n_x and n_y.</span>
+<span class="sd">    Create the UV map of a grid of vertices from the UV fractions along its two axes.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n_x : int</span>
-<span class="sd">        Number of vertices along the x direction.</span>
+<span class="sd">    fx : numpy.ndarray</span>
+<span class="sd">        The fractions (n_x,) of the vertices along the x direction, from 0 (first vertex) to 1 (last vertex).</span>
 
-<span class="sd">    n_y : int</span>
-<span class="sd">        Number of vertices along the y direction.</span>
+<span class="sd">    fy : numpy.ndarray</span>
+<span class="sd">        The fractions (n_y,) of the vertices along the y direction, from 0 (first vertex) to 1 (last vertex).</span>
 
 <span class="sd">    uv_layout : int</span>
 <span class="sd">        The UV mapping strategy. Must be an integer between 0 and 7.</span>
@@ -477,7 +546,7 @@
 <span class="sd">    UV Mapping</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).</span>
+<span class="sd">    The UV coordinates are given by the fractions along the two axes of the grid in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).</span>
 <span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
 
 <span class="sd">    An image is defined by its four corners:</span>
@@ -535,15 +604,11 @@
     <span class="k">elif</span> <span class="n">uv_layout</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
         <span class="n">uv_mapping</span> <span class="o">=</span> <span class="p">[</span><span class="n">upper_right</span><span class="p">,</span> <span class="n">upper_left</span><span class="p">,</span> <span class="n">lower_right</span><span class="p">,</span> <span class="n">lower_left</span><span class="p">]</span>
 
-    <span class="c1"># Create the grid of points in local coordinates</span>
-    <span class="n">ix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_x</span><span class="p">)</span>  <span class="c1"># (n_x,)</span>
-    <span class="n">iy</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_y</span><span class="p">)</span>  <span class="c1"># (n_y,)</span>
-    <span class="n">fx</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_x,)</span>
-    <span class="n">fy</span> <span class="o">=</span> <span class="n">iy</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_y,)</span>
-
     <span class="c1"># Compute the UV mapping coordinates</span>
-    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">fx</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
-    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">fy</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
+    <span class="n">fx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># (n_x,)</span>
+    <span class="n">fy</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># (n_y,)</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">fx</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">fy</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">fy</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">fx</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
 
     <span class="n">U</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">uv_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -559,161 +624,21 @@
     <span class="k">return</span> <span class="n">UV</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_cylindrical_vertices</span><span class="p">(</span>
-    <span class="n">function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
-    <span class="n">t_bounds</span><span class="p">,</span> <span class="n">h_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-    <span class="c1"># Vertices (n_t, n_h, 3) of a cylindrical surface r = f(h, theta) in the local frame</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">t_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="p">(</span><span class="s2">"t_bounds"</span><span class="p">,</span> <span class="s2">"t_array"</span><span class="p">,</span> <span class="s2">"n_t"</span><span class="p">))</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">h_bounds</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span> <span class="p">(</span><span class="s2">"h_bounds"</span><span class="p">,</span> <span class="s2">"h_array"</span><span class="p">,</span> <span class="s2">"n_h"</span><span class="p">))</span>
-    <span class="n">t_grid</span><span class="p">,</span> <span class="n">h_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_t, n_h)</span>
-    <span class="n">r_grid</span> <span class="o">=</span> <span class="n">_evaluate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">h_grid</span><span class="p">,</span> <span class="n">t_grid</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">)</span>
-    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span> <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span> <span class="n">h_grid</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">size</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_spherical_vertices</span><span class="p">(</span>
-    <span class="n">function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
-    <span class="n">t_bounds</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="c1"># Vertices (n_p, n_t, 3) of a spherical surface r = f(theta, phi) in the local frame</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">t_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="p">(</span><span class="s2">"t_bounds"</span><span class="p">,</span> <span class="s2">"t_array"</span><span class="p">,</span> <span class="s2">"n_t"</span><span class="p">))</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">p_bounds</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="p">(</span><span class="s2">"p_bounds"</span><span class="p">,</span> <span class="s2">"p_array"</span><span class="p">,</span> <span class="s2">"n_p"</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The azimuthal angles (p_bounds or p_array) must be between 0 and 2 pi."</span><span class="p">)</span>
-    <span class="n">p_grid</span><span class="p">,</span> <span class="n">t_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_p, n_t)</span>
-    <span class="n">r_grid</span> <span class="o">=</span> <span class="n">_evaluate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">t_grid</span><span class="p">,</span> <span class="n">p_grid</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">)</span>
-    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-        <span class="p">(</span>
-            <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p_grid</span><span class="p">),</span>
-            <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p_grid</span><span class="p">),</span>
-            <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span>
-        <span class="p">),</span>
-        <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span>
-
-
-<div class="viewcode-block" id="create_uniform_quadrangle_4_mesh">
-<a class="viewcode-back" href="../../../api/geometry/create_uniform_quadrangle_4_mesh.html#pysdic.create_uniform_quadrangle_4_mesh">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">create_uniform_quadrangle_4_mesh</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
     <span class="n">vertices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
     <span class="n">x_connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">y_connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">x_swap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">y_swap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_fx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">uv_fy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
-<span class="sd">    Create the quadrilateral connectivity and properties for a uniform grid mesh.</span>
-
-<span class="sd">    The mesh is defined in a local :math:`(n_x, n_y)` grid of vertices,</span>
-<span class="sd">    where :math:`n_x` is the number of vertices along the x direction</span>
-<span class="sd">    and :math:`n_y` is the number of vertices along the y direction.</span>
-
-<span class="sd">    If ``x_connect`` is True, the mesh is connected in the x direction (cylindrical topology)</span>
-<span class="sd">    by adding a fictive column of vertices at :math:`x = n_x` that is equal</span>
-<span class="sd">    to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.</span>
-<span class="sd">    If ``x_swap`` is True, the order of the vertices in the x direction is reversed</span>
-<span class="sd">    during the ``x_connect`` operation, so the vertex at :math:`x = n_x, y = i`</span>
-<span class="sd">    is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.</span>
-
-<span class="sd">    The same applies for the y direction with the ``y_connect`` and ``y_swap`` options.</span>
-
-<span class="sd">    .. figure:: /_static/meshes/uniform_surface_connectivity.png</span>
-<span class="sd">        :width: 400</span>
-<span class="sd">        :align: center</span>
-
-<span class="sd">        :math:`(n_x, n_y)` grid of vertices and the corresponding quadrilateral connectivity</span>
-<span class="sd">        and selected ``x_connect``, ``y_connect``, ``x_swap`` and ``y_swap`` options.</span>
-
-<span class="sd">    If ``direct`` is True, the quadrilaterals are defined in counterclockwise order for</span>
-<span class="sd">    an observer looking from above, otherwise they are defined in clockwise order.</span>
-
-<span class="sd">    - counterclockwise order for ``direct=True``: :math:`(i_X, i_Y), (i_X + 1, i_Y), (i_X + 1, i_Y + 1), (i_X, i_Y + 1)`</span>
-<span class="sd">    - clockwise order for ``direct=False``: :math:`(i_X, i_Y), (i_X, i_Y + 1), (i_X + 1, i_Y + 1), (i_X + 1, i_Y)`</span>
-
-<span class="sd">    Vertices are ordered first along the x direction, then along the y direction.</span>
-<span class="sd">    So the vertex at y index ``i_Y`` and x index ``i_X`` (both starting from 0) is located at:</span>
-
-<span class="sd">    .. code-block:: python</span>
-
-<span class="sd">        mesh.vertices[i_Y * n_x + i_X, :]</span>
-
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    vertices : ArrayLike</span>
-<span class="sd">        An array of shape :math:`(n_x, n_y, E)` containing the vertex positions in E-dimensional space.</span>
-
-<span class="sd">    x_connect : bool, optional (default: ``False``)</span>
-<span class="sd">        If True, connect the mesh in the x direction by adding a fictive column of vertices</span>
-<span class="sd">        at :math:`x = n_x` that is equal to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.</span>
-
-<span class="sd">    y_connect : bool, optional (default: ``False``)</span>
-<span class="sd">        If True, connect the mesh in the y direction by adding a fictive row of vertices</span>
-<span class="sd">        at :math:`y = n_y` that is equal to the first row of vertices at :math:`y = 0` and connecting them with quadrilaterals.</span>
-
-<span class="sd">    x_swap : bool, optional (default: ``False``)</span>
-<span class="sd">        If True, reverse the order of the vertices in the x direction during the ``x_connect`` operation,</span>
-<span class="sd">        so the vertex at :math:`x = n_x, y = i` is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.</span>
-
-<span class="sd">    y_swap : bool, optional (default: ``False``)</span>
-<span class="sd">        If True, reverse the order of the vertices in the y direction during the ``y_connect`` operation,</span>
-<span class="sd">        so the vertex at :math:`x = i, y = n_y` is connected to the vertex at :math:`x = n_x - 1 - i, y = 0` instead of :math:`x = i, y = 0`.</span>
-
-<span class="sd">    direct : bool, optional (default: ``True``)</span>
-<span class="sd">        If True, the quadrilaterals are defined in counterclockwise order for an observer looking from above, otherwise they are defined in clockwise order.</span>
-
-<span class="sd">    uv_layout : Integral, optional (default: ``0``)</span>
-<span class="sd">        The UV mapping strategy. Must be an integer between 0 and 7.</span>
-
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    :class:`pysdic.Mesh`</span>
-<span class="sd">        The generated quadrilateral mesh as a :class:`pysdic.Mesh` object with the specified connectivity and UV mapping.</span>
-
-
-<span class="sd">    UV Mapping</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).</span>
-<span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
-
-<span class="sd">    An image is defined by its four corners:</span>
-
-<span class="sd">    - Lower-left corner : pixel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left</span>
-<span class="sd">    - Upper-left corner : pixel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left</span>
-<span class="sd">    - Lower-right corner : pixel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right</span>
-<span class="sd">    - Upper-right corner : pixel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right</span>
-
-<span class="sd">    The following options are available for ``uv_layout`` and their corresponding vertex mapping:</span>
-
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|</span>
-<span class="sd">    +=================+=========================+=========================+==========================+==========================+</span>
-<span class="sd">    | 0               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 1               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-<span class="sd">    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |</span>
-<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
-
-<span class="sd">    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</span>
-
-<span class="sd">    """</span>
+    <span class="c1"># Implementation of create_uniform_quadrangle_4_mesh with the UV fractions along the two axes of the grid</span>
+    <span class="c1"># (n_x,) and (n_y,), or (n_x + 1,) and (n_y + 1,) for the connected axes (fictive vertex, fraction 1).</span>
+    <span class="c1"># None: the "index" mode (uniform fractions)</span>
     <span class="n">vertices</span> <span class="o">=</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="s2">"vertices"</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shape_hint</span><span class="o">=</span><span class="s2">"(n_x, n_y, E)"</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -742,12 +667,17 @@
     <span class="n">quads</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_x_quads</span><span class="p">,</span> <span class="n">n_y_quads</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
     <span class="n">quads_uv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_x_quads</span><span class="p">,</span> <span class="n">n_y_quads</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
-    <span class="c1"># Create the uv mapping for the vertices</span>
+    <span class="c1"># Create the uv mapping for the vertices (with the fictive column/row of the connected axes)</span>
     <span class="n">uv_n_x</span> <span class="o">=</span> <span class="n">n_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x_connect</span> <span class="k">else</span> <span class="n">n_x</span>
     <span class="n">uv_n_y</span> <span class="o">=</span> <span class="n">n_y</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">y_connect</span> <span class="k">else</span> <span class="n">n_y</span>
-    <span class="n">extended_vertices_uv_map</span> <span class="o">=</span> <span class="n">_create_uniform_vertices_uvmap</span><span class="p">(</span>
-        <span class="n">uv_n_x</span><span class="p">,</span> <span class="n">uv_n_y</span><span class="p">,</span> <span class="n">uv_layout</span>
-    <span class="p">)</span>  <span class="c1"># (uv_n_x, uv_n_y, 2)</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">_index_uv_fractions</span><span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="n">x_connect</span><span class="p">)</span> <span class="k">if</span> <span class="n">uv_fx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">uv_fx</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">_index_uv_fractions</span><span class="p">(</span><span class="n">n_y</span><span class="p">,</span> <span class="n">y_connect</span><span class="p">)</span> <span class="k">if</span> <span class="n">uv_fy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">uv_fy</span>
+    <span class="k">if</span> <span class="n">uv_fx</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">uv_n_x</span><span class="p">,)</span> <span class="ow">or</span> <span class="n">uv_fy</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">uv_n_y</span><span class="p">,):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"The UV fractions must have the shapes (</span><span class="si">{</span><span class="n">uv_n_x</span><span class="si">}</span><span class="s2">,) and (</span><span class="si">{</span><span class="n">uv_n_y</span><span class="si">}</span><span class="s2">,). "</span>
+            <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="n">uv_fx</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">uv_fy</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">."</span>
+        <span class="p">)</span>
+    <span class="n">extended_vertices_uv_map</span> <span class="o">=</span> <span class="n">_create_vertices_uvmap</span><span class="p">(</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">)</span>  <span class="c1"># (uv_n_x, uv_n_y, 2)</span>
     <span class="n">vertices_uv_map</span> <span class="o">=</span> <span class="n">extended_vertices_uv_map</span><span class="p">[:</span><span class="n">n_x</span><span class="p">,</span> <span class="p">:</span><span class="n">n_y</span><span class="p">]</span>  <span class="c1"># (n_x, n_y, 2)</span>
 
     <span class="c1"># Vertex index function</span>
@@ -886,7 +816,208 @@
     <span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="s2">"F"</span><span class="p">)</span>  <span class="c1"># (n_x * n_y, E)</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">quads</span><span class="p">,</span> <span class="n">element_type</span><span class="o">=</span><span class="s2">"quadrangle_4"</span><span class="p">)</span>
     <span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span> <span class="o">=</span> <span class="n">quads_uv</span>
-    <span class="k">return</span> <span class="n">mesh</span></div>
+    <span class="k">return</span> <span class="n">mesh</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_heightmap_mesh</span><span class="p">(</span>
+    <span class="n">function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+    <span class="c1"># quadrangle_4 mesh of a height surface z = f(x, y) (grid (n_x, n_y)), in the local frame</span>
+    <span class="n">uv_mode</span> <span class="o">=</span> <span class="n">_validate_uv_mode</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">_UV_MODES</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"x_bounds"</span><span class="p">,</span> <span class="s2">"x_array"</span><span class="p">,</span> <span class="s2">"n_x"</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">y_bounds</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="p">(</span><span class="s2">"y_bounds"</span><span class="p">,</span> <span class="s2">"y_array"</span><span class="p">,</span> <span class="s2">"n_y"</span><span class="p">))</span>
+    <span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
+    <span class="n">z_grid</span> <span class="o">=</span> <span class="n">_evaluate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">)</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"x (x_bounds or x_array)"</span><span class="p">)</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"y (y_bounds or y_array)"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">,</span> <span class="n">z_grid</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span>
+        <span class="n">uv_fx</span><span class="o">=</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="o">=</span><span class="n">uv_fy</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cylindrical_mesh</span><span class="p">(</span>
+    <span class="n">function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="n">t_bounds</span><span class="p">,</span> <span class="n">h_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Mesh</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="c1"># quadrangle_4 mesh of a cylindrical surface r = f(h, theta) (grid (n_t, n_h)) in the local frame, n_t, n_h</span>
+    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
+    <span class="n">uv_mode</span> <span class="o">=</span> <span class="n">_validate_uv_mode</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">_UV_MODES</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">t_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="p">(</span><span class="s2">"t_bounds"</span><span class="p">,</span> <span class="s2">"t_array"</span><span class="p">,</span> <span class="s2">"n_t"</span><span class="p">))</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">h_bounds</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span> <span class="p">(</span><span class="s2">"h_bounds"</span><span class="p">,</span> <span class="s2">"h_array"</span><span class="p">,</span> <span class="s2">"n_h"</span><span class="p">))</span>
+    <span class="n">t_grid</span><span class="p">,</span> <span class="n">h_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_t, n_h)</span>
+    <span class="n">r_grid</span> <span class="o">=</span> <span class="n">_evaluate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">h_grid</span><span class="p">,</span> <span class="n">t_grid</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">)</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span> <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span> <span class="n">h_grid</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="s2">"theta (t_bounds or t_array)"</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"h (h_bounds or h_array)"</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_fx</span><span class="o">=</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="o">=</span><span class="n">uv_fy</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">size</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_spherical_mesh</span><span class="p">(</span>
+    <span class="n">function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="n">t_bounds</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># quadrangle_4 mesh of a spherical surface r = f(theta, phi) (grid (n_p, n_t)) in the local frame, the</span>
+    <span class="c1"># polar angles t (n_t,), the azimuthal angles p (n_p,) and the UV map of the grid (n_p (+1), n_t, 2)</span>
+    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
+    <span class="n">uv_mode</span> <span class="o">=</span> <span class="n">_validate_uv_mode</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">_UV_MODES_ANGLE</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">t_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="p">(</span><span class="s2">"t_bounds"</span><span class="p">,</span> <span class="s2">"t_array"</span><span class="p">,</span> <span class="s2">"n_t"</span><span class="p">))</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">p_bounds</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="p">(</span><span class="s2">"p_bounds"</span><span class="p">,</span> <span class="s2">"p_array"</span><span class="p">,</span> <span class="s2">"n_p"</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The azimuthal angles (p_bounds or p_array) must be between 0 and 2 pi."</span><span class="p">)</span>
+    <span class="n">p_grid</span><span class="p">,</span> <span class="n">t_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_p, n_t)</span>
+    <span class="n">r_grid</span> <span class="o">=</span> <span class="n">_evaluate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">t_grid</span><span class="p">,</span> <span class="n">p_grid</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">)</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p_grid</span><span class="p">),</span>
+            <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p_grid</span><span class="p">),</span>
+            <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># parametric-angle: (phi, psi) with the isometric latitude psi, conformal on the unit sphere (radius ignored)</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="s2">"phi (p_bounds or p_array)"</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"theta (t_bounds or t_array)"</span><span class="p">,</span> <span class="n">conformal</span><span class="o">=</span><span class="n">_isometric_latitude</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_fx</span><span class="o">=</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="o">=</span><span class="n">uv_fy</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">_create_vertices_uvmap</span><span class="p">(</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_uniform_quadrangle_4_mesh">
+<a class="viewcode-back" href="../../../api/geometry/create_uniform_quadrangle_4_mesh.html#pysdic.create_uniform_quadrangle_4_mesh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_uniform_quadrangle_4_mesh</span><span class="p">(</span>
+    <span class="n">vertices</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+    <span class="n">x_connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">y_connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">x_swap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">y_swap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
+<span class="sd">    Create the quadrilateral connectivity and properties for a uniform grid mesh.</span>
+
+<span class="sd">    The mesh is defined in a local :math:`(n_x, n_y)` grid of vertices,</span>
+<span class="sd">    where :math:`n_x` is the number of vertices along the x direction</span>
+<span class="sd">    and :math:`n_y` is the number of vertices along the y direction.</span>
+
+<span class="sd">    If ``x_connect`` is True, the mesh is connected in the x direction (cylindrical topology)</span>
+<span class="sd">    by adding a fictive column of vertices at :math:`x = n_x` that is equal</span>
+<span class="sd">    to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.</span>
+<span class="sd">    If ``x_swap`` is True, the order of the vertices in the x direction is reversed</span>
+<span class="sd">    during the ``x_connect`` operation, so the vertex at :math:`x = n_x, y = i`</span>
+<span class="sd">    is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.</span>
+
+<span class="sd">    The same applies for the y direction with the ``y_connect`` and ``y_swap`` options.</span>
+
+<span class="sd">    .. figure:: /_static/meshes/uniform_surface_connectivity.png</span>
+<span class="sd">        :width: 400</span>
+<span class="sd">        :align: center</span>
+
+<span class="sd">        :math:`(n_x, n_y)` grid of vertices and the corresponding quadrilateral connectivity</span>
+<span class="sd">        and selected ``x_connect``, ``y_connect``, ``x_swap`` and ``y_swap`` options.</span>
+
+<span class="sd">    If ``direct`` is True, the quadrilaterals are defined in counterclockwise order for</span>
+<span class="sd">    an observer looking from above, otherwise they are defined in clockwise order.</span>
+
+<span class="sd">    - counterclockwise order for ``direct=True``: :math:`(i_X, i_Y), (i_X + 1, i_Y), (i_X + 1, i_Y + 1), (i_X, i_Y + 1)`</span>
+<span class="sd">    - clockwise order for ``direct=False``: :math:`(i_X, i_Y), (i_X, i_Y + 1), (i_X + 1, i_Y + 1), (i_X + 1, i_Y)`</span>
+
+<span class="sd">    Vertices are ordered first along the x direction, then along the y direction.</span>
+<span class="sd">    So the vertex at y index ``i_Y`` and x index ``i_X`` (both starting from 0) is located at:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        mesh.vertices[i_Y * n_x + i_X, :]</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vertices : ArrayLike</span>
+<span class="sd">        An array of shape :math:`(n_x, n_y, E)` containing the vertex positions in E-dimensional space.</span>
+
+<span class="sd">    x_connect : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, connect the mesh in the x direction by adding a fictive column of vertices</span>
+<span class="sd">        at :math:`x = n_x` that is equal to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.</span>
+
+<span class="sd">    y_connect : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, connect the mesh in the y direction by adding a fictive row of vertices</span>
+<span class="sd">        at :math:`y = n_y` that is equal to the first row of vertices at :math:`y = 0` and connecting them with quadrilaterals.</span>
+
+<span class="sd">    x_swap : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, reverse the order of the vertices in the x direction during the ``x_connect`` operation,</span>
+<span class="sd">        so the vertex at :math:`x = n_x, y = i` is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.</span>
+
+<span class="sd">    y_swap : bool, optional (default: ``False``)</span>
+<span class="sd">        If True, reverse the order of the vertices in the y direction during the ``y_connect`` operation,</span>
+<span class="sd">        so the vertex at :math:`x = i, y = n_y` is connected to the vertex at :math:`x = n_x - 1 - i, y = 0` instead of :math:`x = i, y = 0`.</span>
+
+<span class="sd">    direct : bool, optional (default: ``True``)</span>
+<span class="sd">        If True, the quadrilaterals are defined in counterclockwise order for an observer looking from above, otherwise they are defined in clockwise order.</span>
+
+<span class="sd">    uv_layout : Integral, optional (default: ``0``)</span>
+<span class="sd">        The UV mapping strategy. Must be an integer between 0 and 7.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`pysdic.Mesh`</span>
+<span class="sd">        The generated quadrilateral mesh as a :class:`pysdic.Mesh` object with the specified connectivity and UV mapping.</span>
+
+
+<span class="sd">    UV Mapping</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    The UV coordinates are generated based on the vertex indices in the grid and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).</span>
+<span class="sd">    They do not depend on the positions of the vertices: this is the ``uv_mode="index"`` of the mesh generators</span>
+<span class="sd">    (for example :func:`pysdic.create_3d_quadrangle_4_heightmap`), whose default ``uv_mode="parametric"`` follows</span>
+<span class="sd">    the coordinates of the grid instead.</span>
+<span class="sd">    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.</span>
+
+<span class="sd">    An image is defined by its four corners:</span>
+
+<span class="sd">    - Lower-left corner : pixel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left</span>
+<span class="sd">    - Upper-left corner : pixel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left</span>
+<span class="sd">    - Lower-right corner : pixel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right</span>
+<span class="sd">    - Upper-right corner : pixel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right</span>
+
+<span class="sd">    The following options are available for ``uv_layout`` and their corresponding vertex mapping:</span>
+
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|</span>
+<span class="sd">    +=================+=========================+=========================+==========================+==========================+</span>
+<span class="sd">    | 0               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 1               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+<span class="sd">    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |</span>
+<span class="sd">    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+</span>
+
+<span class="sd">    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.</span>
+
+<span class="sd">    With ``uv_layout`` in 0, 3, 5 and 7, the x axis of the grid is along :math:`u` (image width) and the y axis</span>
+<span class="sd">    along :math:`v` (image height). With ``uv_layout`` in 1, 2, 4 and 6, the axes are swapped.</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">x_connect</span><span class="p">,</span> <span class="n">y_connect</span><span class="o">=</span><span class="n">y_connect</span><span class="p">,</span> <span class="n">x_swap</span><span class="o">=</span><span class="n">x_swap</span><span class="p">,</span> <span class="n">y_swap</span><span class="o">=</span><span class="n">y_swap</span><span class="p">,</span>
+        <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 
@@ -904,6 +1035,7 @@
     <span class="n">n_y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 3D ``quadrangle_4`` mesh of a height surface :math:`z = f(x, y)`.</span>
@@ -950,6 +1082,18 @@
 <span class="sd">        The UV mapping strategy, between 0 and 7 (see</span>
 <span class="sd">        :func:`pysdic.create_uniform_quadrangle_4_mesh`).</span>
 
+<span class="sd">    uv_mode: str, optional (default: ``"parametric"``)</span>
+<span class="sd">        How the UV coordinates are distributed between the corners of the grid:</span>
+
+<span class="sd">        - ``"parametric"``: proportional to the coordinates :math:`x` and :math:`y` of the</span>
+<span class="sd">          vertices (projection of the surface on the plane :math:`z = 0`, independent of</span>
+<span class="sd">          :math:`f`). The texture does not depend on the discretization of the grid. The</span>
+<span class="sd">          coordinates of the grid must be strictly monotonic.</span>
+<span class="sd">        - ``"index"``: proportional to the indices of the vertices (uniform in the grid,</span>
+<span class="sd">          whatever its coordinates).</span>
+
+<span class="sd">        Both modes give the same UV map for a uniform grid.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`pysdic.Mesh`</span>
@@ -970,14 +1114,7 @@
 <span class="sd">        print(mesh.n_vertices, mesh.n_elements)  # 200 171</span>
 
 <span class="sd">    """</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"x_bounds"</span><span class="p">,</span> <span class="s2">"x_array"</span><span class="p">,</span> <span class="s2">"n_x"</span><span class="p">))</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">y_bounds</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="p">(</span><span class="s2">"y_bounds"</span><span class="p">,</span> <span class="s2">"y_array"</span><span class="p">,</span> <span class="s2">"n_y"</span><span class="p">))</span>
-    <span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
-    <span class="n">z_grid</span> <span class="o">=</span> <span class="n">_evaluate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">,</span> <span class="s2">"function"</span><span class="p">)</span>
-
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span>
-        <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">,</span> <span class="n">z_grid</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span>
-    <span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">_heightmap_mesh</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_local_frame_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="s2">"create_3d_quadrangle_4_heightmap"</span><span class="p">)</span></div>
 
 
@@ -998,6 +1135,7 @@
     <span class="n">diagonal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"first"</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 3D ``triangle_3`` mesh of a height surface :math:`z = f(x, y)`.</span>
@@ -1009,7 +1147,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    function, frame, x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout:</span>
+<span class="sd">    function, frame, x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode:</span>
 <span class="sd">        See :func:`pysdic.create_3d_quadrangle_4_heightmap`.</span>
 
 <span class="sd">    diagonal: str, optional (default: ``"first"``)</span>
@@ -1027,7 +1165,7 @@
 <span class="sd">    """</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_3d_quadrangle_4_heightmap</span><span class="p">(</span>
         <span class="n">function</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">x_bounds</span><span class="o">=</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="o">=</span><span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="o">=</span><span class="n">x_array</span><span class="p">,</span>
-        <span class="n">y_array</span><span class="o">=</span><span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="o">=</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="o">=</span><span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span>
+        <span class="n">y_array</span><span class="o">=</span><span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="o">=</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="o">=</span><span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="o">=</span><span class="n">uv_mode</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">quadrangle_4_to_triangle_3</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">diagonal</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span></div>
 
@@ -1048,6 +1186,7 @@
     <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">close</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 3D ``quadrangle_4`` mesh of a cylindrical surface with radius</span>
@@ -1105,15 +1244,31 @@
 <span class="sd">        The UV mapping strategy, between 0 and 7 (see</span>
 <span class="sd">        :func:`pysdic.create_uniform_quadrangle_4_mesh`).</span>
 
+<span class="sd">    uv_mode: str, optional (default: ``"parametric"``)</span>
+<span class="sd">        How the UV coordinates are distributed between the corners of the grid:</span>
+
+<span class="sd">        - ``"parametric"``: proportional to :math:`\theta` and :math:`h` (independent of</span>
+<span class="sd">          the radius :math:`f`). The texture does not depend on the discretization of the</span>
+<span class="sd">          grid. The coordinates of the grid must be strictly monotonic. If ``close`` is</span>
+<span class="sd">          True, the angles must span less than :math:`2\pi` and the UV coordinate along</span>
+<span class="sd">          :math:`\theta` is :math:`(\theta - \theta_0) / (\pm 2\pi)`: the closing column of</span>
+<span class="sd">          elements goes up to the UV coordinate 1.</span>
+<span class="sd">        - ``"index"``: proportional to the indices of the vertices (uniform in the grid,</span>
+<span class="sd">          whatever its coordinates).</span>
+
+<span class="sd">        Both modes give the same UV map for a uniform grid (closed with</span>
+<span class="sd">        ``t_bounds=(0, 2 * pi * (1 - 1 / n_t))``). For a unit radius, ``"parametric"``</span>
+<span class="sd">        preserves the lengths up to the scale of each axis.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`pysdic.Mesh`</span>
 <span class="sd">        The ``quadrangle_4`` mesh, with a UV map.</span>
 
 <span class="sd">    """</span>
-    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_cylindrical_vertices</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">h_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span><span class="p">)</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_cylindrical_mesh</span><span class="p">(</span>
+        <span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">h_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">_local_frame_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="s2">"create_3d_quadrangle_4_cylindrical"</span><span class="p">)</span></div>
 
 
@@ -1137,6 +1292,7 @@
     <span class="n">diagonal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"first"</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 3D ``triangle_3`` mesh of a cylindrical surface with radius</span>
@@ -1154,7 +1310,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    function, frame, t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout:</span>
+<span class="sd">    function, frame, t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout, uv_mode:</span>
 <span class="sd">        See :func:`pysdic.create_3d_quadrangle_4_cylindrical`.</span>
 
 <span class="sd">    stick: bool, optional (default: ``False``)</span>
@@ -1176,11 +1332,11 @@
 <span class="sd">        The ``triangle_3`` mesh, with a UV map.</span>
 
 <span class="sd">    """</span>
-    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
     <span class="n">stick</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">stick</span><span class="p">,</span> <span class="s2">"stick"</span><span class="p">)</span>
     <span class="n">stick_eps</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">stick_eps</span><span class="p">,</span> <span class="s2">"stick_eps"</span><span class="p">,</span> <span class="n">non_negative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span> <span class="o">=</span> <span class="n">_cylindrical_vertices</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">h_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span><span class="p">)</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span> <span class="o">=</span> <span class="n">_cylindrical_mesh</span><span class="p">(</span>
+        <span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">h_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">h_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_h</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">quadrangle_4_to_triangle_3</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">diagonal</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">stick</span><span class="p">:</span>
@@ -1218,6 +1374,7 @@
     <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">close</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 3D ``quadrangle_4`` mesh of a spherical surface with radius</span>
@@ -1239,6 +1396,38 @@
 <span class="sd">    column of elements. For a uniform closed grid, use</span>
 <span class="sd">    ``p_bounds=(0, 2 * pi * (1 - 1 / n_p))``. The mesh is not closed at the poles: use</span>
 <span class="sd">    :func:`pysdic.create_3d_triangle_3_spherical` for a closed sphere.</span>
+
+<span class="sd">    The UV coordinates depend on ``uv_mode``:</span>
+
+<span class="sd">    - ``"parametric"`` (default): proportional to :math:`\phi` and :math:`\theta`</span>
+<span class="sd">      (equirectangular projection). The texture does not depend on the discretization of</span>
+<span class="sd">      the grid, but it is stretched along :math:`\phi` by :math:`1 / \sin\theta` near the</span>
+<span class="sd">      poles.</span>
+<span class="sd">    - ``"parametric-angle"``: proportional to :math:`\phi` and to the isometric latitude</span>
+<span class="sd">      :math:`\psi = \ln \tan(\theta / 2)` (Mercator projection), which preserves the angles</span>
+<span class="sd">      on the unit sphere. The local scale :math:`\sin\theta` is the same along both axes,</span>
+<span class="sd">      so the texture is not stretched in one direction, only scaled (smaller near the</span>
+<span class="sd">      poles). The polar angles must be strictly between 0 and :math:`\pi`.</span>
+<span class="sd">    - ``"index"``: proportional to the indices of the vertices (uniform in the grid,</span>
+<span class="sd">      whatever its coordinates).</span>
+
+<span class="sd">    With ``"parametric"`` and ``"parametric-angle"``, the coordinates of the grid must be</span>
+<span class="sd">    strictly monotonic, and if ``close`` is True, the azimuthal angles must span less than</span>
+<span class="sd">    :math:`2\pi` and the UV coordinate along :math:`\phi` is</span>
+<span class="sd">    :math:`(\phi - \phi_0) / (\pm 2\pi)` (the closing column of elements goes up to the</span>
+<span class="sd">    UV coordinate 1). The three modes give the same UV map for a uniform grid, except</span>
+<span class="sd">    ``"parametric-angle"`` along :math:`\theta`.</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The UV square :math:`[0, 1]^2` is stretched onto the whole texture image, so with</span>
+<span class="sd">        ``"parametric-angle"`` the angles are exactly preserved only if the image has the</span>
+<span class="sd">        aspect ratio of the projected grid:</span>
+<span class="sd">        :math:`\text{width} / \text{height} = L_\phi / L_\psi` with</span>
+<span class="sd">        :math:`L_\phi = 2\pi` if ``close`` else :math:`|\phi_{n_p - 1} - \phi_0|`, and</span>
+<span class="sd">        :math:`L_\psi = |\psi(\theta_{n_t - 1}) - \psi(\theta_0)|` (with ``uv_layout`` in</span>
+<span class="sd">        0, 3, 5, 7; inverse ratio with ``uv_layout`` in 1, 2, 4, 6). Otherwise, the</span>
+<span class="sd">        distortion is a uniform stretch of the whole texture along one axis.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1274,15 +1463,21 @@
 <span class="sd">        The UV mapping strategy, between 0 and 7 (see</span>
 <span class="sd">        :func:`pysdic.create_uniform_quadrangle_4_mesh`).</span>
 
+<span class="sd">    uv_mode: str, optional (default: ``"parametric"``)</span>
+<span class="sd">        How the UV coordinates are distributed between the corners of the grid:</span>
+<span class="sd">        ``"parametric"``, ``"parametric-angle"`` or ``"index"`` (see above). The radius</span>
+<span class="sd">        :math:`f` is never used: a change of radius is a deformation of the unit sphere</span>
+<span class="sd">        that the texture follows.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`pysdic.Mesh`</span>
 <span class="sd">        The ``quadrangle_4`` mesh, with a UV map.</span>
 
 <span class="sd">    """</span>
-    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_spherical_vertices</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_p</span><span class="p">)</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_spherical_mesh</span><span class="p">(</span>
+        <span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">_local_frame_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="s2">"create_3d_quadrangle_4_spherical"</span><span class="p">)</span></div>
 
 
@@ -1306,6 +1501,7 @@
     <span class="n">diagonal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"first"</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 3D ``triangle_3`` mesh of a spherical surface with radius</span>
@@ -1336,7 +1532,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    function, frame, t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout:</span>
+<span class="sd">    function, frame, t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout, uv_mode:</span>
 <span class="sd">        See :func:`pysdic.create_3d_quadrangle_4_spherical`. For a closed sphere, use polar</span>
 <span class="sd">        angles strictly between 0 and :math:`\pi`.</span>
 
@@ -1381,20 +1577,20 @@
     <span class="n">direct</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">direct</span><span class="p">,</span> <span class="s2">"direct"</span><span class="p">)</span>
     <span class="n">add_north</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">add_north</span><span class="p">,</span> <span class="s2">"add_north"</span><span class="p">)</span>
     <span class="n">add_south</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">add_south</span><span class="p">,</span> <span class="s2">"add_south"</span><span class="p">)</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">_spherical_vertices</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_p</span><span class="p">)</span>
+    <span class="n">quadrangle_mesh</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">vertices_uv</span> <span class="o">=</span> <span class="n">_spherical_mesh</span><span class="p">(</span>
+        <span class="n">function</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">p_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">p_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">n_p</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># vertices_uv: (n_p (+1 if close), n_t, 2), the closing edge uses the fictive column n_p</span>
     <span class="k">if</span> <span class="n">add_north</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The first polar angle must be greater than 0 to add the north pole. Got </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">add_south</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The last polar angle must be lower than pi to add the south pole. Got </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
-    <span class="n">quadrangle_mesh</span> <span class="o">=</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">x_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">quadrangle_4_to_triangle_3</span><span class="p">(</span><span class="n">quadrangle_mesh</span><span class="p">,</span> <span class="n">diagonal</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="n">n_p</span><span class="p">,</span> <span class="n">n_t</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span>
     <span class="n">coordinates</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">_coordinates</span><span class="p">]</span>
     <span class="n">triangles</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">_elements</span><span class="p">]</span>
     <span class="n">uvmaps</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="o">.</span><span class="n">uvmap</span><span class="p">]</span>
-    <span class="n">vertices_uv</span> <span class="o">=</span> <span class="n">_create_uniform_vertices_uvmap</span><span class="p">(</span><span class="n">n_p</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">close</span> <span class="k">else</span> <span class="n">n_p</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">)</span>  <span class="c1"># (n_p', n_t, 2)</span>
 
     <span class="c1"># Ring edges (a, b) of the fans, with the UV coordinates of a and b</span>
     <span class="n">i_p</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_p</span> <span class="k">if</span> <span class="n">close</span> <span class="k">else</span> <span class="n">n_p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>

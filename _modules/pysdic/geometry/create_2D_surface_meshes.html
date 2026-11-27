@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pysdic.geometry.create_2D_surface_meshes &#8212; pysdic 2.1.1 documentation</title>
+    <title>pysdic.geometry.create_2D_surface_meshes &#8212; pysdic 2.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=841abef3"></script>
+    <script src="../../../_static/documentation_options.js?v=b21de401"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">pysdic 2.1.1 documentation</p>
+    <p class="title logo__title">pysdic 2.2.0 documentation</p>
   
 </a></div>
     
@@ -371,29 +371,63 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.._validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_bool</span><span class="p">,</span> <span class="n">_validate_real</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.mesh_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">quadrangle_4_to_triangle_3</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.create_3D_surface_meshes</span><span class="w"> </span><span class="kn">import</span> <span class="n">_grid_axis</span><span class="p">,</span> <span class="n">create_uniform_quadrangle_4_mesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.create_3D_surface_meshes</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_UV_MODES</span><span class="p">,</span>
+    <span class="n">_UV_MODES_ANGLE</span><span class="p">,</span>
+    <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">,</span>
+    <span class="n">_grid_axis</span><span class="p">,</span>
+    <span class="n">_uv_fractions</span><span class="p">,</span>
+    <span class="n">_validate_uv_mode</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internal helpers</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_rectangle_vertices</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="c1"># Vertices (n_x, n_y, 2) of a rectangular grid</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_log_radius</span><span class="p">(</span><span class="n">r</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Logarithm rho = ln(r) of the radii (strictly positive): (rho, theta) is a conformal parametrization of</span>
+    <span class="c1"># the plane (log-polar coordinates), its metric is r**2 * (drho**2 + dtheta**2)</span>
+    <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"The radii (r_bounds or r_array) must be strictly positive for uv_mode='parametric-angle' "</span>
+            <span class="s2">"(the log-polar projection is infinite at the center)."</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_rectangle_mesh</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
+    <span class="c1"># quadrangle_4 mesh of a rectangular grid (n_x, n_y)</span>
+    <span class="n">uv_mode</span> <span class="o">=</span> <span class="n">_validate_uv_mode</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">_UV_MODES</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"x_bounds"</span><span class="p">,</span> <span class="s2">"x_array"</span><span class="p">,</span> <span class="s2">"n_x"</span><span class="p">))</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">y_bounds</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="p">(</span><span class="s2">"y_bounds"</span><span class="p">,</span> <span class="s2">"y_array"</span><span class="p">,</span> <span class="s2">"n_y"</span><span class="p">))</span>
     <span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_x, n_y)</span>
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"x (x_bounds or x_array)"</span><span class="p">)</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"y (y_bounds or y_array)"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_fx</span><span class="o">=</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="o">=</span><span class="n">uv_fy</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_polar_vertices</span><span class="p">(</span><span class="n">r_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_t</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="c1"># Vertices (n_r, n_t, 2) of a polar grid and its radii (n_r,). The radius is the first axis</span>
-    <span class="c1"># of the grid, so that the elements are counterclockwise in the plane (positive Jacobian)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_polar_mesh</span><span class="p">(</span>
+    <span class="n">r_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="c1"># quadrangle_4 mesh of a polar grid (n_r, n_t) and its radii (n_r,). The radius is the first axis of the</span>
+    <span class="c1"># grid, so that the elements are counterclockwise in the plane (positive Jacobian)</span>
+    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
+    <span class="n">uv_mode</span> <span class="o">=</span> <span class="n">_validate_uv_mode</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">_UV_MODES_ANGLE</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">r_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="p">(</span><span class="s2">"r_bounds"</span><span class="p">,</span> <span class="s2">"r_array"</span><span class="p">,</span> <span class="s2">"n_r"</span><span class="p">))</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">_grid_axis</span><span class="p">(</span><span class="n">t_bounds</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="p">(</span><span class="s2">"t_bounds"</span><span class="p">,</span> <span class="s2">"t_array"</span><span class="p">,</span> <span class="s2">"n_t"</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The radii (r_bounds or r_array) must be non-negative. Got a minimum of </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
     <span class="n">r_grid</span><span class="p">,</span> <span class="n">t_grid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>  <span class="c1"># (n_r, n_t)</span>
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span> <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">r</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t_grid</span><span class="p">),</span> <span class="n">r_grid</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t_grid</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># parametric-angle: (rho, theta) with rho = ln(r), conformal in the plane</span>
+    <span class="n">uv_fx</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"r (r_bounds or r_array)"</span><span class="p">,</span> <span class="n">conformal</span><span class="o">=</span><span class="n">_log_radius</span><span class="p">)</span>
+    <span class="n">uv_fy</span> <span class="o">=</span> <span class="n">_uv_fractions</span><span class="p">(</span><span class="n">uv_mode</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="s2">"theta (t_bounds or t_array)"</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">_create_grid_quadrangle_4_mesh</span><span class="p">(</span>
+        <span class="n">vertices</span><span class="p">,</span> <span class="n">y_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_fx</span><span class="o">=</span><span class="n">uv_fx</span><span class="p">,</span> <span class="n">uv_fy</span><span class="o">=</span><span class="n">uv_fy</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">r</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -411,6 +445,7 @@
     <span class="n">n_y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 2D ``quadrangle_4`` mesh (:math:`E = 2`) of a rectangular grid.</span>
@@ -451,6 +486,17 @@
 <span class="sd">        The UV mapping strategy, between 0 and 7 (see</span>
 <span class="sd">        :func:`pysdic.create_uniform_quadrangle_4_mesh`).</span>
 
+<span class="sd">    uv_mode: str, optional (default: ``"parametric"``)</span>
+<span class="sd">        How the UV coordinates are distributed between the corners of the grid:</span>
+
+<span class="sd">        - ``"parametric"``: proportional to the coordinates :math:`x` and :math:`y` of the</span>
+<span class="sd">          vertices. The texture does not depend on the discretization of the grid. The</span>
+<span class="sd">          coordinates of the grid must be strictly monotonic.</span>
+<span class="sd">        - ``"index"``: proportional to the indices of the vertices (uniform in the grid,</span>
+<span class="sd">          whatever its coordinates).</span>
+
+<span class="sd">        Both modes give the same UV map for a uniform grid.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`pysdic.Mesh`</span>
@@ -467,8 +513,7 @@
 <span class="sd">        print(mesh.n_dimensions, mesh.n_vertices, mesh.n_elements)  # 2 15 8</span>
 
 <span class="sd">    """</span>
-    <span class="n">vertices</span> <span class="o">=</span> <span class="n">_rectangle_vertices</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_rectangle_mesh</span><span class="p">(</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">,</span> <span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">)</span></div>
 
 
 
@@ -486,6 +531,7 @@
     <span class="n">diagonal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"first"</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 2D ``triangle_3`` mesh (:math:`E = 2`) of a rectangular grid.</span>
@@ -497,7 +543,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout:</span>
+<span class="sd">    x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode:</span>
 <span class="sd">        See :func:`pysdic.create_2d_quadrangle_4_rectangle`.</span>
 
 <span class="sd">    diagonal: str, optional (default: ``"first"``)</span>
@@ -515,7 +561,7 @@
 <span class="sd">    """</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_2d_quadrangle_4_rectangle</span><span class="p">(</span>
         <span class="n">x_bounds</span><span class="o">=</span><span class="n">x_bounds</span><span class="p">,</span> <span class="n">y_bounds</span><span class="o">=</span><span class="n">y_bounds</span><span class="p">,</span> <span class="n">x_array</span><span class="o">=</span><span class="n">x_array</span><span class="p">,</span> <span class="n">y_array</span><span class="o">=</span><span class="n">y_array</span><span class="p">,</span>
-        <span class="n">n_x</span><span class="o">=</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="o">=</span><span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span>
+        <span class="n">n_x</span><span class="o">=</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="o">=</span><span class="n">n_y</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="o">=</span><span class="n">uv_mode</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">quadrangle_4_to_triangle_3</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">diagonal</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span></div>
 
@@ -537,6 +583,7 @@
     <span class="n">direct</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">close</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 2D ``quadrangle_4`` mesh (:math:`E = 2`) of a polar grid: an annulus or a</span>
@@ -558,6 +605,36 @@
 <span class="sd">    The radii must be strictly positive: at :math:`r = 0` the quadrangles would be</span>
 <span class="sd">    degenerated. Use :func:`pysdic.create_2d_triangle_3_polar` with ``stick=True`` for a</span>
 <span class="sd">    disk.</span>
+
+<span class="sd">    The UV coordinates depend on ``uv_mode``:</span>
+
+<span class="sd">    - ``"parametric"`` (default): proportional to :math:`r` and :math:`\theta` (the</span>
+<span class="sd">      annulus is unrolled into a rectangle). The texture does not depend on the</span>
+<span class="sd">      discretization of the grid, but it is stretched along :math:`\theta` proportionally</span>
+<span class="sd">      to :math:`r`.</span>
+<span class="sd">    - ``"parametric-angle"``: proportional to :math:`\rho = \ln r` and :math:`\theta`</span>
+<span class="sd">      (log-polar projection), which preserves the angles in the plane. The local scale</span>
+<span class="sd">      :math:`r` is the same along both axes, so the texture is not stretched in one</span>
+<span class="sd">      direction, only scaled (smaller near the center). The radii must be strictly positive.</span>
+<span class="sd">    - ``"index"``: proportional to the indices of the vertices (uniform in the grid,</span>
+<span class="sd">      whatever its coordinates).</span>
+
+<span class="sd">    With ``"parametric"`` and ``"parametric-angle"``, the coordinates of the grid must be</span>
+<span class="sd">    strictly monotonic, and if ``close`` is True, the angles must span less than</span>
+<span class="sd">    :math:`2\pi` and the UV coordinate along :math:`\theta` is</span>
+<span class="sd">    :math:`(\theta - \theta_0) / (\pm 2\pi)` (the closing ring of elements goes up to the</span>
+<span class="sd">    UV coordinate 1).</span>
+
+<span class="sd">    .. important::</span>
+
+<span class="sd">        The UV square :math:`[0, 1]^2` is stretched onto the whole texture image, so with</span>
+<span class="sd">        ``"parametric-angle"`` the angles are exactly preserved only if the image has the</span>
+<span class="sd">        aspect ratio of the projected grid:</span>
+<span class="sd">        :math:`\text{width} / \text{height} = L_\rho / L_\theta` with</span>
+<span class="sd">        :math:`L_\rho = |\ln r_{n_r - 1} - \ln r_0|` and :math:`L_\theta = 2\pi` if</span>
+<span class="sd">        ``close`` else :math:`|\theta_{n_t - 1} - \theta_0|` (with ``uv_layout`` in 0, 3, 5,</span>
+<span class="sd">        7; inverse ratio with ``uv_layout`` in 1, 2, 4, 6). Otherwise, the distortion is a</span>
+<span class="sd">        uniform stretch of the whole texture along one axis.</span>
 
 <span class="sd">    .. seealso::</span>
 
@@ -589,6 +666,10 @@
 <span class="sd">        :func:`pysdic.create_uniform_quadrangle_4_mesh`), with :math:`r` as the first</span>
 <span class="sd">        axis of the grid and :math:`\theta` as the second one.</span>
 
+<span class="sd">    uv_mode: str, optional (default: ``"parametric"``)</span>
+<span class="sd">        How the UV coordinates are distributed between the corners of the grid:</span>
+<span class="sd">        ``"parametric"``, ``"parametric-angle"`` or ``"index"`` (see above).</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    :class:`pysdic.Mesh`</span>
@@ -616,14 +697,13 @@
 <span class="sd">        print(mesh.n_vertices, mesh.n_elements)  # 96 72</span>
 
 <span class="sd">    """</span>
-    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">_polar_vertices</span><span class="p">(</span><span class="n">r_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_t</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">_polar_mesh</span><span class="p">(</span><span class="n">r_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">"The radii must be strictly positive for a quadrangle_4 polar mesh. Use "</span>
             <span class="s2">"'create_2d_triangle_3_polar' with stick=True for a disk."</span>
         <span class="p">)</span>
-    <span class="k">return</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">y_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">mesh</span></div>
 
 
 
@@ -644,6 +724,7 @@
     <span class="n">diagonal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"first"</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">uv_layout</span><span class="p">:</span> <span class="n">Integral</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">uv_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"parametric"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mesh</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Create a 2D ``triangle_3`` mesh (:math:`E = 2`) of a polar grid: an annulus, a disk or</span>
@@ -664,9 +745,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout:</span>
+<span class="sd">    r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout, uv_mode:</span>
 <span class="sd">        See :func:`pysdic.create_2d_quadrangle_4_polar`. Here, the radius :math:`r = 0`</span>
-<span class="sd">        is accepted.</span>
+<span class="sd">        is accepted, except with ``uv_mode="parametric-angle"``.</span>
 
 <span class="sd">    stick: bool, optional (default: ``False``)</span>
 <span class="sd">        If True, the vertices at the center are merged (see above).</span>
@@ -704,11 +785,9 @@
 <span class="sd">        print(mesh.n_vertices, mesh.n_elements)  # 97 168</span>
 
 <span class="sd">    """</span>
-    <span class="n">close</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">close</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">)</span>
     <span class="n">stick</span> <span class="o">=</span> <span class="n">_validate_bool</span><span class="p">(</span><span class="n">stick</span><span class="p">,</span> <span class="s2">"stick"</span><span class="p">)</span>
     <span class="n">stick_eps</span> <span class="o">=</span> <span class="n">_validate_real</span><span class="p">(</span><span class="n">stick_eps</span><span class="p">,</span> <span class="s2">"stick_eps"</span><span class="p">,</span> <span class="n">non_negative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">vertices</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_polar_vertices</span><span class="p">(</span><span class="n">r_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_t</span><span class="p">)</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_uniform_quadrangle_4_mesh</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">y_connect</span><span class="o">=</span><span class="n">close</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">direct</span><span class="p">,</span> <span class="n">uv_layout</span><span class="o">=</span><span class="n">uv_layout</span><span class="p">)</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_polar_mesh</span><span class="p">(</span><span class="n">r_bounds</span><span class="p">,</span> <span class="n">t_bounds</span><span class="p">,</span> <span class="n">r_array</span><span class="p">,</span> <span class="n">t_array</span><span class="p">,</span> <span class="n">n_r</span><span class="p">,</span> <span class="n">n_t</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">close</span><span class="p">,</span> <span class="n">uv_layout</span><span class="p">,</span> <span class="n">uv_mode</span><span class="p">)</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">quadrangle_4_to_triangle_3</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">diagonal</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">stick</span><span class="p">:</span>
