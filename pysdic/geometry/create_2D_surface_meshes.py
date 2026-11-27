@@ -28,29 +28,63 @@ import numpy
 from .._validation import _validate_bool, _validate_real
 from .mesh import Mesh
 from .mesh_conversion import quadrangle_4_to_triangle_3
-from .create_3D_surface_meshes import _grid_axis, create_uniform_quadrangle_4_mesh
+from .create_3D_surface_meshes import (
+    _UV_MODES,
+    _UV_MODES_ANGLE,
+    _create_grid_quadrangle_4_mesh,
+    _grid_axis,
+    _uv_fractions,
+    _validate_uv_mode,
+)
 
 
 # =============================================================================
 # Internal helpers
 # =============================================================================
-def _rectangle_vertices(x_bounds, y_bounds, x_array, y_array, n_x, n_y) -> numpy.ndarray:
-    # Vertices (n_x, n_y, 2) of a rectangular grid
+def _log_radius(r: numpy.ndarray) -> numpy.ndarray:
+    # Logarithm rho = ln(r) of the radii (strictly positive): (rho, theta) is a conformal parametrization of
+    # the plane (log-polar coordinates), its metric is r**2 * (drho**2 + dtheta**2)
+    if numpy.any(r <= 0):
+        raise ValueError(
+            "The radii (r_bounds or r_array) must be strictly positive for uv_mode='parametric-angle' "
+            "(the log-polar projection is infinite at the center)."
+        )
+    return numpy.log(r)
+
+
+def _rectangle_mesh(x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode) -> Mesh:
+    # quadrangle_4 mesh of a rectangular grid (n_x, n_y)
+    uv_mode = _validate_uv_mode(uv_mode, _UV_MODES)
     x = _grid_axis(x_bounds, x_array, n_x, ("x_bounds", "x_array", "n_x"))
     y = _grid_axis(y_bounds, y_array, n_y, ("y_bounds", "y_array", "n_y"))
     x_grid, y_grid = numpy.meshgrid(x, y, indexing="ij")  # (n_x, n_y)
-    return numpy.stack((x_grid, y_grid), axis=2)
+    uv_fx = _uv_fractions(uv_mode, x, False, "x (x_bounds or x_array)")
+    uv_fy = _uv_fractions(uv_mode, y, False, "y (y_bounds or y_array)")
+    return _create_grid_quadrangle_4_mesh(
+        numpy.stack((x_grid, y_grid), axis=2), direct=direct, uv_layout=uv_layout, uv_fx=uv_fx, uv_fy=uv_fy,
+    )
 
 
-def _polar_vertices(r_bounds, t_bounds, r_array, t_array, n_r, n_t) -> Tuple[numpy.ndarray, numpy.ndarray]:
-    # Vertices (n_r, n_t, 2) of a polar grid and its radii (n_r,). The radius is the first axis
-    # of the grid, so that the elements are counterclockwise in the plane (positive Jacobian)
+def _polar_mesh(
+    r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout, uv_mode,
+) -> Tuple[Mesh, numpy.ndarray]:
+    # quadrangle_4 mesh of a polar grid (n_r, n_t) and its radii (n_r,). The radius is the first axis of the
+    # grid, so that the elements are counterclockwise in the plane (positive Jacobian)
+    close = _validate_bool(close, "close")
+    uv_mode = _validate_uv_mode(uv_mode, _UV_MODES_ANGLE)
     r = _grid_axis(r_bounds, r_array, n_r, ("r_bounds", "r_array", "n_r"))
     t = _grid_axis(t_bounds, t_array, n_t, ("t_bounds", "t_array", "n_t"))
     if numpy.any(r < 0):
         raise ValueError(f"The radii (r_bounds or r_array) must be non-negative. Got a minimum of {r.min()}.")
     r_grid, t_grid = numpy.meshgrid(r, t, indexing="ij")  # (n_r, n_t)
-    return numpy.stack((r_grid * numpy.cos(t_grid), r_grid * numpy.sin(t_grid)), axis=2), r
+    vertices = numpy.stack((r_grid * numpy.cos(t_grid), r_grid * numpy.sin(t_grid)), axis=2)
+    # parametric-angle: (rho, theta) with rho = ln(r), conformal in the plane
+    uv_fx = _uv_fractions(uv_mode, r, False, "r (r_bounds or r_array)", conformal=_log_radius)
+    uv_fy = _uv_fractions(uv_mode, t, close, "theta (t_bounds or t_array)", period=2 * numpy.pi)
+    mesh = _create_grid_quadrangle_4_mesh(
+        vertices, y_connect=close, direct=direct, uv_layout=uv_layout, uv_fx=uv_fx, uv_fy=uv_fy,
+    )
+    return mesh, r
 
 
 # =============================================================================
@@ -66,6 +100,7 @@ def create_2d_quadrangle_4_rectangle(
     n_y: Optional[Integral] = None,
     direct: bool = True,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 2D ``quadrangle_4`` mesh (:math:`E = 2`) of a rectangular grid.
@@ -106,6 +141,17 @@ def create_2d_quadrangle_4_rectangle(
         The UV mapping strategy, between 0 and 7 (see
         :func:`pysdic.create_uniform_quadrangle_4_mesh`).
 
+    uv_mode: str, optional (default: ``"parametric"``)
+        How the UV coordinates are distributed between the corners of the grid:
+
+        - ``"parametric"``: proportional to the coordinates :math:`x` and :math:`y` of the
+          vertices. The texture does not depend on the discretization of the grid. The
+          coordinates of the grid must be strictly monotonic.
+        - ``"index"``: proportional to the indices of the vertices (uniform in the grid,
+          whatever its coordinates).
+
+        Both modes give the same UV map for a uniform grid.
+
     Returns
     -------
     :class:`pysdic.Mesh`
@@ -122,8 +168,7 @@ def create_2d_quadrangle_4_rectangle(
         print(mesh.n_dimensions, mesh.n_vertices, mesh.n_elements)  # 2 15 8
 
     """
-    vertices = _rectangle_vertices(x_bounds, y_bounds, x_array, y_array, n_x, n_y)
-    return create_uniform_quadrangle_4_mesh(vertices, direct=direct, uv_layout=uv_layout)
+    return _rectangle_mesh(x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode)
 
 
 def create_2d_triangle_3_rectangle(
@@ -138,6 +183,7 @@ def create_2d_triangle_3_rectangle(
     diagonal: str = "first",
     seed: Optional[Union[Integral, numpy.random.Generator]] = None,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 2D ``triangle_3`` mesh (:math:`E = 2`) of a rectangular grid.
@@ -149,7 +195,7 @@ def create_2d_triangle_3_rectangle(
 
     Parameters
     ----------
-    x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout:
+    x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode:
         See :func:`pysdic.create_2d_quadrangle_4_rectangle`.
 
     diagonal: str, optional (default: ``"first"``)
@@ -167,7 +213,7 @@ def create_2d_triangle_3_rectangle(
     """
     mesh = create_2d_quadrangle_4_rectangle(
         x_bounds=x_bounds, y_bounds=y_bounds, x_array=x_array, y_array=y_array,
-        n_x=n_x, n_y=n_y, direct=direct, uv_layout=uv_layout,
+        n_x=n_x, n_y=n_y, direct=direct, uv_layout=uv_layout, uv_mode=uv_mode,
     )
     return quadrangle_4_to_triangle_3(mesh, diagonal, seed=seed)
 
@@ -186,6 +232,7 @@ def create_2d_quadrangle_4_polar(
     direct: bool = True,
     close: bool = False,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 2D ``quadrangle_4`` mesh (:math:`E = 2`) of a polar grid: an annulus or a
@@ -207,6 +254,36 @@ def create_2d_quadrangle_4_polar(
     The radii must be strictly positive: at :math:`r = 0` the quadrangles would be
     degenerated. Use :func:`pysdic.create_2d_triangle_3_polar` with ``stick=True`` for a
     disk.
+
+    The UV coordinates depend on ``uv_mode``:
+
+    - ``"parametric"`` (default): proportional to :math:`r` and :math:`\theta` (the
+      annulus is unrolled into a rectangle). The texture does not depend on the
+      discretization of the grid, but it is stretched along :math:`\theta` proportionally
+      to :math:`r`.
+    - ``"parametric-angle"``: proportional to :math:`\rho = \ln r` and :math:`\theta`
+      (log-polar projection), which preserves the angles in the plane. The local scale
+      :math:`r` is the same along both axes, so the texture is not stretched in one
+      direction, only scaled (smaller near the center). The radii must be strictly positive.
+    - ``"index"``: proportional to the indices of the vertices (uniform in the grid,
+      whatever its coordinates).
+
+    With ``"parametric"`` and ``"parametric-angle"``, the coordinates of the grid must be
+    strictly monotonic, and if ``close`` is True, the angles must span less than
+    :math:`2\pi` and the UV coordinate along :math:`\theta` is
+    :math:`(\theta - \theta_0) / (\pm 2\pi)` (the closing ring of elements goes up to the
+    UV coordinate 1).
+
+    .. important::
+
+        The UV square :math:`[0, 1]^2` is stretched onto the whole texture image, so with
+        ``"parametric-angle"`` the angles are exactly preserved only if the image has the
+        aspect ratio of the projected grid:
+        :math:`\text{width} / \text{height} = L_\rho / L_\theta` with
+        :math:`L_\rho = |\ln r_{n_r - 1} - \ln r_0|` and :math:`L_\theta = 2\pi` if
+        ``close`` else :math:`|\theta_{n_t - 1} - \theta_0|` (with ``uv_layout`` in 0, 3, 5,
+        7; inverse ratio with ``uv_layout`` in 1, 2, 4, 6). Otherwise, the distortion is a
+        uniform stretch of the whole texture along one axis.
 
     .. seealso::
 
@@ -238,6 +315,10 @@ def create_2d_quadrangle_4_polar(
         :func:`pysdic.create_uniform_quadrangle_4_mesh`), with :math:`r` as the first
         axis of the grid and :math:`\theta` as the second one.
 
+    uv_mode: str, optional (default: ``"parametric"``)
+        How the UV coordinates are distributed between the corners of the grid:
+        ``"parametric"``, ``"parametric-angle"`` or ``"index"`` (see above).
+
     Returns
     -------
     :class:`pysdic.Mesh`
@@ -265,14 +346,13 @@ def create_2d_quadrangle_4_polar(
         print(mesh.n_vertices, mesh.n_elements)  # 96 72
 
     """
-    close = _validate_bool(close, "close")
-    vertices, r = _polar_vertices(r_bounds, t_bounds, r_array, t_array, n_r, n_t)
+    mesh, r = _polar_mesh(r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout, uv_mode)
     if numpy.any(r == 0.0):
         raise ValueError(
             "The radii must be strictly positive for a quadrangle_4 polar mesh. Use "
             "'create_2d_triangle_3_polar' with stick=True for a disk."
         )
-    return create_uniform_quadrangle_4_mesh(vertices, y_connect=close, direct=direct, uv_layout=uv_layout)
+    return mesh
 
 
 def create_2d_triangle_3_polar(
@@ -290,6 +370,7 @@ def create_2d_triangle_3_polar(
     diagonal: str = "first",
     seed: Optional[Union[Integral, numpy.random.Generator]] = None,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 2D ``triangle_3`` mesh (:math:`E = 2`) of a polar grid: an annulus, a disk or
@@ -310,9 +391,9 @@ def create_2d_triangle_3_polar(
 
     Parameters
     ----------
-    r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout:
+    r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout, uv_mode:
         See :func:`pysdic.create_2d_quadrangle_4_polar`. Here, the radius :math:`r = 0`
-        is accepted.
+        is accepted, except with ``uv_mode="parametric-angle"``.
 
     stick: bool, optional (default: ``False``)
         If True, the vertices at the center are merged (see above).
@@ -350,11 +431,9 @@ def create_2d_triangle_3_polar(
         print(mesh.n_vertices, mesh.n_elements)  # 97 168
 
     """
-    close = _validate_bool(close, "close")
     stick = _validate_bool(stick, "stick")
     stick_eps = _validate_real(stick_eps, "stick_eps", non_negative=True, finite=True)
-    vertices, _ = _polar_vertices(r_bounds, t_bounds, r_array, t_array, n_r, n_t)
-    mesh = create_uniform_quadrangle_4_mesh(vertices, y_connect=close, direct=direct, uv_layout=uv_layout)
+    mesh, _ = _polar_mesh(r_bounds, t_bounds, r_array, t_array, n_r, n_t, direct, close, uv_layout, uv_mode)
     mesh = quadrangle_4_to_triangle_3(mesh, diagonal, seed=seed)
 
     if stick:

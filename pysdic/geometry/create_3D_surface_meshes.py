@@ -51,6 +51,75 @@ def _validate_uv_layout(uv_layout: Integral) -> int:
     return uv_layout
 
 
+_UV_MODES = ("index", "parametric")
+_UV_MODES_ANGLE = ("index", "parametric", "parametric-angle")
+
+
+def _validate_uv_mode(uv_mode: str, allowed: Tuple[str, ...]) -> str:
+    # UV mode: one of the allowed strings
+    if not isinstance(uv_mode, str) or uv_mode not in allowed:
+        raise ValueError(f"Input 'uv_mode' must be one of {allowed}. Got {uv_mode!r}.")
+    return uv_mode
+
+
+def _index_uv_fractions(n: int, connect: bool) -> numpy.ndarray:
+    # UV fractions of the "index" mode along one axis: (n,), or (n + 1,) with the fictive vertex of a connected axis
+    m = n + 1 if connect else n
+    return numpy.arange(m, dtype=numpy.float64) / (m - 1)
+
+
+def _parametric_uv_fractions(values: numpy.ndarray, name: str, period: Optional[float] = None) -> numpy.ndarray:
+    # UV fractions of the "parametric" mode along one axis: the coordinates (n,) normalized between the first
+    # and the last vertices, or, for a closed axis, (n + 1,) normalized by the period (fictive vertex at
+    # values[0] +/- period, fraction 1)
+    delta = numpy.diff(values)
+    if not (numpy.all(delta > 0) or numpy.all(delta < 0)):
+        raise ValueError(
+            f"The coordinates along {name} must be strictly monotonic for a parametric UV map "
+            f"(use uv_mode='index' for any coordinates)."
+        )
+    if period is None:
+        return (values - values[0]) / (values[-1] - values[0])
+    span = abs(values[-1] - values[0])
+    if span >= period:
+        raise ValueError(
+            f"The coordinates along {name} must span less than {period} to close the mesh with a parametric "
+            f"UV map. Got a span of {span}."
+        )
+    return numpy.append((values - values[0]) / (numpy.sign(delta[0]) * period), 1.0)
+
+
+def _uv_fractions(
+    uv_mode: str,
+    values: numpy.ndarray,
+    connect: bool,
+    name: str,
+    period: Optional[float] = None,
+    conformal: Optional[Callable[[numpy.ndarray], numpy.ndarray]] = None,
+) -> numpy.ndarray:
+    # UV fractions along one axis of a grid with the parametric coordinates values (n,). conformal is the
+    # change of variable of the "parametric-angle" mode along this axis (None: same as "parametric")
+    if uv_mode == "index":
+        return _index_uv_fractions(values.size, connect)
+    if uv_mode == "parametric-angle" and conformal is not None:
+        values = conformal(values)
+    if connect and period is None:
+        raise ValueError(f"A connected axis ({name}) needs a period for a parametric UV map.")
+    return _parametric_uv_fractions(values, name, period if connect else None)
+
+
+def _isometric_latitude(t: numpy.ndarray) -> numpy.ndarray:
+    # Isometric latitude psi = ln(tan(theta / 2)) of the polar angles theta (strictly between 0 and pi):
+    # (phi, psi) is a conformal parametrization of the unit sphere (Mercator projection), its metric is
+    # sin(theta)**2 * (dphi**2 + dpsi**2)
+    if numpy.any(t <= 0) or numpy.any(t >= numpy.pi):
+        raise ValueError(
+            "The polar angles (t_bounds or t_array) must be strictly between 0 and pi for "
+            "uv_mode='parametric-angle' (the Mercator projection is infinite at the poles)."
+        )
+    return numpy.log(numpy.tan(0.5 * t))
+
+
 def _grid_axis(
     bounds: Optional[Tuple[Real, Real]],
     array: Optional[ArrayLike],
@@ -111,17 +180,17 @@ def _local_frame_mesh(mesh: Mesh, frame: Optional[py3dframe.Frame], method: str)
     return mesh
 
 
-def _create_uniform_vertices_uvmap(n_x: int, n_y: int, uv_layout: int) -> numpy.ndarray:
+def _create_vertices_uvmap(fx: numpy.ndarray, fy: numpy.ndarray, uv_layout: int) -> numpy.ndarray:
     r"""
-    Create a uniform UV map for a grid of vertices defined by n_x and n_y.
+    Create the UV map of a grid of vertices from the UV fractions along its two axes.
 
     Parameters
     ----------
-    n_x : int
-        Number of vertices along the x direction.
+    fx : numpy.ndarray
+        The fractions (n_x,) of the vertices along the x direction, from 0 (first vertex) to 1 (last vertex).
 
-    n_y : int
-        Number of vertices along the y direction.
+    fy : numpy.ndarray
+        The fractions (n_y,) of the vertices along the y direction, from 0 (first vertex) to 1 (last vertex).
 
     uv_layout : int
         The UV mapping strategy. Must be an integer between 0 and 7.
@@ -134,7 +203,7 @@ def _create_uniform_vertices_uvmap(n_x: int, n_y: int, uv_layout: int) -> numpy.
     UV Mapping
     ----------
 
-    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).
+    The UV coordinates are given by the fractions along the two axes of the grid in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).
     Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.
 
     An image is defined by its four corners:
@@ -192,15 +261,11 @@ def _create_uniform_vertices_uvmap(n_x: int, n_y: int, uv_layout: int) -> numpy.
     elif uv_layout == 7:
         uv_mapping = [upper_right, upper_left, lower_right, lower_left]
 
-    # Create the grid of points in local coordinates
-    ix = numpy.arange(n_x)  # (n_x,)
-    iy = numpy.arange(n_y)  # (n_y,)
-    fx = ix / (n_x - 1)  # (n_x,)
-    fy = iy / (n_y - 1)  # (n_y,)
-
     # Compute the UV mapping coordinates
-    uv_fx = fx[:, numpy.newaxis].repeat(n_y, axis=1)  # (n_x, n_y)
-    uv_fy = fy[numpy.newaxis, :].repeat(n_x, axis=0)  # (n_x, n_y)
+    fx = numpy.asarray(fx, dtype=numpy.float64)  # (n_x,)
+    fy = numpy.asarray(fy, dtype=numpy.float64)  # (n_y,)
+    uv_fx = fx[:, numpy.newaxis].repeat(fy.size, axis=1)  # (n_x, n_y)
+    uv_fy = fy[numpy.newaxis, :].repeat(fx.size, axis=0)  # (n_x, n_y)
 
     U = (
         uv_mapping[0][0]
@@ -216,159 +281,21 @@ def _create_uniform_vertices_uvmap(n_x: int, n_y: int, uv_layout: int) -> numpy.
     return UV
 
 
-def _cylindrical_vertices(
-    function: Optional[Callable],
-    t_bounds, h_bounds, t_array, h_array, n_t, n_h,
-) -> Tuple[numpy.ndarray, int, int]:
-    # Vertices (n_t, n_h, 3) of a cylindrical surface r = f(h, theta) in the local frame
-    t = _grid_axis(t_bounds, t_array, n_t, ("t_bounds", "t_array", "n_t"))
-    h = _grid_axis(h_bounds, h_array, n_h, ("h_bounds", "h_array", "n_h"))
-    t_grid, h_grid = numpy.meshgrid(t, h, indexing="ij")  # (n_t, n_h)
-    r_grid = _evaluate(function, 1.0, h_grid, t_grid, "function")
-    vertices = numpy.stack((r_grid * numpy.cos(t_grid), r_grid * numpy.sin(t_grid), h_grid), axis=2)
-    return vertices, t.size, h.size
-
-
-def _spherical_vertices(
-    function: Optional[Callable],
-    t_bounds, p_bounds, t_array, p_array, n_t, n_p,
-) -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
-    # Vertices (n_p, n_t, 3) of a spherical surface r = f(theta, phi) in the local frame
-    t = _grid_axis(t_bounds, t_array, n_t, ("t_bounds", "t_array", "n_t"))
-    p = _grid_axis(p_bounds, p_array, n_p, ("p_bounds", "p_array", "n_p"))
-    if numpy.any(p < 0) or numpy.any(p > 2 * numpy.pi):
-        raise ValueError("The azimuthal angles (p_bounds or p_array) must be between 0 and 2 pi.")
-    p_grid, t_grid = numpy.meshgrid(p, t, indexing="ij")  # (n_p, n_t)
-    r_grid = _evaluate(function, 1.0, t_grid, p_grid, "function")
-    vertices = numpy.stack(
-        (
-            r_grid * numpy.sin(t_grid) * numpy.cos(p_grid),
-            r_grid * numpy.sin(t_grid) * numpy.sin(p_grid),
-            r_grid * numpy.cos(t_grid),
-        ),
-        axis=2,
-    )
-    return vertices, t, p
-
-
-def create_uniform_quadrangle_4_mesh(
+def _create_grid_quadrangle_4_mesh(
     vertices: ArrayLike,
+    *,
     x_connect: bool = False,
     y_connect: bool = False,
     x_swap: bool = False,
     y_swap: bool = False,
     direct: bool = True,
     uv_layout: Integral = 0,
+    uv_fx: Optional[numpy.ndarray] = None,
+    uv_fy: Optional[numpy.ndarray] = None,
 ) -> Mesh:
-    r"""
-    Create the quadrilateral connectivity and properties for a uniform grid mesh.
-
-    The mesh is defined in a local :math:`(n_x, n_y)` grid of vertices,
-    where :math:`n_x` is the number of vertices along the x direction
-    and :math:`n_y` is the number of vertices along the y direction.
-
-    If ``x_connect`` is True, the mesh is connected in the x direction (cylindrical topology)
-    by adding a fictive column of vertices at :math:`x = n_x` that is equal
-    to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.
-    If ``x_swap`` is True, the order of the vertices in the x direction is reversed
-    during the ``x_connect`` operation, so the vertex at :math:`x = n_x, y = i`
-    is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.
-
-    The same applies for the y direction with the ``y_connect`` and ``y_swap`` options.
-
-    .. figure:: /_static/meshes/uniform_surface_connectivity.png
-        :width: 400
-        :align: center
-
-        :math:`(n_x, n_y)` grid of vertices and the corresponding quadrilateral connectivity
-        and selected ``x_connect``, ``y_connect``, ``x_swap`` and ``y_swap`` options.
-
-    If ``direct`` is True, the quadrilaterals are defined in counterclockwise order for
-    an observer looking from above, otherwise they are defined in clockwise order.
-
-    - counterclockwise order for ``direct=True``: :math:`(i_X, i_Y), (i_X + 1, i_Y), (i_X + 1, i_Y + 1), (i_X, i_Y + 1)`
-    - clockwise order for ``direct=False``: :math:`(i_X, i_Y), (i_X, i_Y + 1), (i_X + 1, i_Y + 1), (i_X + 1, i_Y)`
-
-    Vertices are ordered first along the x direction, then along the y direction.
-    So the vertex at y index ``i_Y`` and x index ``i_X`` (both starting from 0) is located at:
-
-    .. code-block:: python
-
-        mesh.vertices[i_Y * n_x + i_X, :]
-
-
-    Parameters
-    ----------
-    vertices : ArrayLike
-        An array of shape :math:`(n_x, n_y, E)` containing the vertex positions in E-dimensional space.
-
-    x_connect : bool, optional (default: ``False``)
-        If True, connect the mesh in the x direction by adding a fictive column of vertices
-        at :math:`x = n_x` that is equal to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.
-
-    y_connect : bool, optional (default: ``False``)
-        If True, connect the mesh in the y direction by adding a fictive row of vertices
-        at :math:`y = n_y` that is equal to the first row of vertices at :math:`y = 0` and connecting them with quadrilaterals.
-
-    x_swap : bool, optional (default: ``False``)
-        If True, reverse the order of the vertices in the x direction during the ``x_connect`` operation,
-        so the vertex at :math:`x = n_x, y = i` is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.
-
-    y_swap : bool, optional (default: ``False``)
-        If True, reverse the order of the vertices in the y direction during the ``y_connect`` operation,
-        so the vertex at :math:`x = i, y = n_y` is connected to the vertex at :math:`x = n_x - 1 - i, y = 0` instead of :math:`x = i, y = 0`.
-
-    direct : bool, optional (default: ``True``)
-        If True, the quadrilaterals are defined in counterclockwise order for an observer looking from above, otherwise they are defined in clockwise order.
-
-    uv_layout : Integral, optional (default: ``0``)
-        The UV mapping strategy. Must be an integer between 0 and 7.
-
-
-    Returns
-    -------
-    :class:`pysdic.Mesh`
-        The generated quadrilateral mesh as a :class:`pysdic.Mesh` object with the specified connectivity and UV mapping.
-
-
-    UV Mapping
-    ----------
-
-    The UV coordinates are generated based on the vertex positions in the mesh and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).
-    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.
-
-    An image is defined by its four corners:
-
-    - Lower-left corner : pixel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left
-    - Upper-left corner : pixel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left
-    - Lower-right corner : pixel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right
-    - Upper-right corner : pixel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right
-
-    The following options are available for ``uv_layout`` and their corresponding vertex mapping:
-
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|
-    +=================+=========================+=========================+==========================+==========================+
-    | 0               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 1               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |
-    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
-
-    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.
-
-    """
+    # Implementation of create_uniform_quadrangle_4_mesh with the UV fractions along the two axes of the grid
+    # (n_x,) and (n_y,), or (n_x + 1,) and (n_y + 1,) for the connected axes (fictive vertex, fraction 1).
+    # None: the "index" mode (uniform fractions)
     vertices = _as_array(vertices, "vertices", numpy.float64, shape=(None, None, None), shape_hint="(n_x, n_y, E)", finite=False)
     if vertices.shape[0] < 2 or vertices.shape[1] < 2 or vertices.shape[2] < 1:
         raise ValueError(
@@ -397,12 +324,17 @@ def create_uniform_quadrangle_4_mesh(
     quads = numpy.zeros((n_x_quads, n_y_quads, 4), dtype=numpy.int64)
     quads_uv = numpy.zeros((n_x_quads, n_y_quads, 4, 2), dtype=numpy.float64)
 
-    # Create the uv mapping for the vertices
+    # Create the uv mapping for the vertices (with the fictive column/row of the connected axes)
     uv_n_x = n_x + 1 if x_connect else n_x
     uv_n_y = n_y + 1 if y_connect else n_y
-    extended_vertices_uv_map = _create_uniform_vertices_uvmap(
-        uv_n_x, uv_n_y, uv_layout
-    )  # (uv_n_x, uv_n_y, 2)
+    uv_fx = _index_uv_fractions(n_x, x_connect) if uv_fx is None else uv_fx
+    uv_fy = _index_uv_fractions(n_y, y_connect) if uv_fy is None else uv_fy
+    if uv_fx.shape != (uv_n_x,) or uv_fy.shape != (uv_n_y,):
+        raise ValueError(
+            f"The UV fractions must have the shapes ({uv_n_x},) and ({uv_n_y},). "
+            f"Got {uv_fx.shape} and {uv_fy.shape}."
+        )
+    extended_vertices_uv_map = _create_vertices_uvmap(uv_fx, uv_fy, uv_layout)  # (uv_n_x, uv_n_y, 2)
     vertices_uv_map = extended_vertices_uv_map[:n_x, :n_y]  # (n_x, n_y, 2)
 
     # Vertex index function
@@ -544,6 +476,205 @@ def create_uniform_quadrangle_4_mesh(
     return mesh
 
 
+def _heightmap_mesh(
+    function: Optional[Callable],
+    x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode,
+) -> Mesh:
+    # quadrangle_4 mesh of a height surface z = f(x, y) (grid (n_x, n_y)), in the local frame
+    uv_mode = _validate_uv_mode(uv_mode, _UV_MODES)
+    x = _grid_axis(x_bounds, x_array, n_x, ("x_bounds", "x_array", "n_x"))
+    y = _grid_axis(y_bounds, y_array, n_y, ("y_bounds", "y_array", "n_y"))
+    x_grid, y_grid = numpy.meshgrid(x, y, indexing="ij")  # (n_x, n_y)
+    z_grid = _evaluate(function, 0.0, x_grid, y_grid, "function")
+    uv_fx = _uv_fractions(uv_mode, x, False, "x (x_bounds or x_array)")
+    uv_fy = _uv_fractions(uv_mode, y, False, "y (y_bounds or y_array)")
+    return _create_grid_quadrangle_4_mesh(
+        numpy.stack((x_grid, y_grid, z_grid), axis=2), direct=direct, uv_layout=uv_layout,
+        uv_fx=uv_fx, uv_fy=uv_fy,
+    )
+
+
+def _cylindrical_mesh(
+    function: Optional[Callable],
+    t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout, uv_mode,
+) -> Tuple[Mesh, int, int]:
+    # quadrangle_4 mesh of a cylindrical surface r = f(h, theta) (grid (n_t, n_h)) in the local frame, n_t, n_h
+    close = _validate_bool(close, "close")
+    uv_mode = _validate_uv_mode(uv_mode, _UV_MODES)
+    t = _grid_axis(t_bounds, t_array, n_t, ("t_bounds", "t_array", "n_t"))
+    h = _grid_axis(h_bounds, h_array, n_h, ("h_bounds", "h_array", "n_h"))
+    t_grid, h_grid = numpy.meshgrid(t, h, indexing="ij")  # (n_t, n_h)
+    r_grid = _evaluate(function, 1.0, h_grid, t_grid, "function")
+    vertices = numpy.stack((r_grid * numpy.cos(t_grid), r_grid * numpy.sin(t_grid), h_grid), axis=2)
+    uv_fx = _uv_fractions(uv_mode, t, close, "theta (t_bounds or t_array)", period=2 * numpy.pi)
+    uv_fy = _uv_fractions(uv_mode, h, False, "h (h_bounds or h_array)")
+    mesh = _create_grid_quadrangle_4_mesh(
+        vertices, x_connect=close, direct=direct, uv_layout=uv_layout, uv_fx=uv_fx, uv_fy=uv_fy,
+    )
+    return mesh, t.size, h.size
+
+
+def _spherical_mesh(
+    function: Optional[Callable],
+    t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout, uv_mode,
+) -> Tuple[Mesh, numpy.ndarray, numpy.ndarray, numpy.ndarray]:
+    # quadrangle_4 mesh of a spherical surface r = f(theta, phi) (grid (n_p, n_t)) in the local frame, the
+    # polar angles t (n_t,), the azimuthal angles p (n_p,) and the UV map of the grid (n_p (+1), n_t, 2)
+    close = _validate_bool(close, "close")
+    uv_mode = _validate_uv_mode(uv_mode, _UV_MODES_ANGLE)
+    t = _grid_axis(t_bounds, t_array, n_t, ("t_bounds", "t_array", "n_t"))
+    p = _grid_axis(p_bounds, p_array, n_p, ("p_bounds", "p_array", "n_p"))
+    if numpy.any(p < 0) or numpy.any(p > 2 * numpy.pi):
+        raise ValueError("The azimuthal angles (p_bounds or p_array) must be between 0 and 2 pi.")
+    p_grid, t_grid = numpy.meshgrid(p, t, indexing="ij")  # (n_p, n_t)
+    r_grid = _evaluate(function, 1.0, t_grid, p_grid, "function")
+    vertices = numpy.stack(
+        (
+            r_grid * numpy.sin(t_grid) * numpy.cos(p_grid),
+            r_grid * numpy.sin(t_grid) * numpy.sin(p_grid),
+            r_grid * numpy.cos(t_grid),
+        ),
+        axis=2,
+    )
+    # parametric-angle: (phi, psi) with the isometric latitude psi, conformal on the unit sphere (radius ignored)
+    uv_fx = _uv_fractions(uv_mode, p, close, "phi (p_bounds or p_array)", period=2 * numpy.pi)
+    uv_fy = _uv_fractions(uv_mode, t, False, "theta (t_bounds or t_array)", conformal=_isometric_latitude)
+    mesh = _create_grid_quadrangle_4_mesh(
+        vertices, x_connect=close, direct=direct, uv_layout=uv_layout, uv_fx=uv_fx, uv_fy=uv_fy,
+    )
+    return mesh, t, p, _create_vertices_uvmap(uv_fx, uv_fy, uv_layout)
+
+
+def create_uniform_quadrangle_4_mesh(
+    vertices: ArrayLike,
+    x_connect: bool = False,
+    y_connect: bool = False,
+    x_swap: bool = False,
+    y_swap: bool = False,
+    direct: bool = True,
+    uv_layout: Integral = 0,
+) -> Mesh:
+    r"""
+    Create the quadrilateral connectivity and properties for a uniform grid mesh.
+
+    The mesh is defined in a local :math:`(n_x, n_y)` grid of vertices,
+    where :math:`n_x` is the number of vertices along the x direction
+    and :math:`n_y` is the number of vertices along the y direction.
+
+    If ``x_connect`` is True, the mesh is connected in the x direction (cylindrical topology)
+    by adding a fictive column of vertices at :math:`x = n_x` that is equal
+    to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.
+    If ``x_swap`` is True, the order of the vertices in the x direction is reversed
+    during the ``x_connect`` operation, so the vertex at :math:`x = n_x, y = i`
+    is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.
+
+    The same applies for the y direction with the ``y_connect`` and ``y_swap`` options.
+
+    .. figure:: /_static/meshes/uniform_surface_connectivity.png
+        :width: 400
+        :align: center
+
+        :math:`(n_x, n_y)` grid of vertices and the corresponding quadrilateral connectivity
+        and selected ``x_connect``, ``y_connect``, ``x_swap`` and ``y_swap`` options.
+
+    If ``direct`` is True, the quadrilaterals are defined in counterclockwise order for
+    an observer looking from above, otherwise they are defined in clockwise order.
+
+    - counterclockwise order for ``direct=True``: :math:`(i_X, i_Y), (i_X + 1, i_Y), (i_X + 1, i_Y + 1), (i_X, i_Y + 1)`
+    - clockwise order for ``direct=False``: :math:`(i_X, i_Y), (i_X, i_Y + 1), (i_X + 1, i_Y + 1), (i_X + 1, i_Y)`
+
+    Vertices are ordered first along the x direction, then along the y direction.
+    So the vertex at y index ``i_Y`` and x index ``i_X`` (both starting from 0) is located at:
+
+    .. code-block:: python
+
+        mesh.vertices[i_Y * n_x + i_X, :]
+
+
+    Parameters
+    ----------
+    vertices : ArrayLike
+        An array of shape :math:`(n_x, n_y, E)` containing the vertex positions in E-dimensional space.
+
+    x_connect : bool, optional (default: ``False``)
+        If True, connect the mesh in the x direction by adding a fictive column of vertices
+        at :math:`x = n_x` that is equal to the first column of vertices at :math:`x = 0` and connecting them with quadrilaterals.
+
+    y_connect : bool, optional (default: ``False``)
+        If True, connect the mesh in the y direction by adding a fictive row of vertices
+        at :math:`y = n_y` that is equal to the first row of vertices at :math:`y = 0` and connecting them with quadrilaterals.
+
+    x_swap : bool, optional (default: ``False``)
+        If True, reverse the order of the vertices in the x direction during the ``x_connect`` operation,
+        so the vertex at :math:`x = n_x, y = i` is connected to the vertex at :math:`x = 0, y = n_y - 1 - i` instead of :math:`x = 0, y = i`.
+
+    y_swap : bool, optional (default: ``False``)
+        If True, reverse the order of the vertices in the y direction during the ``y_connect`` operation,
+        so the vertex at :math:`x = i, y = n_y` is connected to the vertex at :math:`x = n_x - 1 - i, y = 0` instead of :math:`x = i, y = 0`.
+
+    direct : bool, optional (default: ``True``)
+        If True, the quadrilaterals are defined in counterclockwise order for an observer looking from above, otherwise they are defined in clockwise order.
+
+    uv_layout : Integral, optional (default: ``0``)
+        The UV mapping strategy. Must be an integer between 0 and 7.
+
+
+    Returns
+    -------
+    :class:`pysdic.Mesh`
+        The generated quadrilateral mesh as a :class:`pysdic.Mesh` object with the specified connectivity and UV mapping.
+
+
+    UV Mapping
+    ----------
+
+    The UV coordinates are generated based on the vertex indices in the grid and uniformly distributed in the range [0, 1] for the ``OpenGL texture mapping convention`` (See https://learnopengl.com/Getting-started/Textures).
+    They do not depend on the positions of the vertices: this is the ``uv_mode="index"`` of the mesh generators
+    (for example :func:`pysdic.create_3d_quadrangle_4_heightmap`), whose default ``uv_mode="parametric"`` follows
+    the coordinates of the grid instead.
+    Several UV mapping strategies are available and synthesized in the ``uv_layout`` parameter.
+
+    An image is defined by its four corners:
+
+    - Lower-left corner : pixel with array coordinates ``image[height-1, 0]`` but OpenGL convention is (0,0) at lower-left
+    - Upper-left corner : pixel with array coordinates ``image[0, 0]`` but OpenGL convention is (0,1) at upper-left
+    - Lower-right corner : pixel with array coordinates ``image[height-1, width-1]`` but OpenGL convention is (1,0) at lower-right
+    - Upper-right corner : pixel with array coordinates ``image[0, width-1]`` but OpenGL convention is (1,1) at upper-right
+
+    The following options are available for ``uv_layout`` and their corresponding vertex mapping:
+
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | uv_layout       | Vertex lower-left corner| Vertex upper-left corner| Vertex lower-right corner| Vertex upper-right corner|
+    +=================+=========================+=========================+==========================+==========================+
+    | 0               | (0, 0)                  | (0, n_y-1)              | (n_x-1, 0)               | (n_x-1, n_y-1)           |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 1               | (0, 0)                  | (n_x-1, 0)              | (0, n_y-1)               | (n_x-1, n_y-1)           |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 2               | (n_x-1, 0)              | (0, 0)                  | (n_x-1, n_y-1)           | (0, n_y-1)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 3               | (0, n_y-1)              | (0, 0)                  | (n_x-1, n_y-1)           | (n_x-1, 0)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 4               | (0, n_y-1)              | (n_x-1, n_y-1)          | (0, 0)                   | (n_x-1, 0)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 5               | (n_x-1, 0)              | (n_x-1, n_y-1)          | (0, 0)                   | (0, n_y-1)               |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 6               | (n_x-1, n_y-1)          | (0, n_y-1)              | (n_x-1, 0)               | (0, 0)                   |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+    | 7               | (n_x-1, n_y-1)          | (n_x-1, 0)              | (0, n_y-1)               | (0, 0)                   |
+    +-----------------+-------------------------+-------------------------+--------------------------+--------------------------+
+
+    The table above gives for the 4 corners of a image the corresponding vertex in the mesh.
+
+    With ``uv_layout`` in 0, 3, 5 and 7, the x axis of the grid is along :math:`u` (image width) and the y axis
+    along :math:`v` (image height). With ``uv_layout`` in 1, 2, 4 and 6, the axes are swapped.
+
+    """
+    return _create_grid_quadrangle_4_mesh(
+        vertices, x_connect=x_connect, y_connect=y_connect, x_swap=x_swap, y_swap=y_swap,
+        direct=direct, uv_layout=uv_layout,
+    )
+
+
 def create_3d_quadrangle_4_heightmap(
     function: Optional[Callable[[numpy.ndarray, numpy.ndarray], ArrayLike]] = None,
     *,
@@ -556,6 +687,7 @@ def create_3d_quadrangle_4_heightmap(
     n_y: Optional[Integral] = None,
     direct: bool = True,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 3D ``quadrangle_4`` mesh of a height surface :math:`z = f(x, y)`.
@@ -602,6 +734,18 @@ def create_3d_quadrangle_4_heightmap(
         The UV mapping strategy, between 0 and 7 (see
         :func:`pysdic.create_uniform_quadrangle_4_mesh`).
 
+    uv_mode: str, optional (default: ``"parametric"``)
+        How the UV coordinates are distributed between the corners of the grid:
+
+        - ``"parametric"``: proportional to the coordinates :math:`x` and :math:`y` of the
+          vertices (projection of the surface on the plane :math:`z = 0`, independent of
+          :math:`f`). The texture does not depend on the discretization of the grid. The
+          coordinates of the grid must be strictly monotonic.
+        - ``"index"``: proportional to the indices of the vertices (uniform in the grid,
+          whatever its coordinates).
+
+        Both modes give the same UV map for a uniform grid.
+
     Returns
     -------
     :class:`pysdic.Mesh`
@@ -622,14 +766,7 @@ def create_3d_quadrangle_4_heightmap(
         print(mesh.n_vertices, mesh.n_elements)  # 200 171
 
     """
-    x = _grid_axis(x_bounds, x_array, n_x, ("x_bounds", "x_array", "n_x"))
-    y = _grid_axis(y_bounds, y_array, n_y, ("y_bounds", "y_array", "n_y"))
-    x_grid, y_grid = numpy.meshgrid(x, y, indexing="ij")  # (n_x, n_y)
-    z_grid = _evaluate(function, 0.0, x_grid, y_grid, "function")
-
-    mesh = create_uniform_quadrangle_4_mesh(
-        numpy.stack((x_grid, y_grid, z_grid), axis=2), direct=direct, uv_layout=uv_layout
-    )
+    mesh = _heightmap_mesh(function, x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode)
     return _local_frame_mesh(mesh, frame, "create_3d_quadrangle_4_heightmap")
 
 
@@ -647,6 +784,7 @@ def create_3d_triangle_3_heightmap(
     diagonal: str = "first",
     seed: Optional[Union[Integral, numpy.random.Generator]] = None,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 3D ``triangle_3`` mesh of a height surface :math:`z = f(x, y)`.
@@ -658,7 +796,7 @@ def create_3d_triangle_3_heightmap(
 
     Parameters
     ----------
-    function, frame, x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout:
+    function, frame, x_bounds, y_bounds, x_array, y_array, n_x, n_y, direct, uv_layout, uv_mode:
         See :func:`pysdic.create_3d_quadrangle_4_heightmap`.
 
     diagonal: str, optional (default: ``"first"``)
@@ -676,7 +814,7 @@ def create_3d_triangle_3_heightmap(
     """
     mesh = create_3d_quadrangle_4_heightmap(
         function, frame=frame, x_bounds=x_bounds, y_bounds=y_bounds, x_array=x_array,
-        y_array=y_array, n_x=n_x, n_y=n_y, direct=direct, uv_layout=uv_layout,
+        y_array=y_array, n_x=n_x, n_y=n_y, direct=direct, uv_layout=uv_layout, uv_mode=uv_mode,
     )
     return quadrangle_4_to_triangle_3(mesh, diagonal, seed=seed)
 
@@ -694,6 +832,7 @@ def create_3d_quadrangle_4_cylindrical(
     direct: bool = True,
     close: bool = False,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 3D ``quadrangle_4`` mesh of a cylindrical surface with radius
@@ -751,15 +890,31 @@ def create_3d_quadrangle_4_cylindrical(
         The UV mapping strategy, between 0 and 7 (see
         :func:`pysdic.create_uniform_quadrangle_4_mesh`).
 
+    uv_mode: str, optional (default: ``"parametric"``)
+        How the UV coordinates are distributed between the corners of the grid:
+
+        - ``"parametric"``: proportional to :math:`\theta` and :math:`h` (independent of
+          the radius :math:`f`). The texture does not depend on the discretization of the
+          grid. The coordinates of the grid must be strictly monotonic. If ``close`` is
+          True, the angles must span less than :math:`2\pi` and the UV coordinate along
+          :math:`\theta` is :math:`(\theta - \theta_0) / (\pm 2\pi)`: the closing column of
+          elements goes up to the UV coordinate 1.
+        - ``"index"``: proportional to the indices of the vertices (uniform in the grid,
+          whatever its coordinates).
+
+        Both modes give the same UV map for a uniform grid (closed with
+        ``t_bounds=(0, 2 * pi * (1 - 1 / n_t))``). For a unit radius, ``"parametric"``
+        preserves the lengths up to the scale of each axis.
+
     Returns
     -------
     :class:`pysdic.Mesh`
         The ``quadrangle_4`` mesh, with a UV map.
 
     """
-    close = _validate_bool(close, "close")
-    vertices, _, _ = _cylindrical_vertices(function, t_bounds, h_bounds, t_array, h_array, n_t, n_h)
-    mesh = create_uniform_quadrangle_4_mesh(vertices, x_connect=close, direct=direct, uv_layout=uv_layout)
+    mesh, _, _ = _cylindrical_mesh(
+        function, t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout, uv_mode,
+    )
     return _local_frame_mesh(mesh, frame, "create_3d_quadrangle_4_cylindrical")
 
 
@@ -780,6 +935,7 @@ def create_3d_triangle_3_cylindrical(
     diagonal: str = "first",
     seed: Optional[Union[Integral, numpy.random.Generator]] = None,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 3D ``triangle_3`` mesh of a cylindrical surface with radius
@@ -797,7 +953,7 @@ def create_3d_triangle_3_cylindrical(
 
     Parameters
     ----------
-    function, frame, t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout:
+    function, frame, t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout, uv_mode:
         See :func:`pysdic.create_3d_quadrangle_4_cylindrical`.
 
     stick: bool, optional (default: ``False``)
@@ -819,11 +975,11 @@ def create_3d_triangle_3_cylindrical(
         The ``triangle_3`` mesh, with a UV map.
 
     """
-    close = _validate_bool(close, "close")
     stick = _validate_bool(stick, "stick")
     stick_eps = _validate_real(stick_eps, "stick_eps", non_negative=True, finite=True)
-    vertices, n_t, n_h = _cylindrical_vertices(function, t_bounds, h_bounds, t_array, h_array, n_t, n_h)
-    mesh = create_uniform_quadrangle_4_mesh(vertices, x_connect=close, direct=direct, uv_layout=uv_layout)
+    mesh, n_t, n_h = _cylindrical_mesh(
+        function, t_bounds, h_bounds, t_array, h_array, n_t, n_h, direct, close, uv_layout, uv_mode,
+    )
     mesh = quadrangle_4_to_triangle_3(mesh, diagonal, seed=seed)
 
     if stick:
@@ -858,6 +1014,7 @@ def create_3d_quadrangle_4_spherical(
     direct: bool = True,
     close: bool = False,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 3D ``quadrangle_4`` mesh of a spherical surface with radius
@@ -879,6 +1036,38 @@ def create_3d_quadrangle_4_spherical(
     column of elements. For a uniform closed grid, use
     ``p_bounds=(0, 2 * pi * (1 - 1 / n_p))``. The mesh is not closed at the poles: use
     :func:`pysdic.create_3d_triangle_3_spherical` for a closed sphere.
+
+    The UV coordinates depend on ``uv_mode``:
+
+    - ``"parametric"`` (default): proportional to :math:`\phi` and :math:`\theta`
+      (equirectangular projection). The texture does not depend on the discretization of
+      the grid, but it is stretched along :math:`\phi` by :math:`1 / \sin\theta` near the
+      poles.
+    - ``"parametric-angle"``: proportional to :math:`\phi` and to the isometric latitude
+      :math:`\psi = \ln \tan(\theta / 2)` (Mercator projection), which preserves the angles
+      on the unit sphere. The local scale :math:`\sin\theta` is the same along both axes,
+      so the texture is not stretched in one direction, only scaled (smaller near the
+      poles). The polar angles must be strictly between 0 and :math:`\pi`.
+    - ``"index"``: proportional to the indices of the vertices (uniform in the grid,
+      whatever its coordinates).
+
+    With ``"parametric"`` and ``"parametric-angle"``, the coordinates of the grid must be
+    strictly monotonic, and if ``close`` is True, the azimuthal angles must span less than
+    :math:`2\pi` and the UV coordinate along :math:`\phi` is
+    :math:`(\phi - \phi_0) / (\pm 2\pi)` (the closing column of elements goes up to the
+    UV coordinate 1). The three modes give the same UV map for a uniform grid, except
+    ``"parametric-angle"`` along :math:`\theta`.
+
+    .. important::
+
+        The UV square :math:`[0, 1]^2` is stretched onto the whole texture image, so with
+        ``"parametric-angle"`` the angles are exactly preserved only if the image has the
+        aspect ratio of the projected grid:
+        :math:`\text{width} / \text{height} = L_\phi / L_\psi` with
+        :math:`L_\phi = 2\pi` if ``close`` else :math:`|\phi_{n_p - 1} - \phi_0|`, and
+        :math:`L_\psi = |\psi(\theta_{n_t - 1}) - \psi(\theta_0)|` (with ``uv_layout`` in
+        0, 3, 5, 7; inverse ratio with ``uv_layout`` in 1, 2, 4, 6). Otherwise, the
+        distortion is a uniform stretch of the whole texture along one axis.
 
     Parameters
     ----------
@@ -914,15 +1103,21 @@ def create_3d_quadrangle_4_spherical(
         The UV mapping strategy, between 0 and 7 (see
         :func:`pysdic.create_uniform_quadrangle_4_mesh`).
 
+    uv_mode: str, optional (default: ``"parametric"``)
+        How the UV coordinates are distributed between the corners of the grid:
+        ``"parametric"``, ``"parametric-angle"`` or ``"index"`` (see above). The radius
+        :math:`f` is never used: a change of radius is a deformation of the unit sphere
+        that the texture follows.
+
     Returns
     -------
     :class:`pysdic.Mesh`
         The ``quadrangle_4`` mesh, with a UV map.
 
     """
-    close = _validate_bool(close, "close")
-    vertices, _, _ = _spherical_vertices(function, t_bounds, p_bounds, t_array, p_array, n_t, n_p)
-    mesh = create_uniform_quadrangle_4_mesh(vertices, x_connect=close, direct=direct, uv_layout=uv_layout)
+    mesh, _, _, _ = _spherical_mesh(
+        function, t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout, uv_mode,
+    )
     return _local_frame_mesh(mesh, frame, "create_3d_quadrangle_4_spherical")
 
 
@@ -943,6 +1138,7 @@ def create_3d_triangle_3_spherical(
     diagonal: str = "first",
     seed: Optional[Union[Integral, numpy.random.Generator]] = None,
     uv_layout: Integral = 0,
+    uv_mode: str = "parametric",
 ) -> Mesh:
     r"""
     Create a 3D ``triangle_3`` mesh of a spherical surface with radius
@@ -973,7 +1169,7 @@ def create_3d_triangle_3_spherical(
 
     Parameters
     ----------
-    function, frame, t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout:
+    function, frame, t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout, uv_mode:
         See :func:`pysdic.create_3d_quadrangle_4_spherical`. For a closed sphere, use polar
         angles strictly between 0 and :math:`\pi`.
 
@@ -1018,20 +1214,20 @@ def create_3d_triangle_3_spherical(
     direct = _validate_bool(direct, "direct")
     add_north = _validate_bool(add_north, "add_north")
     add_south = _validate_bool(add_south, "add_south")
-    vertices, t, p = _spherical_vertices(function, t_bounds, p_bounds, t_array, p_array, n_t, n_p)
+    quadrangle_mesh, t, p, vertices_uv = _spherical_mesh(
+        function, t_bounds, p_bounds, t_array, p_array, n_t, n_p, direct, close, uv_layout, uv_mode,
+    )  # vertices_uv: (n_p (+1 if close), n_t, 2), the closing edge uses the fictive column n_p
     if add_north and not t[0] > 0:
         raise ValueError(f"The first polar angle must be greater than 0 to add the north pole. Got {t[0]}.")
     if add_south and not t[-1] < numpy.pi:
         raise ValueError(f"The last polar angle must be lower than pi to add the south pole. Got {t[-1]}.")
 
-    quadrangle_mesh = create_uniform_quadrangle_4_mesh(vertices, x_connect=close, direct=direct, uv_layout=uv_layout)
     mesh = quadrangle_4_to_triangle_3(quadrangle_mesh, diagonal, seed=seed)
 
     n_p, n_t = p.size, t.size
     coordinates = [mesh.vertices._coordinates]
     triangles = [mesh.connectivity._elements]
     uvmaps = [mesh.uvmap]
-    vertices_uv = _create_uniform_vertices_uvmap(n_p + 1 if close else n_p, n_t, uv_layout)  # (n_p', n_t, 2)
 
     # Ring edges (a, b) of the fans, with the UV coordinates of a and b
     i_p = numpy.arange(n_p if close else n_p - 1)
