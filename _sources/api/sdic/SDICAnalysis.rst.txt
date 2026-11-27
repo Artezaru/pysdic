@@ -240,14 +240,16 @@ Save and load
 An analysis is saved in a folder (or a zip archive of the same files): the mesh, each image and each transformation
 once (even if shared), the displacements, the times and the structure of the analysis, with a SHA-256 manifest. No
 ``pickle`` is used. The writing is atomic (temporary folder renamed at the end), and ``overwrite=True`` only replaces
-a previous save of an analysis. At the loading, the integrity of the files and the structures of the loaded analysis are
-checked ("Inconsistent loading" error if they differ from the saved ones).
+a previous save of an analysis. At the loading, the integrity of the files is checked (``check_integrity=True``),
+then the summary of the metadata (numbers of frames, vertices, elements, views, images, cameras and transformations,
+frames with a displacement, times) and the structures of the loaded analysis are compared with the saved ones
+("Inconsistent loading" error if they differ).
 
 .. code-block:: text
 
    folder/
-   ├── metadata.json        format, version, date, title, description
-   ├── README.txt
+   ├── metadata.json        format, pysdic version, date, title, description, summary
+   ├── README.txt           the same information, readable by a human
    ├── manifest.json        SHA-256 of each file
    ├── structure.json       cameras, views, frames, structures
    ├── mesh/mesh.npz        (+ mesh.vtk with export_vtk=True, never read)
@@ -255,6 +257,11 @@ checked ("Inconsistent loading" error if they differ from the saved ones).
    ├── extrinsics/, distortions/, intrinsics/   one JSON file per transformation
    ├── displacements.npz    frame_00, ... (only the frames with a displacement)
    └── times.npz            (only if the times are set)
+
+.. code-block:: python
+
+   analysis.to_folder("results/test_42", title="Tensile test 42")
+   same_analysis = SDICAnalysis.from_folder("results/test_42")
 
 .. autosummary::
    :toctree: ./_generated/
@@ -269,3 +276,31 @@ checked ("Inconsistent loading" error if they differ from the saved ones).
 
    The integration points and the pairings are not part of the analysis: save them separately
    (e.g. :meth:`pysdic.IntegrationPoints.to_npz_file`).
+
+Saves of previous versions
+""""""""""""""""""""""""""
+
+The compatibility of a save is given by the version of pysdic that wrote it (``pysdic_version`` in
+``metadata.json``):
+
+- **2.1.0 and later**: the current format, loaded directly.
+- **0.0.1 to 2.1.0** (including the saves of the former ``pysdic.SDIC`` class): converted to the current format
+  while loading, with a :class:`pysdic.PreviousSaveWarning` displayed in the console. The files are not modified:
+  save the loaded analysis again (``to_folder`` or ``to_archive``) to update the save and remove the warning.
+- **Before 0.0.1**: deprecated, a :class:`pysdic.DeprecatedError` is raised (a subclass of ``ValueError``).
+
+.. code-block:: python
+
+   import warnings
+   from pysdic import PreviousSaveWarning, SDICAnalysis
+
+   analysis = SDICAnalysis.from_folder("results/old_test")   # PreviousSaveWarning
+   analysis.to_folder("results/old_test", overwrite=True)     # Updated: no more warning
+
+   warnings.simplefilter("error", PreviousSaveWarning)        # Or: refuse the saves of previous versions
+
+.. autosummary::
+   :toctree: ./_generated/
+
+   PreviousSaveWarning
+   DeprecatedError
